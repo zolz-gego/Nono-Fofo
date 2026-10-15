@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../core/l10n/l10n.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_icons.dart';
 import '../../../core/widgets/text/app_texts.dart';
 import 'settings_cubit.dart';
 
@@ -23,7 +25,7 @@ class LanguageButton extends StatelessWidget {
             ? AppLocales.arabic.languageCode
             : AppLocales.english.languageCode,
       ),
-      icon: const Icon(Icons.translate_rounded),
+      icon: const FaIcon(AppIcons.language),
       // The label is written in the target language, so use its font.
       label: toArabic
           ? ArabicText(label, color: AppColors.textOnDark)

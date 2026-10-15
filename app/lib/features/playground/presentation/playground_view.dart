@@ -2,10 +2,12 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../core/domain/character_id.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_icons.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../core/typography/app_text_styles.dart';
 import '../../../core/widgets/text/app_texts.dart';
@@ -271,7 +273,7 @@ class _SoundsDemoState extends State<_SoundsDemo> {
                       setState(() {});
                     }
                   : null,
-              icon: const Icon(Icons.stop_rounded),
+              icon: const FaIcon(AppIcons.stop),
               label: Text(l10n.stopMusic),
             ),
           ],

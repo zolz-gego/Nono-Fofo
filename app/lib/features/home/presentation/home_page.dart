@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/router.dart';
 import '../../../core/domain/character_id.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_icons.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../core/widgets/app_top_bar.dart';
 import '../../../core/widgets/text/app_texts.dart';
@@ -60,7 +62,7 @@ class _HomePageState extends State<HomePage> {
             tooltip: l10n.about,
             color: AppColors.textOnDark,
             onPressed: () => context.push(AppRoutes.about),
-            icon: const Icon(Icons.info_outline_rounded),
+            icon: const FaIcon(AppIcons.info),
           ),
           const SizedBox(width: AppDimens.spaceSm),
         ],
@@ -89,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                       Center(
                         child: FilledButton.icon(
                           onPressed: () => context.push(AppRoutes.about),
-                          icon: const Icon(Icons.info_outline_rounded),
+                          icon: const FaIcon(AppIcons.info),
                           label: Text(l10n.about),
                         ),
                       ),
@@ -183,7 +185,7 @@ class _Hero extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.auto_stories_rounded, color: AppColors.ink),
+                const FaIcon(AppIcons.lessons, color: AppColors.ink),
                 const SizedBox(width: AppDimens.spaceSm),
                 Flexible(child: AppText(l10n.homeLessons)),
               ],
@@ -266,7 +268,7 @@ class _BrotherCard extends StatelessWidget {
                 const SizedBox(height: AppDimens.spaceMd),
                 Row(
                   children: [
-                    Icon(Icons.chat_bubble_rounded, color: accent),
+                    FaIcon(AppIcons.speech, color: accent),
                     const SizedBox(width: AppDimens.spaceSm),
                     Expanded(
                       child: AppText.h3(
