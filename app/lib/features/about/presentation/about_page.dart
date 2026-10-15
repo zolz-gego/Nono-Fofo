@@ -9,6 +9,7 @@ import '../../../core/widgets/app_top_bar.dart';
 import '../../../core/widgets/text/app_texts.dart';
 import '../../playground/presentation/playground_view.dart';
 import '../../settings/presentation/language_button.dart';
+import '../../settings/presentation/mute_button.dart';
 
 /// About: what the app is and where it's heading, followed by a playground
 /// of everything implemented so far.
@@ -24,6 +25,7 @@ class AboutPage extends StatelessWidget {
         onLogoTap: () => context.go(AppRoutes.home),
         actions: const [
           LanguageButton(),
+          MuteButton(),
           SizedBox(width: AppDimens.spaceSm),
         ],
       ),

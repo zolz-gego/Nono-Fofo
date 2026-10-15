@@ -158,6 +158,12 @@ abstract class AppLocalizations {
   /// **'كتم الصوت'**
   String get mute;
 
+  /// No description provided for @unmute.
+  ///
+  /// In ar, this message translates to:
+  /// **'شغّل الصوت'**
+  String get unmute;
+
   /// No description provided for @nono.
   ///
   /// In ar, this message translates to:

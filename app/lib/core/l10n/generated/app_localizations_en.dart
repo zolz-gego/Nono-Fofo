@@ -40,6 +40,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mute => 'Mute';
 
   @override
+  String get unmute => 'Unmute';
+
+  @override
   String get nono => 'Nono';
 
   @override

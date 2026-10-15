@@ -40,6 +40,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mute => 'كتم الصوت';
 
   @override
+  String get unmute => 'شغّل الصوت';
+
+  @override
   String get nono => 'نونو';
 
   @override

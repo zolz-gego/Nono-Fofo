@@ -19,6 +19,7 @@ import '../../../engines/characters/presentation/character_controller.dart';
 import '../../../engines/sound/application/sound_service.dart';
 import '../../../engines/sound/domain/sound_event.dart';
 import '../../settings/presentation/language_button.dart';
+import '../../settings/presentation/mute_button.dart';
 
 /// Home: what the app is, the brothers and their world, language switch
 /// and a way into the About page.
@@ -79,6 +80,7 @@ class _HomePageState extends State<HomePage> {
           title: l10n.appTitle,
           actions: [
             const LanguageButton(),
+            const MuteButton(),
             IconButton(
               tooltip: l10n.about,
               color: AppColors.textOnDark,
