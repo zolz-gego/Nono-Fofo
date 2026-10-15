@@ -439,6 +439,108 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تحدّى {opponent}'**
   String gameChallenge(String opponent);
+
+  /// No description provided for @pickLetter.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار الحرف اللي هتصطاده!'**
+  String get pickLetter;
+
+  /// No description provided for @randomLetter.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار لي أي حرف'**
+  String get randomLetter;
+
+  /// No description provided for @backToGames.
+  ///
+  /// In ar, this message translates to:
+  /// **'الألعاب'**
+  String get backToGames;
+
+  /// No description provided for @catchLetter.
+  ///
+  /// In ar, this message translates to:
+  /// **'اصطاد'**
+  String get catchLetter;
+
+  /// No description provided for @fishingStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'يلا يا {name}! اصطاد {letter}'**
+  String fishingStart(String name, String letter);
+
+  /// No description provided for @fishingCheer1.
+  ///
+  /// In ar, this message translates to:
+  /// **'برافو!'**
+  String get fishingCheer1;
+
+  /// No description provided for @fishingCheer2.
+  ///
+  /// In ar, this message translates to:
+  /// **'شاطر يا {name}!'**
+  String fishingCheer2(String name);
+
+  /// No description provided for @fishingCheer3.
+  ///
+  /// In ar, this message translates to:
+  /// **'صح كده!'**
+  String get fishingCheer3;
+
+  /// No description provided for @fishingCheer4.
+  ///
+  /// In ar, this message translates to:
+  /// **'جامد!'**
+  String get fishingCheer4;
+
+  /// Referee after a wrong catch. caught/target are replaced by Coptic letters.
+  ///
+  /// In ar, this message translates to:
+  /// **'لأ! ده {caught} مش {target}'**
+  String fishingWrong(String caught, String target);
+
+  /// A fish with the target letter swam away. target is a Coptic letter.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاتك {target}! خلّي عينك عليه'**
+  String fishingMissed(String target);
+
+  /// No description provided for @fishingStars3.
+  ///
+  /// In ar, this message translates to:
+  /// **'ممتاز! ولا غلطة!'**
+  String get fishingStars3;
+
+  /// No description provided for @fishingStars2.
+  ///
+  /// In ar, this message translates to:
+  /// **'برافو! ركّز شوية وتاخد ٣ نجوم'**
+  String get fishingStars2;
+
+  /// No description provided for @fishingStars1.
+  ///
+  /// In ar, this message translates to:
+  /// **'خلصتها! العب تاني عشان تجمع نجوم أكتر'**
+  String get fishingStars1;
+
+  /// No description provided for @newBest.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم جديد!'**
+  String get newBest;
+
+  /// No description provided for @playAgain.
+  ///
+  /// In ar, this message translates to:
+  /// **'العب تاني'**
+  String get playAgain;
+
+  /// No description provided for @otherLetter.
+  ///
+  /// In ar, this message translates to:
+  /// **'حرف تاني'**
+  String get otherLetter;
 }
 
 class _AppLocalizationsDelegate

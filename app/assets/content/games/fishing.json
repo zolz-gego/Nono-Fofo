@@ -1,0 +1,18 @@
+{
+  "_readme": "Settings for the fishing game. Change numbers here; no code change needed. catchesToWin: correct fish needed to finish. maxDifferentLetters: how many different letters swim in one game (the target included). targetChance: 0..1, how often a new fish carries the target letter. swimSeconds: how long a fish takes to cross the screen (bigger = slower). swimDirection: 'ltr' (left to right), 'rtl', or 'both' (lanes alternate). Stars: a mistake is a wrong catch, or (if countMissedAsMistake) a target fish that swam away. 0..threeStarsMaxMistakes = 3 stars, up to twoStarsMaxMistakes = 2 stars, more = 1 star. fishImages: optional painted fish PNGs (see design/game-prompts.md); when empty the fish are drawn in code. background: optional Nile picture; drawn in code when the file is missing.",
+  "version": 1,
+  "catchesToWin": 5,
+  "maxDifferentLetters": 7,
+  "targetChance": 0.35,
+  "maxFishOnScreen": 6,
+  "spawnEverySeconds": 1.4,
+  "swimSeconds": 9,
+  "swimDirection": "ltr",
+  "countMissedAsMistake": true,
+  "stars": {
+    "threeStarsMaxMistakes": 0,
+    "twoStarsMaxMistakes": 2
+  },
+  "fishImages": [],
+  "background": "assets/games/fishing/nile.png"
+}

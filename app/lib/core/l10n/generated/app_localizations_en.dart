@@ -196,4 +196,63 @@ class AppLocalizationsEn extends AppLocalizations {
   String gameChallenge(String opponent) {
     return 'Challenge $opponent';
   }
+
+  @override
+  String get pickLetter => 'Pick the letter you\'ll catch!';
+
+  @override
+  String get randomLetter => 'Pick one for me';
+
+  @override
+  String get backToGames => 'Games';
+
+  @override
+  String get catchLetter => 'Catch';
+
+  @override
+  String fishingStart(String name, String letter) {
+    return 'Let\'s go, $name! Catch $letter';
+  }
+
+  @override
+  String get fishingCheer1 => 'Bravo!';
+
+  @override
+  String fishingCheer2(String name) {
+    return 'Well done, $name!';
+  }
+
+  @override
+  String get fishingCheer3 => 'That\'s right!';
+
+  @override
+  String get fishingCheer4 => 'Awesome!';
+
+  @override
+  String fishingWrong(String caught, String target) {
+    return 'Oops! That\'s $caught, not $target';
+  }
+
+  @override
+  String fishingMissed(String target) {
+    return '$target got away! Keep an eye out';
+  }
+
+  @override
+  String get fishingStars3 => 'Perfect! No mistakes!';
+
+  @override
+  String get fishingStars2 => 'Bravo! A bit more focus for 3 stars';
+
+  @override
+  String get fishingStars1 => 'You did it! Play again for more stars';
+
+  @override
+  String get newBest => 'New best!';
+
+  @override
+  String get playAgain => 'Play again';
+
+  @override
+  String get otherLetter => 'Another letter';
 }
