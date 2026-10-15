@@ -7,12 +7,20 @@ import '../../../../core/theme/app_colors.dart';
 
 /// The صنارة: a rod from the hero's hands to its tip, the line, and either a
 /// bobber on the water (waiting) or the hook wherever the game puts it.
+///
+/// When the hero's pose already holds a rod, set [drawRod] to false and keep
+/// [restTip] on the pose's rod tip: only the line is drawn.
 class RodComponent extends Component {
   RodComponent() : super(priority: 20);
 
   /// Where the hands hold the rod and where its tip rests.
   ui.Offset hand = ui.Offset.zero;
   ui.Offset restTip = ui.Offset.zero;
+
+  bool drawRod = true;
+
+  /// Hides the line too (the hero put the rod down to cheer).
+  bool visible = true;
 
   /// Extra bend of the rod (radians, + = tip up), animated by the game.
   double bend = 0;
@@ -35,7 +43,8 @@ class RodComponent extends Component {
 
   @override
   void render(ui.Canvas canvas) {
-    final t = tip;
+    if (!visible) return;
+    final t = drawRod ? tip : restTip;
     final len = (t - hand).distance;
 
     // Line first, so the rod sits on top of it.
@@ -83,6 +92,8 @@ class RodComponent extends Component {
         );
       canvas.drawPath(hookPath, line..strokeWidth = 2);
     }
+
+    if (!drawRod) return;
 
     // Rod: thick at the handle, thin at the tip.
     final dir = (t - hand) / len;

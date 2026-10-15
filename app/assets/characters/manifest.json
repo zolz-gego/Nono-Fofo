@@ -137,6 +137,36 @@
           293,
           125
         ]
+      },
+      "fish": {
+        "file": "nono/fish.png",
+        "small": "nono/small/fish.png",
+        "width": 634,
+        "height": 982,
+        "source": "Nono Fishing.webp",
+        "head_center": [
+          201,
+          140
+        ],
+        "rod_tip": [
+          616,
+          102
+        ]
+      },
+      "reel": {
+        "file": "nono/reel.png",
+        "small": "nono/small/reel.png",
+        "width": 651,
+        "height": 1080,
+        "source": "Nono Fishing.webp",
+        "head_center": [
+          171,
+          307
+        ],
+        "rod_tip": [
+          640,
+          16
+        ]
       }
     },
     "fofo": {
@@ -270,6 +300,36 @@
         "head_center": [
           157,
           102
+        ]
+      },
+      "fish": {
+        "file": "fofo/fish.png",
+        "small": "fofo/small/fish.png",
+        "width": 614,
+        "height": 795,
+        "source": "Fofo Fishing.webp",
+        "head_center": [
+          135,
+          169
+        ],
+        "rod_tip": [
+          599,
+          14
+        ]
+      },
+      "reel": {
+        "file": "fofo/reel.png",
+        "small": "fofo/small/reel.png",
+        "width": 553,
+        "height": 875,
+        "source": "Fofo Fishing.webp",
+        "head_center": [
+          137,
+          306
+        ],
+        "rod_tip": [
+          537,
+          13
         ]
       }
     }

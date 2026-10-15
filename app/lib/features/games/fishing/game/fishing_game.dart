@@ -46,8 +46,11 @@ class FishingGame extends FlameGame {
   /// in Arabic.
   bool rtl = false;
 
+  /// The background picture once loaded (the layout lines up with it).
+  NileArt? art;
+
   FishingLayout _layoutFor(ui.Size size) =>
-      FishingLayout(size, goal: cubit.round.goal, rtl: rtl);
+      FishingLayout(size, goal: cubit.round.goal, rtl: rtl, art: art);
   FishingConfig get config => cubit.round.config;
 
   late final CharacterComponent _hero;
@@ -77,6 +80,13 @@ class FishingGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     final picture = await _tryLoad(config.background);
+    if (picture != null) {
+      art = NileArt(
+        ui.Size(picture.width.toDouble(), picture.height.toDouble()),
+        config.backgroundMarks,
+      );
+      layout = _layoutFor(layout.size);
+    }
     for (final path in config.fishImages) {
       final img = await _tryLoad(path);
       if (img != null) _fishSprites.add(img);
@@ -86,7 +96,8 @@ class FishingGame extends FlameGame {
       roster: roster,
       characterSize: layout.characterSize,
     )..priority = 15;
-    _rod = RodComponent();
+    _rod = RodComponent()..drawRod = !_hero.hasPose(CharacterAction.fish);
+    _hero.play(_restPose);
     await addAll([NileBackground(picture: picture), _hero, _rod]);
     _loaded = true;
     _place();
@@ -109,6 +120,26 @@ class FishingGame extends FlameGame {
     if (_loaded) _place();
   }
 
+  /// With fishing poses the hero holds the drawn rod; without them he
+  /// stands idle and the rod is drawn in code.
+  bool get _holdsRod => !_rod.drawRod;
+  CharacterAction get _restPose =>
+      _holdsRod ? CharacterAction.fish : CharacterAction.idle;
+
+  /// Keeps the line on the tip of the rod in the hero's hands (it moves
+  /// when the pose changes), and hides it while he puts the rod down.
+  void _followRod() {
+    if (!_holdsRod) return;
+    final tip = _hero.rodTip;
+    _rod.visible = tip != null;
+    if (tip == null) return;
+    _rod.restTip = layout.heroFeet + tip;
+    _rod.bobber = ui.Offset(
+      max(_rod.restTip.dx + 8, layout.leftBankEdge + 14),
+      layout.waterTop + 3,
+    );
+  }
+
   /// Puts the hero, rod and fish where the current layout says.
   void _place() {
     final l = layout;
@@ -126,6 +157,7 @@ class FishingGame extends FlameGame {
         max(l.heroFeet.dy - heroH * 0.82, l.cardBottom + 14),
       );
     _rod.bobber = ui.Offset(_rod.restTip.dx + 6, l.waterTop + 3);
+    _followRod();
     for (final f in _fish) {
       f
         ..size = Vector2(l.fishWidth, l.fishHeight)
@@ -177,8 +209,11 @@ class FishingGame extends FlameGame {
       null => round.nextFishLetter(_random, targetsSwimming: _targetsSwimming),
     };
     _sinceTarget = round.isTarget(letter) ? 0 : _sinceTarget + 1;
-    var color = _random.nextInt(AppColors.fish.length);
-    if (color == _lastColor) color = (color + 1) % AppColors.fish.length;
+    final colors = _fishSprites.isEmpty
+        ? AppColors.fish.length
+        : _fishSprites.length;
+    var color = _random.nextInt(colors);
+    if (color == _lastColor) color = (color + 1) % colors;
     _lastColor = color;
     final w = layout.fishWidth;
     final fish =
@@ -187,10 +222,9 @@ class FishingGame extends FlameGame {
             lane: lane,
             direction: dir,
             speed: _speedOf(lane),
-            color: AppColors.fish[color],
-            sprite: _fishSprites.isEmpty
-                ? null
-                : _fishSprites[_random.nextInt(_fishSprites.length)],
+            color: AppColors.fish[color % AppColors.fish.length],
+            sprite: _fishSprites.isEmpty ? null : _fishSprites[color],
+            letterSpot: config.fishLetterSpot,
             fishSize: Vector2(w, layout.fishHeight),
           )
           ..baseY = layout.laneY(lane)
@@ -223,8 +257,9 @@ class FishingGame extends FlameGame {
     if (!_loaded) return;
     if (_heroIdleIn > 0) {
       _heroIdleIn -= dt;
-      if (_heroIdleIn <= 0 && !_isOver) _hero.play(CharacterAction.idle);
+      if (_heroIdleIn <= 0 && !_isOver) _hero.play(_restPose);
     }
+    _followRod();
     if (!_isOver) {
       _spawnIn -= dt;
       final swimming = _fish.where((f) => f.state != FishState.caught).length;
@@ -283,6 +318,9 @@ enum _Phase { cast, reel, judge, fly }
 class _Cast {
   _Cast(this.game, this.fish) {
     fish.state = FishState.hooked;
+    game._heroIdleIn = 0;
+    game._hero.play(game._restPose);
+    game._followRod();
     _from = game._rod.bobber;
     game.sound.playKey('fishing.fish_cast');
   }
@@ -293,7 +331,7 @@ class _Cast {
   double _t = 0;
   late ui.Offset _from;
   late ui.Offset _fishFrom;
-  late ui.Offset _hang;
+  ui.Offset _hang = ui.Offset.zero;
   late ui.Offset _slot;
   bool _correct = false;
 
@@ -315,6 +353,12 @@ class _Cast {
     return center + ui.Offset.lerp(side, up, hang)!;
   }
 
+  ui.Offset _hangPoint() {
+    final w = fish.size.x;
+    final tip = _rod.drawRod ? _rod.tip : _rod.restTip;
+    return ui.Offset(tip.dx, min(_l.bankTop - w * 0.45, tip.dy + w * 0.62));
+  }
+
   void _go(_Phase next) {
     _phase = next;
     _t = 0;
@@ -332,18 +376,18 @@ class _Cast {
             ..playKey('fishing.fish_bite')
             ..playKey('fishing.fish_splash');
           _fishFrom = _fishCenter;
-          final w = fish.size.x;
-          final tip = _rod.restTip;
-          _hang = ui.Offset(
-            tip.dx,
-            min(_l.bankTop - w * 0.45, tip.dy + w * 0.62),
-          );
           game.sound.playKey('fishing.fish_reel');
+          if (game._holdsRod) {
+            game._hero.play(CharacterAction.reel);
+            game._followRod();
+          }
           _go(_Phase.reel);
         }
       case _Phase.reel:
         final k = Curves.easeInOut.transform(min(1, _t / _reelTime));
         _rod.bend = 0.14 * sin(k * pi);
+        // The fish rises to just under the rod tip.
+        _hang = _hangPoint();
         fish.hang = k;
         final c = ui.Offset.lerp(_fishFrom, _hang, k)!;
         fish.position = Vector2(c.dx, c.dy);
@@ -359,6 +403,7 @@ class _Cast {
           fish
             ..baseY = _l.laneY(fish.lane)
             ..release();
+          game._hero.play(game._restPose);
           game._cast = null;
         }
       case _Phase.fly:
@@ -394,7 +439,9 @@ class _Cast {
       game._cast = null;
       _go(_Phase.fly);
     } else {
-      game._heroPose(CharacterAction.wrong);
+      // Holding the rod he keeps the wrong fish on the line; the referee
+      // does the talking.
+      if (!game._holdsRod) game._heroPose(CharacterAction.wrong);
       _go(_Phase.judge);
     }
   }

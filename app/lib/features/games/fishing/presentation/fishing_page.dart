@@ -103,16 +103,22 @@ class _FishingPageState extends State<FishingPage> {
       ),
       sl<GameProgressRepository>(),
     );
+    final game = FishingGame(
+      cubit: cubit,
+      hero: widget.args.setup.buddy,
+      roster: context.read<CharacterRoster>(),
+      sound: _sound,
+      random: _random,
+    );
     setState(() {
       _cubit = cubit;
-      _game = FishingGame(
-        cubit: cubit,
-        hero: widget.args.setup.buddy,
-        roster: context.read<CharacterRoster>(),
-        sound: _sound,
-        random: _random,
-      );
+      _game = game;
       _showResult = false;
+    });
+    // The background picture decides where the banks are: place the
+    // referee again once it has loaded.
+    game.loaded.then((_) {
+      if (mounted && _game == game) setState(() {});
     });
     _referee.idle();
     _sound.play(SoundEvent.levelStart);
@@ -296,6 +302,7 @@ class _FishingPageState extends State<FishingPage> {
                         constraints.biggest,
                         goal: cubit.round.goal,
                         rtl: rtl,
+                        art: game.art,
                       ),
                       game,
                     );
@@ -315,10 +322,59 @@ class _FishingPageState extends State<FishingPage> {
     final feet = layout.refereeFeet;
     final bubble = _bubble;
     const bubbleWidth = 240.0;
-    final bubbleLeft = (feet.dx - bubbleWidth / 2).clamp(
+    final headTop = feet.dy - boxH;
+
+    // Above the referee's head when there's room and it doesn't cover the
+    // top card; otherwise beside him (left), below the card, so it never
+    // runs under the top bar or hides the basket.
+    const roomNeeded = 110.0;
+    final aboveLeft = (feet.dx - bubbleWidth / 2).clamp(
       AppDimens.spaceSm,
       layout.width - bubbleWidth - AppDimens.spaceSm,
     );
+    final card = Rect.fromLTRB(
+      (layout.width - layout.cardWidth) / 2,
+      layout.cardTop,
+      (layout.width + layout.cardWidth) / 2,
+      layout.cardBottom,
+    );
+    final aboveRect = Rect.fromLTWH(
+      aboveLeft,
+      headTop - roomNeeded,
+      bubbleWidth,
+      roomNeeded,
+    );
+    final above = headTop >= roomNeeded && !aboveRect.overlaps(card);
+    final Widget bubbleBox;
+    final speech = SpeechBubble(
+      text: bubble?.key,
+      richText: bubble?.span,
+      maxWidth: bubbleWidth,
+      showTail: above,
+    );
+    if (above) {
+      bubbleBox = Positioned(
+        left: aboveLeft,
+        width: bubbleWidth,
+        bottom: layout.height - headTop + AppDimens.spaceXs,
+        child: Align(alignment: Alignment.bottomCenter, child: speech),
+      );
+    } else {
+      final right = feet.dx - boxW * 0.35;
+      final left = max(AppDimens.spaceSm, right - bubbleWidth);
+      final top = left < card.right
+          ? max(
+              headTop + AppDimens.spaceSm,
+              layout.cardBottom + AppDimens.spaceSm,
+            )
+          : max(headTop + AppDimens.spaceSm, AppDimens.spaceSm);
+      bubbleBox = Positioned(
+        left: left,
+        width: right - left,
+        top: top,
+        child: Align(alignment: Alignment.topRight, child: speech),
+      );
+    }
 
     return Stack(
       clipBehavior: Clip.hardEdge,
@@ -336,19 +392,7 @@ class _FishingPageState extends State<FishingPage> {
             mirror: true,
           ),
         ),
-        Positioned(
-          left: bubbleLeft,
-          width: bubbleWidth,
-          bottom: layout.height - (feet.dy - boxH) + AppDimens.spaceXs,
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: SpeechBubble(
-              text: bubble?.key,
-              richText: bubble?.span,
-              maxWidth: bubbleWidth,
-            ),
-          ),
-        ),
+        bubbleBox,
         if (_showResult)
           Positioned.fill(
             child: FishingResult(

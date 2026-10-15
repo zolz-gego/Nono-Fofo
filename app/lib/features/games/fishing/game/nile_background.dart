@@ -8,8 +8,9 @@ import 'fishing_game.dart';
 
 /// The Nile: sky, far bank with palms and a sailing felucca, the two grassy
 /// banks the brothers stand on, and the water with bubbles and reeds.
-/// If a background picture is given it is drawn instead of the sky and
-/// banks; the water layer is always drawn so fish stay readable.
+/// With a background picture, the picture is drawn where the layout says
+/// (plus moving bubbles), and a code bank is only added where the picture's
+/// bank is cut off on narrow screens.
 class NileBackground extends Component with HasGameReference<FishingGame> {
   NileBackground({this.picture}) : super(priority: 0);
 
@@ -46,8 +47,21 @@ class NileBackground extends Component with HasGameReference<FishingGame> {
     final w = l.width;
     final h = l.height;
 
-    if (picture != null) {
-      _drawCover(canvas, picture!, w, h);
+    final picture = this.picture;
+    final rect = l.imageRect;
+    if (picture != null && rect != null) {
+      canvas.drawImageRect(
+        picture,
+        ui.Rect.fromLTWH(
+          0,
+          0,
+          picture.width.toDouble(),
+          picture.height.toDouble(),
+        ),
+        rect,
+        ui.Paint()..filterQuality = ui.FilterQuality.medium,
+      );
+      _drawBubbles(canvas, w, h, l.waterTop);
     } else {
       _drawSky(canvas, w, l.waterTop);
       _drawFarBank(
@@ -57,10 +71,12 @@ class NileBackground extends Component with HasGameReference<FishingGame> {
         from: l.heroFeet.dx + 90,
         to: l.refereeFeet.dx - 90,
       );
+      _drawWater(canvas, w, h, l.waterTop);
     }
-    _drawWater(canvas, w, h, l.waterTop);
-    if (picture == null) {
+    if (l.drawLeftBank) {
       _drawBank(canvas, l.heroFeet.dx, l.bankTop, l.waterTop, left: true, w: w);
+    }
+    if (l.drawRightBank) {
       _drawBank(
         canvas,
         l.refereeFeet.dx,
@@ -70,23 +86,6 @@ class NileBackground extends Component with HasGameReference<FishingGame> {
         w: w,
       );
     }
-  }
-
-  void _drawCover(ui.Canvas canvas, ui.Image img, double w, double h) {
-    final iw = img.width.toDouble();
-    final ih = img.height.toDouble();
-    final scale = max(w / iw, h / ih);
-    final src = ui.Rect.fromCenter(
-      center: ui.Offset(iw / 2, ih / 2),
-      width: w / scale,
-      height: h / scale,
-    );
-    canvas.drawImageRect(
-      img,
-      src,
-      ui.Rect.fromLTWH(0, 0, w, h),
-      ui.Paint()..filterQuality = ui.FilterQuality.medium,
-    );
   }
 
   void _drawSky(ui.Canvas canvas, double w, double bottom) {
@@ -285,6 +284,10 @@ class NileBackground extends Component with HasGameReference<FishingGame> {
         sin(_time * 1.3 + rx * 9) * 0.08,
       );
     }
+    _drawBubbles(canvas, w, h, top);
+  }
+
+  void _drawBubbles(ui.Canvas canvas, double w, double h, double top) {
     final bubble = ui.Paint()
       ..color = AppColors.waterShine
       ..style = ui.PaintingStyle.stroke
@@ -332,7 +335,9 @@ class NileBackground extends Component with HasGameReference<FishingGame> {
     required bool left,
     required double w,
   }) {
-    final depth = (waterTop - top) * 2.2 + 10;
+    // A ledge: never deeper than a small block, even when the water is far
+    // below (big picture on tall screens).
+    final depth = min((waterTop - top).abs() * 2.2 + 10, 46.0);
     final reach = cx + (left ? 1 : -1) * 70;
     final edge = left ? 0.0 : w;
     final ground = ui.Path()
@@ -342,9 +347,9 @@ class NileBackground extends Component with HasGameReference<FishingGame> {
         reach + (left ? 18 : -18),
         top + 2,
         reach + (left ? 26 : -26),
-        waterTop + depth * 0.3,
+        top + depth * 0.45,
       )
-      ..quadraticBezierTo(reach, waterTop + depth, edge, waterTop + depth)
+      ..quadraticBezierTo(reach, top + depth, edge, top + depth)
       ..close();
     canvas.drawPath(ground, ui.Paint()..color = AppColors.bankEarth);
     final grass = ui.Path()

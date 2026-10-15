@@ -15,11 +15,16 @@ class SpeechBubble extends StatelessWidget {
     required this.text,
     this.richText,
     this.maxWidth = 220,
+    this.showTail = true,
   });
 
   final String? text;
   final InlineSpan? richText;
   final double maxWidth;
+
+  /// The little point toward the speaker, under the bubble. Turn it off
+  /// when the bubble sits beside the speaker instead of above.
+  final bool showTail;
 
   @override
   Widget build(BuildContext context) {
@@ -52,10 +57,11 @@ class SpeechBubble extends StatelessWidget {
                       ? AppText.body(text!, textAlign: TextAlign.center)
                       : Text.rich(richText!, textAlign: TextAlign.center),
                 ),
-                CustomPaint(
-                  size: const Size(18, 10),
-                  painter: _TailPainter(),
-                ),
+                if (showTail)
+                  CustomPaint(
+                    size: const Size(18, 10),
+                    painter: _TailPainter(),
+                  ),
               ],
             )
               .animate()

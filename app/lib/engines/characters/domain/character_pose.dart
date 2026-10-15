@@ -17,6 +17,7 @@ class CharacterPose extends Equatable {
     required this.width,
     required this.height,
     required this.headCenter,
+    this.rodTip,
   });
 
   final CharacterId character;
@@ -26,6 +27,9 @@ class CharacterPose extends Equatable {
   final double width;
   final double height;
   final Offset headCenter;
+
+  /// Tip of the fishing rod, for poses that hold one (in manifest px).
+  final Offset? rodTip;
 
   @override
   List<Object?> get props => [character, action, asset];

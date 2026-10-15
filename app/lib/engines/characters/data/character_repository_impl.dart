@@ -36,6 +36,13 @@ class CharacterRepositoryImpl implements CharacterRepository {
                 ((p['head_center'] as List)[0] as num).toDouble(),
                 ((p['head_center'] as List)[1] as num).toDouble(),
               ),
+              rodTip: switch (p['rod_tip']) {
+                [final num x, final num y] => Offset(
+                  x.toDouble(),
+                  y.toDouble(),
+                ),
+                _ => null,
+              },
             ),
       };
     }

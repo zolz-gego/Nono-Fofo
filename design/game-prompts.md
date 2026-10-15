@@ -55,15 +55,17 @@ Using the attached reference for the exact look of both brothers: Nono and Fofo 
 
 ## Fishing game art (صيد السمك)
 
-The fishing game already works with fish and a Nile drawn in code. These
-prompts are for painted versions. Drop the results in and they're used
-automatically (no code change):
+All three are done (2026-10-16). To regenerate any of them, use the prompts
+below, then:
 
-| What | File | Used by |
+| What | Save the original as | Then run |
 |---|---|---|
-| Fish 1–8 | `app/assets/games/fishing/fish_1.png` … `fish_8.png` | list them in `fishImages` in `app/assets/content/games/fishing.json` |
-| Nile background | `app/assets/games/fishing/nile.png` | `background` in the same JSON (already set) |
-| Nono / Fofo fishing poses | `Characters/` originals → `tools/characters/process_poses.py` | needs a small code step to switch the hero to them (ask Claude) |
+| Fish (one orange fish; the script makes the 8 colors) | `design/reference/fishing/fish.webp` | `tools/.venv/bin/python tools/games/process_fishing.py` |
+| Nile background | `design/reference/fishing/nile.webp` | same script; if the banks or waterline move, update `backgroundMarks` in `app/assets/content/games/fishing.json` |
+| Nono / Fofo fishing poses (one sheet each: "fish" left, "reel" right) | `Characters/Nono Fishing.webp`, `Characters/Fofo Fishing.webp` | `tools/.venv/bin/python tools/characters/process_poses.py` (check the `PICK` points if the layout of the sheet changes) |
+
+If the code-drawn fallbacks are ever needed again, empty `fishImages` or
+remove the background file.
 
 Fish need a **transparent background** (or a flat sand background that is
 removed afterwards), must **face right**, and must have an **empty cream circle**

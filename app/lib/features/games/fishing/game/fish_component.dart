@@ -9,6 +9,7 @@ import 'package:flutter/painting.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/typography/app_text_styles.dart';
 import '../../../letters/domain/coptic_letter.dart';
+import '../domain/fishing_config.dart';
 import 'fish_painter.dart';
 import 'fishing_game.dart';
 
@@ -25,6 +26,7 @@ class FishComponent extends PositionComponent
     required this.speed,
     required Color color,
     this.sprite,
+    this.letterSpot = LetterSpot.fallback,
     required Vector2 fishSize,
   }) : _painter = FishPainter(color),
        _phase = Random().nextDouble() * pi * 2,
@@ -41,6 +43,9 @@ class FishComponent extends PositionComponent
 
   /// A painted fish image (facing right), or null to draw one in code.
   final ui.Image? sprite;
+
+  /// Where the letter goes on [sprite].
+  final LetterSpot letterSpot;
 
   final FishPainter _painter;
   final double _phase;
@@ -61,8 +66,13 @@ class FishComponent extends PositionComponent
     textDirection: TextDirection.ltr,
     text: TextSpan(
       text: letter.small,
-      style: AppTextStyles.coptic(AppTextVariant.h1)
-          .copyWith(fontSize: size.y * 0.5, height: 1, color: AppColors.coptic),
+      style: AppTextStyles.coptic(AppTextVariant.h1).copyWith(
+        fontSize: sprite == null
+            ? size.y * 0.5
+            : size.y * letterSpot.size * 0.8,
+        height: 1,
+        color: AppColors.coptic,
+      ),
     ),
   )..layout();
 
@@ -135,7 +145,12 @@ class FishComponent extends PositionComponent
       _painter.paint(canvas, w, h, tail: tail);
     }
     // The letter stays upright and readable whatever the fish does.
-    canvas.translate(w * FishPainter.patchX, 0);
+    canvas.translate(
+      sprite == null
+          ? w * FishPainter.patchX
+          : (letterSpot.center.dx - 0.5) * w,
+      sprite == null ? 0 : (letterSpot.center.dy - 0.5) * h,
+    );
     if (direction < 0) canvas.scale(-1, 1);
     canvas.rotate(direction * hang * pi / 2 - hang * tail * 0.12);
     _text.paint(canvas, ui.Offset(-_text.width / 2, -_text.height / 2));
