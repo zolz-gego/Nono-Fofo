@@ -13,3 +13,8 @@
   3. Open a PR into the default branch with `gh pr create`. Give it a clear title and a body that summarizes what changed and why.
   4. Reply with the PR link.
 - Don't open a PR before the user says the task is completed.
+
+## UI conventions
+
+- Every screen's `Scaffold` uses `AppTopBar` (`app/lib/core/widgets/app_top_bar.dart`) as its `appBar`, so the logo shows on every screen. Inner pages pass `onLogoTap` to go home.
+- Small icons (buttons, labels, list items) use Font Awesome through `font_awesome_flutter`: add the icon to `AppIcons` (`app/lib/core/theme/app_icons.dart`) and show it with `FaIcon(AppIcons.xxx)`. Don't add image files for small icons. Image assets are only for the logo, characters, and illustrations.
