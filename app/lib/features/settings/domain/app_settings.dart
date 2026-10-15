@@ -22,16 +22,20 @@ class AppSettings extends Equatable {
     double? voiceVolume,
     double? musicVolume,
     bool? muted,
-  }) =>
-      AppSettings(
-        languageCode: languageCode ?? this.languageCode,
-        sfxVolume: sfxVolume ?? this.sfxVolume,
-        voiceVolume: voiceVolume ?? this.voiceVolume,
-        musicVolume: musicVolume ?? this.musicVolume,
-        muted: muted ?? this.muted,
-      );
+  }) => AppSettings(
+    languageCode: languageCode ?? this.languageCode,
+    sfxVolume: sfxVolume ?? this.sfxVolume,
+    voiceVolume: voiceVolume ?? this.voiceVolume,
+    musicVolume: musicVolume ?? this.musicVolume,
+    muted: muted ?? this.muted,
+  );
 
   @override
-  List<Object?> get props =>
-      [languageCode, sfxVolume, voiceVolume, musicVolume, muted];
+  List<Object?> get props => [
+    languageCode,
+    sfxVolume,
+    voiceVolume,
+    musicVolume,
+    muted,
+  ];
 }

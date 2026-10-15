@@ -47,6 +47,7 @@ dependencies:
   audioplayers: ^6.8.1
   flutter_localizations:
     sdk: flutter
+  font_awesome_flutter: ^11.0.0
 
 dev_dependencies:
   flutter_test:
