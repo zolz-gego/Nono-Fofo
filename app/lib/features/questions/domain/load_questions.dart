@@ -7,11 +7,7 @@ class LoadQuestions {
 
   final QuestionRepository _repository;
 
-  Future<List<Question>> call(
-    String type, {
-    int? limit,
-    bool shuffle = false,
-  }) async {
+  Future<List<Question>> call(String type, {int? limit, bool shuffle = false}) async {
     final all = [...await _repository.loadType(type)];
     if (shuffle) all.shuffle();
     return limit == null || limit >= all.length ? all : all.sublist(0, limit);

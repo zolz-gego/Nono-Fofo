@@ -28,7 +28,7 @@ class QuestionParserRegistry {
 /// can be added before the type's code exists.
 class RawQuestion extends Question {
   RawQuestion({required super.type, required this.json})
-    : super(id: '${json['id'] ?? ''}');
+      : super(id: '${json['id'] ?? ''}');
 
   final Map<String, dynamic> json;
 
