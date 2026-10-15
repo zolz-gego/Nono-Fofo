@@ -104,12 +104,6 @@ abstract class AppLocalizations {
   /// **'نونو وفوفو'**
   String get appTitle;
 
-  /// Developer playground screen title
-  ///
-  /// In ar, this message translates to:
-  /// **'ملعب التجارب'**
-  String get playgroundTitle;
-
   /// No description provided for @sectionTexts.
   ///
   /// In ar, this message translates to:
@@ -211,6 +205,126 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'وقّف الموسيقى'**
   String get stopMusic;
+
+  /// Language button label: the name of the OTHER language to switch to
+  ///
+  /// In ar, this message translates to:
+  /// **'English'**
+  String get switchLanguage;
+
+  /// No description provided for @about.
+  ///
+  /// In ar, this message translates to:
+  /// **'عن التطبيق'**
+  String get about;
+
+  /// No description provided for @homeTagline.
+  ///
+  /// In ar, this message translates to:
+  /// **'يلا نتعلم ونلعب مع نونو وفوفو!'**
+  String get homeTagline;
+
+  /// No description provided for @homeIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحروف القبطي اتبعترت في كل حتة في مصر! تعالى مع نونو وفوفو نلاقيها ونرجعها لكتاب جدو.'**
+  String get homeIntro;
+
+  /// No description provided for @homeLessons.
+  ///
+  /// In ar, this message translates to:
+  /// **'دلوقتي بنتعلم الحروف القبطي، وقريب هيبقى في دروس تانية كتير!'**
+  String get homeLessons;
+
+  /// No description provided for @meetBrothers.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعرّف على نونو وفوفو'**
+  String get meetBrothers;
+
+  /// No description provided for @nonoAge.
+  ///
+  /// In ar, this message translates to:
+  /// **'٩ سنين'**
+  String get nonoAge;
+
+  /// No description provided for @fofoAge.
+  ///
+  /// In ar, this message translates to:
+  /// **'٦ سنين'**
+  String get fofoAge;
+
+  /// No description provided for @nonoBio.
+  ///
+  /// In ar, this message translates to:
+  /// **'نونو الأخ الكبير. شعره كيرلي غامق وضحكته واسعة، ومليان طاقة. مبيمشيش، دايماً بيجري! بيحب الكورة والسباقات، وأول واحد بيرفع إيده يجاوب. ساعات بيستعجل ويغلط، بس بيضحك ويحاول تاني ومبيزهقش أبداً. وبيحب أخوه الصغير جداً، ودايماً بيشجعه.'**
+  String get nonoBio;
+
+  /// No description provided for @fofoBio.
+  ///
+  /// In ar, this message translates to:
+  /// **'فوفو الأخ الصغير. شعره كيرلي لونه كراميل، وسنته اللي قدام واقعة. هادي وشاطر، ولما بيفكر بيحط صباعه على دقنه. بيحب الألغاز والرسم وبيسأل \"ليه؟\" على كل حاجة. بياخد وقته، بس لما بيجاوب غالباً بيبقى صح، وبيلاحظ حاجات صغيرة محدش بياخد باله منها.'**
+  String get fofoBio;
+
+  /// No description provided for @together.
+  ///
+  /// In ar, this message translates to:
+  /// **'نونو بيجيب الشجاعة، وفوفو بيجيب الأفكار، ومع بعض مفيش حرف يستخبى منهم!'**
+  String get together;
+
+  /// No description provided for @ourStory.
+  ///
+  /// In ar, this message translates to:
+  /// **'حكايتنا'**
+  String get ourStory;
+
+  /// No description provided for @storyHome.
+  ///
+  /// In ar, this message translates to:
+  /// **'نونو وفوفو أخين مصريين عايشين مع بابا وماما في القاهرة. كل جمعة بيروحوا بيت جدو، أحلى بيت في الدنيا، مليان كتب قديمة وحكايات.'**
+  String get storyHome;
+
+  /// No description provided for @grandpa.
+  ///
+  /// In ar, this message translates to:
+  /// **'جدو'**
+  String get grandpa;
+
+  /// No description provided for @storyGrandpa.
+  ///
+  /// In ar, this message translates to:
+  /// **'جدو طيب وهادي وبيعرف حكايات كتير. عنده كتاب قبطي قديم جداً، حروفه بتلمع زي الدهب.'**
+  String get storyGrandpa;
+
+  /// No description provided for @lostLetters.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحروف التايهة'**
+  String get lostLetters;
+
+  /// No description provided for @storyAdventure.
+  ///
+  /// In ar, this message translates to:
+  /// **'في يوم، نونو دخل بيت جدو جري زي عادته… وخبط في الكتاب! الكتاب وقع واتفتح، والحروف طارت واتبعترت في كل حتة في مصر: على النيل، في القرية، عند الأهرامات، في الدير اللي في الصحرا، ولحد إسكندرية والبحر. ومن ساعتها نونو وفوفو بيلفوا مصر كلها يدوروا على الحروف ويرجعوها للكتاب.'**
+  String get storyAdventure;
+
+  /// No description provided for @aboutTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عن نونو وفوفو'**
+  String get aboutTitle;
+
+  /// No description provided for @aboutBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'نونو وفوفو تطبيق بيعلّم الأطفال من خلال ألعاب وحكايات. دلوقتي بنبدأ بالحروف القبطي، وبعد كده هيبقى في دروس تانية كتير. التطبيق لسه بيتبني، والجاي أحلى!'**
+  String get aboutBody;
+
+  /// No description provided for @aboutTryTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'جرّب اللي جاهز لحد دلوقتي'**
+  String get aboutTryTitle;
 }
 
 class _AppLocalizationsDelegate
