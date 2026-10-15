@@ -218,6 +218,9 @@ class _BrotherCard extends StatelessWidget {
 
   static const double _characterSize = 200;
 
+  /// Room above the character for the speech bubble (the card clips).
+  static const double _bubbleSpace = 120;
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -228,7 +231,7 @@ class _BrotherCard extends StatelessWidget {
         children: [
           Container(
             color: AppColors.tertiary,
-            height: _characterSize + 70,
+            height: _characterSize + _bubbleSpace,
             alignment: Alignment.bottomCenter,
             padding: const EdgeInsets.only(bottom: AppDimens.spaceMd),
             child: AnimatedCharacter(
