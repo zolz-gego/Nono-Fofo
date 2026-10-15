@@ -17,6 +17,7 @@ import '../../../engines/characters/domain/character_reaction.dart';
 import '../../../engines/characters/presentation/animated_character.dart';
 import '../../../engines/characters/presentation/character_controller.dart';
 import '../../../engines/sound/application/sound_service.dart';
+import '../../../engines/sound/domain/sound_event.dart';
 import '../../settings/presentation/language_button.dart';
 
 /// Home: what the app is, the brothers and their world, language switch
@@ -43,6 +44,24 @@ class _HomePageState extends State<HomePage> {
   static const double _maxWidth = 960;
   static const double _twoColumnsFrom = 720;
 
+  /// The story starts at Grandpa's house, so that's the home theme.
+  static const MusicTrack _music = MusicTrack.grandpaHouse;
+  bool _retriedMusic = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _sound.playMusic(_music);
+  }
+
+  /// Browsers block audio until the first user gesture, so try again on the
+  /// first tap (a no-op if the music is already playing).
+  void _retryMusicOnce(PointerDownEvent _) {
+    if (_retriedMusic) return;
+    _retriedMusic = true;
+    if (_sound.currentTrack == _music) _sound.playMusic(_music);
+  }
+
   @override
   void dispose() {
     _nono.dispose();
@@ -53,53 +72,56 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Scaffold(
-      appBar: AppTopBar(
-        title: l10n.appTitle,
-        actions: [
-          const LanguageButton(),
-          IconButton(
-            tooltip: l10n.about,
-            color: AppColors.textOnDark,
-            onPressed: () => context.push(AppRoutes.about),
-            icon: const FaIcon(AppIcons.info),
-          ),
-          const SizedBox(width: AppDimens.spaceSm),
-        ],
-      ),
-      body: Align(
-        alignment: Alignment.topCenter,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: _maxWidth),
-          child: ListView(
-            padding: const EdgeInsets.all(AppDimens.spaceMd),
-            children:
-                [
-                      const _Hero(),
-                      const SizedBox(height: AppDimens.spaceLg),
-                      AppText.h2(
-                        l10n.meetBrothers,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: AppDimens.spaceMd),
-                      _brothers(l10n),
-                      const SizedBox(height: AppDimens.spaceMd),
-                      _TogetherBanner(text: l10n.together),
-                      const SizedBox(height: AppDimens.spaceLg),
-                      const _Story(),
-                      const SizedBox(height: AppDimens.spaceLg),
-                      Center(
-                        child: FilledButton.icon(
-                          onPressed: () => context.push(AppRoutes.about),
-                          icon: const FaIcon(AppIcons.info),
-                          label: Text(l10n.about),
+    return Listener(
+      onPointerDown: _retryMusicOnce,
+      child: Scaffold(
+        appBar: AppTopBar(
+          title: l10n.appTitle,
+          actions: [
+            const LanguageButton(),
+            IconButton(
+              tooltip: l10n.about,
+              color: AppColors.textOnDark,
+              onPressed: () => context.push(AppRoutes.about),
+              icon: const FaIcon(AppIcons.info),
+            ),
+            const SizedBox(width: AppDimens.spaceSm),
+          ],
+        ),
+        body: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: _maxWidth),
+            child: ListView(
+              padding: const EdgeInsets.all(AppDimens.spaceMd),
+              children:
+                  [
+                        const _Hero(),
+                        const SizedBox(height: AppDimens.spaceLg),
+                        AppText.h2(
+                          l10n.meetBrothers,
+                          textAlign: TextAlign.center,
                         ),
-                      ),
-                      const SizedBox(height: AppDimens.spaceLg),
-                    ]
-                    .animate(interval: 80.ms)
-                    .fadeIn(duration: AppDimens.normal)
-                    .slideY(begin: 0.06, curve: Curves.easeOut),
+                        const SizedBox(height: AppDimens.spaceMd),
+                        _brothers(l10n),
+                        const SizedBox(height: AppDimens.spaceMd),
+                        _TogetherBanner(text: l10n.together),
+                        const SizedBox(height: AppDimens.spaceLg),
+                        const _Story(),
+                        const SizedBox(height: AppDimens.spaceLg),
+                        Center(
+                          child: FilledButton.icon(
+                            onPressed: () => context.push(AppRoutes.about),
+                            icon: const FaIcon(AppIcons.info),
+                            label: Text(l10n.about),
+                          ),
+                        ),
+                        const SizedBox(height: AppDimens.spaceLg),
+                      ]
+                      .animate(interval: 80.ms)
+                      .fadeIn(duration: AppDimens.normal)
+                      .slideY(begin: 0.06, curve: Curves.easeOut),
+            ),
           ),
         ),
       ),
