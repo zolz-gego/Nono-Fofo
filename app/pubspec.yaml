@@ -83,6 +83,7 @@ flutter:
     - assets/audio/voice/nono/
     - assets/audio/voice/fofo/
     - assets/content/questions/
+    - assets/games/
 
   fonts:
     - family: BalooBhaijaan2

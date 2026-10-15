@@ -171,4 +171,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String gameComingSoon(String name) {
     return 'Ready, $name! The game is coming soon.';
   }
+
+  @override
+  String welcomeName(String name) {
+    return 'Welcome, $name!';
+  }
+
+  @override
+  String get pickGame => 'Pick a game and let\'s go!';
+
+  @override
+  String get gamesComingSoon => 'This level\'s games are coming soon.';
+
+  @override
+  String get gameFishing => 'Fish catch';
+
+  @override
+  String get gameWriteLetter => 'Write the letter';
+
+  @override
+  String get gameBalloons => 'Pop the balloon';
+
+  @override
+  String gameChallenge(String opponent) {
+    return 'Challenge $opponent';
+  }
 }
