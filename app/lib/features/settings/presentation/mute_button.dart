@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../core/l10n/l10n.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_icons.dart';
 import '../domain/app_settings.dart';
 import 'settings_cubit.dart';
 
@@ -19,9 +21,7 @@ class MuteButton extends StatelessWidget {
         tooltip: s.muted ? l10n.unmute : l10n.mute,
         color: AppColors.textOnDark,
         onPressed: () => context.read<SettingsCubit>().setMuted(!s.muted),
-        icon: Icon(
-          s.muted ? Icons.volume_off_rounded : Icons.volume_up_rounded,
-        ),
+        icon: FaIcon(s.muted ? AppIcons.soundOff : AppIcons.soundOn),
       ),
     );
   }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -240,10 +242,29 @@ class _BrotherCard extends StatelessWidget {
   final Color accent;
   final bool mirror;
 
-  static const double _characterSize = 200;
+  /// Nono's height; Fofo is drawn to the same scale (~75%).
+  static const double _characterSize = 300;
 
-  /// Room above the character for the speech bubble (the card clips).
-  static const double _bubbleSpace = 120;
+  /// Headroom so jumps and raised arms stay inside the card (it clips).
+  static const double _headroom = 80;
+
+  /// Hold for reactions that otherwise never end (run, sleep).
+  static const Duration _openEndedHold = Duration(seconds: 3);
+
+  static final Random _random = Random();
+
+  /// Plays a random reaction (pose + sound), never the one already showing.
+  void _playRandom() {
+    final options = CharacterReaction.values
+        .where((r) => r.action != controller.action)
+        .toList();
+    final r = options[_random.nextInt(options.length)];
+    if (r.hold != null) return controller.react(r);
+    controller.play(r.action, hold: _openEndedHold);
+    if (r.sound != null) {
+      controller.sound?.play(r.sound!, by: controller.character);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -255,15 +276,14 @@ class _BrotherCard extends StatelessWidget {
         children: [
           Container(
             color: AppColors.tertiary,
-            height: _characterSize + _bubbleSpace,
+            height: _characterSize + _headroom,
             alignment: Alignment.bottomCenter,
             padding: const EdgeInsets.only(bottom: AppDimens.spaceMd),
             child: AnimatedCharacter(
               controller: controller,
               size: _characterSize,
               mirror: mirror,
-              onTap: () =>
-                  controller.react(CharacterReaction.greet, say: catchphrase),
+              onTap: _playRandom,
             ),
           ),
           Container(height: 6, color: accent),

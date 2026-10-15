@@ -7,4 +7,6 @@ abstract final class AppIcons {
   static const FaIconData lessons = FontAwesomeIcons.bookOpen;
   static const FaIconData speech = FontAwesomeIcons.solidComment;
   static const FaIconData stop = FontAwesomeIcons.stop;
+  static const FaIconData soundOn = FontAwesomeIcons.volumeHigh;
+  static const FaIconData soundOff = FontAwesomeIcons.volumeXmark;
 }
