@@ -38,5 +38,30 @@
   "storyAdventure": "One day, Nono ran into Grandpa's house as usual… and crashed right into the book! It fell open, and the letters flew out and scattered all over Egypt: along the Nile, into the village, to the Pyramids, the desert monastery, and all the way to Alexandria by the sea. Ever since, Nono and Fofo have been travelling across Egypt to find the letters and bring them back to the book.",
   "aboutTitle": "About Nono & Fofo",
   "aboutBody": "Nono & Fofo teaches kids through games and stories. We're starting with the Coptic letters, and many more lessons will come later. The app is still being built, and the best is yet to come!",
-  "aboutTryTitle": "Try what's ready so far"
+  "aboutTryTitle": "Try what's ready so far",
+  "chooseLevel": "Choose your level",
+  "levelNumber": "Level {number}",
+  "@levelNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "level1Desc": "Meet the letters",
+  "level2Desc": "Read short words",
+  "level3Desc": "Read full sentences",
+  "yourName": "What's your name?",
+  "nameHint": "Type your name",
+  "playWith": "Who do you want to play with?",
+  "letsPlay": "Let's play!",
+  "cancel": "Cancel",
+  "gameComingSoon": "Ready, {name}! The game is coming soon.",
+  "@gameComingSoon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

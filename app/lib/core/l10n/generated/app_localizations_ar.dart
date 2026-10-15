@@ -134,4 +134,41 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get aboutTryTitle => 'جرّب اللي جاهز لحد دلوقتي';
+
+  @override
+  String get chooseLevel => 'اختار المستوى';
+
+  @override
+  String levelNumber(int number) {
+    return 'المستوى $number';
+  }
+
+  @override
+  String get level1Desc => 'اتعرّف على الحروف';
+
+  @override
+  String get level2Desc => 'اقرا كلمات قصيرة';
+
+  @override
+  String get level3Desc => 'اقرا جمل كاملة';
+
+  @override
+  String get yourName => 'اسمك إيه؟';
+
+  @override
+  String get nameHint => 'اكتب اسمك';
+
+  @override
+  String get playWith => 'عايز تلعب مع مين؟';
+
+  @override
+  String get letsPlay => 'يلا نلعب!';
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
+  String gameComingSoon(String name) {
+    return 'جاهز يا $name! اللعبة جاية قريب.';
+  }
 }

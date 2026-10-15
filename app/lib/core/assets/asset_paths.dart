@@ -6,6 +6,10 @@ abstract final class AssetPaths {
   static const String characters = 'assets/characters';
   static const String characterManifest = '$characters/manifest.json';
 
+  /// Small still image of one pose, e.g. `characterPose('nono', 'cheer')`.
+  static String characterPose(String character, String pose) =>
+      '$characters/$character/small/$pose.png';
+
   static const String audio = 'assets/audio';
   static const String audioManifest = '$audio/manifest.json';
 

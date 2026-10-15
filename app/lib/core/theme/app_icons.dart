@@ -9,4 +9,8 @@ abstract final class AppIcons {
   static const FaIconData stop = FontAwesomeIcons.stop;
   static const FaIconData soundOn = FontAwesomeIcons.volumeHigh;
   static const FaIconData soundOff = FontAwesomeIcons.volumeXmark;
+  static const FaIconData star = FontAwesomeIcons.solidStar;
+  static const FaIconData play = FontAwesomeIcons.play;
+  static const FaIconData close = FontAwesomeIcons.xmark;
+  static const FaIconData check = FontAwesomeIcons.solidCircleCheck;
 }

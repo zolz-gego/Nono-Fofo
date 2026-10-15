@@ -134,4 +134,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutTryTitle => 'Try what\'s ready so far';
+
+  @override
+  String get chooseLevel => 'Choose your level';
+
+  @override
+  String levelNumber(int number) {
+    return 'Level $number';
+  }
+
+  @override
+  String get level1Desc => 'Meet the letters';
+
+  @override
+  String get level2Desc => 'Read short words';
+
+  @override
+  String get level3Desc => 'Read full sentences';
+
+  @override
+  String get yourName => 'What\'s your name?';
+
+  @override
+  String get nameHint => 'Type your name';
+
+  @override
+  String get playWith => 'Who do you want to play with?';
+
+  @override
+  String get letsPlay => 'Let\'s play!';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String gameComingSoon(String name) {
+    return 'Ready, $name! The game is coming soon.';
+  }
 }
