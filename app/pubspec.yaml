@@ -47,6 +47,7 @@ dependencies:
   audioplayers: ^6.8.1
   flutter_localizations:
     sdk: flutter
+  font_awesome_flutter: ^11.0.0
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +71,7 @@ flutter:
   generate: true
 
   assets:
+    - assets/brand/
     - assets/characters/
     - assets/characters/nono/
     - assets/characters/nono/small/
@@ -81,6 +83,7 @@ flutter:
     - assets/audio/voice/nono/
     - assets/audio/voice/fofo/
     - assets/content/questions/
+    - assets/games/
 
   fonts:
     - family: BalooBhaijaan2

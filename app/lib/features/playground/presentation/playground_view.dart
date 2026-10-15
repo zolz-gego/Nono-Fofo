@@ -2,10 +2,12 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../core/domain/character_id.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_icons.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../core/typography/app_text_styles.dart';
 import '../../../core/widgets/text/app_texts.dart';
@@ -18,24 +20,32 @@ import '../../../engines/sound/domain/sound_event.dart';
 import '../../settings/domain/app_settings.dart';
 import '../../settings/presentation/settings_cubit.dart';
 
-/// Developer playground: shows the text components, both characters with
-/// every pose/reaction, and the sound engine. Replaced by the real home
-/// screen later.
-class PlaygroundPage extends StatefulWidget {
-  const PlaygroundPage({super.key});
+/// Playground of what's built so far: the text components, both characters
+/// with every pose/reaction, the sound engine and settings. Shown on the
+/// About page below [header].
+class PlaygroundView extends StatefulWidget {
+  const PlaygroundView({super.key, this.header});
+
+  /// Shown above the playground sections, scrolling with them.
+  final Widget? header;
 
   @override
-  State<PlaygroundPage> createState() => _PlaygroundPageState();
+  State<PlaygroundView> createState() => _PlaygroundViewState();
 }
 
-class _PlaygroundPageState extends State<PlaygroundPage> {
+class _PlaygroundViewState extends State<PlaygroundView> {
   late final SoundService _sound = context.read<SoundService>();
-  late final CharacterController _nono =
-      CharacterController(CharacterId.nono, sound: _sound);
-  late final CharacterController _fofo =
-      CharacterController(CharacterId.fofo, sound: _sound);
-  final ConfettiController _confetti =
-      ConfettiController(duration: const Duration(seconds: 2));
+  late final CharacterController _nono = CharacterController(
+    CharacterId.nono,
+    sound: _sound,
+  );
+  late final CharacterController _fofo = CharacterController(
+    CharacterId.fofo,
+    sound: _sound,
+  );
+  final ConfettiController _confetti = ConfettiController(
+    duration: const Duration(seconds: 2),
+  );
 
   @override
   void dispose() {
@@ -59,31 +69,42 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.playgroundTitle)),
-      body: Stack(
-        alignment: Alignment.topCenter,
-        children: [
-          ListView(
-            padding: const EdgeInsets.all(AppDimens.spaceMd),
-            children: [
-              _Section(title: l10n.sectionCharacters, child: _stage(l10n)),
-              _Section(title: l10n.sectionTexts, child: const _TextsDemo()),
-              _Section(title: l10n.sectionSounds, child: _SoundsDemo(_sound)),
-              _Section(title: l10n.sectionSettings, child: const _SettingsDemo()),
-            ]
-                .animate(interval: 80.ms)
-                .fadeIn(duration: AppDimens.normal)
-                .slideY(begin: 0.08, curve: Curves.easeOut),
-          ),
-          ConfettiWidget(
-            confettiController: _confetti,
-            blastDirectionality: BlastDirectionality.explosive,
-            colors: AppColors.celebration,
-            numberOfParticles: 30,
-          ),
-        ],
-      ),
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        ListView(
+          padding: const EdgeInsets.all(AppDimens.spaceMd),
+          children:
+              [
+                    ?widget.header,
+                    _Section(
+                      title: l10n.sectionCharacters,
+                      child: _stage(l10n),
+                    ),
+                    _Section(
+                      title: l10n.sectionTexts,
+                      child: const _TextsDemo(),
+                    ),
+                    _Section(
+                      title: l10n.sectionSounds,
+                      child: _SoundsDemo(_sound),
+                    ),
+                    _Section(
+                      title: l10n.sectionSettings,
+                      child: const _SettingsDemo(),
+                    ),
+                  ]
+                  .animate(interval: 80.ms)
+                  .fadeIn(duration: AppDimens.normal)
+                  .slideY(begin: 0.08, curve: Curves.easeOut),
+        ),
+        ConfettiWidget(
+          confettiController: _confetti,
+          blastDirectionality: BlastDirectionality.explosive,
+          colors: AppColors.celebration,
+          numberOfParticles: 30,
+        ),
+      ],
     );
   }
 
@@ -252,7 +273,7 @@ class _SoundsDemoState extends State<_SoundsDemo> {
                       setState(() {});
                     }
                   : null,
-              icon: const Icon(Icons.stop_rounded),
+              icon: const FaIcon(AppIcons.stop),
               label: Text(l10n.stopMusic),
             ),
           ],
@@ -286,12 +307,21 @@ class _SettingsDemo extends StatelessWidget {
               ),
             ],
           ),
-          _volume(l10n.music, s.musicVolume,
-              (v) => cubit.setVolume(SoundChannel.music, v)),
-          _volume(l10n.effects, s.sfxVolume,
-              (v) => cubit.setVolume(SoundChannel.sfx, v)),
-          _volume(l10n.voices, s.voiceVolume,
-              (v) => cubit.setVolume(SoundChannel.voice, v)),
+          _volume(
+            l10n.music,
+            s.musicVolume,
+            (v) => cubit.setVolume(SoundChannel.music, v),
+          ),
+          _volume(
+            l10n.effects,
+            s.sfxVolume,
+            (v) => cubit.setVolume(SoundChannel.sfx, v),
+          ),
+          _volume(
+            l10n.voices,
+            s.voiceVolume,
+            (v) => cubit.setVolume(SoundChannel.voice, v),
+          ),
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
             title: AppText(l10n.mute),
@@ -307,7 +337,9 @@ class _SettingsDemo extends StatelessWidget {
       Row(
         children: [
           SizedBox(width: 110, child: AppText(label)),
-          Expanded(child: Slider(value: value, onChanged: onChanged)),
+          Expanded(
+            child: Slider(value: value, onChanged: onChanged),
+          ),
         ],
       );
 }
