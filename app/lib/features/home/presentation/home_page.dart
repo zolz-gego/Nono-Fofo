@@ -67,14 +67,8 @@ class _HomePageState extends State<HomePage> {
     if (_sound.currentTrack == _music) _sound.playMusic(_music);
   }
 
-  /// The games come in a later task; for now just confirm the choice.
-  void _startLevel(PlayerSetup setup) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(content: Text(context.l10n.gameComingSoon(setup.name))),
-      );
-  }
+  void _startLevel(PlayerSetup setup) =>
+      context.push(AppRoutes.level, extra: setup);
 
   @override
   void dispose() {

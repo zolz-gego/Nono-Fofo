@@ -63,5 +63,12 @@
         "type": "String"
       }
     }
-  }
+  },
+  "welcomeName": "Welcome, {name}!",
+  "pickGame": "Pick a game and let's go!",
+  "gamesComingSoon": "This level's games are coming soon.",
+  "gameFishing": "Fish catch",
+  "gameWriteLetter": "Write the letter",
+  "gameBalloons": "Pop the balloon",
+  "gameChallenge": "Challenge {opponent}"
 }

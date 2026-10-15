@@ -171,4 +171,29 @@ class AppLocalizationsAr extends AppLocalizations {
   String gameComingSoon(String name) {
     return 'جاهز يا $name! اللعبة جاية قريب.';
   }
+
+  @override
+  String welcomeName(String name) {
+    return 'أهلاً يا $name!';
+  }
+
+  @override
+  String get pickGame => 'اختار لعبة ويلا بينا!';
+
+  @override
+  String get gamesComingSoon => 'ألعاب المستوى ده جاية قريب.';
+
+  @override
+  String get gameFishing => 'صيد السمك';
+
+  @override
+  String get gameWriteLetter => 'اكتب الحرف';
+
+  @override
+  String get gameBalloons => 'فرقع البالونة';
+
+  @override
+  String gameChallenge(String opponent) {
+    return 'تحدّى $opponent';
+  }
 }

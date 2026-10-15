@@ -397,6 +397,48 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'جاهز يا {name}! اللعبة جاية قريب.'**
   String gameComingSoon(String name);
+
+  /// No description provided for @welcomeName.
+  ///
+  /// In ar, this message translates to:
+  /// **'أهلاً يا {name}!'**
+  String welcomeName(String name);
+
+  /// No description provided for @pickGame.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار لعبة ويلا بينا!'**
+  String get pickGame;
+
+  /// No description provided for @gamesComingSoon.
+  ///
+  /// In ar, this message translates to:
+  /// **'ألعاب المستوى ده جاية قريب.'**
+  String get gamesComingSoon;
+
+  /// No description provided for @gameFishing.
+  ///
+  /// In ar, this message translates to:
+  /// **'صيد السمك'**
+  String get gameFishing;
+
+  /// No description provided for @gameWriteLetter.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب الحرف'**
+  String get gameWriteLetter;
+
+  /// No description provided for @gameBalloons.
+  ///
+  /// In ar, this message translates to:
+  /// **'فرقع البالونة'**
+  String get gameBalloons;
+
+  /// No description provided for @gameChallenge.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحدّى {opponent}'**
+  String gameChallenge(String opponent);
 }
 
 class _AppLocalizationsDelegate

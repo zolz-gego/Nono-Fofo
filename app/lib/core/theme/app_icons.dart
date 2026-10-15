@@ -13,4 +13,10 @@ abstract final class AppIcons {
   static const FaIconData play = FontAwesomeIcons.play;
   static const FaIconData close = FontAwesomeIcons.xmark;
   static const FaIconData check = FontAwesomeIcons.solidCircleCheck;
+
+  // Game placeholders, shown until a game's illustration is added.
+  static const FaIconData fishing = FontAwesomeIcons.fish;
+  static const FaIconData writeLetter = FontAwesomeIcons.pencil;
+  static const FaIconData balloons = FontAwesomeIcons.burst;
+  static const FaIconData challenge = FontAwesomeIcons.trophy;
 }

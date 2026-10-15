@@ -64,6 +64,27 @@
       }
     }
   },
+  "welcomeName": "أهلاً يا {name}!",
+  "@welcomeName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "pickGame": "اختار لعبة ويلا بينا!",
+  "gamesComingSoon": "ألعاب المستوى ده جاية قريب.",
+  "gameFishing": "صيد السمك",
+  "gameWriteLetter": "اكتب الحرف",
+  "gameBalloons": "فرقع البالونة",
+  "gameChallenge": "تحدّى {opponent}",
+  "@gameChallenge": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
   "@appTitle": {
     "description": "App name"
   },

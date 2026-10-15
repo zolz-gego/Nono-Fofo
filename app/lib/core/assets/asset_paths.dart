@@ -10,6 +10,9 @@ abstract final class AssetPaths {
   static String characterPose(String character, String pose) =>
       '$characters/$character/small/$pose.png';
 
+  /// Card illustration of one game, e.g. `gameImage('fishing')`.
+  static String gameImage(String game) => 'assets/games/$game.png';
+
   static const String audio = 'assets/audio';
   static const String audioManifest = '$audio/manifest.json';
 
