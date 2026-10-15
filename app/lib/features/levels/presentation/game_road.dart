@@ -28,46 +28,116 @@ class RoadStop {
   final VoidCallback onTap;
 }
 
+/// Draws the piece that walks the road (the child's buddy). [height] is the
+/// size to draw it at; [facingLeft] is where it is heading or looking.
+typedef RoadWalkerBuilder = Widget Function(
+  BuildContext context,
+  double height,
+  bool facingLeft,
+);
+
 /// Game cards along a winding road, [perRow] to a row. The first row runs
 /// in reading direction (right to left in Arabic), the next one comes back,
 /// and so on, like a board-game trail.
-class GameRoad extends StatelessWidget {
-  const GameRoad({super.key, required this.stops, this.perRow = 3});
+///
+/// With a [walker], a piece stands beside stop [walkerAt]. When [walkerAt]
+/// changes it walks there stop by stop, then calls [onArrived].
+class GameRoad extends StatefulWidget {
+  const GameRoad({
+    super.key,
+    required this.stops,
+    this.perRow = 3,
+    this.walker,
+    this.walkerAt = 0,
+    this.onArrived,
+  });
 
   final List<RoadStop> stops;
   final int perRow;
+  final RoadWalkerBuilder? walker;
+  final int walkerAt;
+  final VoidCallback? onArrived;
 
   static const double _minGapX = AppDimens.spaceLg;
   static const double _maxCardWidth = 200;
   static const double _gapY = AppDimens.spaceXl + AppDimens.spaceMd;
   static const double _titleHeight = 64;
 
+  /// Walker height as a share of a card's height.
+  static const double _walkerScale = 0.8;
+
+  /// Time to walk from one stop to the next.
+  static const Duration _stepTime = Duration(milliseconds: 450);
+
+  @override
+  State<GameRoad> createState() => _GameRoadState();
+}
+
+class _GameRoadState extends State<GameRoad>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _walk = AnimationController(vsync: this)
+    ..addStatusListener((status) {
+      if (status == AnimationStatus.completed) widget.onArrived?.call();
+    });
+
+  /// Stops the walker passes through, first to last.
+  late List<int> _route = [widget.walkerAt];
+
+  int get _perRow => widget.perRow;
+
+  @override
+  void didUpdateWidget(GameRoad old) {
+    super.didUpdateWidget(old);
+    if (old.walkerAt == widget.walkerAt) return;
+    final from = _currentStop();
+    final to = widget.walkerAt;
+    final step = to > from ? 1 : -1;
+    _route = [for (var i = from; i != to + step; i += step) i];
+    _walk
+      ..duration = GameRoad._stepTime * (_route.length - 1)
+      ..forward(from: 0);
+  }
+
+  @override
+  void dispose() {
+    _walk.dispose();
+    super.dispose();
+  }
+
+  /// The stop the walker is at or closest to right now.
+  int _currentStop() {
+    final t = _walk.value * (_route.length - 1);
+    return _route[t.round()];
+  }
+
   /// Card column of stop [i], counted from the reading start.
   int _column(int i) {
-    final row = i ~/ perRow;
-    final c = i % perRow;
-    return row.isEven ? c : perRow - 1 - c;
+    final row = i ~/ _perRow;
+    final c = i % _perRow;
+    return row.isEven ? c : _perRow - 1 - c;
   }
 
   @override
   Widget build(BuildContext context) {
+    final stops = widget.stops;
     final rtl = Directionality.of(context) == TextDirection.rtl;
-    final rows = (stops.length + perRow - 1) ~/ perRow;
+    final rows = (stops.length + _perRow - 1) ~/ _perRow;
     return LayoutBuilder(
       builder: (context, c) {
-        final cardW = ((c.maxWidth - _minGapX * (perRow - 1)) / perRow).clamp(
-          0.0,
-          _maxCardWidth,
-        );
+        final cardW =
+            ((c.maxWidth - GameRoad._minGapX * (_perRow - 1)) / _perRow).clamp(
+              0.0,
+              GameRoad._maxCardWidth,
+            );
         // Wide screens: spread the cards so the road shows between them.
-        final gapX = (c.maxWidth - cardW * perRow) / (perRow - 1);
-        final cardH = cardW + _titleHeight;
+        final gapX = (c.maxWidth - cardW * _perRow) / (_perRow - 1);
+        final cardH = cardW + GameRoad._titleHeight;
         Offset topLeft(int i) {
           final col = _column(i);
           final fromStart = col * (cardW + gapX);
           return Offset(
             rtl ? c.maxWidth - fromStart - cardW : fromStart,
-            (i ~/ perRow) * (cardH + _gapY),
+            (i ~/ _perRow) * (cardH + GameRoad._gapY),
           );
         }
 
@@ -75,8 +145,20 @@ class GameRoad extends StatelessWidget {
           for (var i = 0; i < stops.length; i++)
             topLeft(i) + Offset(cardW / 2, cardH / 2),
         ];
+
+        // Where the walker's feet go at stop i: on the road beside the
+        // card's bottom corner, on the side away from the screen edge.
+        Offset spot(int i) {
+          final tl = topLeft(i);
+          final leftSide = tl.dx > c.maxWidth / 2;
+          return Offset(
+            leftSide ? tl.dx : tl.dx + cardW,
+            tl.dy + cardH + AppDimens.spaceSm,
+          );
+        }
+
         return SizedBox(
-          height: rows * cardH + (rows - 1) * _gapY,
+          height: rows * cardH + (rows - 1) * GameRoad._gapY,
           child: Stack(
             clipBehavior: Clip.none,
             children: [
@@ -93,10 +175,47 @@ class GameRoad extends StatelessWidget {
                   height: cardH,
                   child: _GameCard(number: i + 1, stop: stop),
                 ),
+              if (widget.walker != null)
+                AnimatedBuilder(
+                  animation: _walk,
+                  builder: (context, _) => _walkerAt(
+                    context,
+                    spot,
+                    cardH * GameRoad._walkerScale,
+                    c.maxWidth,
+                  ),
+                ),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _walkerAt(
+    BuildContext context,
+    Offset Function(int) spot,
+    double height,
+    double width,
+  ) {
+    final steps = _route.length - 1;
+    final t = _walk.value * steps;
+    final seg = t.floor().clamp(0, steps == 0 ? 0 : steps - 1);
+    final a = spot(_route[seg]);
+    final b = steps == 0 ? a : spot(_route[seg + 1]);
+    final feet = Offset.lerp(a, b, steps == 0 ? 0 : t - seg)!;
+    // Heading: the way it's moving; standing still: towards the middle.
+    final dx = b.dx - a.dx;
+    final facingLeft = dx.abs() > 1 ? dx < 0 : feet.dx > width / 2;
+    return Positioned(
+      left: feet.dx - height / 2,
+      top: feet.dy - height,
+      width: height,
+      height: height,
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: widget.walker!(context, height, facingLeft),
+      ),
     );
   }
 }

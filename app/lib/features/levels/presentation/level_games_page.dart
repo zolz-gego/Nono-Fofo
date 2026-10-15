@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,10 +42,6 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
   );
 
   static const double _maxWidth = 960;
-  static const double _buddySize = 240;
-
-  /// Keeps the buddy from crowding the road on short phone screens.
-  static const double _buddyMaxScreenShare = 0.22;
   static const Duration _greetAfter = Duration(milliseconds: 400);
 
   @override
@@ -65,14 +59,27 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
     super.dispose();
   }
 
-  void _openGame() {
+  /// The game the buddy is standing at (or walking to).
+  int _at = 0;
+
+  /// Tapping a game sends the buddy running along the road to it; once
+  /// there he says the game is coming soon.
+  void _openGame(int index) {
     _sound.play(SoundEvent.tap);
+    if (index == _at) return _arrived();
+    _buddy
+      ..hideSpeech()
+      ..play(CharacterAction.run);
+    setState(() => _at = index);
+  }
+
+  void _arrived() {
     _buddy
       ..play(CharacterAction.hint, hold: const Duration(seconds: 2))
       ..say(context.l10n.gameComingSoon(widget.setup.name));
   }
 
-  RoadStop _stop(LevelGame game, AppLocalizations l10n) {
+  RoadStop _stop(int index, LevelGame game, AppLocalizations l10n) {
     final opponent = widget.setup.buddy == CharacterId.nono
         ? l10n.fofo
         : l10n.nono;
@@ -82,28 +89,28 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
         placeholder: AppIcons.fishing,
         title: l10n.gameFishing,
         accent: AppColors.mistBlue,
-        onTap: _openGame,
+        onTap: () => _openGame(index),
       ),
       LevelGame.writeLetter => RoadStop(
         image: game.name,
         placeholder: AppIcons.writeLetter,
         title: l10n.gameWriteLetter,
         accent: AppColors.sunYellow,
-        onTap: _openGame,
+        onTap: () => _openGame(index),
       ),
       LevelGame.balloons => RoadStop(
         image: game.name,
         placeholder: AppIcons.balloons,
         title: l10n.gameBalloons,
         accent: AppColors.coral,
-        onTap: _openGame,
+        onTap: () => _openGame(index),
       ),
       LevelGame.challenge => RoadStop(
         image: game.name,
         placeholder: AppIcons.challenge,
         title: l10n.gameChallenge(opponent),
         accent: AppColors.leafGreen,
-        onTap: _openGame,
+        onTap: () => _openGame(index),
       ),
     };
   }
@@ -122,52 +129,54 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
           SizedBox(width: AppDimens.spaceSm),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: _maxWidth),
-                child: ListView(
-                  padding: const EdgeInsets.all(AppDimens.spaceMd),
-                  children:
-                      [
-                            AppText.h1(
-                              l10n.welcomeName(widget.setup.name),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: AppDimens.spaceLg),
-                            if (games.isEmpty)
-                              AppText.body(
-                                l10n.gamesComingSoon,
-                                color: AppColors.textMuted,
-                                textAlign: TextAlign.center,
-                              )
-                            else
-                              GameRoad(
-                                stops: [for (final g in games) _stop(g, l10n)],
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: _maxWidth),
+          child: ListView(
+            // Room under the last row for the buddy's feet.
+            padding: const EdgeInsets.fromLTRB(
+              AppDimens.spaceMd,
+              AppDimens.spaceMd,
+              AppDimens.spaceMd,
+              AppDimens.spaceXl * 2,
+            ),
+            children:
+                [
+                      AppText.h1(
+                        l10n.welcomeName(widget.setup.name),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: AppDimens.spaceLg),
+                      if (games.isEmpty) ...[
+                        AppText.body(
+                          l10n.gamesComingSoon,
+                          color: AppColors.textMuted,
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: AppDimens.spaceXl * 2),
+                        Center(child: AnimatedCharacter(controller: _buddy)),
+                      ] else
+                        GameRoad(
+                          stops: [
+                            for (final (i, g) in games.indexed)
+                              _stop(i, g, l10n),
+                          ],
+                          walkerAt: _at,
+                          onArrived: _arrived,
+                          walker: (context, height, facingLeft) =>
+                              AnimatedCharacter(
+                                controller: _buddy,
+                                size: height,
+                                mirror: facingLeft,
                               ),
-                          ]
-                          .animate(interval: 80.ms)
-                          .fadeIn(duration: AppDimens.normal)
-                          .slideY(begin: 0.06, curve: Curves.easeOut),
-                ),
-              ),
-            ),
+                        ),
+                    ]
+                    .animate(interval: 80.ms)
+                    .fadeIn(duration: AppDimens.normal)
+                    .slideY(begin: 0.06, curve: Curves.easeOut),
           ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: AppDimens.spaceSm),
-            child: AnimatedCharacter(
-              controller: _buddy,
-              size: min(
-                _buddySize,
-                MediaQuery.sizeOf(context).height * _buddyMaxScreenShare,
-              ),
-              mirror: widget.setup.buddy == CharacterId.fofo,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
