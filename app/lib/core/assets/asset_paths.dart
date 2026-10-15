@@ -19,6 +19,12 @@ abstract final class AssetPaths {
   /// Event -> sound mapping. Edit this to change which sound plays when.
   static const String soundMap = '$audio/sound_map.json';
 
+  /// Coptic letters and which level uses which (edit to add letters).
+  static const String letters = 'assets/content/letters.json';
+
+  /// Per-game settings, e.g. `gameConfig('fishing')`.
+  static String gameConfig(String game) => 'assets/content/games/$game.json';
+
   /// One JSON file per question type lives in this folder.
   static const String questions = 'assets/content/questions/';
 }

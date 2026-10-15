@@ -70,5 +70,22 @@
   "gameFishing": "Fish catch",
   "gameWriteLetter": "Write the letter",
   "gameBalloons": "Pop the balloon",
-  "gameChallenge": "Challenge {opponent}"
+  "gameChallenge": "Challenge {opponent}",
+  "pickLetter": "Pick the letter you'll catch!",
+  "randomLetter": "Pick one for me",
+  "backToGames": "Games",
+  "catchLetter": "Catch",
+  "fishingStart": "Let's go, {name}! Catch {letter}",
+  "fishingCheer1": "Bravo!",
+  "fishingCheer2": "Well done, {name}!",
+  "fishingCheer3": "That's right!",
+  "fishingCheer4": "Awesome!",
+  "fishingWrong": "Oops! That's {caught}, not {target}",
+  "fishingMissed": "{target} got away! Keep an eye out",
+  "fishingStars3": "Perfect! No mistakes!",
+  "fishingStars2": "Bravo! A bit more focus for 3 stars",
+  "fishingStars1": "You did it! Play again for more stars",
+  "newBest": "New best!",
+  "playAgain": "Play again",
+  "otherLetter": "Another letter"
 }

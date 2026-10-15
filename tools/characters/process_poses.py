@@ -28,12 +28,14 @@ SOURCES = {
         "hint": "Nono Hint.jpeg", "celebrate": "Nono Celebrate.jpeg", "encourage": "Nono Encourage.jpeg",
         "run": "Nono Run.jpeg", "wave": "Nono hello.jpeg", "write": "Nono Write.jpeg",
         "read": "Nono Read.jpeg", "sleep": "Nono Sleep.jpeg", "surprised": "Nono surprised.jpeg",
+        "fish": "Nono Fishing.webp", "reel": "Nono Fishing.webp",
     },
     "fofo": {
         "idle": "Fofo idle.jpeg", "cheer": "Fofo Cheer.jpeg", "wrong": "Fofo oops.jpeg",
         "hint": "Fofo Hint.jpeg", "celebrate": "Fofo Celebrate.jpeg", "encourage": "Fofo Encourage.jpeg",
         "run": "Fofo Run.jpeg", "wave": "Fofo Hello.jpeg", "write": "Fofo Write 2.jpeg",
         "read": "Fofo Read.jpeg", "sleep": "Fofo Sleep.jpeg", "surprised": "Fofo Surprised.jpeg",
+        "fish": "Fofo Fishing.webp", "reel": "Fofo Fishing.webp",
     },
 }
 
@@ -44,6 +46,17 @@ HOLES = {
     ("nono", "encourage"): [(594, 489)],
     ("fofo", "idle"): [(460, 630)],
 }
+
+# Sheets with two poses side by side: keep only the figure touching this
+# (x, y) point in source pixels.
+PICK = {
+    ("nono", "fish"): (180, 563), ("nono", "reel"): (717, 563),
+    ("fofo", "fish"): (150, 560), ("fofo", "reel"): (690, 600),
+}
+
+# Poses holding the fishing rod: the manifest gets the rod tip, where the
+# game starts the fishing line.
+ROD = {"fish", "reel"}
 
 # Head (hair) width in the output, in px. Fofo is smaller, like in the approved lineup.
 HEAD_W = {"nono": 300, "fofo": 262}
@@ -211,8 +224,44 @@ def drop_specks(rgba, min_area=40):
     return Image.fromarray(a, "RGBA")
 
 
+def keep_figure(rgba, seed):
+    """Keep the solid shape connected to seed (8-connected); clear the rest."""
+    a = np.asarray(rgba).copy()
+    solid = a[..., 3] > 40
+    H, W = solid.shape
+    keep = np.zeros_like(solid)
+    x0, y0 = seed
+    q = deque([(y0, x0)])
+    keep[y0, x0] = True
+    while q:
+        y, x = q.popleft()
+        for dy in (-1, 0, 1):
+            for dx in (-1, 0, 1):
+                ny, nx = y + dy, x + dx
+                if 0 <= ny < H and 0 <= nx < W and solid[ny, nx] and not keep[ny, nx]:
+                    keep[ny, nx] = True
+                    q.append((ny, nx))
+    # keep the soft anti-aliased edge around the figure
+    grown = np.asarray(Image.fromarray((keep * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(5))) > 0
+    a[~grown, 3] = 0
+    return Image.fromarray(a, "RGBA")
+
+
+def rod_tip(rgba):
+    """The rod points up and to the right: its tip is the solid pixel
+    furthest in that direction."""
+    a = np.asarray(rgba)[..., 3] > 120
+    ys, xs = np.nonzero(a)
+    i = np.argmax(xs - ys)
+    return xs[i], ys[i]
+
+
 def main():
     manifest = {"version": 1, "head_width": HEAD_W, "characters": {}}
+    # Hair-top-to-feet height of each idle pose, in output px. The fishing
+    # sheets were drawn with other proportions, so they match this instead of
+    # the head width.
+    idle_height = {}
     for name, poses in SOURCES.items():
         os.makedirs(os.path.join(OUT, name, "small"), exist_ok=True)
         manifest["characters"][name] = {}
@@ -220,9 +269,18 @@ def main():
             img = Image.open(os.path.join(SRC, fn)).convert("RGB")
             img = fix_source(name, pose, img)
             rgba = drop_specks(remove_white(img, HOLES.get((name, pose), ())))
+            if (name, pose) in PICK:
+                rgba = keep_figure(rgba, PICK[(name, pose)])
             hx0, hy0, hx1, hy1 = largest_blob_bbox(hair_mask(name, rgba))
             scale = HEAD_W[name] / max(1, hx1 - hx0)
             bbox = rgba.getchannel("A").point(lambda v: 255 if v > 8 else 0).getbbox()
+            if pose == "idle":
+                idle_height[name] = (bbox[3] - hy0) * scale
+            elif pose == "fish":
+                scale = idle_height[name] / (bbox[3] - hy0)
+                rod_scale = scale
+            elif pose in ROD:
+                scale = rod_scale  # same size as "fish", so the brother doesn't jump
             pad = 12
             box = (max(0, bbox[0] - pad), max(0, bbox[1] - pad),
                    min(rgba.width, bbox[2] + pad), min(rgba.height, bbox[3] + pad))
@@ -238,6 +296,10 @@ def main():
                 # head centre, so the app can line poses up when switching
                 "head_center": [round(((hx0 + hx1) / 2 - box[0]) * scale), round(((hy0 + hy1) / 2 - box[1]) * scale)],
             }
+            if pose in ROD:
+                tx, ty = rod_tip(rgba)
+                manifest["characters"][name][pose]["rod_tip"] = [
+                    round((tx - box[0]) * scale), round((ty - box[1]) * scale)]
             print(f"{name:5} {pose:10} {full.width}x{full.height}  head {hx1 - hx0}px -> x{scale:.2f}")
     with open(os.path.join(OUT, "manifest.json"), "w") as fh:
         json.dump(manifest, fh, indent=2)

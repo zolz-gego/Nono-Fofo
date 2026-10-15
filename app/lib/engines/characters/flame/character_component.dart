@@ -23,8 +23,8 @@ class CharacterComponent extends PositionComponent {
     this.characterSize = 200,
     this.mirror = false,
     CharacterAction initial = CharacterAction.idle,
-  })  : _action = initial,
-        super(anchor: Anchor.bottomCenter);
+  }) : _action = initial,
+       super(anchor: Anchor.bottomCenter);
 
   /// Character images use full asset paths, not Flame's `assets/images/`.
   static final Images _images = Images(prefix: '');
@@ -52,6 +52,21 @@ class CharacterComponent extends PositionComponent {
     final idle = roster.pose(character, CharacterAction.idle)!;
     size = Vector2(idle.width * _k, idle.height * _k);
     play(_action);
+  }
+
+  /// Whether this brother has an image for [action] (else idle is shown).
+  bool hasPose(CharacterAction action) =>
+      roster.pose(character, action)?.action == action;
+
+  /// Where the fishing rod's tip is, relative to [position] (the feet), or
+  /// null if the current pose holds no rod.
+  Offset? get rodTip {
+    final pose = roster.pose(character, _action);
+    final tip = pose?.rodTip;
+    if (pose == null || tip == null) return null;
+    final k = _k * scale.x;
+    final x = (tip.dx - pose.headCenter.dx) * k;
+    return Offset(mirror ? -x : x, (tip.dy - pose.height) * k);
   }
 
   void play(CharacterAction action) {

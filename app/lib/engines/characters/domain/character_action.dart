@@ -13,4 +13,10 @@ enum CharacterAction {
   read,
   sleep,
   surprised,
+
+  /// Holding a fishing rod, waiting (fishing game).
+  fish,
+
+  /// Pulling the rod up, excited (fishing game).
+  reel,
 }

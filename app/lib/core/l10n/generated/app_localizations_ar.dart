@@ -196,4 +196,63 @@ class AppLocalizationsAr extends AppLocalizations {
   String gameChallenge(String opponent) {
     return 'تحدّى $opponent';
   }
+
+  @override
+  String get pickLetter => 'اختار الحرف اللي هتصطاده!';
+
+  @override
+  String get randomLetter => 'اختار لي أي حرف';
+
+  @override
+  String get backToGames => 'الألعاب';
+
+  @override
+  String get catchLetter => 'اصطاد';
+
+  @override
+  String fishingStart(String name, String letter) {
+    return 'يلا يا $name! اصطاد $letter';
+  }
+
+  @override
+  String get fishingCheer1 => 'برافو!';
+
+  @override
+  String fishingCheer2(String name) {
+    return 'شاطر يا $name!';
+  }
+
+  @override
+  String get fishingCheer3 => 'صح كده!';
+
+  @override
+  String get fishingCheer4 => 'جامد!';
+
+  @override
+  String fishingWrong(String caught, String target) {
+    return 'لأ! ده $caught مش $target';
+  }
+
+  @override
+  String fishingMissed(String target) {
+    return 'فاتك $target! خلّي عينك عليه';
+  }
+
+  @override
+  String get fishingStars3 => 'ممتاز! ولا غلطة!';
+
+  @override
+  String get fishingStars2 => 'برافو! ركّز شوية وتاخد ٣ نجوم';
+
+  @override
+  String get fishingStars1 => 'خلصتها! العب تاني عشان تجمع نجوم أكتر';
+
+  @override
+  String get newBest => 'رقم جديد!';
+
+  @override
+  String get playAgain => 'العب تاني';
+
+  @override
+  String get otherLetter => 'حرف تاني';
 }
