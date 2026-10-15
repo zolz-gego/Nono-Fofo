@@ -1,5 +1,8 @@
 /// Every asset path the code knows about. Pipelines in `../tools` write here.
 abstract final class AssetPaths {
+  /// Round app logo, from tools/brand/process_logo.py.
+  static const String logo = 'assets/brand/logo.png';
+
   static const String characters = 'assets/characters';
   static const String characterManifest = '$characters/manifest.json';
 

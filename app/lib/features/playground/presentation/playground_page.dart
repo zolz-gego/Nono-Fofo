@@ -8,6 +8,7 @@ import '../../../core/l10n/l10n.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../core/typography/app_text_styles.dart';
+import '../../../core/widgets/app_top_bar.dart';
 import '../../../core/widgets/text/app_texts.dart';
 import '../../../engines/characters/domain/character_action.dart';
 import '../../../engines/characters/domain/character_reaction.dart';
@@ -60,7 +61,7 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.playgroundTitle)),
+      appBar: AppTopBar(title: l10n.playgroundTitle),
       body: Stack(
         alignment: Alignment.topCenter,
         children: [
