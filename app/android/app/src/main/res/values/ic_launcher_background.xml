@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Ring color of the logo, from tools/brand/process_logo.py -->
+    <color name="ic_launcher_background">#0D515E</color>
+</resources>

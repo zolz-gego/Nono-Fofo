@@ -70,6 +70,7 @@ flutter:
   generate: true
 
   assets:
+    - assets/brand/
     - assets/characters/
     - assets/characters/nono/
     - assets/characters/nono/small/
