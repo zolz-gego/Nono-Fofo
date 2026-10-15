@@ -20,6 +20,8 @@ import '../../../engines/characters/presentation/animated_character.dart';
 import '../../../engines/characters/presentation/character_controller.dart';
 import '../../../engines/sound/application/sound_service.dart';
 import '../../../engines/sound/domain/sound_event.dart';
+import '../../levels/domain/game_level.dart';
+import '../../levels/presentation/level_section.dart';
 import '../../settings/presentation/language_button.dart';
 import '../../settings/presentation/mute_button.dart';
 
@@ -63,6 +65,15 @@ class _HomePageState extends State<HomePage> {
     if (_retriedMusic) return;
     _retriedMusic = true;
     if (_sound.currentTrack == _music) _sound.playMusic(_music);
+  }
+
+  /// The games come in a later task; for now just confirm the choice.
+  void _startLevel(PlayerSetup setup) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(content: Text(context.l10n.gameComingSoon(setup.name))),
+      );
   }
 
   @override
@@ -110,6 +121,8 @@ class _HomePageState extends State<HomePage> {
                         _brothers(l10n),
                         const SizedBox(height: AppDimens.spaceMd),
                         _TogetherBanner(text: l10n.together),
+                        const SizedBox(height: AppDimens.spaceLg),
+                        LevelSection(onStart: _startLevel),
                         const SizedBox(height: AppDimens.spaceLg),
                         const _Story(),
                         const SizedBox(height: AppDimens.spaceLg),

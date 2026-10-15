@@ -1,9 +1,6 @@
 {
   "@@locale": "ar",
   "appTitle": "نونو وفوفو",
-  "@appTitle": {
-    "description": "App name"
-  },
   "sectionTexts": "الخطوط",
   "sectionCharacters": "نونو وفوفو",
   "sectionSounds": "الأصوات",
@@ -42,6 +39,34 @@
   "aboutTitle": "عن نونو وفوفو",
   "aboutBody": "نونو وفوفو تطبيق بيعلّم الأطفال من خلال ألعاب وحكايات. دلوقتي بنبدأ بالحروف القبطي، وبعد كده هيبقى في دروس تانية كتير. التطبيق لسه بيتبني، والجاي أحلى!",
   "aboutTryTitle": "جرّب اللي جاهز لحد دلوقتي",
+  "chooseLevel": "اختار المستوى",
+  "levelNumber": "المستوى {number}",
+  "@levelNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "level1Desc": "اتعرّف على الحروف",
+  "level2Desc": "اقرا كلمات قصيرة",
+  "level3Desc": "اقرا جمل كاملة",
+  "yourName": "اسمك إيه؟",
+  "nameHint": "اكتب اسمك",
+  "playWith": "عايز تلعب مع مين؟",
+  "letsPlay": "يلا نلعب!",
+  "cancel": "إلغاء",
+  "gameComingSoon": "جاهز يا {name}! اللعبة جاية قريب.",
+  "@gameComingSoon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@appTitle": {
+    "description": "App name"
+  },
   "@switchLanguage": {
     "description": "Language button label: the name of the OTHER language to switch to"
   }

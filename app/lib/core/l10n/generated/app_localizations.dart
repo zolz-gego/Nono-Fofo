@@ -331,6 +331,72 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'جرّب اللي جاهز لحد دلوقتي'**
   String get aboutTryTitle;
+
+  /// No description provided for @chooseLevel.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار المستوى'**
+  String get chooseLevel;
+
+  /// No description provided for @levelNumber.
+  ///
+  /// In ar, this message translates to:
+  /// **'المستوى {number}'**
+  String levelNumber(int number);
+
+  /// No description provided for @level1Desc.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتعرّف على الحروف'**
+  String get level1Desc;
+
+  /// No description provided for @level2Desc.
+  ///
+  /// In ar, this message translates to:
+  /// **'اقرا كلمات قصيرة'**
+  String get level2Desc;
+
+  /// No description provided for @level3Desc.
+  ///
+  /// In ar, this message translates to:
+  /// **'اقرا جمل كاملة'**
+  String get level3Desc;
+
+  /// No description provided for @yourName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسمك إيه؟'**
+  String get yourName;
+
+  /// No description provided for @nameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب اسمك'**
+  String get nameHint;
+
+  /// No description provided for @playWith.
+  ///
+  /// In ar, this message translates to:
+  /// **'عايز تلعب مع مين؟'**
+  String get playWith;
+
+  /// No description provided for @letsPlay.
+  ///
+  /// In ar, this message translates to:
+  /// **'يلا نلعب!'**
+  String get letsPlay;
+
+  /// No description provided for @cancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء'**
+  String get cancel;
+
+  /// No description provided for @gameComingSoon.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاهز يا {name}! اللعبة جاية قريب.'**
+  String gameComingSoon(String name);
 }
 
 class _AppLocalizationsDelegate
