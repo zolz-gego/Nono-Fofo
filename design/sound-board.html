@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nono &amp; Fofo Sound Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Rubik:wght@400;500;600&display=swap">
+<style>
+:root {
+  --teal: #0F4C5C; --sea: #A8DADC; --sand: #EFE6D8; --slate: #4F7C82; --brown: #5B4B3A;
+  --yellow: #FFC93C; --coral: #FF6B5B; --green: #5CC98A;
+  --bg: var(--sand); --card: #fffaf2; --ink: #2b2620; --muted: #7a6d5f; --line: #e2d6c3;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 Rubik, system-ui, sans-serif; }
+header { background: var(--teal); color: #fff; padding: 28px 16px 22px; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+header .wrap { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+header img { height: 86px; }
+h1 { font: 800 34px/1.1 "Baloo Bhaijaan 2", Rubik, sans-serif; margin: 0; }
+header p { margin: 4px 0 0; color: var(--sea); }
+.stats { margin-left: auto; display: flex; gap: 10px; flex-wrap: wrap; }
+.stat { background: rgba(255,255,255,.1); border-radius: 12px; padding: 8px 14px; text-align: center; }
+.stat b { display: block; font: 800 22px "Baloo Bhaijaan 2", sans-serif; color: var(--yellow); }
+nav { position: sticky; top: 0; z-index: 2; background: var(--bg); border-bottom: 1px solid var(--line); }
+nav .wrap { display: flex; gap: 6px; overflow-x: auto; padding-top: 10px; padding-bottom: 10px; }
+nav a { flex: none; text-decoration: none; color: var(--teal); background: var(--card); border: 1px solid var(--line);
+  padding: 5px 12px; border-radius: 999px; font-weight: 500; font-size: 13px; }
+nav a:hover { background: var(--sea); }
+section { padding: 22px 0 6px; }
+h2 { font: 700 23px "Baloo Bhaijaan 2", Rubik, sans-serif; margin: 0 0 10px; color: var(--teal); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+h2 small { font: 400 13px Rubik, sans-serif; color: var(--muted); }
+.playall { margin-left: auto; font: 500 13px Rubik, sans-serif; border: 0; background: var(--teal); color: #fff;
+  border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.snd { display: flex; gap: 10px; align-items: center; text-align: left; width: 100%; background: var(--card);
+  border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; cursor: pointer; font: inherit; color: inherit;
+  transition: transform .08s, box-shadow .15s, border-color .15s; }
+.snd:hover { border-color: var(--slate); box-shadow: 0 3px 0 var(--line); }
+.snd:active { transform: scale(.97); }
+.snd .btn { flex: none; width: 38px; height: 38px; border-radius: 50%; background: var(--yellow); display: grid; place-items: center; }
+.snd .btn svg { width: 15px; height: 15px; fill: var(--brown); margin-left: 2px; }
+.snd.playing { border-color: var(--coral); }
+.snd.playing .btn { background: var(--coral); animation: bounce .4s ease infinite alternate; }
+.snd.playing .btn svg { fill: #fff; }
+@keyframes bounce { to { transform: scale(1.12); } }
+.snd .id { font-weight: 600; font-size: 14px; }
+.snd .desc { color: var(--muted); font-size: 12.5px; }
+.snd .dur { margin-left: auto; flex: none; font-size: 11.5px; color: var(--muted); }
+.snd.missing { cursor: default; opacity: .8; border-style: dashed; background: transparent; }
+.snd.missing .btn { background: var(--line); }
+.snd.missing .dur { color: var(--coral); font-weight: 600; }
+.brother { display: flex; align-items: center; gap: 10px; margin: 14px 0 8px; font: 700 18px "Baloo Bhaijaan 2", sans-serif; color: var(--brown); }
+.brother img { height: 54px; }
+.note { background: var(--card); border-left: 4px solid var(--yellow); border-radius: 10px; padding: 10px 14px; color: var(--muted); font-size: 13.5px; margin-bottom: 12px; }
+.note code { background: var(--sand); padding: 1px 5px; border-radius: 5px; color: var(--ink); }
+.takes { display: flex; gap: 5px; align-items: center; padding: 5px 4px 0 12px; font-size: 12px; color: var(--muted); }
+.takes button { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--line); background: var(--card);
+  color: var(--teal); font: 600 12px Rubik, sans-serif; cursor: pointer; }
+.takes button.playing { background: var(--coral); color: #fff; border-color: var(--coral); }
+.vol { display: flex; gap: 8px; align-items: center; color: var(--sea); font-size: 13px; }
+footer { color: var(--muted); font-size: 12.5px; padding: 30px 0 40px; }
+.err { background: #fff0ee; border: 1px solid var(--coral); border-radius: 12px; padding: 14px; margin-top: 20px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <img src="../app/assets/characters/nono/small/cheer.png" alt="">
+    <div>
+      <h1>Sound Board</h1>
+      <p>Every sound in Nono &amp; Fofo. Tap to listen.</p>
+    </div>
+    <img src="../app/assets/characters/fofo/small/hint.png" alt="">
+    <div class="stats" id="stats"></div>
+  </div>
+</header>
+<nav><div class="wrap" id="nav"></div></nav>
+<main class="wrap" id="main"></main>
+<footer class="wrap">Effects come from <code>tools/audio/synth_sfx.py</code>. Music and voices come from <code>Sounds/</code> via <code>tools/audio/process_audio.py</code>. Prompts are in <code>design/sound-prompts.md</code>.</footer>
+
+<script>
+const GROUPS = {
+  feedback: "Answers & turns", level: "Levels, stars & rewards", ui: "Buttons & menus",
+  character: "Nono & Fofo moves", connect4: "Connect 4", board: "Dice, Ludo, Snakes & Ladders",
+  fishing: "Fishing", balloons: "Balloons", whack: "Hit the word", train: "Word train", frog: "Frog jump",
+  memory: "Memory cards", treasure: "Treasure", writing: "Letter writing", race: "Word race",
+  tug: "Tug of war", ice_tower: "Ice tower", shop: "Shop order", game_end: "Game over",
+};
+const PLAY = '<svg viewBox="0 0 10 12"><path d="M0 0l10 6-10 6z"/></svg>';
+const BASE = "../app/assets/audio/";
+let current = null;
+
+function play(btn, url, loop) {
+  if (current) { current.audio.pause(); current.btn.classList.remove("playing"); }
+  if (current && current.btn === btn) { current = null; return Promise.resolve(); }
+  const audio = new Audio(url);
+  audio.loop = !!loop;
+  if (loop) audio.volume = 0.6;
+  btn.classList.add("playing");
+  current = { audio, btn };
+  return new Promise(res => {
+    audio.onended = () => { btn.classList.remove("playing"); if (current && current.btn === btn) current = null; res(); };
+    audio.play().catch(() => { btn.classList.remove("playing"); res(); });
+  });
+}
+
+function card(id, e, opts = {}) {
+  const b = document.createElement("button");
+  const missing = e.status === "missing";
+  b.className = "snd" + (missing ? " missing" : "");
+  const dur = missing ? "missing" : (e.duration != null ? e.duration.toFixed(e.duration < 10 ? 2 : 0) + "s" : "");
+  b.innerHTML = `<span class="btn">${PLAY}</span><span><div class="id"></div><div class="desc"></div></span><span class="dur">${dur}${opts.loop && !missing ? " ↻" : ""}</span>`;
+  b.querySelector(".id").textContent = id;
+  b.querySelector(".desc").textContent = e.desc;
+  if (!missing) b.onclick = () => play(b, BASE + e.file, opts.loop);
+  return b;
+}
+
+function section(key, title, sub, children, playAll) {
+  const s = document.createElement("section");
+  s.id = key;
+  s.innerHTML = `<h2><span></span><small></small></h2>`;
+  s.querySelector("h2 span").textContent = title;
+  s.querySelector("h2 small").textContent = sub;
+  if (playAll) {
+    const p = document.createElement("button");
+    p.className = "playall"; p.textContent = "▶ Play all";
+    p.onclick = async () => { for (const b of s.querySelectorAll(".snd:not(.missing)")) { await play(b, b._url); await new Promise(r => setTimeout(r, 250)); } };
+    s.querySelector("h2").append(p);
+  }
+  children.forEach(c => s.append(c));
+  document.getElementById("main").append(s);
+  const a = document.createElement("a");
+  a.href = "#" + key; a.textContent = title;
+  document.getElementById("nav").append(a);
+}
+
+fetch(BASE + "manifest.json", { cache: "no-store" }).then(r => r.json()).then(m => {
+  const sfx = Object.entries(m.sfx || {});
+  const music = Object.entries(m.music || {});
+  const voices = Object.entries(m.voice || {}).flatMap(([n, items]) => Object.entries(items).map(([k, v]) => [n, k, v]));
+  const ready = a => a.filter(x => x[x.length - 1].status !== "missing").length;
+  document.getElementById("stats").innerHTML =
+    `<div class="stat"><b>${sfx.length}</b>effects</div>` +
+    `<div class="stat"><b>${ready(music)}/${music.length}</b>music</div>` +
+    `<div class="stat"><b>${ready(voices)}/${voices.length}</b>voices</div>`;
+
+  for (const [g, title] of Object.entries(GROUPS)) {
+    const items = sfx.filter(([, e]) => e.group === g);
+    if (!items.length) continue;
+    const cards = items.map(([id, e]) => { const c = card(id, e); c._url = BASE + e.file; return c; });
+    const grid = document.createElement("div"); grid.className = "grid"; cards.forEach(c => grid.append(c));
+    section(g, title, `${items.length} sounds`, [grid], true);
+  }
+
+  const howto = document.createElement("div"); howto.className = "note";
+  howto.innerHTML = `Generate with the prompts in <code>design/sound-prompts.md</code>, save as <code>Sounds/music/&lt;id&gt;.mp3</code>, then run <code>tools/audio/process_audio.py</code> and reload.`;
+  const mg = document.createElement("div"); mg.className = "grid";
+  music.forEach(([id, e]) => mg.append(card(id, e, { loop: true })));
+  section("music", "Background music", `${ready(music)} of ${music.length} ready · loops`, [howto, mg]);
+
+  const vparts = [];
+  const vnote = howto.cloneNode(true);
+  vnote.innerHTML = `Save as <code>Sounds/voice/nono/&lt;id&gt;.mp3</code> or <code>Sounds/voice/fofo/&lt;id&gt;.mp3</code>.`;
+  vparts.push(vnote);
+  for (const [name, items] of Object.entries(m.voice || {})) {
+    const h = document.createElement("div"); h.className = "brother";
+    h.innerHTML = `<img src="../app/assets/characters/${name}/small/wave.png" alt=""><span>${name === "nono" ? "Nono" : "Fofo"}</span>`;
+    const g = document.createElement("div"); g.className = "grid";
+    Object.entries(items).forEach(([id, e]) => {
+      const wrap = document.createElement("div");
+      wrap.append(card(id, e));
+      if (e.takes && e.takes.length > 1) {
+        const t = document.createElement("div"); t.className = "takes";
+        t.innerHTML = "<span>takes:</span>";
+        e.takes.forEach((path, i) => {
+          const b = document.createElement("button");
+          b.textContent = i + 1; b.title = path;
+          b.onclick = () => play(b, "../" + path);
+          t.append(b);
+        });
+        wrap.append(t);
+      }
+      g.append(wrap);
+    });
+    vparts.push(h, g);
+  }
+  section("voices", "The brothers' voices", `${ready(voices)} of ${voices.length} ready`, vparts);
+}).catch(err => {
+  document.getElementById("main").innerHTML = `<div class="err">Couldn't load <code>assets/audio/manifest.json</code>. Open this page through the local server (design-preview), not as a file. <br><small></small></div>`;
+  document.querySelector(".err small").textContent = err;
+});
+</script>
+</body>
+</html>

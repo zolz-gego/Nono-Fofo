@@ -1,0 +1,1005 @@
+{
+  "version": 1,
+  "sfx": {
+    "ui_tap": {
+      "file": "sfx/ui_tap.wav",
+      "group": "ui",
+      "desc": "Button tap: soft bubble pop",
+      "duration": 0.08
+    },
+    "ui_back": {
+      "file": "sfx/ui_back.wav",
+      "group": "ui",
+      "desc": "Back / close: low pop going down",
+      "duration": 0.09
+    },
+    "ui_toggle": {
+      "file": "sfx/ui_toggle.wav",
+      "group": "ui",
+      "desc": "Switch toggle: tick-tock",
+      "duration": 0.14
+    },
+    "ui_open": {
+      "file": "sfx/ui_open.wav",
+      "group": "ui",
+      "desc": "Popup opens: whoosh up + ding",
+      "duration": 1.25
+    },
+    "ui_close": {
+      "file": "sfx/ui_close.wav",
+      "group": "ui",
+      "desc": "Popup closes: whoosh down + dong",
+      "duration": 0.52
+    },
+    "ui_swipe": {
+      "file": "sfx/ui_swipe.wav",
+      "group": "ui",
+      "desc": "Page swipe",
+      "duration": 0.18
+    },
+    "ui_locked": {
+      "file": "sfx/ui_locked.wav",
+      "group": "ui",
+      "desc": "Locked item: soft dun-dun",
+      "duration": 0.33
+    },
+    "ui_unlock": {
+      "file": "sfx/ui_unlock.wav",
+      "group": "ui",
+      "desc": "Unlock: key clink + rising bells",
+      "duration": 1.8
+    },
+    "ui_select": {
+      "file": "sfx/ui_select.wav",
+      "group": "ui",
+      "desc": "Pick a buddy / item: boop-bip",
+      "duration": 0.19
+    },
+    "ui_coin": {
+      "file": "sfx/ui_coin.wav",
+      "group": "ui",
+      "desc": "Collect coin / sticker point",
+      "duration": 0.52
+    },
+    "correct_1": {
+      "file": "sfx/correct_1.wav",
+      "group": "feedback",
+      "desc": "Correct answer (variant 1): marimba arpeggio + bell",
+      "duration": 1.55
+    },
+    "correct_2": {
+      "file": "sfx/correct_2.wav",
+      "group": "feedback",
+      "desc": "Correct answer (variant 2)",
+      "duration": 1.57
+    },
+    "correct_3": {
+      "file": "sfx/correct_3.wav",
+      "group": "feedback",
+      "desc": "Correct answer (variant 3): quick up-down",
+      "duration": 1.61
+    },
+    "correct_streak": {
+      "file": "sfx/correct_streak.wav",
+      "group": "feedback",
+      "desc": "3 in a row! fast run up + party pop",
+      "duration": 1.86
+    },
+    "wrong_1": {
+      "file": "sfx/wrong_1.wav",
+      "group": "feedback",
+      "desc": "Wrong answer (variant 1): gentle cartoon 'bwoop' down",
+      "duration": 0.35
+    },
+    "wrong_2": {
+      "file": "sfx/wrong_2.wav",
+      "group": "feedback",
+      "desc": "Wrong answer (variant 2): two soft low boops",
+      "duration": 0.44
+    },
+    "try_again": {
+      "file": "sfx/try_again.wav",
+      "group": "feedback",
+      "desc": "Try again: hopeful two-note chime",
+      "duration": 1.65
+    },
+    "hint": {
+      "file": "sfx/hint.wav",
+      "group": "feedback",
+      "desc": "Hint appears: magic twinkle sweep",
+      "duration": 2.16
+    },
+    "skip_turn": {
+      "file": "sfx/skip_turn.wav",
+      "group": "feedback",
+      "desc": "Turn skipped: swoosh away + slide down",
+      "duration": 0.35
+    },
+    "your_turn": {
+      "file": "sfx/your_turn.wav",
+      "group": "feedback",
+      "desc": "Your turn: ding-dong up",
+      "duration": 1.62
+    },
+    "opponent_turn": {
+      "file": "sfx/opponent_turn.wav",
+      "group": "feedback",
+      "desc": "Nono/Fofo's turn: marimba dong-ding",
+      "duration": 0.76
+    },
+    "timer_tick": {
+      "file": "sfx/timer_tick.wav",
+      "group": "feedback",
+      "desc": "Clock tick",
+      "duration": 0.08
+    },
+    "timer_hurry": {
+      "file": "sfx/timer_hurry.wav",
+      "group": "feedback",
+      "desc": "Hurry! fast high ticks",
+      "duration": 0.4
+    },
+    "time_up": {
+      "file": "sfx/time_up.wav",
+      "group": "feedback",
+      "desc": "Time's up: cuckoo",
+      "duration": 0.52
+    },
+    "countdown_beep": {
+      "file": "sfx/countdown_beep.wav",
+      "group": "feedback",
+      "desc": "3-2-1 beep",
+      "duration": 0.15
+    },
+    "countdown_go": {
+      "file": "sfx/countdown_go.wav",
+      "group": "feedback",
+      "desc": "GO! high beep + whoosh",
+      "duration": 0.4
+    },
+    "level_start": {
+      "file": "sfx/level_start.wav",
+      "group": "level",
+      "desc": "Level start: darbuka + qanun run + bell",
+      "duration": 2.05
+    },
+    "level_complete": {
+      "file": "sfx/level_complete.wav",
+      "group": "level",
+      "desc": "Level complete! fanfare with darbuka roll + sparkles",
+      "duration": 3.22
+    },
+    "level_failed": {
+      "file": "sfx/level_failed.wav",
+      "group": "level",
+      "desc": "Level not passed: soft 'wah-wah' then a hopeful rise",
+      "duration": 3.51
+    },
+    "star_1": {
+      "file": "sfx/star_1.wav",
+      "group": "level",
+      "desc": "First star lands",
+      "duration": 1.74
+    },
+    "star_2": {
+      "file": "sfx/star_2.wav",
+      "group": "level",
+      "desc": "Second star (higher)",
+      "duration": 1.76
+    },
+    "star_3": {
+      "file": "sfx/star_3.wav",
+      "group": "level",
+      "desc": "Third star (highest, extra shine)",
+      "duration": 1.77
+    },
+    "letter_found": {
+      "file": "sfx/letter_found.wav",
+      "group": "level",
+      "desc": "Lost letter found: harp glissando + bell",
+      "duration": 2.8
+    },
+    "place_unlocked": {
+      "file": "sfx/place_unlocked.wav",
+      "group": "level",
+      "desc": "New map place unlocked: harp up + bell chord + darbuka",
+      "duration": 3.22
+    },
+    "reward_sticker": {
+      "file": "sfx/reward_sticker.wav",
+      "group": "level",
+      "desc": "Sticker reward: peel + slap + sparkle",
+      "duration": 1.42
+    },
+    "confetti": {
+      "file": "sfx/confetti.wav",
+      "group": "level",
+      "desc": "Confetti party pops",
+      "duration": 1.75
+    },
+    "char_run": {
+      "file": "sfx/char_run.wav",
+      "group": "character",
+      "desc": "Nono runs in: quick cartoon footsteps",
+      "duration": 0.79
+    },
+    "char_dash": {
+      "file": "sfx/char_dash.wav",
+      "group": "character",
+      "desc": "Zoom across the screen",
+      "duration": 0.35
+    },
+    "char_jump": {
+      "file": "sfx/char_jump.wav",
+      "group": "character",
+      "desc": "Jump: boing up",
+      "duration": 0.4
+    },
+    "char_land": {
+      "file": "sfx/char_land.wav",
+      "group": "character",
+      "desc": "Land: soft thump",
+      "duration": 0.25
+    },
+    "char_think": {
+      "file": "sfx/char_think.wav",
+      "group": "character",
+      "desc": "Fofo thinks: rising thought bubbles",
+      "duration": 1.62
+    },
+    "char_surprise": {
+      "file": "sfx/char_surprise.wav",
+      "group": "character",
+      "desc": "Surprise: quick slide-whistle 'fwip!'",
+      "duration": 0.22
+    },
+    "char_appear": {
+      "file": "sfx/char_appear.wav",
+      "group": "character",
+      "desc": "Character pops in",
+      "duration": 1.11
+    },
+    "c4_drop": {
+      "file": "sfx/c4_drop.wav",
+      "group": "connect4",
+      "desc": "Disc falls down the column",
+      "duration": 0.36
+    },
+    "c4_land": {
+      "file": "sfx/c4_land.wav",
+      "group": "connect4",
+      "desc": "Disc clacks into place",
+      "duration": 0.14
+    },
+    "c4_column_full": {
+      "file": "sfx/c4_column_full.wav",
+      "group": "connect4",
+      "desc": "Column is full: dull thunk",
+      "duration": 0.2
+    },
+    "c4_win_line": {
+      "file": "sfx/c4_win_line.wav",
+      "group": "connect4",
+      "desc": "Four in a row! 4 rising clicks + sparkle",
+      "duration": 1.8
+    },
+    "c4_reset": {
+      "file": "sfx/c4_reset.wav",
+      "group": "connect4",
+      "desc": "Board empties: disc cascade",
+      "duration": 0.77
+    },
+    "dice_shake": {
+      "file": "sfx/dice_shake.wav",
+      "group": "board",
+      "desc": "Shake the dice in a cup",
+      "duration": 0.57
+    },
+    "dice_roll": {
+      "file": "sfx/dice_roll.wav",
+      "group": "board",
+      "desc": "Dice tumble and stop",
+      "duration": 1.57
+    },
+    "dice_land": {
+      "file": "sfx/dice_land.wav",
+      "group": "board",
+      "desc": "Dice result shown: clack + ding",
+      "duration": 0.55
+    },
+    "piece_hop_1": {
+      "file": "sfx/piece_hop_1.wav",
+      "group": "board",
+      "desc": "Piece hops one square (low)",
+      "duration": 0.12
+    },
+    "piece_hop_2": {
+      "file": "sfx/piece_hop_2.wav",
+      "group": "board",
+      "desc": "Piece hops one square (mid)",
+      "duration": 0.12
+    },
+    "piece_hop_3": {
+      "file": "sfx/piece_hop_3.wav",
+      "group": "board",
+      "desc": "Piece hops one square (high)",
+      "duration": 0.12
+    },
+    "ladder_climb": {
+      "file": "sfx/ladder_climb.wav",
+      "group": "board",
+      "desc": "Snakes & ladders: climbing up the ladder",
+      "duration": 1.81
+    },
+    "snake_slide": {
+      "file": "sfx/snake_slide.wav",
+      "group": "board",
+      "desc": "Snakes & ladders: sliiide down the snake",
+      "duration": 1.35
+    },
+    "piece_out": {
+      "file": "sfx/piece_out.wav",
+      "group": "board",
+      "desc": "Ludo: piece leaves home base (plop)",
+      "duration": 0.33
+    },
+    "piece_capture": {
+      "file": "sfx/piece_capture.wav",
+      "group": "board",
+      "desc": "Ludo: piece knocked back home (bonk + zoom)",
+      "duration": 0.52
+    },
+    "piece_home": {
+      "file": "sfx/piece_home.wav",
+      "group": "board",
+      "desc": "Piece reaches the finish",
+      "duration": 1.62
+    },
+    "fish_cast": {
+      "file": "sfx/fish_cast.wav",
+      "group": "fishing",
+      "desc": "Cast the line: whoosh + reel spin",
+      "duration": 0.46
+    },
+    "fish_splash_1": {
+      "file": "sfx/fish_splash_1.wav",
+      "group": "fishing",
+      "desc": "Hook hits the water",
+      "duration": 0.4
+    },
+    "fish_splash_2": {
+      "file": "sfx/fish_splash_2.wav",
+      "group": "fishing",
+      "desc": "Bigger splash",
+      "duration": 0.6
+    },
+    "fish_bubbles": {
+      "file": "sfx/fish_bubbles.wav",
+      "group": "fishing",
+      "desc": "Underwater bubbles (ambience)",
+      "duration": 1.34
+    },
+    "fish_reel": {
+      "file": "sfx/fish_reel.wav",
+      "group": "fishing",
+      "desc": "Reeling in: ratchet clicks",
+      "duration": 0.96
+    },
+    "fish_bite": {
+      "file": "sfx/fish_bite.wav",
+      "group": "fishing",
+      "desc": "A fish bites! bobber tug",
+      "duration": 0.28
+    },
+    "fish_catch": {
+      "file": "sfx/fish_catch.wav",
+      "group": "fishing",
+      "desc": "Fish caught! splash out + pop + ding",
+      "duration": 1.89
+    },
+    "fish_escape": {
+      "file": "sfx/fish_escape.wav",
+      "group": "fishing",
+      "desc": "Fish got away: splash + 'blub' down",
+      "duration": 0.6
+    },
+    "balloon_inflate": {
+      "file": "sfx/balloon_inflate.wav",
+      "group": "balloons",
+      "desc": "Balloon blows up (squeaky rise)",
+      "duration": 0.7
+    },
+    "balloon_pop_1": {
+      "file": "sfx/balloon_pop_1.wav",
+      "group": "balloons",
+      "desc": "Balloon pop (variant 1)",
+      "duration": 0.24
+    },
+    "balloon_pop_2": {
+      "file": "sfx/balloon_pop_2.wav",
+      "group": "balloons",
+      "desc": "Balloon pop (variant 2)",
+      "duration": 0.25
+    },
+    "balloon_pop_3": {
+      "file": "sfx/balloon_pop_3.wav",
+      "group": "balloons",
+      "desc": "Balloon pop (variant 3)",
+      "duration": 0.23
+    },
+    "balloon_float": {
+      "file": "sfx/balloon_float.wav",
+      "group": "balloons",
+      "desc": "Balloon floats away",
+      "duration": 0.9
+    },
+    "whack_popup": {
+      "file": "sfx/whack_popup.wav",
+      "group": "whack",
+      "desc": "Word pops up from a hole",
+      "duration": 0.13
+    },
+    "whack_hit": {
+      "file": "sfx/whack_hit.wav",
+      "group": "whack",
+      "desc": "Squeaky hammer bonk!",
+      "duration": 0.2
+    },
+    "whack_miss": {
+      "file": "sfx/whack_miss.wav",
+      "group": "whack",
+      "desc": "Hammer misses: swish",
+      "duration": 0.2
+    },
+    "train_whistle": {
+      "file": "sfx/train_whistle.wav",
+      "group": "train",
+      "desc": "Choo-choo whistle",
+      "duration": 0.9
+    },
+    "train_chug": {
+      "file": "sfx/train_chug.wav",
+      "group": "train",
+      "desc": "Train chugs off (speeding up)",
+      "duration": 1.68
+    },
+    "wagon_connect": {
+      "file": "sfx/wagon_connect.wav",
+      "group": "train",
+      "desc": "Wagon clicks onto the train",
+      "duration": 0.3
+    },
+    "frog_jump": {
+      "file": "sfx/frog_jump.wav",
+      "group": "frog",
+      "desc": "Frog jumps: boing",
+      "duration": 0.35
+    },
+    "frog_croak": {
+      "file": "sfx/frog_croak.wav",
+      "group": "frog",
+      "desc": "Ribbit!",
+      "duration": 0.25
+    },
+    "frog_plop": {
+      "file": "sfx/frog_plop.wav",
+      "group": "frog",
+      "desc": "Frog lands in water",
+      "duration": 0.31
+    },
+    "lily_land": {
+      "file": "sfx/lily_land.wav",
+      "group": "frog",
+      "desc": "Frog lands on a lily pad",
+      "duration": 0.15
+    },
+    "card_flip": {
+      "file": "sfx/card_flip.wav",
+      "group": "memory",
+      "desc": "Card flips",
+      "duration": 0.12
+    },
+    "card_match": {
+      "file": "sfx/card_match.wav",
+      "group": "memory",
+      "desc": "Pair found! two-bell harmony",
+      "duration": 1.61
+    },
+    "card_mismatch": {
+      "file": "sfx/card_mismatch.wav",
+      "group": "memory",
+      "desc": "Not a pair: soft double boop",
+      "duration": 0.31
+    },
+    "treasure_dig": {
+      "file": "sfx/treasure_dig.wav",
+      "group": "treasure",
+      "desc": "Shovel digs in sand",
+      "duration": 0.68
+    },
+    "chest_open": {
+      "file": "sfx/chest_open.wav",
+      "group": "treasure",
+      "desc": "Treasure chest creaks open + shine",
+      "duration": 3.01
+    },
+    "coins_shower": {
+      "file": "sfx/coins_shower.wav",
+      "group": "treasure",
+      "desc": "Coins pour out",
+      "duration": 0.95
+    },
+    "chalk_stroke": {
+      "file": "sfx/chalk_stroke.wav",
+      "group": "writing",
+      "desc": "Pencil/chalk drawing (loop while tracing)",
+      "duration": 0.8
+    },
+    "stroke_done": {
+      "file": "sfx/stroke_done.wav",
+      "group": "writing",
+      "desc": "One stroke traced correctly",
+      "duration": 0.4
+    },
+    "letter_traced": {
+      "file": "sfx/letter_traced.wav",
+      "group": "writing",
+      "desc": "Whole letter written! sparkle chord",
+      "duration": 1.65
+    },
+    "stroke_off": {
+      "file": "sfx/stroke_off.wav",
+      "group": "writing",
+      "desc": "Finger went off the path: soft tick",
+      "duration": 0.12
+    },
+    "race_zoom": {
+      "file": "sfx/race_zoom.wav",
+      "group": "race",
+      "desc": "Racer zooms past",
+      "duration": 0.49
+    },
+    "race_boost": {
+      "file": "sfx/race_boost.wav",
+      "group": "race",
+      "desc": "Speed boost",
+      "duration": 0.73
+    },
+    "race_finish": {
+      "file": "sfx/race_finish.wav",
+      "group": "race",
+      "desc": "Crossing the finish line",
+      "duration": 2.06
+    },
+    "rope_pull": {
+      "file": "sfx/rope_pull.wav",
+      "group": "tug",
+      "desc": "Rope stretches (creak)",
+      "duration": 0.49
+    },
+    "rope_win": {
+      "file": "sfx/rope_win.wav",
+      "group": "tug",
+      "desc": "Team falls over: whoosh + thump + jingle",
+      "duration": 1.14
+    },
+    "ice_place": {
+      "file": "sfx/ice_place.wav",
+      "group": "ice_tower",
+      "desc": "Ice block placed: glassy clink",
+      "duration": 0.5
+    },
+    "ice_crack": {
+      "file": "sfx/ice_crack.wav",
+      "group": "ice_tower",
+      "desc": "Ice cracks",
+      "duration": 0.49
+    },
+    "ice_tumble": {
+      "file": "sfx/ice_tumble.wav",
+      "group": "ice_tower",
+      "desc": "Tower tumbles down",
+      "duration": 1.25
+    },
+    "shop_item": {
+      "file": "sfx/shop_item.wav",
+      "group": "shop",
+      "desc": "Item drops into the basket",
+      "duration": 0.14
+    },
+    "shop_scan": {
+      "file": "sfx/shop_scan.wav",
+      "group": "shop",
+      "desc": "Checkout beep",
+      "duration": 0.12
+    },
+    "cash_register": {
+      "file": "sfx/cash_register.wav",
+      "group": "shop",
+      "desc": "Cha-ching!",
+      "duration": 1.15
+    },
+    "game_win": {
+      "file": "sfx/game_win.wav",
+      "group": "game_end",
+      "desc": "You won the game! (short jingle)",
+      "duration": 2.75
+    },
+    "game_lose": {
+      "file": "sfx/game_lose.wav",
+      "group": "game_end",
+      "desc": "Nono/Fofo won this time: friendly 'aww' + rise",
+      "duration": 2.47
+    },
+    "game_draw": {
+      "file": "sfx/game_draw.wav",
+      "group": "game_end",
+      "desc": "It's a draw: two equal chimes",
+      "duration": 1.63
+    }
+  },
+  "music": {
+    "map_theme": {
+      "file": "music/map_theme.m4a",
+      "desc": "Egypt map / home screen",
+      "loop": true,
+      "status": "ready",
+      "duration": 138.0,
+      "source": "Sounds/music/map_theme.mp3"
+    },
+    "place_grandpa_house": {
+      "file": "music/place_grandpa_house.m4a",
+      "desc": "Grandpa's house",
+      "loop": true,
+      "status": "ready",
+      "duration": 177.0,
+      "source": "Sounds/music/place_grandpa_house.mp3"
+    },
+    "place_nile": {
+      "file": "music/place_nile.m4a",
+      "desc": "The Nile & the felucca",
+      "loop": true,
+      "status": "ready",
+      "duration": 178.0,
+      "source": "Sounds/music/place_nile.mp3"
+    },
+    "place_village": {
+      "file": "music/place_village.m4a",
+      "desc": "The village",
+      "loop": true,
+      "status": "ready",
+      "duration": 178.0,
+      "source": "Sounds/music/place_village.mp3"
+    },
+    "place_pyramids": {
+      "file": "music/place_pyramids.m4a",
+      "desc": "The Pyramids",
+      "loop": true,
+      "status": "ready",
+      "duration": 175.0,
+      "source": "Sounds/music/place_pyramids.mp3"
+    },
+    "place_monastery": {
+      "file": "music/place_monastery.m4a",
+      "desc": "The desert monastery",
+      "loop": true,
+      "status": "ready",
+      "duration": 173.0,
+      "source": "Sounds/music/place_monastery.mp3"
+    },
+    "place_alexandria": {
+      "file": "music/place_alexandria.m4a",
+      "desc": "Alexandria & the sea",
+      "loop": true,
+      "status": "ready",
+      "duration": 173.0,
+      "source": "Sounds/music/place_alexandria.mp3"
+    },
+    "game_loop_1": {
+      "file": "music/game_loop_1.m4a",
+      "desc": "Board games (Ludo, Snakes & Ladders, Connect 4)",
+      "loop": true,
+      "status": "ready",
+      "duration": 158.0,
+      "source": "Sounds/music/game_loop_1.mp3"
+    },
+    "game_loop_2": {
+      "file": "music/game_loop_2.m4a",
+      "desc": "Catch & tap games (fishing, balloons, hit the word, frog)",
+      "loop": true,
+      "status": "ready",
+      "duration": 175.0,
+      "source": "Sounds/music/game_loop_2.mp3"
+    },
+    "game_race": {
+      "file": "music/game_race.m4a",
+      "desc": "Timed games (word race, tug of war, word train)",
+      "loop": true,
+      "status": "ready",
+      "duration": 178.0,
+      "source": "Sounds/music/game_race.mp3"
+    }
+  },
+  "voice": {
+    "nono": {
+      "yay": {
+        "file": "voice/nono/yay.m4a",
+        "desc": "Correct answer",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/nono/yay_1.m4a",
+          "Sounds/voice/preview/nono/yay_2.m4a",
+          "Sounds/voice/preview/nono/yay_3.m4a"
+        ],
+        "duration": 3.0,
+        "source": "Sounds/voice/nono/yay.mp3"
+      },
+      "woohoo": {
+        "file": "voice/nono/woohoo.m4a",
+        "desc": "Level complete / celebrate",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/nono/woohoo_1.m4a",
+          "Sounds/voice/preview/nono/woohoo_2.m4a",
+          "Sounds/voice/preview/nono/woohoo_3.m4a"
+        ],
+        "duration": 0.84,
+        "source": "Sounds/voice/nono/woohoo.mp3"
+      },
+      "giggle": {
+        "file": "voice/nono/giggle.m4a",
+        "desc": "Wave, idle tap",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/nono/giggle_1.m4a",
+          "Sounds/voice/preview/nono/giggle_2.m4a",
+          "Sounds/voice/preview/nono/giggle_3.m4a"
+        ],
+        "duration": 0.48,
+        "source": "Sounds/voice/nono/giggle.mp3"
+      },
+      "laugh": {
+        "file": "voice/nono/laugh.m4a",
+        "desc": "Wins the game",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/nono/laugh_1.m4a",
+          "Sounds/voice/preview/nono/laugh_2.m4a",
+          "Sounds/voice/preview/nono/laugh_3.m4a"
+        ],
+        "duration": 0.92,
+        "source": "Sounds/voice/nono/laugh.mp3"
+      },
+      "wow": {
+        "file": "voice/nono/wow.m4a",
+        "desc": "Star 3, new place",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/nono/wow_1.m4a",
+          "Sounds/voice/preview/nono/wow_2.m4a",
+          "Sounds/voice/preview/nono/wow_3.m4a"
+        ],
+        "duration": 2.6,
+        "source": "Sounds/voice/nono/wow.mp3"
+      },
+      "uh_oh": {
+        "file": "voice/nono/uh_oh.m4a",
+        "desc": "Wrong answer",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/nono/uh_oh_1.m4a",
+          "Sounds/voice/preview/nono/uh_oh_2.m4a",
+          "Sounds/voice/preview/nono/uh_oh_3.m4a"
+        ],
+        "duration": 1.94,
+        "source": "Sounds/voice/nono/uh_oh.mp3"
+      },
+      "aww": {
+        "file": "voice/nono/aww.m4a",
+        "desc": "Level not passed",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/nono/aww_1.m4a",
+          "Sounds/voice/preview/nono/aww_2.m4a",
+          "Sounds/voice/preview/nono/aww_3.m4a"
+        ],
+        "duration": 2.12,
+        "source": "Sounds/voice/nono/aww.mp3"
+      },
+      "gasp": {
+        "file": "voice/nono/gasp.m4a",
+        "desc": "Surprised",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/nono/gasp_1.m4a",
+          "Sounds/voice/preview/nono/gasp_2.m4a",
+          "Sounds/voice/preview/nono/gasp_3.m4a"
+        ],
+        "duration": 0.36,
+        "source": "Sounds/voice/nono/gasp.mp3"
+      },
+      "huh": {
+        "file": "voice/nono/huh.m4a",
+        "desc": "Confused",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/nono/huh_1.m4a",
+          "Sounds/voice/preview/nono/huh_2.m4a",
+          "Sounds/voice/preview/nono/huh_3.m4a"
+        ],
+        "duration": 0.56,
+        "source": "Sounds/voice/nono/huh.mp3"
+      },
+      "pant": {
+        "file": "voice/nono/pant.m4a",
+        "desc": "After running",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/nono/pant_1.m4a",
+          "Sounds/voice/preview/nono/pant_2.m4a",
+          "Sounds/voice/preview/nono/pant_3.m4a"
+        ],
+        "duration": 2.88,
+        "source": "Sounds/voice/nono/pant.mp3"
+      },
+      "yawn": {
+        "file": "voice/nono/yawn.m4a",
+        "desc": "Sleep",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/nono/yawn_1.m4a",
+          "Sounds/voice/preview/nono/yawn_2.m4a",
+          "Sounds/voice/preview/nono/yawn_3.m4a"
+        ],
+        "duration": 3.0,
+        "source": "Sounds/voice/nono/yawn.mp3"
+      },
+      "snore": {
+        "file": "voice/nono/snore.m4a",
+        "desc": "Sleep (idle too long)",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/nono/snore_1.m4a",
+          "Sounds/voice/preview/nono/snore_2.m4a",
+          "Sounds/voice/preview/nono/snore_3.m4a"
+        ],
+        "duration": 2.74,
+        "source": "Sounds/voice/nono/snore.mp3"
+      }
+    },
+    "fofo": {
+      "yay": {
+        "file": "voice/fofo/yay.m4a",
+        "desc": "Correct answer",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/fofo/yay_1.m4a",
+          "Sounds/voice/preview/fofo/yay_2.m4a",
+          "Sounds/voice/preview/fofo/yay_3.m4a"
+        ],
+        "duration": 1.88,
+        "source": "Sounds/voice/fofo/yay.mp3"
+      },
+      "giggle": {
+        "file": "voice/fofo/giggle.m4a",
+        "desc": "Wave, idle tap",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/fofo/giggle_1.m4a",
+          "Sounds/voice/preview/fofo/giggle_2.m4a",
+          "Sounds/voice/preview/fofo/giggle_3.m4a"
+        ],
+        "duration": 2.0,
+        "source": "Sounds/voice/fofo/giggle.mp3"
+      },
+      "laugh": {
+        "file": "voice/fofo/laugh.m4a",
+        "desc": "Wins the game",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/fofo/laugh_1.m4a",
+          "Sounds/voice/preview/fofo/laugh_2.m4a",
+          "Sounds/voice/preview/fofo/laugh_3.m4a"
+        ],
+        "duration": 3.0,
+        "source": "Sounds/voice/fofo/laugh.mp3"
+      },
+      "wow": {
+        "file": "voice/fofo/wow.m4a",
+        "desc": "Star 3, new place",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/fofo/wow_1.m4a",
+          "Sounds/voice/preview/fofo/wow_2.m4a",
+          "Sounds/voice/preview/fofo/wow_3.m4a"
+        ],
+        "duration": 1.24,
+        "source": "Sounds/voice/fofo/wow.mp3"
+      },
+      "uh_oh": {
+        "file": "voice/fofo/uh_oh.m4a",
+        "desc": "Wrong answer",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/fofo/uh_oh_1.m4a",
+          "Sounds/voice/preview/fofo/uh_oh_2.m4a",
+          "Sounds/voice/preview/fofo/uh_oh_3.m4a"
+        ],
+        "duration": 1.95,
+        "source": "Sounds/voice/fofo/uh_oh.mp3"
+      },
+      "aww": {
+        "file": "voice/fofo/aww.m4a",
+        "desc": "Level not passed",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/fofo/aww_1.m4a",
+          "Sounds/voice/preview/fofo/aww_2.m4a",
+          "Sounds/voice/preview/fofo/aww_3.m4a"
+        ],
+        "duration": 0.86,
+        "source": "Sounds/voice/fofo/aww.mp3"
+      },
+      "gasp": {
+        "file": "voice/fofo/gasp.m4a",
+        "desc": "Surprised",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/fofo/gasp_1.m4a",
+          "Sounds/voice/preview/fofo/gasp_2.m4a",
+          "Sounds/voice/preview/fofo/gasp_3.m4a"
+        ],
+        "duration": 0.54,
+        "source": "Sounds/voice/fofo/gasp.mp3"
+      },
+      "hmm": {
+        "file": "voice/fofo/hmm.m4a",
+        "desc": "Thinking / hint",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/fofo/hmm_1.m4a",
+          "Sounds/voice/preview/fofo/hmm_2.m4a",
+          "Sounds/voice/preview/fofo/hmm_3.m4a"
+        ],
+        "duration": 1.14,
+        "source": "Sounds/voice/fofo/hmm.mp3"
+      },
+      "aha": {
+        "file": "voice/fofo/aha.m4a",
+        "desc": "Hint revealed",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/fofo/aha_1.m4a",
+          "Sounds/voice/preview/fofo/aha_2.m4a",
+          "Sounds/voice/preview/fofo/aha_3.m4a"
+        ],
+        "duration": 2.43,
+        "source": "Sounds/voice/fofo/aha.mp3"
+      },
+      "yawn": {
+        "file": "voice/fofo/yawn.m4a",
+        "desc": "Sleep",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/fofo/yawn_1.m4a",
+          "Sounds/voice/preview/fofo/yawn_2.m4a",
+          "Sounds/voice/preview/fofo/yawn_3.m4a"
+        ],
+        "duration": 1.16,
+        "source": "Sounds/voice/fofo/yawn.mp3"
+      },
+      "snore": {
+        "file": "voice/fofo/snore.m4a",
+        "desc": "Sleep (idle too long)",
+        "status": "ready",
+        "takes": [
+          "Sounds/voice/preview/fofo/snore_1.m4a",
+          "Sounds/voice/preview/fofo/snore_2.m4a",
+          "Sounds/voice/preview/fofo/snore_3.m4a"
+        ],
+        "duration": 1.85,
+        "source": "Sounds/voice/fofo/snore.mp3"
+      }
+    }
+  }
+}

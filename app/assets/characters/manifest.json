@@ -1,0 +1,277 @@
+{
+  "version": 1,
+  "head_width": {
+    "nono": 300,
+    "fofo": 262
+  },
+  "characters": {
+    "nono": {
+      "idle": {
+        "file": "nono/idle.png",
+        "small": "nono/small/idle.png",
+        "width": 382,
+        "height": 974,
+        "source": "Nono idle.jpeg",
+        "head_center": [
+          218,
+          133
+        ]
+      },
+      "cheer": {
+        "file": "nono/cheer.png",
+        "small": "nono/small/cheer.png",
+        "width": 489,
+        "height": 894,
+        "source": "Nono cheer.jpeg",
+        "head_center": [
+          245,
+          125
+        ]
+      },
+      "wrong": {
+        "file": "nono/wrong.png",
+        "small": "nono/small/wrong.png",
+        "width": 400,
+        "height": 928,
+        "source": "nono oops.jpeg",
+        "head_center": [
+          212,
+          130
+        ]
+      },
+      "hint": {
+        "file": "nono/hint.png",
+        "small": "nono/small/hint.png",
+        "width": 555,
+        "height": 929,
+        "source": "Nono Hint.jpeg",
+        "head_center": [
+          207,
+          131
+        ]
+      },
+      "celebrate": {
+        "file": "nono/celebrate.png",
+        "small": "nono/small/celebrate.png",
+        "width": 738,
+        "height": 894,
+        "source": "Nono Celebrate.jpeg",
+        "head_center": [
+          369,
+          125
+        ]
+      },
+      "encourage": {
+        "file": "nono/encourage.png",
+        "small": "nono/small/encourage.png",
+        "width": 407,
+        "height": 894,
+        "source": "Nono Encourage.jpeg",
+        "head_center": [
+          221,
+          125
+        ]
+      },
+      "run": {
+        "file": "nono/run.png",
+        "small": "nono/small/run.png",
+        "width": 675,
+        "height": 894,
+        "source": "Nono Run.jpeg",
+        "head_center": [
+          405,
+          125
+        ]
+      },
+      "wave": {
+        "file": "nono/wave.png",
+        "small": "nono/small/wave.png",
+        "width": 444,
+        "height": 894,
+        "source": "Nono hello.jpeg",
+        "head_center": [
+          258,
+          125
+        ]
+      },
+      "write": {
+        "file": "nono/write.png",
+        "small": "nono/small/write.png",
+        "width": 476,
+        "height": 894,
+        "source": "Nono Write.jpeg",
+        "head_center": [
+          224,
+          125
+        ]
+      },
+      "read": {
+        "file": "nono/read.png",
+        "small": "nono/small/read.png",
+        "width": 374,
+        "height": 893,
+        "source": "Nono Read.jpeg",
+        "head_center": [
+          188,
+          125
+        ]
+      },
+      "sleep": {
+        "file": "nono/sleep.png",
+        "small": "nono/small/sleep.png",
+        "width": 490,
+        "height": 704,
+        "source": "Nono Sleep.jpeg",
+        "head_center": [
+          163,
+          196
+        ]
+      },
+      "surprised": {
+        "file": "nono/surprised.png",
+        "small": "nono/small/surprised.png",
+        "width": 584,
+        "height": 894,
+        "source": "Nono surprised.jpeg",
+        "head_center": [
+          293,
+          125
+        ]
+      }
+    },
+    "fofo": {
+      "idle": {
+        "file": "fofo/idle.png",
+        "small": "fofo/small/idle.png",
+        "width": 287,
+        "height": 732,
+        "source": "Fofo idle.jpeg",
+        "head_center": [
+          151,
+          111
+        ]
+      },
+      "cheer": {
+        "file": "fofo/cheer.png",
+        "small": "fofo/small/cheer.png",
+        "width": 447,
+        "height": 681,
+        "source": "Fofo Cheer.jpeg",
+        "head_center": [
+          235,
+          114
+        ]
+      },
+      "wrong": {
+        "file": "fofo/wrong.png",
+        "small": "fofo/small/wrong.png",
+        "width": 345,
+        "height": 683,
+        "source": "Fofo oops.jpeg",
+        "head_center": [
+          153,
+          119
+        ]
+      },
+      "hint": {
+        "file": "fofo/hint.png",
+        "small": "fofo/small/hint.png",
+        "width": 375,
+        "height": 935,
+        "source": "Fofo Hint.jpeg",
+        "head_center": [
+          225,
+          294
+        ]
+      },
+      "celebrate": {
+        "file": "fofo/celebrate.png",
+        "small": "fofo/small/celebrate.png",
+        "width": 698,
+        "height": 879,
+        "source": "Fofo Celebrate.jpeg",
+        "head_center": [
+          367,
+          205
+        ]
+      },
+      "encourage": {
+        "file": "fofo/encourage.png",
+        "small": "fofo/small/encourage.png",
+        "width": 359,
+        "height": 711,
+        "source": "Fofo Encourage.jpeg",
+        "head_center": [
+          214,
+          113
+        ]
+      },
+      "run": {
+        "file": "fofo/run.png",
+        "small": "fofo/small/run.png",
+        "width": 381,
+        "height": 712,
+        "source": "Fofo Run.jpeg",
+        "head_center": [
+          209,
+          112
+        ]
+      },
+      "wave": {
+        "file": "fofo/wave.png",
+        "small": "fofo/small/wave.png",
+        "width": 364,
+        "height": 712,
+        "source": "Fofo Hello.jpeg",
+        "head_center": [
+          219,
+          112
+        ]
+      },
+      "write": {
+        "file": "fofo/write.png",
+        "small": "fofo/small/write.png",
+        "width": 356,
+        "height": 684,
+        "source": "Fofo Write 2.jpeg",
+        "head_center": [
+          212,
+          113
+        ]
+      },
+      "read": {
+        "file": "fofo/read.png",
+        "small": "fofo/small/read.png",
+        "width": 332,
+        "height": 691,
+        "source": "Fofo Read.jpeg",
+        "head_center": [
+          181,
+          102
+        ]
+      },
+      "sleep": {
+        "file": "fofo/sleep.png",
+        "small": "fofo/small/sleep.png",
+        "width": 419,
+        "height": 527,
+        "source": "Fofo Sleep.jpeg",
+        "head_center": [
+          184,
+          110
+        ]
+      },
+      "surprised": {
+        "file": "fofo/surprised.png",
+        "small": "fofo/small/surprised.png",
+        "width": 299,
+        "height": 691,
+        "source": "Fofo Surprised.jpeg",
+        "head_center": [
+          157,
+          102
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "@@locale": "en",
+  "appTitle": "Nono & Fofo",
+  "playgroundTitle": "Playground",
+  "sectionTexts": "Fonts",
+  "sectionCharacters": "Nono & Fofo",
+  "sectionSounds": "Sounds",
+  "sectionSettings": "Settings",
+  "language": "Language",
+  "music": "Music",
+  "effects": "Effects",
+  "voices": "Voices",
+  "mute": "Mute",
+  "nono": "Nono",
+  "fofo": "Fofo",
+  "sampleHeader": "Let's learn the Coptic letters!",
+  "sampleBody": "Nono runs fast, and Fofo thinks first.",
+  "nonoGreeting": "Let's go!",
+  "fofoGreeting": "Wait, let's think a bit",
+  "playMusic": "Play music",
+  "stopMusic": "Stop music"
+}

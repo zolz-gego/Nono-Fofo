@@ -1,0 +1,27 @@
+# OS / editors
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+*.iml
+.vscode/
+
+# Python (tools/)
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Secrets
+.env
+.env.*
+*.keystore
+*.jks
+key.properties
+
+# Flutter build output (app/ has its own .gitignore too)
+app/build/
+app/.dart_tool/
+
+# Claude Code local settings
+.claude/settings.local.json

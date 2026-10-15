@@ -1,0 +1,658 @@
+{
+  "_readme": "Change which sound plays for an event here; no code change needed. 'sfx' and 'voice' list ids from manifest.json; when a list has several ids one is picked at random (never the same twice in a row). 'voice' is per brother (nono/fofo) and plays when that brother triggers the event. 'music' maps a music slot to a music id.",
+  "version": 1,
+  "events": {
+    "tap": {
+      "sfx": [
+        "ui_tap"
+      ]
+    },
+    "back": {
+      "sfx": [
+        "ui_back"
+      ]
+    },
+    "toggle": {
+      "sfx": [
+        "ui_toggle"
+      ]
+    },
+    "popupOpen": {
+      "sfx": [
+        "ui_open"
+      ]
+    },
+    "popupClose": {
+      "sfx": [
+        "ui_close"
+      ]
+    },
+    "swipe": {
+      "sfx": [
+        "ui_swipe"
+      ]
+    },
+    "locked": {
+      "sfx": [
+        "ui_locked"
+      ]
+    },
+    "unlock": {
+      "sfx": [
+        "ui_unlock"
+      ]
+    },
+    "select": {
+      "sfx": [
+        "ui_select"
+      ]
+    },
+    "coin": {
+      "sfx": [
+        "ui_coin"
+      ]
+    },
+    "correctAnswer": {
+      "sfx": [
+        "correct_1",
+        "correct_2",
+        "correct_3"
+      ],
+      "voice": {
+        "nono": [
+          "yay"
+        ],
+        "fofo": [
+          "yay"
+        ]
+      }
+    },
+    "correctStreak": {
+      "sfx": [
+        "correct_streak"
+      ],
+      "voice": {
+        "nono": [
+          "woohoo"
+        ],
+        "fofo": [
+          "wow"
+        ]
+      }
+    },
+    "wrongAnswer": {
+      "sfx": [
+        "wrong_1",
+        "wrong_2"
+      ],
+      "voice": {
+        "nono": [
+          "uh_oh"
+        ],
+        "fofo": [
+          "uh_oh"
+        ]
+      }
+    },
+    "tryAgain": {
+      "sfx": [
+        "try_again"
+      ]
+    },
+    "hint": {
+      "sfx": [
+        "hint"
+      ],
+      "voice": {
+        "nono": [
+          "huh"
+        ],
+        "fofo": [
+          "hmm"
+        ]
+      }
+    },
+    "hintRevealed": {
+      "sfx": [],
+      "voice": {
+        "fofo": [
+          "aha"
+        ]
+      }
+    },
+    "skipTurn": {
+      "sfx": [
+        "skip_turn"
+      ]
+    },
+    "yourTurn": {
+      "sfx": [
+        "your_turn"
+      ]
+    },
+    "opponentTurn": {
+      "sfx": [
+        "opponent_turn"
+      ]
+    },
+    "timerTick": {
+      "sfx": [
+        "timer_tick"
+      ]
+    },
+    "timerHurry": {
+      "sfx": [
+        "timer_hurry"
+      ]
+    },
+    "timeUp": {
+      "sfx": [
+        "time_up"
+      ]
+    },
+    "countdownBeep": {
+      "sfx": [
+        "countdown_beep"
+      ]
+    },
+    "countdownGo": {
+      "sfx": [
+        "countdown_go"
+      ]
+    },
+    "levelStart": {
+      "sfx": [
+        "level_start"
+      ]
+    },
+    "levelComplete": {
+      "sfx": [
+        "level_complete"
+      ],
+      "voice": {
+        "nono": [
+          "woohoo"
+        ],
+        "fofo": [
+          "laugh"
+        ]
+      }
+    },
+    "levelFailed": {
+      "sfx": [
+        "level_failed"
+      ],
+      "voice": {
+        "nono": [
+          "aww"
+        ],
+        "fofo": [
+          "aww"
+        ]
+      }
+    },
+    "star1": {
+      "sfx": [
+        "star_1"
+      ]
+    },
+    "star2": {
+      "sfx": [
+        "star_2"
+      ]
+    },
+    "star3": {
+      "sfx": [
+        "star_3"
+      ],
+      "voice": {
+        "nono": [
+          "wow"
+        ],
+        "fofo": [
+          "wow"
+        ]
+      }
+    },
+    "letterFound": {
+      "sfx": [
+        "letter_found"
+      ]
+    },
+    "placeUnlocked": {
+      "sfx": [
+        "place_unlocked"
+      ],
+      "voice": {
+        "nono": [
+          "wow"
+        ],
+        "fofo": [
+          "wow"
+        ]
+      }
+    },
+    "rewardSticker": {
+      "sfx": [
+        "reward_sticker"
+      ]
+    },
+    "confetti": {
+      "sfx": [
+        "confetti"
+      ]
+    },
+    "gameWin": {
+      "sfx": [
+        "game_win"
+      ],
+      "voice": {
+        "nono": [
+          "laugh"
+        ],
+        "fofo": [
+          "laugh"
+        ]
+      }
+    },
+    "gameLose": {
+      "sfx": [
+        "game_lose"
+      ],
+      "voice": {
+        "nono": [
+          "aww"
+        ],
+        "fofo": [
+          "aww"
+        ]
+      }
+    },
+    "gameDraw": {
+      "sfx": [
+        "game_draw"
+      ]
+    },
+    "charIdleTap": {
+      "sfx": [],
+      "voice": {
+        "nono": [
+          "giggle"
+        ],
+        "fofo": [
+          "giggle"
+        ]
+      }
+    },
+    "charRun": {
+      "sfx": [
+        "char_run"
+      ]
+    },
+    "charDash": {
+      "sfx": [
+        "char_dash"
+      ]
+    },
+    "charJump": {
+      "sfx": [
+        "char_jump"
+      ]
+    },
+    "charLand": {
+      "sfx": [
+        "char_land"
+      ]
+    },
+    "charThink": {
+      "sfx": [
+        "char_think"
+      ],
+      "voice": {
+        "fofo": [
+          "hmm"
+        ]
+      }
+    },
+    "charSurprise": {
+      "sfx": [
+        "char_surprise"
+      ],
+      "voice": {
+        "nono": [
+          "gasp"
+        ],
+        "fofo": [
+          "gasp"
+        ]
+      }
+    },
+    "charAppear": {
+      "sfx": [
+        "char_appear"
+      ]
+    },
+    "charTired": {
+      "sfx": [],
+      "voice": {
+        "nono": [
+          "pant"
+        ]
+      }
+    },
+    "charSleep": {
+      "sfx": [],
+      "voice": {
+        "nono": [
+          "yawn"
+        ],
+        "fofo": [
+          "yawn"
+        ]
+      }
+    },
+    "charSnore": {
+      "sfx": [],
+      "voice": {
+        "nono": [
+          "snore"
+        ],
+        "fofo": [
+          "snore"
+        ]
+      }
+    },
+    "balloons.balloon_float": {
+      "sfx": [
+        "balloon_float"
+      ]
+    },
+    "balloons.balloon_inflate": {
+      "sfx": [
+        "balloon_inflate"
+      ]
+    },
+    "balloons.balloon_pop": {
+      "sfx": [
+        "balloon_pop_1",
+        "balloon_pop_2",
+        "balloon_pop_3"
+      ]
+    },
+    "board.dice_land": {
+      "sfx": [
+        "dice_land"
+      ]
+    },
+    "board.dice_roll": {
+      "sfx": [
+        "dice_roll"
+      ]
+    },
+    "board.dice_shake": {
+      "sfx": [
+        "dice_shake"
+      ]
+    },
+    "board.ladder_climb": {
+      "sfx": [
+        "ladder_climb"
+      ]
+    },
+    "board.piece_capture": {
+      "sfx": [
+        "piece_capture"
+      ]
+    },
+    "board.piece_home": {
+      "sfx": [
+        "piece_home"
+      ]
+    },
+    "board.piece_hop": {
+      "sfx": [
+        "piece_hop_1",
+        "piece_hop_2",
+        "piece_hop_3"
+      ]
+    },
+    "board.piece_out": {
+      "sfx": [
+        "piece_out"
+      ]
+    },
+    "board.snake_slide": {
+      "sfx": [
+        "snake_slide"
+      ]
+    },
+    "connect4.c4_column_full": {
+      "sfx": [
+        "c4_column_full"
+      ]
+    },
+    "connect4.c4_drop": {
+      "sfx": [
+        "c4_drop"
+      ]
+    },
+    "connect4.c4_land": {
+      "sfx": [
+        "c4_land"
+      ]
+    },
+    "connect4.c4_reset": {
+      "sfx": [
+        "c4_reset"
+      ]
+    },
+    "connect4.c4_win_line": {
+      "sfx": [
+        "c4_win_line"
+      ]
+    },
+    "fishing.fish_bite": {
+      "sfx": [
+        "fish_bite"
+      ]
+    },
+    "fishing.fish_bubbles": {
+      "sfx": [
+        "fish_bubbles"
+      ]
+    },
+    "fishing.fish_cast": {
+      "sfx": [
+        "fish_cast"
+      ]
+    },
+    "fishing.fish_catch": {
+      "sfx": [
+        "fish_catch"
+      ]
+    },
+    "fishing.fish_escape": {
+      "sfx": [
+        "fish_escape"
+      ]
+    },
+    "fishing.fish_reel": {
+      "sfx": [
+        "fish_reel"
+      ]
+    },
+    "fishing.fish_splash": {
+      "sfx": [
+        "fish_splash_1",
+        "fish_splash_2"
+      ]
+    },
+    "frog.frog_croak": {
+      "sfx": [
+        "frog_croak"
+      ]
+    },
+    "frog.frog_jump": {
+      "sfx": [
+        "frog_jump"
+      ]
+    },
+    "frog.frog_plop": {
+      "sfx": [
+        "frog_plop"
+      ]
+    },
+    "frog.lily_land": {
+      "sfx": [
+        "lily_land"
+      ]
+    },
+    "ice_tower.ice_crack": {
+      "sfx": [
+        "ice_crack"
+      ]
+    },
+    "ice_tower.ice_place": {
+      "sfx": [
+        "ice_place"
+      ]
+    },
+    "ice_tower.ice_tumble": {
+      "sfx": [
+        "ice_tumble"
+      ]
+    },
+    "memory.card_flip": {
+      "sfx": [
+        "card_flip"
+      ]
+    },
+    "memory.card_match": {
+      "sfx": [
+        "card_match"
+      ]
+    },
+    "memory.card_mismatch": {
+      "sfx": [
+        "card_mismatch"
+      ]
+    },
+    "race.race_boost": {
+      "sfx": [
+        "race_boost"
+      ]
+    },
+    "race.race_finish": {
+      "sfx": [
+        "race_finish"
+      ]
+    },
+    "race.race_zoom": {
+      "sfx": [
+        "race_zoom"
+      ]
+    },
+    "shop.cash_register": {
+      "sfx": [
+        "cash_register"
+      ]
+    },
+    "shop.shop_item": {
+      "sfx": [
+        "shop_item"
+      ]
+    },
+    "shop.shop_scan": {
+      "sfx": [
+        "shop_scan"
+      ]
+    },
+    "train.train_chug": {
+      "sfx": [
+        "train_chug"
+      ]
+    },
+    "train.train_whistle": {
+      "sfx": [
+        "train_whistle"
+      ]
+    },
+    "train.wagon_connect": {
+      "sfx": [
+        "wagon_connect"
+      ]
+    },
+    "treasure.chest_open": {
+      "sfx": [
+        "chest_open"
+      ]
+    },
+    "treasure.coins_shower": {
+      "sfx": [
+        "coins_shower"
+      ]
+    },
+    "treasure.treasure_dig": {
+      "sfx": [
+        "treasure_dig"
+      ]
+    },
+    "tug.rope_pull": {
+      "sfx": [
+        "rope_pull"
+      ]
+    },
+    "tug.rope_win": {
+      "sfx": [
+        "rope_win"
+      ]
+    },
+    "whack.whack_hit": {
+      "sfx": [
+        "whack_hit"
+      ]
+    },
+    "whack.whack_miss": {
+      "sfx": [
+        "whack_miss"
+      ]
+    },
+    "whack.whack_popup": {
+      "sfx": [
+        "whack_popup"
+      ]
+    },
+    "writing.chalk_stroke": {
+      "sfx": [
+        "chalk_stroke"
+      ]
+    },
+    "writing.letter_traced": {
+      "sfx": [
+        "letter_traced"
+      ]
+    },
+    "writing.stroke_done": {
+      "sfx": [
+        "stroke_done"
+      ]
+    },
+    "writing.stroke_off": {
+      "sfx": [
+        "stroke_off"
+      ]
+    }
+  },
+  "music": {
+    "map": "map_theme",
+    "grandpaHouse": "place_grandpa_house",
+    "nile": "place_nile",
+    "village": "place_village",
+    "pyramids": "place_pyramids",
+    "monastery": "place_monastery",
+    "alexandria": "place_alexandria",
+    "boardGame": "game_loop_1",
+    "actionGame": "game_loop_2",
+    "raceGame": "game_race"
+  }
+}
