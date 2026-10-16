@@ -61,7 +61,10 @@ void main() {
         random: Random(2),
       );
       game.onGameResize(Vector2(1280, 758));
+      // Same start-up flame_test does (no flame_test dependency here).
+      // ignore: invalid_use_of_internal_member
       await game.load();
+      // ignore: invalid_use_of_internal_member
       game.mount();
       game.update(0);
       await game.ready();
