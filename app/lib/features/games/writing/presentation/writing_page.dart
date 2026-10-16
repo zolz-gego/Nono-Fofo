@@ -587,9 +587,7 @@ class _WritingPageState extends State<WritingPage> {
     );
     final boardW = design.width * scale;
     final boardH = design.height * scale;
-    final boardY = portrait
-        ? boardArea.top + (boardArea.height - boardH) / 2
-        : boardTop;
+    final boardY = boardArea.top;
     final boardStart = short
         ? charZoneW +
               gap +

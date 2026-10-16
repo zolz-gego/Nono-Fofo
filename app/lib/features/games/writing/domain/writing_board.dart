@@ -14,7 +14,7 @@ class WritingBoard {
   static const double standardHeight = 470;
 
   /// The tallest board (upright phones).
-  static const double maxHeight = 1200;
+  static const double maxHeight = 1400;
 
   static const WritingBoard standard = WritingBoard();
 
