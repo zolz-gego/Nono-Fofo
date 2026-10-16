@@ -93,6 +93,16 @@ void main() {
     verifyNever(() => progress.savePassed(any(), any()));
   });
 
+  test('erasing lowers the mess, so the board is not wiped', () {
+    cubit.boardReady(_bar(), withDemo: false);
+    cubit.chalk(const Offset(0, 74), const Offset(150, 74), 2);
+    final mess = cubit.state.mess;
+    expect(mess, greaterThan(0));
+    cubit.erase(const Offset(0, 74), const Offset(150, 74), 4);
+    expect(cubit.state.mess, 0);
+    expect(cubit.state.phase, WritingPhase.drawing);
+  });
+
   test('warns once before the mess meter is full', () {
     cubit.boardReady(_bar(), withDemo: false);
     final events = <WritingEvent>[];

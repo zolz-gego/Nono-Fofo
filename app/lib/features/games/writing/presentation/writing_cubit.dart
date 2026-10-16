@@ -175,6 +175,20 @@ class WritingCubit extends Cubit<WritingState> {
     emit(state.copyWith(filled: filled, mess: mess, event: event));
   }
 
+  /// The eraser went from [a] to [b] (board units), [radius] wide. Rubbing
+  /// out chalk lowers the colouring and the mess meter alike.
+  void erase(Offset a, Offset b, double radius) {
+    final coverage = _coverage;
+    if (coverage == null || !state.canDraw) return;
+    coverage.eraseLine(a, b, radius);
+    emit(
+      state.copyWith(
+        filled: coverage.filled,
+        mess: (coverage.mess / config.messLimit).clamp(0.0, 1.0),
+      ),
+    );
+  }
+
   /// The sponge went over the board: start this board again (no demo,
   /// the start dots are still there).
   void wipeDone() {

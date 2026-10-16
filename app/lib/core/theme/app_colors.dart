@@ -141,13 +141,23 @@ abstract final class AppColors {
   static const Color spongeHoles = Color(0xFFE8B43A);
   static const Color passGlow = leafGreen;
 
-  /// Chalk sticks in the tray: white, yellow, pink, blue, orange.
+  /// Chalk sticks in the tray (bright, so they show on the green board).
   static const List<Color> chalk = [
-    Color(0xFFF7F4EC),
-    Color(0xFFFFE27A),
-    Color(0xFFFFB3C7),
-    Color(0xFF9FD8F0),
-    Color(0xFFFFB36B),
+    Color(0xFFF7F4EC), // white
+    Color(0xFFFFF3A0), // pale yellow
+    Color(0xFFFFD23F), // yellow
+    Color(0xFFFFB36B), // orange
+    Color(0xFFFF8A65), // coral
+    Color(0xFFFF6B6B), // red
+    Color(0xFFFFB3C7), // pink
+    Color(0xFFF78FD1), // magenta
+    Color(0xFFD7B4F3), // lilac
+    Color(0xFFA78BFA), // violet
+    Color(0xFF9FD8F0), // sky blue
+    Color(0xFF6CB4FF), // blue
+    Color(0xFF7EE0C3), // mint
+    Color(0xFF9BE36B), // green
+    Color(0xFFD9C3A0), // sand
   ];
 
   // Grandpa's study (placeholder art).

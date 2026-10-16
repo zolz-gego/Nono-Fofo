@@ -709,6 +709,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'برافو يا {name}! كتبت الحرف القبطي {letter} في نونو وفوفو'**
   String writingShareText(String name, String letter);
+
+  /// No description provided for @writingEraser.
+  ///
+  /// In ar, this message translates to:
+  /// **'أستيكة'**
+  String get writingEraser;
 }
 
 class _AppLocalizationsDelegate

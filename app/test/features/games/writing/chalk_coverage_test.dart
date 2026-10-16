@@ -41,6 +41,23 @@ void main() {
     expect(coverage.filled, 0);
   });
 
+  test('the eraser takes chalk off, inside and outside the letter', () {
+    final coverage = ChalkCoverage(_bar())
+      ..addLine(const Offset(20, 40), const Offset(140, 40), 10)
+      ..addLine(const Offset(20, 74), const Offset(140, 74), 2);
+    final filled = coverage.filled, mess = coverage.mess;
+    coverage.eraseLine(const Offset(20, 40), const Offset(80, 40), 10);
+    expect(coverage.filled, lessThan(filled));
+    expect(coverage.filled, greaterThan(0));
+    coverage.eraseLine(const Offset(20, 74), const Offset(140, 74), 4);
+    expect(coverage.mess, lessThan(mess));
+    expect(coverage.mess, 0);
+    // Erasing where there's no chalk changes nothing.
+    final now = coverage.filled;
+    coverage.eraseLine(const Offset(20, 74), const Offset(140, 74), 4);
+    expect(coverage.filled, now);
+  });
+
   test('clear wipes everything', () {
     final coverage = ChalkCoverage(_bar())
       ..addLine(const Offset(20, 40), const Offset(140, 40), 10)

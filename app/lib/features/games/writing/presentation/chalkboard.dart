@@ -12,13 +12,17 @@ import '../domain/letter_strokes.dart';
 import '../domain/writing_board.dart';
 import 'writing_cubit.dart';
 
-/// One chalk line the child drew.
+/// One chalk line the child drew, or rubbed out with the eraser.
 class ChalkStroke {
-  ChalkStroke(this.color, this.radius, Offset start) : points = [start];
+  ChalkStroke(this.color, this.radius, Offset start, {this.erase = false})
+    : points = [start];
 
   final Color color;
   final double radius;
   final List<Offset> points;
+
+  /// Rubs out the chalk under it instead of adding chalk.
+  final bool erase;
 }
 
 /// Holds the chalk on the board (so the page can wipe it or take a
@@ -35,9 +39,9 @@ class ChalkboardController extends ChangeNotifier {
   bool get isDrawing => _current != null;
   bool get isEmpty => _done.isEmpty && _current == null;
 
-  void begin(Offset p, Color color, double radius) {
+  void begin(Offset p, Color color, double radius, {bool erase = false}) {
     end();
-    _current = ChalkStroke(color, radius, p);
+    _current = ChalkStroke(color, radius, p, erase: erase);
     notifyListeners();
   }
 
@@ -111,7 +115,9 @@ class ChalkboardController extends ChangeNotifier {
   static void paintStroke(Canvas canvas, ChalkStroke s) {
     final paint = Paint()
       ..color = s.color
-      ..isAntiAlias = true;
+      ..isAntiAlias = true
+      // The chalk is drawn on its own layer, so clearing only removes chalk.
+      ..blendMode = s.erase ? BlendMode.clear : BlendMode.srcOver;
     final pts = s.points;
     if (pts.length == 1) {
       canvas.drawCircle(pts.first, s.radius, paint);
@@ -155,12 +161,14 @@ class Chalkboard extends StatefulWidget {
     required this.chalkRadius,
     required this.demoStrokeSeconds,
     required this.onChalk,
+    required this.onErase,
     required this.onDrawing,
     required this.onDemoDone,
     required this.onWipeDone,
     this.onDemoStroke,
     this.art,
     this.artSurface,
+    this.erasing = false,
   });
 
   /// Frame thickness of the code-drawn board.
@@ -193,6 +201,12 @@ class Chalkboard extends StatefulWidget {
   final double chalkRadius;
   final double demoStrokeSeconds;
   final void Function(Offset a, Offset b, double radius) onChalk;
+
+  /// The eraser went from a to b ([erasing] only).
+  final void Function(Offset a, Offset b, double radius) onErase;
+
+  /// The finger rubs chalk out instead of drawing ([chalkRadius] wide).
+  final bool erasing;
 
   /// True while the child's finger is on the board.
   final ValueChanged<bool> onDrawing;
@@ -331,8 +345,8 @@ class _ChalkboardState extends State<Chalkboard> with TickerProviderStateMixin {
     final p = _clamp(e.localPosition);
     _pointer = e.pointer;
     _last = p;
-    _c.begin(p, widget.chalkColor, widget.chalkRadius);
-    widget.onChalk(p, p, widget.chalkRadius);
+    _c.begin(p, widget.chalkColor, widget.chalkRadius, erase: widget.erasing);
+    _report(p, p);
     widget.onDrawing(true);
   }
 
@@ -343,8 +357,12 @@ class _ChalkboardState extends State<Chalkboard> with TickerProviderStateMixin {
     if ((p - last).distance < 2) return;
     _c.extend(p);
     _last = p;
-    widget.onChalk(last, p, widget.chalkRadius);
+    _report(last, p);
   }
+
+  void _report(Offset a, Offset b) => widget.erasing
+      ? widget.onErase(a, b, widget.chalkRadius)
+      : widget.onChalk(a, b, widget.chalkRadius);
 
   void _up(PointerEvent e) {
     if (e.pointer != _pointer) return;

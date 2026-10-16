@@ -23,16 +23,23 @@ class ChalkCoverage {
   double get mess => mask.insideCount == 0 ? 0 : _outside / mask.insideCount;
 
   /// Adds a chalk line from [a] to [b] (board units), [radius] wide.
-  void addLine(Offset a, Offset b, double radius) {
+  void addLine(Offset a, Offset b, double radius) =>
+      _line(a, b, radius, erase: false);
+
+  /// Rubs the chalk out along a line from [a] to [b], [radius] wide.
+  void eraseLine(Offset a, Offset b, double radius) =>
+      _line(a, b, radius, erase: true);
+
+  void _line(Offset a, Offset b, double radius, {required bool erase}) {
     final step = mask.cell / 2;
     final d = (b - a).distance;
     final n = math.max(1, (d / step).ceil());
     for (var i = 0; i <= n; i++) {
-      _dab(Offset.lerp(a, b, i / n)!, radius);
+      _dab(Offset.lerp(a, b, i / n)!, radius, erase: erase);
     }
   }
 
-  void _dab(Offset p, double radius) {
+  void _dab(Offset p, double radius, {required bool erase}) {
     final cell = mask.cell;
     final c0 = math.max(0, ((p.dx - radius) / cell).floor());
     final c1 = math.min(mask.cols - 1, ((p.dx + radius) / cell).floor());
@@ -45,12 +52,14 @@ class ChalkCoverage {
         final cx = (c + 0.5) * cell - p.dx;
         if (cx * cx + cy * cy > rr) continue;
         final i = r * mask.cols + c;
-        if (_chalk[i] == 1) continue;
-        _chalk[i] = 1;
+        final had = _chalk[i] == 1;
+        if (had != erase) continue;
+        _chalk[i] = erase ? 0 : 1;
+        final delta = erase ? -1 : 1;
         if (mask.letter[i] == 1) {
-          _inside++;
+          _inside += delta;
         } else if (mask.near[i] == 0) {
-          _outside++;
+          _outside += delta;
         }
       }
     }

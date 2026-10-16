@@ -59,6 +59,7 @@ class _HostState extends State<_Host> {
         chalkRadius: 10,
         demoStrokeSeconds: 1,
         onChalk: (_, _, _) {},
+        onErase: (_, _, _) {},
         onDrawing: (d) => setState(() => drawing = d),
         onDemoDone: () {},
         onWipeDone: () {},

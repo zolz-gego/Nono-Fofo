@@ -21,7 +21,8 @@ abstract final class AppIcons {
 
   // Writing game.
   static const FaIconData chalkFilled = FontAwesomeIcons.paintbrush;
-  static const FaIconData sponge = FontAwesomeIcons.eraser;
+  static const FaIconData sponge = FontAwesomeIcons.soap;
+  static const FaIconData eraser = FontAwesomeIcons.eraser;
   static const FaIconData passed = FontAwesomeIcons.solidCircleCheck;
   static const FaIconData share = FontAwesomeIcons.shareNodes;
 

@@ -81,6 +81,12 @@ class _WritingPageState extends State<WritingPage> {
   LetterMask? _mask;
   int _colorIndex = 0;
   int _sizeIndex = 1;
+
+  /// The eraser is in hand instead of chalk.
+  bool _erasing = false;
+
+  /// The eraser is this much wider than the chalk of the same size.
+  static const double _eraserScale = 1.6;
   bool _drawing = false;
   DateTime _lastChalkSound = DateTime(0);
   final Map<LetterForm, Uint8List> _shots = {};
@@ -132,6 +138,7 @@ class _WritingPageState extends State<WritingPage> {
       _cubit = cubit;
       _mask = null;
       _resultPassed = null;
+      _erasing = false;
       _card = null;
     });
     _hero.play(CharacterAction.chalk);
@@ -292,6 +299,15 @@ class _WritingPageState extends State<WritingPage> {
     }
   }
 
+  void _onErase(Offset a, Offset b, double radius) {
+    _cubit?.erase(a, b, radius);
+    final now = DateTime.now();
+    if (now.difference(_lastChalkSound) > const Duration(milliseconds: 750)) {
+      _lastChalkSound = now;
+      _sound.playKey('writing.chalk_stroke');
+    }
+  }
+
   void _onDrawing(bool drawing) {
     if (drawing != _drawing) setState(() => _drawing = drawing);
   }
@@ -404,7 +420,7 @@ class _WritingPageState extends State<WritingPage> {
     final roster = context.read<CharacterRoster>();
     final rtl = Directionality.of(context) == TextDirection.rtl;
 
-    const hudH = 64.0, trayH = 60.0, gap = AppDimens.spaceSm;
+    const hudH = 64.0, trayH = 92.0, gap = AppDimens.spaceSm;
     final boardMaxW = size.width * 0.6;
     final boardMaxH = size.height - hudH - trayH - gap * 4;
     final (design, _) = Chalkboard.layoutFor(
@@ -461,7 +477,10 @@ class _WritingPageState extends State<WritingPage> {
               strokes: _book?.of(_letter.id, state.form) ?? LetterStrokes.none,
               phase: state.phase,
               chalkColor: _chalkColor,
-              chalkRadius: config.chalkSizes[_sizeIndex],
+              chalkRadius:
+                  config.chalkSizes[_sizeIndex] * (_erasing ? _eraserScale : 1),
+              erasing: _erasing,
+              onErase: _onErase,
               demoStrokeSeconds: config.demoStrokeSeconds,
               onChalk: _onChalk,
               onDrawing: _onDrawing,
@@ -509,9 +528,17 @@ class _WritingPageState extends State<WritingPage> {
                 colorIndex: _colorIndex,
                 sizeIndex: _sizeIndex,
                 sizes: config.chalkSizes,
+                erasing: _erasing,
                 onColor: (i) {
                   _sound.play(SoundEvent.select);
-                  setState(() => _colorIndex = i);
+                  setState(() {
+                    _colorIndex = i;
+                    _erasing = false;
+                  });
+                },
+                onEraser: () {
+                  _sound.play(SoundEvent.select);
+                  setState(() => _erasing = !_erasing);
                 },
                 onSize: (i) {
                   _sound.play(SoundEvent.select);

@@ -354,4 +354,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String writingShareText(String name, String letter) {
     return 'Bravo $name! You wrote the Coptic letter $letter in Nono & Fofo';
   }
+
+  @override
+  String get writingEraser => 'Eraser';
 }

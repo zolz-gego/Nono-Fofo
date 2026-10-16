@@ -353,4 +353,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String writingShareText(String name, String letter) {
     return 'برافو يا $name! كتبت الحرف القبطي $letter في نونو وفوفو';
   }
+
+  @override
+  String get writingEraser => 'أستيكة';
 }
