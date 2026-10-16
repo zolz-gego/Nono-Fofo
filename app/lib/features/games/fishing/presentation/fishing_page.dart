@@ -30,6 +30,7 @@ import '../domain/fishing_config.dart';
 import '../domain/fishing_round.dart';
 import '../game/fishing_game.dart';
 import '../game/fishing_layout.dart';
+import '../../../../core/layout/screen_size.dart';
 import '../../letter_hunt/presentation/coptic_mixed_text.dart';
 import '../../letter_hunt/presentation/letter_hunt_cubit.dart';
 import '../../letter_hunt/presentation/letter_hunt_hud.dart';
@@ -140,6 +141,9 @@ class _FishingPageState extends State<FishingPage> {
     MixedText bubble, {
     Duration duration = const Duration(milliseconds: 2400),
   }) {
+    // On phones the bubble would cover a big part of the game: the brother
+    // reacts with his pose and sounds only.
+    if (isPhone(context)) return;
     _bubbleTimer?.cancel();
     setState(() => _bubble = bubble);
     _bubbleTimer = Timer(duration, () {

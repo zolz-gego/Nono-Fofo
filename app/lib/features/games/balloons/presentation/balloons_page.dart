@@ -24,6 +24,7 @@ import '../../../../engines/sound/application/sound_service.dart';
 import '../../../../engines/sound/domain/sound_event.dart';
 import '../../../settings/presentation/language_button.dart';
 import '../../../settings/presentation/mute_button.dart';
+import '../../../../core/layout/screen_size.dart';
 import '../../letter_hunt/presentation/coptic_mixed_text.dart';
 import '../../letter_hunt/presentation/letter_hunt_cubit.dart';
 import '../../letter_hunt/presentation/letter_hunt_hud.dart';
@@ -144,6 +145,9 @@ class _BalloonsPageState extends State<BalloonsPage> {
     MixedText bubble, {
     Duration duration = const Duration(milliseconds: 2400),
   }) {
+    // On phones the bubble would cover a big part of the game: the brother
+    // reacts with his pose and sounds only.
+    if (isPhone(context)) return;
     _bubbleTimer?.cancel();
     setState(() => _bubble = bubble);
     _bubbleTimer = Timer(duration, () {

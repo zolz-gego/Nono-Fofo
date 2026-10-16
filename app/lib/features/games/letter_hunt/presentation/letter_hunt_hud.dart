@@ -67,28 +67,33 @@ class LetterHuntHud extends StatelessWidget {
           children: [
             SizedBox(
               height: l.slotsTop - l.cardTop,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AppText.h3(label),
-                  const SizedBox(width: AppDimens.spaceSm),
-                  Text(
-                        round.target.small,
-                        style: AppTextStyles.coptic(AppTextVariant.h1)
-                            .copyWith(fontSize: l.cardLetterSize, height: 1.1),
-                      )
-                      .animate(
-                        key: ValueKey(state.eventId),
-                        target: shake ? 1 : 0,
-                      )
-                      .shake(hz: 5, offset: const Offset(6, 0)),
-                  const SizedBox(width: AppDimens.spaceSm),
-                  AppText(
-                    round.target.nameIn(lang),
-                    variant: AppTextVariant.caption,
-                    color: AppColors.textMuted,
-                  ),
-                ],
+              // Shrinks the row instead of overflowing on short screens.
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AppText.h3(label),
+                    const SizedBox(width: AppDimens.spaceSm),
+                    Text(
+                          round.target.small,
+                          style: AppTextStyles.coptic(
+                            AppTextVariant.h1,
+                          ).copyWith(fontSize: l.cardLetterSize, height: 1.1),
+                        )
+                        .animate(
+                          key: ValueKey(state.eventId),
+                          target: shake ? 1 : 0,
+                        )
+                        .shake(hz: 5, offset: const Offset(6, 0)),
+                    const SizedBox(width: AppDimens.spaceSm),
+                    AppText(
+                      round.target.nameIn(lang),
+                      variant: AppTextVariant.caption,
+                      color: AppColors.textMuted,
+                    ),
+                  ],
+                ),
               ),
             ),
             Row(
@@ -100,7 +105,7 @@ class LetterHuntHud extends StatelessWidget {
                 ],
               ],
             ),
-            const SizedBox(height: AppDimens.spaceSm + 2),
+            SizedBox(height: l.cardBottomPadding),
           ],
         ),
       ),
