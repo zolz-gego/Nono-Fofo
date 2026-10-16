@@ -53,9 +53,12 @@ class CharacterRoster {
   double get referenceHeight =>
       _poses[CharacterId.nono]?[CharacterAction.idle]?.height ?? 1000;
 
-  /// Falls back to idle if a pose is missing.
+  /// Falls back to [CharacterAction.fallback], then idle, if a pose is
+  /// missing.
   CharacterPose? pose(CharacterId c, CharacterAction a) =>
-      _poses[c]?[a] ?? _poses[c]?[CharacterAction.idle];
+      _poses[c]?[a] ??
+      (a.fallback == null ? null : _poses[c]?[a.fallback!]) ??
+      _poses[c]?[CharacterAction.idle];
 
   Iterable<CharacterPose> posesOf(CharacterId c) =>
       _poses[c]?.values ?? const [];

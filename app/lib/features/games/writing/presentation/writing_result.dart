@@ -220,7 +220,10 @@ class _Drawing extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(4),
-        child: Image.memory(png, fit: BoxFit.contain, gaplessPlayback: true),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 200),
+          child: Image.memory(png, fit: BoxFit.contain, gaplessPlayback: true),
+        ),
       ),
     );
   }

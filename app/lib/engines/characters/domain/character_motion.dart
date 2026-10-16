@@ -69,7 +69,7 @@ abstract final class CharacterMotions {
       Duration(milliseconds: 2200),
       _ponder,
     ),
-    CharacterAction.encourage => const MotionSpec(
+    CharacterAction.encourage || CharacterAction.sponge => const MotionSpec(
       Duration(milliseconds: 1000),
       _nod,
     ),
@@ -77,10 +77,8 @@ abstract final class CharacterMotions {
       Duration(milliseconds: 1100),
       _rock,
     ),
-    CharacterAction.write || CharacterAction.read => const MotionSpec(
-      Duration(milliseconds: 2400),
-      _sway,
-    ),
+    CharacterAction.write || CharacterAction.read || CharacterAction.chalk =>
+      const MotionSpec(Duration(milliseconds: 2400), _sway),
     CharacterAction.sleep => const MotionSpec(
       Duration(milliseconds: 3400),
       _sleep,

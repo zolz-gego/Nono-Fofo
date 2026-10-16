@@ -141,3 +141,50 @@ in code. One sheet per brother, two poses side by side, full body:
 ```
 Using the attached reference for the exact look, clothes and colors: [NONO / FOFO], full body, two poses side by side on one sheet, both facing RIGHT. Pose 1 "jump" (left): jumping up with both feet off the ground, one arm stretched straight up with the hand closed in a fist as if grabbing a string, big excited smile. Pose 2 "hold" (right): standing, one hand raised above his head with the fist closed as if holding several balloon strings, the other hand on his hip, proud happy smile. No balloons and no strings (the game draws them). Same flat 2D style, thin warm-brown outlines. Plain solid white background, no shadow, no text.
 ```
+
+---
+
+## Write the letter art (اكتب الحرف), for ElevenLabs
+
+Made with **ElevenLabs image generation** (Image & Video), like the balloons
+art. If the model you pick accepts a reference image, attach
+`design/reference/nono-fofo-approved.webp` so the style matches the
+brothers. Paste each prompt as it is.
+
+| What | Save the original as | Then run |
+|---|---|---|
+| Grandpa's study background | `design/reference/writing/study.webp` | `tools/.venv/bin/python tools/games/process_writing.py`, then paste the `"art"` line it prints into `app/assets/content/games/writing.json` |
+| Chalkboard (empty) | `design/reference/writing/board.webp` | same script |
+| Nono / Fofo board poses (later) | `Characters/Nono Board.webp`, `Characters/Fofo Board.webp` | `tools/.venv/bin/python tools/characters/process_poses.py` (add `chalk` and `sponge` to `SOURCES` first) |
+
+Until a file is there the game draws that part in code, so it plays without
+them. If ElevenLabs gives you a PNG or JPG, save it under the `.webp` name
+above anyway: the script reads the file's content, not its extension. Until
+the board poses exist, the hero uses his `write` pose and the other brother
+his `encourage` pose.
+
+### Grandpa's study (wide, landscape 16:9)
+
+The board covers the middle of the picture and the brothers stand on the
+floor at the left and right, so the middle must stay empty.
+
+```
+Wide landscape (16:9) background for a children's game, flat 2D vector cartoon style: thin warm-brown outlines, flat colors with soft shading, rounded friendly shapes, cheerful and simple. The inside of a cozy old Egyptian grandfather's study, seen from the front like a stage. Back wall in warm sand and cream plaster. On the left and right sides: tall wooden bookshelves full of old leather books in cocoa brown, teal and coral, a few rolled scrolls, a small brass lamp. Upper right: a wooden mashrabiya window with warm afternoon sunlight making soft patterned light on the wall. Lower left corner: a comfy old armchair with a knitted cushion. The floor is warm wood with a patterned rug in teal, coral and sunny yellow. Keep the whole CENTER of the picture (about 55% of the width, from 10% to 85% of the height) as a plain empty wall, because a big chalkboard will be placed there. Keep the floor in front of the left and right shelves empty, because two children will stand there. Use this palette: deep teal #0F4C5C, mist blue #A8DADC, warm sand #EFE6D8, slate teal #4F7C82, cocoa brown #5B4B3A, sunny yellow #FFC845, coral #FF7A5C, leaf green #6CC24A, cream #FFFBF4. No people, no chalkboard, no text, no letters, no logos, no watermark, no religious symbols.
+```
+
+### Chalkboard (generate once)
+
+The game paints the green surface and the letter itself, so only the wooden
+frame of this picture shows; keep the frame an even thickness all round.
+
+```
+A single cartoon school chalkboard for a children's game, flat 2D vector style: thin warm-brown #5B4B3A outline, flat colors with soft shading. Wide landscape rectangle, about 3:2, front view, standing straight. Rounded wooden frame of the same thickness on all four sides, in warm cocoa brown with light wood grain and small round pegs in the corners. The board surface is a soft deep chalkboard GREEN (#2F5D4E), completely EMPTY, with nothing written on it. Whole board visible, centered, nothing else in the picture. Plain flat pure white background so it can be cut out. No text, no letters, no chalk marks, no chalk ledge, no watermark.
+```
+
+### Board poses for Nono and Fofo (later)
+
+Not needed to play. One sheet per brother, two poses side by side, full body:
+
+```
+Using the attached reference for the exact look, clothes and colors: [NONO / FOFO], full body, two poses side by side on one sheet. Pose 1 "chalk" (left), facing RIGHT: standing sideways, one arm raised forward at shoulder height holding a short white stick of chalk as if writing on a wall, focused happy face, tongue slightly out in concentration. Pose 2 "sponge" (right), facing LEFT: standing, one arm raised forward holding a yellow rectangular cleaning sponge as if wiping a wall, cheeky friendly smile. No chalkboard and no wall (the game draws them). Same flat 2D style, thin warm-brown outlines. Plain solid white background, no shadow, no text.
+```

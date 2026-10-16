@@ -75,14 +75,34 @@ class ChalkboardController extends ChangeNotifier {
     _cache = recorder.endRecording();
   }
 
-  /// A PNG of the board as it looks now ([pixelRatio] of the board's
-  /// 800-unit width), or null if it isn't on screen.
-  Future<Uint8List?> capturePng({double pixelRatio = 0.35}) async {
+  /// A PNG of the board as it looks now, cut to [crop] (board units) if
+  /// given, at [pixelRatio] pixels per board unit; null if it isn't on
+  /// screen.
+  Future<Uint8List?> capturePng({Rect? crop, double pixelRatio = 0.5}) async {
     final boundary =
         boundaryKey.currentContext?.findRenderObject()
             as RenderRepaintBoundary?;
     if (boundary == null) return null;
-    final image = await boundary.toImage(pixelRatio: pixelRatio);
+    var image = await boundary.toImage(pixelRatio: pixelRatio);
+    if (crop != null) {
+      final src = Rect.fromLTRB(
+        crop.left * pixelRatio,
+        crop.top * pixelRatio,
+        crop.right * pixelRatio,
+        crop.bottom * pixelRatio,
+      ).intersect(Offset.zero & Size(image.width * 1.0, image.height * 1.0));
+      final recorder = ui.PictureRecorder();
+      Canvas(recorder)
+          .drawImageRect(image, src, Offset.zero & src.size, Paint());
+      final picture = recorder.endRecording();
+      final cropped = await picture.toImage(
+        src.width.round(),
+        src.height.round(),
+      );
+      picture.dispose();
+      image.dispose();
+      image = cropped;
+    }
     final data = await image.toByteData(format: ui.ImageByteFormat.png);
     image.dispose();
     return data?.buffer.asUint8List();

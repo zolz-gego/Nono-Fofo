@@ -60,8 +60,8 @@ class _WritingPageState extends State<WritingPage> {
   late final CharacterController _hero = CharacterController(
     _heroId,
     sound: _sound,
-    initial: CharacterAction.write,
-  )..rest = CharacterAction.write;
+    initial: CharacterAction.chalk,
+  )..rest = CharacterAction.chalk;
   late final CharacterController _other = CharacterController(
     _otherId,
     sound: _sound,
@@ -121,7 +121,7 @@ class _WritingPageState extends State<WritingPage> {
       _mask = null;
       _resultPassed = null;
     });
-    _hero.play(CharacterAction.write);
+    _hero.play(CharacterAction.chalk);
     _other
       ..rest = CharacterAction.idle
       ..idle();
@@ -210,7 +210,7 @@ class _WritingPageState extends State<WritingPage> {
         _other.react(CharacterReaction.celebrate, say: l10n.writingCapitalNext);
         _snapshot(state.form);
         _later(const Duration(milliseconds: 2200), () {
-          _hero.play(CharacterAction.write);
+          _hero.play(CharacterAction.chalk);
           _cubit?.nextBoard();
           _prepareBoard(LetterForm.capital);
         });
@@ -231,14 +231,23 @@ class _WritingPageState extends State<WritingPage> {
   void _wipeReaction(AppLocalizations l10n) {
     _sound.playKey('writing.sponge_wipe');
     _other
-      ..play(CharacterAction.encourage, hold: const Duration(seconds: 2))
+      ..play(CharacterAction.sponge, hold: const Duration(seconds: 2))
       ..say(l10n.writingWipe);
   }
 
   Future<void> _snapshot(LetterForm form) async {
     // Wait a frame so the green "passed" outline is in the picture.
     await WidgetsBinding.instance.endOfFrame;
-    final png = await _board.capturePng();
+    // Just the letter (with a little board around it), never too narrow.
+    final ink = _mask?.inkRect.inflate(36);
+    final crop = ink == null
+        ? null
+        : Rect.fromCenter(
+            center: ink.center,
+            width: max(ink.width, ink.height * 0.75),
+            height: ink.height,
+          );
+    final png = await _board.capturePng(crop: crop);
     if (png != null) _shots[form] = png;
   }
 
@@ -349,9 +358,8 @@ class _WritingPageState extends State<WritingPage> {
     // Characters stand on the floor beside the board: the hero on the
     // reading-start side, the other brother on the far side.
     final charSize = min(size.height * 0.6, 460.0);
-    final heroX = boardLeft / 2;
-    final otherX = boardLeft + boardW + boardLeft / 2;
-    final (leftX, rightX) = rtl ? (otherX, heroX) : (heroX, otherX);
+    final leftX = boardLeft / 2;
+    final rightX = boardLeft + boardW + boardLeft / 2;
     final feetY = size.height - AppDimens.spaceSm;
 
     Positioned standing(
@@ -466,7 +474,10 @@ class _WritingPageState extends State<WritingPage> {
             child: WritingResult(
               passed: _resultPassed!,
               wipesToFail: config.wipesToFail,
-              drawings: [for (final form in LetterForm.values) ?_shots[form]],
+              drawings: [
+                if (_resultPassed!)
+                  for (final form in LetterForm.values) ?_shots[form],
+              ],
               onPlayAgain: _playAgain,
               onOtherLetter: _otherLetter,
               onBackToGames: _backToGames,
