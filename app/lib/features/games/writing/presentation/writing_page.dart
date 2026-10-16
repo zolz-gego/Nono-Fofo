@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show SystemChrome, SystemUiMode;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
@@ -35,6 +36,7 @@ import '../data/letter_mask_builder.dart';
 import '../data/writing_config_repository.dart';
 import '../domain/letter_mask.dart';
 import '../domain/letter_strokes.dart';
+import '../domain/writing_board.dart';
 import '../domain/writing_config.dart';
 import 'chalk_tray.dart';
 import 'chalkboard.dart';
@@ -86,6 +88,20 @@ class _WritingPageState extends State<WritingPage> {
 
   /// The eraser is in hand instead of chalk.
   bool _erasing = false;
+
+  /// The top bar and the other brother are hidden, so the board can grow;
+  /// the hero stays, small, in a corner and says his brother's lines too.
+  bool _fullScreen = false;
+
+  /// The board shape this screen wants (worked out while laying out) and
+  /// the one the current letter was built for. A tall screen gets a tall
+  /// board, so the letter can be bigger.
+  WritingBoard _wantedShape = WritingBoard.standard;
+  WritingBoard _shape = WritingBoard.standard;
+  bool _reshaping = false;
+
+  /// Says the other brother's lines (the hero, in full screen).
+  CharacterController get _voice => _fullScreen ? _hero : _other;
 
   /// The eraser is this much wider than the chalk of the same size.
   static const double _eraserScale = 1.6;
@@ -151,25 +167,49 @@ class _WritingPageState extends State<WritingPage> {
     _prepareBoard(LetterForm.small);
   }
 
-  Future<void> _prepareBoard(LetterForm form) async {
+  Future<void> _prepareBoard(
+    LetterForm form, {
+    bool announce = true,
+    bool withDemo = true,
+  }) async {
     final cubit = _cubit!;
+    // Wait for a layout, so the board shape for this screen is known.
+    await WidgetsBinding.instance.endOfFrame;
+    if (!mounted || _cubit != cubit) return;
+    final shape = _wantedShape;
     final glyph = form == LetterForm.small ? _letter.small : _letter.capital;
-    var mask = await const LetterMaskBuilder().build(
+    Future<LetterMask> build() => const LetterMaskBuilder().build(
       glyph,
       thicken: _config!.letterThicken,
+      board: shape,
     );
+    var mask = await build();
     // The font may still be loading on the very first board: try again.
     for (var i = 0; i < 5 && mask.insideCount == 0; i++) {
       await Future<void>.delayed(const Duration(milliseconds: 300));
-      mask = await const LetterMaskBuilder().build(
-        glyph,
-        thicken: _config!.letterThicken,
-      );
+      mask = await build();
     }
     if (!mounted || _cubit != cubit) return;
     _board.clear();
-    setState(() => _mask = mask);
-    cubit.boardReady(mask);
+    setState(() {
+      _mask = mask;
+      _shape = shape;
+    });
+    cubit.boardReady(mask, withDemo: withDemo, announce: announce);
+  }
+
+  /// The screen changed shape (turned, or full screen) before the child
+  /// drew anything: build the same letter again for the new board shape.
+  Future<void> _reshape() async {
+    final cubit = _cubit;
+    if (cubit != null && mounted) {
+      await _prepareBoard(
+        cubit.state.form,
+        announce: false,
+        withDemo: cubit.state.phase == WritingPhase.demo,
+      );
+    }
+    _reshaping = false;
   }
 
   @override
@@ -181,6 +221,7 @@ class _WritingPageState extends State<WritingPage> {
     _other.dispose();
     _board.dispose();
     _cubit?.close();
+    if (_fullScreen) _setSystemBars(visible: true);
     _sound.playMusic(MusicTrack.map);
     super.dispose();
   }
@@ -212,16 +253,16 @@ class _WritingPageState extends State<WritingPage> {
           _hero.say(l10n.writingStart(widget.args.setup.name));
           _later(
             const Duration(milliseconds: 1800),
-            () => _other.say(l10n.writingWatch),
+            () => _voice.say(l10n.writingWatch),
           );
         } else {
-          _other.say(l10n.writingWatch);
+          _voice.say(l10n.writingWatch);
         }
       case WritingEvent.halfway:
-        _other.react(CharacterReaction.correct, say: l10n.writingHalfway);
+        _voice.react(CharacterReaction.correct, say: l10n.writingHalfway);
       case WritingEvent.warn:
         _sound.playKey('writing.stroke_off');
-        _other.react(CharacterReaction.think, say: l10n.writingWarn);
+        _voice.react(CharacterReaction.think, say: l10n.writingWarn);
       case WritingEvent.wipe:
         _wipeReaction(l10n);
       case WritingEvent.levelFailed:
@@ -229,7 +270,7 @@ class _WritingPageState extends State<WritingPage> {
       case WritingEvent.boardPassed:
         _sound.playKey('writing.letter_traced');
         _hero.react(CharacterReaction.correct);
-        _other.react(CharacterReaction.celebrate, say: l10n.writingCapitalNext);
+        _voice.react(CharacterReaction.celebrate, say: l10n.writingCapitalNext);
         _snapshot(state.form);
         _later(const Duration(milliseconds: 2200), () {
           _hero.play(CharacterAction.chalk);
@@ -239,7 +280,7 @@ class _WritingPageState extends State<WritingPage> {
       case WritingEvent.levelPassed:
         _sound.playKey('writing.letter_traced');
         _hero.react(CharacterReaction.celebrate);
-        _other.react(CharacterReaction.celebrate, say: _cheer(l10n));
+        _voice.react(CharacterReaction.celebrate, say: _cheer(l10n));
         _snapshot(state.form).then((_) {
           _later(const Duration(milliseconds: 1400), () {
             _sound.play(SoundEvent.levelComplete);
@@ -254,7 +295,7 @@ class _WritingPageState extends State<WritingPage> {
 
   void _wipeReaction(AppLocalizations l10n) {
     _sound.playKey('writing.sponge_wipe');
-    _other
+    _voice
       ..play(CharacterAction.sponge, hold: const Duration(seconds: 2))
       ..say(l10n.writingWipe);
   }
@@ -285,7 +326,7 @@ class _WritingPageState extends State<WritingPage> {
     if (cubit == null) return;
     if (cubit.state.phase == WritingPhase.failed) {
       _sound.play(SoundEvent.levelFailed);
-      _other.react(CharacterReaction.encourage);
+      _voice.react(CharacterReaction.encourage);
       setState(() => _resultPassed = false);
     } else {
       cubit.wipeDone();
@@ -312,6 +353,20 @@ class _WritingPageState extends State<WritingPage> {
 
   void _onDrawing(bool drawing) {
     if (drawing != _drawing) setState(() => _drawing = drawing);
+  }
+
+  void _toggleFullScreen() {
+    _sound.play(SoundEvent.tap);
+    setState(() => _fullScreen = !_fullScreen);
+    _setSystemBars(visible: !_fullScreen);
+  }
+
+  /// Hides the phone's status and navigation bars too (no effect on the
+  /// web).
+  void _setSystemBars({required bool visible}) {
+    SystemChrome.setEnabledSystemUIMode(
+      visible ? SystemUiMode.edgeToEdge : SystemUiMode.immersiveSticky,
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -409,20 +464,27 @@ class _WritingPageState extends State<WritingPage> {
     final cubit = _cubit;
     final config = _config;
     return Scaffold(
-      appBar: AppTopBar(
-        title: l10n.gameWriteLetter,
-        onLogoTap: () => context.go(AppRoutes.home),
-        actions: [
-          IconButton(
-            tooltip: l10n.otherLetter,
-            onPressed: _otherLetter,
-            icon: const FaIcon(AppIcons.letters),
-          ),
-          const LanguageButton(),
-          const MuteButton(),
-          const SizedBox(width: AppDimens.spaceSm),
-        ],
-      ),
+      appBar: _fullScreen
+          ? null
+          : AppTopBar(
+              title: l10n.gameWriteLetter,
+              onLogoTap: () => context.go(AppRoutes.home),
+              actions: [
+                IconButton(
+                  tooltip: l10n.writingFullScreen,
+                  onPressed: cubit == null ? null : _toggleFullScreen,
+                  icon: const FaIcon(AppIcons.fullScreen),
+                ),
+                IconButton(
+                  tooltip: l10n.otherLetter,
+                  onPressed: _otherLetter,
+                  icon: const FaIcon(AppIcons.letters),
+                ),
+                const LanguageButton(),
+                const MuteButton(),
+                const SizedBox(width: AppDimens.spaceSm),
+              ],
+            ),
       body: cubit == null || config == null
           ? const Center(child: CircularProgressIndicator())
           : BlocConsumer<WritingCubit, WritingState>(
@@ -441,41 +503,168 @@ class _WritingPageState extends State<WritingPage> {
     final roster = context.read<CharacterRoster>();
     final rtl = Directionality.of(context) == TextDirection.rtl;
 
-    const hudH = 64.0, trayH = 92.0, gap = AppDimens.spaceSm;
-    final boardMaxW = size.width * 0.6;
-    final boardMaxH = size.height - hudH - trayH - gap * 4;
-    final (design, _) = Chalkboard.layoutFor(
-      config.board == null ? null : config.boardSurface,
-    );
-    final scale = min(boardMaxW / design.width, boardMaxH / design.height);
-    final boardW = design.width * scale;
-    final boardH = design.height * scale;
-    final boardLeft = (size.width - boardW) / 2;
+    // Wide screens: the board in the middle, a brother on each side, the
+    // chalk tray under it. Upright screens: a tall board fills the width
+    // and the height down to a strip at the bottom, where the brothers stand
+    // in the corners with a square chalk tray between them. Short screens
+    // (phones held sideways): the board takes the full height, the square
+    // tray stands beside it and the brothers on the start side.
+    // Full screen: the same, with only the hero, smaller, so the board grows
+    // (upright, the tray stands right beside him).
+    final full = _fullScreen;
+    final portrait = size.width < size.height;
+    final short = !portrait && size.height < 520;
+    const hudH = 64.0, trayH = 92.0, gap = AppDimens.spaceSm, exitW = 64.0;
     const boardTop = hudH + gap;
+    final feetY = size.height - gap;
+    final surface = config.board == null ? null : config.boardSurface;
 
-    // Characters stand on the floor beside the board: the hero on the
-    // reading-start side, the other brother on the far side.
-    final charSize = min(size.height * 0.6, 460.0);
-    final leftX = boardLeft / 2;
-    final rightX = boardLeft + boardW + boardLeft / 2;
-    final feetY = size.height - AppDimens.spaceSm;
+    double idleW(CharacterController c) =>
+        roster.pose(c.character, CharacterAction.idle)?.width ?? 0;
+    // In full screen the other brother is away: only the hero is measured.
+    final heroW = idleW(_hero), otherW = full ? 0.0 : idleW(_other);
+    final ref = roster.referenceHeight;
 
-    Positioned standing(
-      CharacterController c,
-      double x, {
-      required bool mirror,
-    }) {
-      final idle = roster.pose(c.character, CharacterAction.idle);
-      final k = charSize / roster.referenceHeight;
-      final w = (idle?.width ?? 0) * k, h = (idle?.height ?? 0) * k;
-      return Positioned(
-        left: x - w / 2,
-        top: feetY - h,
-        child: AnimatedCharacter(controller: c, size: charSize, mirror: mirror),
+    // Where the board may go, measured from the start side (left in
+    // English, right in Arabic).
+    final Rect boardArea;
+    final trayW = short ? min(size.width * 0.24, 200.0) : 0.0;
+    final charZoneW = short ? size.width * (full ? 0.13 : 0.22) : 0.0;
+    final stripH = portrait ? size.height * (full ? 0.19 : 0.25) : 0.0;
+    if (portrait) {
+      boardArea = Rect.fromLTRB(
+        gap,
+        boardTop,
+        size.width - gap,
+        feetY - stripH - gap,
+      );
+    } else if (short) {
+      boardArea = Rect.fromLTRB(
+        charZoneW + gap,
+        boardTop,
+        size.width - trayW - gap * 2,
+        size.height - gap,
+      );
+    } else {
+      final w = size.width * (full ? 0.74 : 0.6);
+      boardArea = Rect.fromLTWH(
+        (size.width - w) / 2,
+        boardTop,
+        w,
+        size.height - hudH - trayH - gap * 4,
       );
     }
 
-    final heroOnLeft = !rtl;
+    // Upright, the board grows taller to fill its area. A new shape needs
+    // the letter built again: only done while the board is still clean.
+    final WritingBoard wanted;
+    if (portrait) {
+      final (std, _) = Chalkboard.layoutFor(surface);
+      final s = boardArea.width / std.width;
+      final frameH = std.height - WritingBoard.standardHeight;
+      final h = ((boardArea.height / s - frameH) / 20).floor() * 20.0;
+      wanted = WritingBoard(
+        height: h.clamp(WritingBoard.standardHeight, WritingBoard.maxHeight),
+      );
+    } else {
+      wanted = WritingBoard.standard;
+    }
+    _wantedShape = wanted;
+    if (wanted != _shape &&
+        !_reshaping &&
+        _mask != null &&
+        _board.isEmpty &&
+        (state.phase == WritingPhase.demo ||
+            state.phase == WritingPhase.drawing)) {
+      _reshaping = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) => _reshape());
+    }
+
+    final (design, _) = Chalkboard.layoutFor(surface, _shape);
+    final scale = min(
+      boardArea.width / design.width,
+      boardArea.height / design.height,
+    );
+    final boardW = design.width * scale;
+    final boardH = design.height * scale;
+    final boardY = boardArea.top;
+    final boardStart = short
+        ? charZoneW +
+              gap +
+              (size.width - charZoneW - gap - boardW - gap - trayW) / 2
+        : boardArea.left + (boardArea.width - boardW) / 2;
+    double fromStart(double start, double width) =>
+        rtl ? size.width - start - width : start;
+    final boardLeft = fromStart(boardStart, boardW);
+
+    // Characters stand on the floor, the hero on the start side.
+    final double charSize;
+    if (portrait) {
+      charSize = stripH;
+    } else if (short) {
+      charSize = min(
+        size.height * 0.75,
+        heroW + otherW == 0
+            ? double.infinity
+            : (charZoneW - gap) * ref / (heroW + otherW),
+      );
+    } else {
+      final sideW = (size.width - boardW) / 2;
+      charSize = min(
+        min(size.height * (full ? 0.4 : 0.6), 460.0),
+        max(heroW, otherW) == 0
+            ? double.infinity
+            : (sideW - gap) * ref / max(heroW, otherW),
+      );
+    }
+    final k = charSize / ref;
+    // Each brother's centre, measured from the start side.
+    final (heroX, otherX) = portrait
+        ? (gap + heroW * k / 2, size.width - gap - otherW * k / 2)
+        : short
+        ? (gap + heroW * k / 2, gap + (heroW + otherW / 2) * k)
+        : ((size.width - boardW) / 4, size.width - (size.width - boardW) / 4);
+
+    // The chalk tray: square beside the board or between the brothers,
+    // a long ledge under the board on wide screens.
+    final squareTray = portrait || short;
+    final Rect trayRect;
+    if (portrait) {
+      final start = gap * 2 + heroW * k;
+      final end = full ? size.width - gap : size.width - gap * 2 - otherW * k;
+      trayRect = Rect.fromLTRB(
+        fromStart(start, end - start),
+        feetY - stripH,
+        fromStart(start, end - start) + end - start,
+        feetY,
+      );
+    } else if (short) {
+      trayRect = Rect.fromLTWH(
+        fromStart(boardStart + boardW + gap, trayW),
+        boardY,
+        trayW,
+        boardH,
+      );
+    } else {
+      trayRect = Rect.fromLTWH(0, boardY + boardH + gap, size.width, trayH);
+    }
+
+    Positioned standing(CharacterController c, double startX, bool facesEnd) {
+      final idle = roster.pose(c.character, CharacterAction.idle);
+      final w = (idle?.width ?? 0) * k, h = (idle?.height ?? 0) * k;
+      // Unmirrored characters face right; [facesEnd] turns them towards the
+      // end side (right in English).
+      return Positioned(
+        left: fromStart(startX - w / 2, w),
+        top: feetY - h,
+        child: AnimatedCharacter(
+          controller: c,
+          size: charSize,
+          mirror: facesEnd == rtl,
+        ),
+      );
+    }
+
     return Stack(
       clipBehavior: Clip.hardEdge,
       children: [
@@ -488,11 +677,12 @@ class _WritingPageState extends State<WritingPage> {
         ),
         Positioned(
           left: boardLeft,
-          top: boardTop,
+          top: boardY,
           width: boardW,
           height: boardH,
           child: FittedBox(
             child: Chalkboard(
+              board: _shape,
               controller: _board,
               mask: _mask,
               strokes: _book?.of(_letter.id, state.form) ?? LetterStrokes.none,
@@ -516,15 +706,16 @@ class _WritingPageState extends State<WritingPage> {
         if (_mask == null)
           Positioned(
             left: boardLeft,
-            top: boardTop,
+            top: boardY,
             width: boardW,
             height: boardH,
             child: const Center(child: CircularProgressIndicator()),
           ),
         Positioned(
           top: AppDimens.spaceSm,
-          left: 0,
-          right: 0,
+          // Room for the exit button in full screen.
+          left: full ? exitW : 0,
+          right: full ? exitW : 0,
           height: hudH - AppDimens.spaceSm,
           child: Center(
             child: FittedBox(
@@ -538,14 +729,16 @@ class _WritingPageState extends State<WritingPage> {
             ),
           ),
         ),
-        Positioned(
-          top: boardTop + boardH + gap,
-          left: 0,
-          right: 0,
-          height: trayH,
-          child: Center(
+        Positioned.fromRect(
+          rect: trayRect,
+          child: Align(
+            // In full screen (upright) the tray stands right by the hero.
+            alignment: portrait && full
+                ? AlignmentDirectional.centerStart
+                : Alignment.center,
             child: FittedBox(
               child: ChalkTray(
+                vertical: squareTray,
                 colorIndex: _colorIndex,
                 sizeIndex: _sizeIndex,
                 sizes: config.chalkSizes,
@@ -570,15 +763,26 @@ class _WritingPageState extends State<WritingPage> {
           ),
         ),
         // The hero's arm "writes" while the child draws.
-        _Scribbling(
-          active: _drawing,
-          child: standing(
-            _hero,
-            heroOnLeft ? leftX : rightX,
-            mirror: !heroOnLeft,
+        _Scribbling(active: _drawing, child: standing(_hero, heroX, true)),
+        if (!full) standing(_other, otherX, short),
+        if (full)
+          Positioned(
+            top: AppDimens.spaceSm,
+            left: fromStart(size.width - exitW, exitW - gap),
+            width: exitW - gap,
+            height: hudH - AppDimens.spaceSm,
+            child: Center(
+              child: IconButton.filled(
+                tooltip: context.l10n.writingExitFullScreen,
+                onPressed: _toggleFullScreen,
+                style: IconButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: AppColors.white,
+                ),
+                icon: const FaIcon(AppIcons.exitFullScreen),
+              ),
+            ),
           ),
-        ),
-        standing(_other, heroOnLeft ? rightX : leftX, mirror: heroOnLeft),
         if (_resultPassed != null)
           Positioned.fill(
             child: WritingResult(

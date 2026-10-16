@@ -117,5 +117,7 @@
   "writingShareWith": "With {hero} at Grandpa's chalkboard",
   "writingShareText": "Bravo {name}! You wrote the Coptic letter {letter} in Nono & Fofo",
   "writingEraser": "Eraser",
-  "writingShareSaved": "Picture saved to your downloads"
+  "writingShareSaved": "Picture saved to your downloads",
+  "writingFullScreen": "Full screen",
+  "writingExitFullScreen": "Exit full screen"
 }

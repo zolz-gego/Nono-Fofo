@@ -10,13 +10,18 @@ import '../domain/writing_board.dart';
 
 /// Turns one Coptic glyph (typed with the Avva Shenouda keyboard) into a
 /// [LetterMask]: the glyph is drawn off screen, fitted into
-/// [WritingBoard.letterArea], and its pixels become the letter's cells.
+/// the [WritingBoard]'s letter area, and its pixels become the letter's
+/// cells.
 class LetterMaskBuilder {
   const LetterMaskBuilder();
 
   static const double _probeSize = 400;
 
-  Future<LetterMask> build(String glyph, {double thicken = 0}) async {
+  Future<LetterMask> build(
+    String glyph, {
+    double thicken = 0,
+    WritingBoard board = WritingBoard.standard,
+  }) async {
     // 1. Draw the glyph once to find its ink box.
     final painter = TextPainter(
       text: TextSpan(
@@ -41,8 +46,10 @@ class LetterMaskBuilder {
         Rect.fromLTWH(pad, pad, painter.width, painter.height);
 
     // 2. Fit the ink box into the letter area.
-    const area = WritingBoard.letterArea;
-    final scale = math.min(area.width / ink.width, area.height / ink.height);
+    double fit(Rect area) =>
+        math.min(area.width / ink.width, area.height / ink.height);
+    final area = board.letterArea;
+    final scale = fit(area);
     final inkRect = Rect.fromCenter(
       center: area.center,
       width: ink.width * scale,
@@ -53,7 +60,7 @@ class LetterMaskBuilder {
     const cell = WritingBoard.cell;
     final (cols, rows) = LetterMask.gridFor(
       WritingBoard.width,
-      WritingBoard.height,
+      board.height,
       cell,
     );
     final grid = await _render(cols, rows, (c) {
@@ -77,7 +84,11 @@ class LetterMaskBuilder {
       letter: letter,
       inkRect: inkRect,
     );
-    final cells = (thicken * WritingBoard.height / cell).round();
+    // [thicken] is for the standard board; a bigger letter gets a thicker
+    // outline to match.
+    final growth = scale / fit(WritingBoard.standard.letterArea);
+    final cells = (thicken * WritingBoard.standardHeight * growth / cell)
+        .round();
     return cells > 0 ? mask.thickened(cells) : mask;
   }
 
