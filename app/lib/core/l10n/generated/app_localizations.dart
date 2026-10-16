@@ -721,6 +721,18 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اتحفظت الصورة في التنزيلات'**
   String get writingShareSaved;
+
+  /// No description provided for @writingFullScreen.
+  ///
+  /// In ar, this message translates to:
+  /// **'كبّر السبورة'**
+  String get writingFullScreen;
+
+  /// No description provided for @writingExitFullScreen.
+  ///
+  /// In ar, this message translates to:
+  /// **'رجّع السبورة زي ما كانت'**
+  String get writingExitFullScreen;
 }
 
 class _AppLocalizationsDelegate

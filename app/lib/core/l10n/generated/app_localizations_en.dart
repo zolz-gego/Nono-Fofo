@@ -360,4 +360,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get writingShareSaved => 'Picture saved to your downloads';
+
+  @override
+  String get writingFullScreen => 'Full screen';
+
+  @override
+  String get writingExitFullScreen => 'Exit full screen';
 }

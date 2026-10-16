@@ -359,4 +359,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get writingShareSaved => 'اتحفظت الصورة في التنزيلات';
+
+  @override
+  String get writingFullScreen => 'كبّر السبورة';
+
+  @override
+  String get writingExitFullScreen => 'رجّع السبورة زي ما كانت';
 }

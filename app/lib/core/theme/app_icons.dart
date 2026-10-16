@@ -25,6 +25,8 @@ abstract final class AppIcons {
   static const FaIconData eraser = FontAwesomeIcons.eraser;
   static const FaIconData passed = FontAwesomeIcons.solidCircleCheck;
   static const FaIconData share = FontAwesomeIcons.shareNodes;
+  static const FaIconData fullScreen = FontAwesomeIcons.expand;
+  static const FaIconData exitFullScreen = FontAwesomeIcons.compress;
 
   // Game placeholders, shown until a game's illustration is added.
   static const FaIconData fishing = FontAwesomeIcons.fish;

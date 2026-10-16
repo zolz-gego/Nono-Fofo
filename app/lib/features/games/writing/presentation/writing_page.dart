@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show SystemChrome, SystemUiMode;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
@@ -86,6 +87,13 @@ class _WritingPageState extends State<WritingPage> {
 
   /// The eraser is in hand instead of chalk.
   bool _erasing = false;
+
+  /// The top bar and the other brother are hidden, so the board can grow;
+  /// the hero stays, small, in a corner and says his brother's lines too.
+  bool _fullScreen = false;
+
+  /// Says the other brother's lines (the hero, in full screen).
+  CharacterController get _voice => _fullScreen ? _hero : _other;
 
   /// The eraser is this much wider than the chalk of the same size.
   static const double _eraserScale = 1.6;
@@ -181,6 +189,7 @@ class _WritingPageState extends State<WritingPage> {
     _other.dispose();
     _board.dispose();
     _cubit?.close();
+    if (_fullScreen) _setSystemBars(visible: true);
     _sound.playMusic(MusicTrack.map);
     super.dispose();
   }
@@ -212,16 +221,16 @@ class _WritingPageState extends State<WritingPage> {
           _hero.say(l10n.writingStart(widget.args.setup.name));
           _later(
             const Duration(milliseconds: 1800),
-            () => _other.say(l10n.writingWatch),
+            () => _voice.say(l10n.writingWatch),
           );
         } else {
-          _other.say(l10n.writingWatch);
+          _voice.say(l10n.writingWatch);
         }
       case WritingEvent.halfway:
-        _other.react(CharacterReaction.correct, say: l10n.writingHalfway);
+        _voice.react(CharacterReaction.correct, say: l10n.writingHalfway);
       case WritingEvent.warn:
         _sound.playKey('writing.stroke_off');
-        _other.react(CharacterReaction.think, say: l10n.writingWarn);
+        _voice.react(CharacterReaction.think, say: l10n.writingWarn);
       case WritingEvent.wipe:
         _wipeReaction(l10n);
       case WritingEvent.levelFailed:
@@ -229,7 +238,7 @@ class _WritingPageState extends State<WritingPage> {
       case WritingEvent.boardPassed:
         _sound.playKey('writing.letter_traced');
         _hero.react(CharacterReaction.correct);
-        _other.react(CharacterReaction.celebrate, say: l10n.writingCapitalNext);
+        _voice.react(CharacterReaction.celebrate, say: l10n.writingCapitalNext);
         _snapshot(state.form);
         _later(const Duration(milliseconds: 2200), () {
           _hero.play(CharacterAction.chalk);
@@ -239,7 +248,7 @@ class _WritingPageState extends State<WritingPage> {
       case WritingEvent.levelPassed:
         _sound.playKey('writing.letter_traced');
         _hero.react(CharacterReaction.celebrate);
-        _other.react(CharacterReaction.celebrate, say: _cheer(l10n));
+        _voice.react(CharacterReaction.celebrate, say: _cheer(l10n));
         _snapshot(state.form).then((_) {
           _later(const Duration(milliseconds: 1400), () {
             _sound.play(SoundEvent.levelComplete);
@@ -254,7 +263,7 @@ class _WritingPageState extends State<WritingPage> {
 
   void _wipeReaction(AppLocalizations l10n) {
     _sound.playKey('writing.sponge_wipe');
-    _other
+    _voice
       ..play(CharacterAction.sponge, hold: const Duration(seconds: 2))
       ..say(l10n.writingWipe);
   }
@@ -285,7 +294,7 @@ class _WritingPageState extends State<WritingPage> {
     if (cubit == null) return;
     if (cubit.state.phase == WritingPhase.failed) {
       _sound.play(SoundEvent.levelFailed);
-      _other.react(CharacterReaction.encourage);
+      _voice.react(CharacterReaction.encourage);
       setState(() => _resultPassed = false);
     } else {
       cubit.wipeDone();
@@ -312,6 +321,20 @@ class _WritingPageState extends State<WritingPage> {
 
   void _onDrawing(bool drawing) {
     if (drawing != _drawing) setState(() => _drawing = drawing);
+  }
+
+  void _toggleFullScreen() {
+    _sound.play(SoundEvent.tap);
+    setState(() => _fullScreen = !_fullScreen);
+    _setSystemBars(visible: !_fullScreen);
+  }
+
+  /// Hides the phone's status and navigation bars too (no effect on the
+  /// web).
+  void _setSystemBars({required bool visible}) {
+    SystemChrome.setEnabledSystemUIMode(
+      visible ? SystemUiMode.edgeToEdge : SystemUiMode.immersiveSticky,
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -409,20 +432,27 @@ class _WritingPageState extends State<WritingPage> {
     final cubit = _cubit;
     final config = _config;
     return Scaffold(
-      appBar: AppTopBar(
-        title: l10n.gameWriteLetter,
-        onLogoTap: () => context.go(AppRoutes.home),
-        actions: [
-          IconButton(
-            tooltip: l10n.otherLetter,
-            onPressed: _otherLetter,
-            icon: const FaIcon(AppIcons.letters),
-          ),
-          const LanguageButton(),
-          const MuteButton(),
-          const SizedBox(width: AppDimens.spaceSm),
-        ],
-      ),
+      appBar: _fullScreen
+          ? null
+          : AppTopBar(
+              title: l10n.gameWriteLetter,
+              onLogoTap: () => context.go(AppRoutes.home),
+              actions: [
+                IconButton(
+                  tooltip: l10n.writingFullScreen,
+                  onPressed: cubit == null ? null : _toggleFullScreen,
+                  icon: const FaIcon(AppIcons.fullScreen),
+                ),
+                IconButton(
+                  tooltip: l10n.otherLetter,
+                  onPressed: _otherLetter,
+                  icon: const FaIcon(AppIcons.letters),
+                ),
+                const LanguageButton(),
+                const MuteButton(),
+                const SizedBox(width: AppDimens.spaceSm),
+              ],
+            ),
       body: cubit == null || config == null
           ? const Center(child: CircularProgressIndicator())
           : BlocConsumer<WritingCubit, WritingState>(
@@ -446,17 +476,19 @@ class _WritingPageState extends State<WritingPage> {
     // full width and the brothers stand smaller in the bottom corners.
     // Short screens (phones held sideways): the board takes the full height,
     // the chalk tray stands beside it and the brothers on the start side.
+    // Full screen: the same, with only the hero, smaller, so the board grows.
+    final full = _fullScreen;
     final portrait = size.width < size.height;
     final short = !portrait && size.height < 520;
-    const hudH = 64.0, trayH = 92.0, gap = AppDimens.spaceSm;
+    const hudH = 64.0, trayH = 92.0, gap = AppDimens.spaceSm, exitW = 64.0;
     final trayW = short ? min(size.width * 0.24, 200.0) : 0.0;
-    final charZoneW = short ? size.width * 0.22 : 0.0;
-    final minCharH = portrait ? size.height * 0.22 : 0.0;
+    final charZoneW = short ? size.width * (full ? 0.13 : 0.22) : 0.0;
+    final minCharH = portrait ? size.height * (full ? 0.14 : 0.22) : 0.0;
     final boardMaxW = portrait
         ? size.width - gap * 2
         : short
         ? size.width - charZoneW - trayW - gap * 4
-        : size.width * 0.6;
+        : size.width * (full ? 0.74 : 0.6);
     final boardMaxH = short
         ? size.height - hudH - gap * 2
         : size.height - hudH - trayH - gap * 4 - minCharH;
@@ -489,13 +521,14 @@ class _WritingPageState extends State<WritingPage> {
     final feetY = size.height - AppDimens.spaceSm;
     double idleW(CharacterController c) =>
         roster.pose(c.character, CharacterAction.idle)?.width ?? 0;
-    final heroW = idleW(_hero), otherW = idleW(_other);
+    // In full screen the other brother is away: only the hero is measured.
+    final heroW = idleW(_hero), otherW = full ? 0.0 : idleW(_other);
     final ref = roster.referenceHeight;
     final double charSize;
     if (portrait) {
       charSize = max(
         minCharH,
-        min(feetY - trayRect.bottom, size.height * 0.36),
+        min(feetY - trayRect.bottom, size.height * (full ? 0.22 : 0.36)),
       );
     } else if (short) {
       charSize = min(
@@ -507,7 +540,7 @@ class _WritingPageState extends State<WritingPage> {
     } else {
       final sideW = (size.width - boardW) / 2;
       charSize = min(
-        min(size.height * 0.6, 460.0),
+        min(size.height * (full ? 0.4 : 0.6), 460.0),
         max(heroW, otherW) == 0
             ? double.infinity
             : (sideW - gap) * ref / max(heroW, otherW),
@@ -584,8 +617,9 @@ class _WritingPageState extends State<WritingPage> {
           ),
         Positioned(
           top: AppDimens.spaceSm,
-          left: 0,
-          right: 0,
+          // Room for the exit button in full screen.
+          left: full ? exitW : 0,
+          right: full ? exitW : 0,
           height: hudH - AppDimens.spaceSm,
           child: Center(
             child: FittedBox(
@@ -630,7 +664,25 @@ class _WritingPageState extends State<WritingPage> {
         ),
         // The hero's arm "writes" while the child draws.
         _Scribbling(active: _drawing, child: standing(_hero, heroX, true)),
-        standing(_other, otherX, short),
+        if (!full) standing(_other, otherX, short),
+        if (full)
+          Positioned(
+            top: AppDimens.spaceSm,
+            left: fromStart(size.width - exitW, exitW - gap),
+            width: exitW - gap,
+            height: hudH - AppDimens.spaceSm,
+            child: Center(
+              child: IconButton.filled(
+                tooltip: context.l10n.writingExitFullScreen,
+                onPressed: _toggleFullScreen,
+                style: IconButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: AppColors.white,
+                ),
+                icon: const FaIcon(AppIcons.exitFullScreen),
+              ),
+            ),
+          ),
         if (_resultPassed != null)
           Positioned.fill(
             child: WritingResult(
