@@ -1,0 +1,53 @@
+# Builds the Flutter web app from `main` and publishes it to GitHub Pages:
+# https://zolz-gego.github.io/Nono-Fofo/
+name: Deploy web to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.47.2
+          cache: true
+
+      - run: flutter pub get
+
+      # The site lives under /Nono-Fofo/, so assets must load from that path.
+      # Icon tree-shaking drops some Font Awesome glyphs (star, xmark, play,
+      # circle-check) from the release build, so keep the full icon fonts.
+      - run: flutter build web --release --base-href /Nono-Fofo/ --no-tree-shake-icons
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: app/build/web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
