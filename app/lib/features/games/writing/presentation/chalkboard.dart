@@ -160,14 +160,30 @@ class Chalkboard extends StatefulWidget {
     required this.onWipeDone,
     this.onDemoStroke,
     this.art,
+    this.artSurface,
   });
 
-  /// Frame thickness around the 800 x 520 surface.
+  /// Frame thickness of the code-drawn board.
   static const double frame = 30;
-  static const Size designSize = Size(
-    WritingBoard.width + frame * 2,
-    WritingBoard.height + frame * 2,
-  );
+
+  /// The whole board's size (frame included) and where the chalk surface
+  /// ([WritingBoard.size]) sits in it. With a painted board, [artSurface]
+  /// says where its green is (fractions of the picture) and the picture is
+  /// stretched so that green lands exactly under the surface.
+  static (Size, Offset) layoutFor(Rect? artSurface) {
+    if (artSurface == null || artSurface.width <= 0 || artSurface.height <= 0) {
+      return (
+        const Size(
+          WritingBoard.width + frame * 2,
+          WritingBoard.height + frame * 2,
+        ),
+        const Offset(frame, frame),
+      );
+    }
+    final w = WritingBoard.width / artSurface.width;
+    final h = WritingBoard.height / artSurface.height;
+    return (Size(w, h), Offset(artSurface.left * w, artSurface.top * h));
+  }
 
   final ChalkboardController controller;
   final LetterMask? mask;
@@ -188,6 +204,9 @@ class Chalkboard extends StatefulWidget {
 
   /// Painted board (frame included); drawn in code when null.
   final ImageProvider? art;
+
+  /// Where the green surface is in [art], as fractions of it.
+  final Rect? artSurface;
 
   @override
   State<Chalkboard> createState() => _ChalkboardState();
@@ -423,18 +442,26 @@ class _ChalkboardState extends State<Chalkboard> with TickerProviderStateMixin {
       ),
     );
 
+    final (size, offset) = Chalkboard.layoutFor(
+      widget.art == null ? null : widget.artSurface,
+    );
     return SizedBox.fromSize(
-      size: Chalkboard.designSize,
+      size: size,
       child: Stack(
         children: [
           Positioned.fill(
             child: widget.art == null
                 ? const CustomPaint(painter: _FramePainter())
-                : Image(image: widget.art!, fit: BoxFit.fill),
+                : Image(
+                    image: widget.art!,
+                    fit: BoxFit.fill,
+                    errorBuilder: (_, _, _) =>
+                        const CustomPaint(painter: _FramePainter()),
+                  ),
           ),
           Positioned(
-            left: Chalkboard.frame,
-            top: Chalkboard.frame,
+            left: offset.dx,
+            top: offset.dy,
             child: ClipRect(child: surface),
           ),
         ],

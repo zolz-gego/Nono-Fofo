@@ -57,6 +57,7 @@ class LetterPickPage extends StatefulWidget {
     required this.prompt,
     required this.playRoute,
     this.passFail = false,
+    this.allLetters = false,
   });
 
   final PlayerSetup setup;
@@ -74,14 +75,18 @@ class LetterPickPage extends StatefulWidget {
   /// The game has no stars, only passed / not passed (the writing game).
   final bool passFail;
 
+  /// Offer the whole alphabet instead of the level's letters.
+  final bool allLetters;
+
   @override
   State<LetterPickPage> createState() => _LetterPickPageState();
 }
 
 class _LetterPickPageState extends State<LetterPickPage> {
   late final SoundService _sound = context.read<SoundService>();
-  late final Future<List<CopticLetter>> _letters = sl<LetterRepository>()
-      .lettersOf(widget.setup.level);
+  late final Future<List<CopticLetter>> _letters = widget.allLetters
+      ? sl<LetterRepository>().allLetters()
+      : sl<LetterRepository>().lettersOf(widget.setup.level);
   late final CharacterController _buddy = CharacterController(
     widget.setup.buddy,
     sound: _sound,
@@ -306,7 +311,11 @@ class _LetterTile extends StatelessWidget {
                       )
                     : FittedBox(
                         child: Text(
-                          letter.small,
+                          // Pass / not-passed (writing) levels play both
+                          // forms: show the capital and the small one.
+                          stars == null
+                              ? '${letter.capital} ${letter.small}'
+                              : letter.small,
                           style: AppTextStyles.coptic(AppTextVariant.h1)
                               .copyWith(fontSize: 64, height: 1.1),
                         ),

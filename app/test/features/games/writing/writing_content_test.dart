@@ -27,7 +27,7 @@ void main() {
     expect(config.board, isNull);
   });
 
-  test('every level letter has a stroke order for both forms, inside 0..1', () {
+  test('every letter has a stroke order for both forms, inside 0..1', () {
     final letters = (_json('assets/content/letters.json')['letters'] as List)
         .map((l) => (l as Map<String, dynamic>)['id'] as String);
     final book = StrokeBook.fromJson(

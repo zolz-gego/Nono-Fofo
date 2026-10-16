@@ -104,6 +104,7 @@ final GoRouter appRouter = GoRouter(
         prompt: context.l10n.writingPickLetter,
         playRoute: AppRoutes.writingPlay,
         passFail: true,
+        allLetters: true,
       ),
     ),
     GoRoute(

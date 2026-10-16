@@ -93,9 +93,17 @@ class _WritingPageState extends State<WritingPage> {
   void initState() {
     super.initState();
     _sound.playMusic(MusicTrack.grandpaHouse);
-    _content.then((c) {
+    _content.then((c) async {
       if (!mounted) return;
       final (config, book) = c;
+      // Load the study and board pictures first, so the board never shows
+      // up without its frame.
+      await Future.wait([
+        for (final path in [config.background, config.board])
+          if (path != null)
+            precacheImage(AssetImage(path), context, onError: (_, _) {}),
+      ]);
+      if (!mounted) return;
       _config = config;
       _book = book;
       _sizeIndex = config.startSize.clamp(0, config.chalkSizes.length - 1);
@@ -346,12 +354,12 @@ class _WritingPageState extends State<WritingPage> {
     const hudH = 64.0, trayH = 60.0, gap = AppDimens.spaceSm;
     final boardMaxW = size.width * 0.6;
     final boardMaxH = size.height - hudH - trayH - gap * 4;
-    final scale = min(
-      boardMaxW / Chalkboard.designSize.width,
-      boardMaxH / Chalkboard.designSize.height,
+    final (design, _) = Chalkboard.layoutFor(
+      config.board == null ? null : config.boardSurface,
     );
-    final boardW = Chalkboard.designSize.width * scale;
-    final boardH = Chalkboard.designSize.height * scale;
+    final scale = min(boardMaxW / design.width, boardMaxH / design.height);
+    final boardW = design.width * scale;
+    final boardH = design.height * scale;
     final boardLeft = (size.width - boardW) / 2;
     const boardTop = hudH + gap;
 
@@ -408,6 +416,7 @@ class _WritingPageState extends State<WritingPage> {
               onDemoStroke: () => _sound.playKey('writing.chalk_stroke'),
               onWipeDone: _onWipeDone,
               art: config.board == null ? null : AssetImage(config.board!),
+              artSurface: config.boardSurface,
             ),
           ),
         ),

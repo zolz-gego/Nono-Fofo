@@ -1,3 +1,5 @@
+import 'dart:ui' show Rect;
+
 /// Settings from `assets/content/games/writing.json`. Defaults here are only
 /// used for keys missing from the file.
 class WritingConfig {
@@ -13,11 +15,13 @@ class WritingConfig {
     this.demoStrokeSeconds = 1.1,
     this.background,
     this.board,
+    this.boardSurface,
   });
 
   factory WritingConfig.fromJson(Map<String, dynamic> json) {
     const d = WritingConfig();
     final art = json['art'] as Map<String, dynamic>? ?? const {};
+    final surface = art['boardSurface'] as Map<String, dynamic>?;
     return WritingConfig(
       passAt: (json['passAt'] as num?)?.toDouble() ?? d.passAt,
       messLimit: (json['messLimit'] as num?)?.toDouble() ?? d.messLimit,
@@ -38,6 +42,14 @@ class WritingConfig {
           d.demoStrokeSeconds,
       background: art['background'] as String?,
       board: art['board'] as String?,
+      boardSurface: surface == null
+          ? null
+          : Rect.fromLTRB(
+              (surface['left'] as num).toDouble(),
+              (surface['top'] as num).toDouble(),
+              (surface['right'] as num).toDouble(),
+              (surface['bottom'] as num).toDouble(),
+            ),
     );
   }
 
@@ -76,4 +88,8 @@ class WritingConfig {
 
   /// The chalkboard picture (drawn in code when missing).
   final String? board;
+
+  /// Where the green is in [board], as fractions of the picture (printed
+  /// by tools/games/process_writing.py).
+  final Rect? boardSurface;
 }

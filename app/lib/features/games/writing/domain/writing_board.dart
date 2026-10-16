@@ -5,7 +5,7 @@ import 'dart:ui' show Rect, Size;
 /// scales the whole board to fit the screen.
 abstract final class WritingBoard {
   static const double width = 800;
-  static const double height = 520;
+  static const double height = 470;
   static const Size size = Size(width, height);
 
   /// Grid cell used to measure the chalk.
