@@ -271,4 +271,93 @@ class AppLocalizationsEn extends AppLocalizations {
   String balloonsMissed(String target) {
     return 'The $target balloon floated away! Keep an eye out';
   }
+
+  @override
+  String get writingPickLetter => 'Pick the letter you\'ll write!';
+
+  @override
+  String writingStart(String name) {
+    return 'Come on, $name! Colour the letter in with chalk';
+  }
+
+  @override
+  String get writingWatch => 'First, watch how it\'s written';
+
+  @override
+  String get writingHalfway => 'Halfway there! Keep going';
+
+  @override
+  String get writingWarn => 'Careful! Stay inside the letter';
+
+  @override
+  String get writingWipe => 'A bit messy! I\'ll wipe it, let\'s start again';
+
+  @override
+  String get writingCapitalNext => 'Bravo! Now the capital letter';
+
+  @override
+  String get writingSmall => 'Small';
+
+  @override
+  String get writingCapital => 'Capital';
+
+  @override
+  String get writingFilled => 'Coloured';
+
+  @override
+  String get writingMess => 'Chalk outside the letter';
+
+  @override
+  String get writingWipesLeft => 'Wipes left';
+
+  @override
+  String get writingThin => 'Thin';
+
+  @override
+  String get writingMedium => 'Medium';
+
+  @override
+  String get writingThick => 'Thick';
+
+  @override
+  String get writingPassed => 'You wrote it!';
+
+  @override
+  String get writingPassedBody =>
+      'The small and the capital letter, in your own hand';
+
+  @override
+  String get writingFailed => 'Let\'s try again!';
+
+  @override
+  String writingFailedBody(int count) {
+    return 'The board was wiped $count times. Keep the chalk inside the letter';
+  }
+
+  @override
+  String get writingAgain => 'Write it again';
+
+  @override
+  String get writingShare => 'Share the drawing';
+
+  @override
+  String writingShareTitle(String name, String letter) {
+    return 'Bravo $name! You wrote the letter $letter';
+  }
+
+  @override
+  String writingShareWith(String hero) {
+    return 'With $hero at Grandpa\'s chalkboard';
+  }
+
+  @override
+  String writingShareText(String name, String letter) {
+    return 'Bravo $name! You wrote the Coptic letter $letter in Nono & Fofo';
+  }
+
+  @override
+  String get writingEraser => 'Eraser';
+
+  @override
+  String get writingShareSaved => 'Picture saved to your downloads';
 }

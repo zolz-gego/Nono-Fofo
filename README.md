@@ -52,6 +52,28 @@ Tap a balloon with your letter: your buddy jumps for its string and hands it to 
 
 ![Balloons game in English](screenshots/10-balloons-english.jpg)
 
+### Write the letter: pick a letter
+
+Every Coptic letter, capital and small; the ones you've written get a green tick.
+
+![Writing letter picker](screenshots/11-writing-letters.jpg)
+
+### Write the letter in Grandpa's study
+
+Colour the big dotted letter with chalk: small first, then capital. Pick from 15 chalk colours or the eraser; stay inside the letter or your buddy's brother wipes the board.
+
+![Writing game](screenshots/12-writing.jpg)
+
+![Writing game in English](screenshots/14-writing-english.jpg)
+
+### You wrote it!
+
+Both boards, in your own hand, with a button to share them.
+
+![Writing passed](screenshots/13-writing-passed.jpg)
+
+![Writing passed in English](screenshots/15-writing-passed-english.jpg)
+
 ## For developers
 
 The Flutter app lives in [`app/`](app/). See [`app/README.md`](app/README.md) to run it.

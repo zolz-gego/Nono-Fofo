@@ -553,6 +553,12 @@
       "desc": "Finger went off the path: soft tick",
       "duration": 0.12
     },
+    "sponge_wipe": {
+      "file": "sfx/sponge_wipe.wav",
+      "group": "writing",
+      "desc": "Sponge wipes the chalkboard: three soft swishes",
+      "duration": 1.24
+    },
     "race_zoom": {
       "file": "sfx/race_zoom.wav",
       "group": "race",

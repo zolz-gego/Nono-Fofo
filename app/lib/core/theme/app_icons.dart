@@ -19,6 +19,13 @@ abstract final class AppIcons {
   static const FaIconData road = FontAwesomeIcons.route;
   static const FaIconData starEmpty = FontAwesomeIcons.star;
 
+  // Writing game.
+  static const FaIconData chalkFilled = FontAwesomeIcons.paintbrush;
+  static const FaIconData sponge = FontAwesomeIcons.soap;
+  static const FaIconData eraser = FontAwesomeIcons.eraser;
+  static const FaIconData passed = FontAwesomeIcons.solidCircleCheck;
+  static const FaIconData share = FontAwesomeIcons.shareNodes;
+
   // Game placeholders, shown until a game's illustration is added.
   static const FaIconData fishing = FontAwesomeIcons.fish;
   static const FaIconData writeLetter = FontAwesomeIcons.pencil;

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stroke order review</title>
+<style>
+  @font-face { font-family: "Avva"; src: url("../app/assets/fonts/Avva_Shenouda.ttf"); }
+  :root { --bg: #EFE6D8; --card: #FFFBF4; --ink: #2B2420; --teal: #0F4C5C; --board: #2F5D4E; --muted: #4F7C82; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.4 system-ui, sans-serif; }
+  header { padding: 16px; background: var(--teal); color: #fff; }
+  header h1 { margin: 0 0 4px; font-size: 20px; }
+  header p { margin: 0; opacity: .85; max-width: 900px; }
+  header button { margin-top: 10px; font: inherit; padding: 6px 14px; border-radius: 99px; border: 0; background: #FFC845; cursor: pointer; }
+  main { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; padding: 16px; }
+  .card { background: var(--card); border-radius: 16px; padding: 10px; box-shadow: 0 2px 6px #0002; }
+  .card h2 { margin: 0 0 6px; font-size: 15px; display: flex; justify-content: space-between; }
+  .card h2 span { color: var(--muted); font-weight: 400; }
+  canvas { width: 100%; aspect-ratio: 1; background: var(--board); border-radius: 10px; cursor: pointer; display: block; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Stroke order review: Write the letter</h1>
+  <p>Each board plays the demo from <code>app/assets/content/games/writing_strokes.json</code>, the same file the game reads. Yellow dots are the numbered start of each stroke. Tap a board to replay it. Points are fractions (0..1) of the letter's ink box, so a letter written differently can be fixed by editing its points there.</p>
+  <button id="all">Replay all</button>
+</header>
+<main id="grid"></main>
+<script>
+const SIZE = 420, PAD = 50;
+const grid = document.getElementById("grid");
+const boards = [];
+
+function inkBox(glyph) {
+  const c = document.createElement("canvas");
+  c.width = c.height = 900;
+  const g = c.getContext("2d");
+  g.font = "500px Avva";
+  g.fillStyle = "#fff";
+  g.fillText(glyph, 200, 650);
+  const d = g.getImageData(0, 0, 900, 900).data;
+  let x0 = 900, y0 = 900, x1 = -1, y1 = -1;
+  for (let y = 0; y < 900; y++) for (let x = 0; x < 900; x++) {
+    if (d[(y * 900 + x) * 4 + 3] > 110) {
+      if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+    }
+  }
+  return { x0, y0, w: x1 - x0 + 1, h: y1 - y0 + 1 };
+}
+
+function makeBoard(glyph, strokes, title, sub) {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `<h2>${title}<span>${sub}</span></h2>`;
+  const cv = document.createElement("canvas");
+  cv.width = cv.height = SIZE;
+  card.appendChild(cv);
+  grid.appendChild(card);
+  const g = cv.getContext("2d");
+  const box = inkBox(glyph);
+  const k = Math.min((SIZE - PAD * 2) / box.w, (SIZE - PAD * 2) / box.h);
+  const ox = (SIZE - box.w * k) / 2, oy = (SIZE - box.h * k) / 2;
+  const pts = strokes.map(s => s.map(([x, y]) => [ox + x * box.w * k, oy + y * box.h * k]));
+  const len = s => s.slice(1).reduce((a, p, i) => a + Math.hypot(p[0] - s[i][0], p[1] - s[i][1]), 0);
+
+  function draw(t) {
+    g.clearRect(0, 0, SIZE, SIZE);
+    g.save();
+    g.translate(ox - box.x0 * k, oy - box.y0 * k);
+    g.scale(k, k);
+    g.font = "500px Avva";
+    g.textAlign = "left";
+    g.textBaseline = "alphabetic";
+    g.fillStyle = "rgba(255,255,255,.16)";
+    g.fillText(glyph, 200, 650);
+    g.restore();
+    const n = pts.length, progress = t * n;
+    g.lineCap = g.lineJoin = "round";
+    g.lineWidth = 9;
+    g.strokeStyle = "rgba(255,251,244,.9)";
+    pts.forEach((s, i) => {
+      if (i > progress) return;
+      const upTo = len(s) * Math.min(1, progress - i);
+      g.beginPath(); g.moveTo(...s[0]);
+      let walked = 0;
+      for (let j = 0; j < s.length - 1; j++) {
+        const d = Math.hypot(s[j + 1][0] - s[j][0], s[j + 1][1] - s[j][1]);
+        if (walked + d >= upTo) {
+          const f = d ? (upTo - walked) / d : 0;
+          g.lineTo(s[j][0] + (s[j + 1][0] - s[j][0]) * f, s[j][1] + (s[j + 1][1] - s[j][1]) * f);
+          break;
+        }
+        g.lineTo(...s[j + 1]); walked += d;
+      }
+      g.stroke();
+    });
+    pts.forEach((s, i) => {
+      g.fillStyle = "#FFC845";
+      g.beginPath(); g.arc(s[0][0], s[0][1], 13, 0, Math.PI * 2); g.fill();
+      g.fillStyle = "#5B4B3A"; g.font = "bold 16px system-ui"; g.textAlign = "center"; g.textBaseline = "middle";
+      g.fillText(String(i + 1), s[0][0], s[0][1] + 1);
+    });
+  }
+
+  let start = null;
+  function play() {
+    start = performance.now();
+    const total = 1100 * pts.length;
+    const tick = now => {
+      const t = Math.min(1, (now - start) / total);
+      draw(t);
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+  cv.addEventListener("click", play);
+  boards.push(play);
+  draw(1);
+}
+
+(async () => {
+  await document.fonts.load("500px Avva");
+  const [letters, strokes] = await Promise.all([
+    fetch("../app/assets/content/letters.json").then(r => r.json()),
+    fetch("../app/assets/content/games/writing_strokes.json").then(r => r.json()),
+  ]);
+  for (const l of letters.letters) {
+    for (const form of ["small", "capital"]) {
+      const s = strokes.letters[l.id]?.[form];
+      if (!s) continue;
+      makeBoard(l[form], s, `${l.name.en} · ${l.name.ar}`, form);
+    }
+  }
+  document.getElementById("all").onclick = () => boards.forEach(p => p());
+  boards.forEach(p => p());
+})();
+</script>
+</body>
+</html>

@@ -271,4 +271,92 @@ class AppLocalizationsAr extends AppLocalizations {
   String balloonsMissed(String target) {
     return 'بالونة $target طارت! خلّي عينك عليها';
   }
+
+  @override
+  String get writingPickLetter => 'اختار الحرف اللي هتكتبه!';
+
+  @override
+  String writingStart(String name) {
+    return 'يلا يا $name! لوّن الحرف بالطباشير';
+  }
+
+  @override
+  String get writingWatch => 'بص الأول بيتكتب ازاي';
+
+  @override
+  String get writingHalfway => 'نص الحرف خلص! كمّل';
+
+  @override
+  String get writingWarn => 'حاسب! خلّيك جوّه الحرف';
+
+  @override
+  String get writingWipe => 'اتلخبطت شوية! هامسحها ونبدأ تاني';
+
+  @override
+  String get writingCapitalNext => 'برافو! يلا نكتب الحرف الكبير';
+
+  @override
+  String get writingSmall => 'صغير';
+
+  @override
+  String get writingCapital => 'كبير';
+
+  @override
+  String get writingFilled => 'اللي اتلوّن';
+
+  @override
+  String get writingMess => 'اللخبطة برّه الحرف';
+
+  @override
+  String get writingWipesLeft => 'مرات المسح الباقية';
+
+  @override
+  String get writingThin => 'رفيع';
+
+  @override
+  String get writingMedium => 'وسط';
+
+  @override
+  String get writingThick => 'تخين';
+
+  @override
+  String get writingPassed => 'كتبته!';
+
+  @override
+  String get writingPassedBody => 'الحرف الصغير والكبير، بخط إيدك';
+
+  @override
+  String get writingFailed => 'يلا نجرب تاني!';
+
+  @override
+  String writingFailedBody(int count) {
+    return 'السبورة اتمسحت $count مرات. خلّي الطباشير جوّه الحرف';
+  }
+
+  @override
+  String get writingAgain => 'اكتبه تاني';
+
+  @override
+  String get writingShare => 'شارك الرسمة';
+
+  @override
+  String writingShareTitle(String name, String letter) {
+    return 'برافو يا $name! كتبت حرف $letter';
+  }
+
+  @override
+  String writingShareWith(String hero) {
+    return 'مع $hero على سبورة جدو';
+  }
+
+  @override
+  String writingShareText(String name, String letter) {
+    return 'برافو يا $name! كتبت الحرف القبطي $letter في نونو وفوفو';
+  }
+
+  @override
+  String get writingEraser => 'أستيكة';
+
+  @override
+  String get writingShareSaved => 'اتحفظت الصورة في التنزيلات';
 }
