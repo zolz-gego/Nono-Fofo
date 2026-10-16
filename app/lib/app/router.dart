@@ -8,6 +8,8 @@ import '../features/games/balloons/presentation/balloons_page.dart';
 import '../features/games/fishing/presentation/fishing_cubit.dart';
 import '../features/games/fishing/presentation/fishing_page.dart';
 import '../features/games/letter_hunt/presentation/letter_pick_page.dart';
+import '../features/games/writing/presentation/writing_cubit.dart';
+import '../features/games/writing/presentation/writing_page.dart';
 import '../features/levels/domain/game_level.dart';
 import '../features/levels/presentation/level_games_page.dart';
 
@@ -28,6 +30,11 @@ abstract final class AppRoutes {
   /// (extra: [LetterHuntArgs]).
   static const balloons = '/level/balloons';
   static const balloonsPlay = '/level/balloons/play';
+
+  /// Write the letter (Grandpa's house): pick a letter (extra:
+  /// [PlayerSetup]), then write it (extra: [LetterHuntArgs]).
+  static const writing = '/level/writing';
+  static const writingPlay = '/level/writing/play';
 }
 
 final GoRouter appRouter = GoRouter(
@@ -85,6 +92,26 @@ final GoRouter appRouter = GoRouter(
           state.extra is LetterHuntArgs ? null : AppRoutes.home,
       builder: (context, state) =>
           BalloonsPage(args: state.extra! as LetterHuntArgs),
+    ),
+    GoRoute(
+      path: AppRoutes.writing,
+      redirect: (context, state) =>
+          state.extra is PlayerSetup ? null : AppRoutes.home,
+      builder: (context, state) => LetterPickPage(
+        setup: state.extra! as PlayerSetup,
+        gameId: WritingCubit.id,
+        title: context.l10n.gameWriteLetter,
+        prompt: context.l10n.writingPickLetter,
+        playRoute: AppRoutes.writingPlay,
+        passFail: true,
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.writingPlay,
+      redirect: (context, state) =>
+          state.extra is LetterHuntArgs ? null : AppRoutes.home,
+      builder: (context, state) =>
+          WritingPage(args: state.extra! as LetterHuntArgs),
     ),
   ],
 );

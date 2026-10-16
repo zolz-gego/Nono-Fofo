@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -26,6 +27,8 @@ import '../../../levels/domain/game_level.dart';
 import '../../../settings/presentation/language_button.dart';
 import '../../../settings/presentation/mute_button.dart';
 import '../../progress/domain/game_progress_repository.dart';
+import '../../writing/data/writing_drawings_repository.dart';
+import '../../writing/domain/letter_strokes.dart';
 
 /// What a "find the letter" game needs: who plays, the letter to catch and
 /// the letters the other items may carry.
@@ -43,7 +46,8 @@ class LetterHuntArgs {
 
 /// Before a "find the letter" game: the child picks the letter to catch, or
 /// lets the dice pick one. Each letter shows the best stars won with it in
-/// that game.
+/// that game, or for a pass / not-passed game ([passFail]) a green tick and
+/// the child's own saved drawing.
 class LetterPickPage extends StatefulWidget {
   const LetterPickPage({
     super.key,
@@ -52,6 +56,7 @@ class LetterPickPage extends StatefulWidget {
     required this.title,
     required this.prompt,
     required this.playRoute,
+    this.passFail = false,
   });
 
   final PlayerSetup setup;
@@ -65,6 +70,9 @@ class LetterPickPage extends StatefulWidget {
 
   /// Route of the game itself; gets [LetterHuntArgs] as `extra`.
   final String playRoute;
+
+  /// The game has no stars, only passed / not passed (the writing game).
+  final bool passFail;
 
   @override
   State<LetterPickPage> createState() => _LetterPickPageState();
@@ -104,6 +112,13 @@ class _LetterPickPageState extends State<LetterPickPage> {
       extra: LetterHuntArgs(setup: widget.setup, target: letter, pool: pool),
     );
     if (mounted) setState(() {}); // Show any new stars.
+  }
+
+  List<Uint8List> _drawingsOf(String letterId) {
+    final repo = sl<WritingDrawingsRepository>();
+    return [
+      for (final form in LetterForm.values) ?repo.drawing(letterId, form),
+    ];
   }
 
   void _playRandom(List<CopticLetter> pool) {
@@ -171,10 +186,21 @@ class _LetterPickPageState extends State<LetterPickPage> {
                       itemBuilder: (context, i) =>
                           _LetterTile(
                                 letter: letters[i],
-                                stars: _progress.bestStars(
-                                  widget.gameId,
-                                  letters[i].id,
-                                ),
+                                stars: widget.passFail
+                                    ? null
+                                    : _progress.bestStars(
+                                        widget.gameId,
+                                        letters[i].id,
+                                      ),
+                                passed:
+                                    widget.passFail &&
+                                    _progress.hasPassed(
+                                      widget.gameId,
+                                      letters[i].id,
+                                    ),
+                                drawings: widget.passFail
+                                    ? _drawingsOf(letters[i].id)
+                                    : const [],
                                 onTap: () => _play(letters[i], letters),
                               )
                               .animate(delay: (40 * i).ms)
@@ -228,10 +254,18 @@ class _LetterTile extends StatelessWidget {
     required this.letter,
     required this.stars,
     required this.onTap,
+    this.passed = false,
+    this.drawings = const [],
   });
 
   final CopticLetter letter;
-  final int stars;
+
+  /// Best stars, or null for a pass / not-passed game.
+  final int? stars;
+  final bool passed;
+
+  /// The child's saved drawings of this letter (small, capital).
+  final List<Uint8List> drawings;
   final VoidCallback onTap;
 
   @override
@@ -251,13 +285,32 @@ class _LetterTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
-                child: FittedBox(
-                  child: Text(
-                    letter.small,
-                    style: AppTextStyles.coptic(AppTextVariant.h1)
-                        .copyWith(fontSize: 64, height: 1.1),
-                  ),
-                ),
+                child: drawings.isNotEmpty
+                    ? Row(
+                        children: [
+                          for (final png in drawings)
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(1.5),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(4),
+                                  child: Image.memory(
+                                    png,
+                                    fit: BoxFit.contain,
+                                    gaplessPlayback: true,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      )
+                    : FittedBox(
+                        child: Text(
+                          letter.small,
+                          style: AppTextStyles.coptic(AppTextVariant.h1)
+                              .copyWith(fontSize: 64, height: 1.1),
+                        ),
+                      ),
               ),
               AppText(
                 letter.nameIn(lang),
@@ -265,20 +318,34 @@ class _LetterTile extends StatelessWidget {
                 color: AppColors.textMuted,
               ),
               const SizedBox(height: AppDimens.spaceXs),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var i = 0; i < 3; i++)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 1),
-                      child: FaIcon(
-                        i < stars ? AppIcons.star : AppIcons.starEmpty,
-                        size: 14,
-                        color: i < stars ? AppColors.star : AppColors.outline,
+              if (stars == null)
+                SizedBox(
+                  height: 18,
+                  child: passed
+                      ? const FaIcon(
+                          AppIcons.passed,
+                          size: 18,
+                          color: AppColors.correct,
+                        )
+                      : null,
+                )
+              else
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    for (var i = 0; i < 3; i++)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 1),
+                        child: FaIcon(
+                          i < stars! ? AppIcons.star : AppIcons.starEmpty,
+                          size: 14,
+                          color: i < stars!
+                              ? AppColors.star
+                              : AppColors.outline,
+                        ),
                       ),
-                    ),
-                ],
-              ),
+                  ],
+                ),
             ],
           ),
         ),

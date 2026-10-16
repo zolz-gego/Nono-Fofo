@@ -14,6 +14,8 @@ import '../../engines/sound/domain/sound_repository.dart';
 import '../../features/games/balloons/data/balloons_config_repository.dart';
 import '../../features/games/fishing/data/fishing_config_repository.dart';
 import '../../features/games/progress/data/game_progress_repository_impl.dart';
+import '../../features/games/writing/data/writing_config_repository.dart';
+import '../../features/games/writing/data/writing_drawings_repository.dart';
 import '../../features/games/progress/domain/game_progress_repository.dart';
 import '../../features/letters/data/letter_repository_impl.dart';
 import '../../features/letters/domain/letter_repository.dart';
@@ -67,6 +69,8 @@ Future<void> configureDependencies() async {
   );
   sl.registerLazySingleton(() => FishingConfigRepository(sl()));
   sl.registerLazySingleton(() => BalloonsConfigRepository(sl()));
+  sl.registerLazySingleton(() => WritingConfigRepository(sl()));
+  sl.registerLazySingleton(() => WritingDrawingsRepository(sl()));
 
   // Warm up engines before the first frame.
   await sl<SoundService>().init();

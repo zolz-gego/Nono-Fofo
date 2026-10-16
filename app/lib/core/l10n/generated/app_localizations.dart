@@ -565,6 +565,126 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'بالونة {target} طارت! خلّي عينك عليها'**
   String balloonsMissed(String target);
+
+  /// No description provided for @writingPickLetter.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار الحرف اللي هتكتبه!'**
+  String get writingPickLetter;
+
+  /// No description provided for @writingStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'يلا يا {name}! لوّن الحرف بالطباشير'**
+  String writingStart(String name);
+
+  /// No description provided for @writingWatch.
+  ///
+  /// In ar, this message translates to:
+  /// **'بص الأول بيتكتب ازاي'**
+  String get writingWatch;
+
+  /// No description provided for @writingHalfway.
+  ///
+  /// In ar, this message translates to:
+  /// **'نص الحرف خلص! كمّل'**
+  String get writingHalfway;
+
+  /// No description provided for @writingWarn.
+  ///
+  /// In ar, this message translates to:
+  /// **'حاسب! خلّيك جوّه الحرف'**
+  String get writingWarn;
+
+  /// No description provided for @writingWipe.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتلخبطت شوية! هامسحها ونبدأ تاني'**
+  String get writingWipe;
+
+  /// No description provided for @writingCapitalNext.
+  ///
+  /// In ar, this message translates to:
+  /// **'برافو! يلا نكتب الحرف الكبير'**
+  String get writingCapitalNext;
+
+  /// No description provided for @writingSmall.
+  ///
+  /// In ar, this message translates to:
+  /// **'صغير'**
+  String get writingSmall;
+
+  /// No description provided for @writingCapital.
+  ///
+  /// In ar, this message translates to:
+  /// **'كبير'**
+  String get writingCapital;
+
+  /// No description provided for @writingFilled.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللي اتلوّن'**
+  String get writingFilled;
+
+  /// No description provided for @writingMess.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللخبطة برّه الحرف'**
+  String get writingMess;
+
+  /// No description provided for @writingWipesLeft.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرات المسح الباقية'**
+  String get writingWipesLeft;
+
+  /// No description provided for @writingThin.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفيع'**
+  String get writingThin;
+
+  /// No description provided for @writingMedium.
+  ///
+  /// In ar, this message translates to:
+  /// **'وسط'**
+  String get writingMedium;
+
+  /// No description provided for @writingThick.
+  ///
+  /// In ar, this message translates to:
+  /// **'تخين'**
+  String get writingThick;
+
+  /// No description provided for @writingPassed.
+  ///
+  /// In ar, this message translates to:
+  /// **'كتبته!'**
+  String get writingPassed;
+
+  /// No description provided for @writingPassedBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحرف الصغير والكبير، بخط إيدك'**
+  String get writingPassedBody;
+
+  /// No description provided for @writingFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'يلا نجرب تاني!'**
+  String get writingFailed;
+
+  /// No description provided for @writingFailedBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'السبورة اتمسحت {count} مرات. خلّي الطباشير جوّه الحرف'**
+  String writingFailedBody(int count);
+
+  /// No description provided for @writingAgain.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتبه تاني'**
+  String get writingAgain;
 }
 
 class _AppLocalizationsDelegate

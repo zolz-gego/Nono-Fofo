@@ -1,0 +1,14 @@
+{
+  "_readme": "Settings for the 'Write the letter' game (Grandpa's house). Change numbers here; no code change needed. A level is one letter on two boards: small, then capital. passAt: 0..1, how full the letter must be for a board to pass (it passes by itself). messLimit: chalk outside the letter (well outside: a small margin around it never counts) as a fraction of the letter's own size; when it is reached the other brother wipes the board and it starts again. warnAt: 0..1 of the mess meter where he warns first. halfwayCheerAt: he cheers once when the letter is this full. wipesToFail: wipes in one level that make it 'not passed'. letterThicken: how much thicker than the font the hollow letter is, as a fraction of the board height (bigger = easier to colour). chalkSizes: thin / medium / thick chalk in board units (the board is 800 x 520). startSize: which of those is picked first (0 = thin). demoStrokeSeconds: how long the 'watch how it's written' demo takes per stroke. The stroke order itself is in writing_strokes.json. art.background / art.board: the ElevenLabs pictures, made by tools/games/process_writing.py; until they exist both are drawn in code.",
+  "version": 1,
+  "passAt": 0.85,
+  "messLimit": 0.6,
+  "warnAt": 0.5,
+  "halfwayCheerAt": 0.5,
+  "wipesToFail": 3,
+  "letterThicken": 0.012,
+  "chalkSizes": [9, 15, 23],
+  "startSize": 1,
+  "demoStrokeSeconds": 1.1,
+  "art": {}
+}

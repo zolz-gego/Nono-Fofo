@@ -641,6 +641,11 @@
       "sfx": [
         "stroke_off"
       ]
+    },
+    "writing.sponge_wipe": {
+      "sfx": [
+        "sponge_wipe"
+      ]
     }
   },
   "music": {

@@ -164,5 +164,39 @@
         "type": "String"
       }
     }
+  },
+  "writingPickLetter": "اختار الحرف اللي هتكتبه!",
+  "writingStart": "يلا يا {name}! لوّن الحرف بالطباشير",
+  "writingWatch": "بص الأول بيتكتب ازاي",
+  "writingHalfway": "نص الحرف خلص! كمّل",
+  "writingWarn": "حاسب! خلّيك جوّه الحرف",
+  "writingWipe": "اتلخبطت شوية! هامسحها ونبدأ تاني",
+  "writingCapitalNext": "برافو! يلا نكتب الحرف الكبير",
+  "writingSmall": "صغير",
+  "writingCapital": "كبير",
+  "writingFilled": "اللي اتلوّن",
+  "writingMess": "اللخبطة برّه الحرف",
+  "writingWipesLeft": "مرات المسح الباقية",
+  "writingThin": "رفيع",
+  "writingMedium": "وسط",
+  "writingThick": "تخين",
+  "writingPassed": "كتبته!",
+  "writingPassedBody": "الحرف الصغير والكبير، بخط إيدك",
+  "writingFailed": "يلا نجرب تاني!",
+  "writingFailedBody": "السبورة اتمسحت {count} مرات. خلّي الطباشير جوّه الحرف",
+  "writingAgain": "اكتبه تاني",
+  "@writingStart": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@writingFailedBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }
