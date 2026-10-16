@@ -336,4 +336,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get writingAgain => 'Write it again';
+
+  @override
+  String get writingShare => 'Share the drawing';
+
+  @override
+  String writingShareTitle(String name, String letter) {
+    return 'Bravo $name! You wrote the letter $letter';
+  }
+
+  @override
+  String writingShareWith(String hero) {
+    return 'With $hero at Grandpa\'s chalkboard';
+  }
+
+  @override
+  String writingShareText(String name, String letter) {
+    return 'Bravo $name! You wrote the Coptic letter $letter in Nono & Fofo';
+  }
 }

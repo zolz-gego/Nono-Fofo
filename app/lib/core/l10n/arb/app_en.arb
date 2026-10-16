@@ -111,5 +111,9 @@
   "writingPassedBody": "The small and the capital letter, in your own hand",
   "writingFailed": "Let's try again!",
   "writingFailedBody": "The board was wiped {count} times. Keep the chalk inside the letter",
-  "writingAgain": "Write it again"
+  "writingAgain": "Write it again",
+  "writingShare": "Share the drawing",
+  "writingShareTitle": "Bravo {name}! You wrote the letter {letter}",
+  "writingShareWith": "With {hero} at Grandpa's chalkboard",
+  "writingShareText": "Bravo {name}! You wrote the Coptic letter {letter} in Nono & Fofo"
 }

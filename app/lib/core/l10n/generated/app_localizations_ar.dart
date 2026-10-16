@@ -335,4 +335,22 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get writingAgain => 'اكتبه تاني';
+
+  @override
+  String get writingShare => 'شارك الرسمة';
+
+  @override
+  String writingShareTitle(String name, String letter) {
+    return 'برافو يا $name! كتبت حرف $letter';
+  }
+
+  @override
+  String writingShareWith(String hero) {
+    return 'مع $hero على سبورة جدو';
+  }
+
+  @override
+  String writingShareText(String name, String letter) {
+    return 'برافو يا $name! كتبت الحرف القبطي $letter في نونو وفوفو';
+  }
 }

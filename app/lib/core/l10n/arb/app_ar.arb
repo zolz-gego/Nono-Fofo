@@ -198,5 +198,36 @@
         "type": "int"
       }
     }
+  },
+  "writingShare": "شارك الرسمة",
+  "writingShareTitle": "برافو يا {name}! كتبت حرف {letter}",
+  "writingShareWith": "مع {hero} على سبورة جدو",
+  "writingShareText": "برافو يا {name}! كتبت الحرف القبطي {letter} في نونو وفوفو",
+  "@writingShareTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "letter": {
+        "type": "String"
+      }
+    }
+  },
+  "@writingShareWith": {
+    "placeholders": {
+      "hero": {
+        "type": "String"
+      }
+    }
+  },
+  "@writingShareText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "letter": {
+        "type": "String"
+      }
+    }
   }
 }

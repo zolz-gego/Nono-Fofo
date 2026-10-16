@@ -25,6 +25,7 @@ class WritingResult extends StatefulWidget {
     required this.onOtherLetter,
     required this.onBackToGames,
     this.wipesToFail = 3,
+    this.onShare,
   });
 
   final bool passed;
@@ -37,6 +38,10 @@ class WritingResult extends StatefulWidget {
   final VoidCallback onPlayAgain;
   final VoidCallback onOtherLetter;
   final VoidCallback onBackToGames;
+
+  /// Shares a picture of the drawings (passed only). Gets where the button
+  /// is, for the share sheet's arrow on tablets.
+  final void Function(Rect origin)? onShare;
 
   @override
   State<WritingResult> createState() => _WritingResultState();
@@ -150,6 +155,26 @@ class _WritingResultState extends State<WritingResult> {
                                               ),
                                     ),
                                 ],
+                              ),
+                            ],
+                            if (widget.onShare != null) ...[
+                              const SizedBox(height: AppDimens.spaceMd),
+                              Builder(
+                                builder: (context) => FilledButton.tonalIcon(
+                                  onPressed: () {
+                                    final box =
+                                        context.findRenderObject()
+                                            as RenderBox?;
+                                    widget.onShare!(
+                                      box == null
+                                          ? Rect.zero
+                                          : box.localToGlobal(Offset.zero) &
+                                                box.size,
+                                    );
+                                  },
+                                  icon: const FaIcon(AppIcons.share, size: 18),
+                                  label: Text(l10n.writingShare),
+                                ),
                               ),
                             ],
                             const SizedBox(height: AppDimens.spaceLg),

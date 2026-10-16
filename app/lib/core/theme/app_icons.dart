@@ -23,6 +23,7 @@ abstract final class AppIcons {
   static const FaIconData chalkFilled = FontAwesomeIcons.paintbrush;
   static const FaIconData sponge = FontAwesomeIcons.eraser;
   static const FaIconData passed = FontAwesomeIcons.solidCircleCheck;
+  static const FaIconData share = FontAwesomeIcons.shareNodes;
 
   // Game placeholders, shown until a game's illustration is added.
   static const FaIconData fishing = FontAwesomeIcons.fish;

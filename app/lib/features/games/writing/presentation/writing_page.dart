@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../../app/di/injection.dart';
 import '../../../../app/router.dart';
 import '../../../../core/domain/character_id.dart';
+import '../../../../core/typography/app_text_styles.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
@@ -29,7 +31,6 @@ import '../../letter_hunt/presentation/letter_pick_page.dart';
 import '../../progress/domain/game_progress_repository.dart';
 import '../data/letter_mask_builder.dart';
 import '../data/writing_config_repository.dart';
-import '../data/writing_drawings_repository.dart';
 import '../domain/letter_mask.dart';
 import '../domain/letter_strokes.dart';
 import '../domain/writing_config.dart';
@@ -39,6 +40,7 @@ import 'study_background.dart';
 import 'writing_cubit.dart';
 import 'writing_hud.dart';
 import 'writing_result.dart';
+import 'writing_share_card.dart';
 
 /// "Write the letter" in Grandpa's study: the chosen hero stands by the
 /// green chalkboard, the child colours the big hollow letter (small, then
@@ -68,7 +70,6 @@ class _WritingPageState extends State<WritingPage> {
   );
   final ChalkboardController _board = ChalkboardController();
   final WritingConfigRepository _repo = sl<WritingConfigRepository>();
-  final WritingDrawingsRepository _drawings = sl<WritingDrawingsRepository>();
   late final Future<(WritingConfig, StrokeBook)> _content = (
     _repo.load(),
     _repo.strokes(),
@@ -84,6 +85,9 @@ class _WritingPageState extends State<WritingPage> {
   DateTime _lastChalkSound = DateTime(0);
   final Map<LetterForm, Uint8List> _shots = {};
   bool? _resultPassed;
+
+  /// The picture to share after a pass (drawings, names, the hero).
+  Future<Uint8List>? _card;
   final List<Timer> _timers = [];
   final Random _random = Random();
 
@@ -128,6 +132,7 @@ class _WritingPageState extends State<WritingPage> {
       _cubit = cubit;
       _mask = null;
       _resultPassed = null;
+      _card = null;
     });
     _hero.play(CharacterAction.chalk);
     _other
@@ -227,10 +232,12 @@ class _WritingPageState extends State<WritingPage> {
         _hero.react(CharacterReaction.celebrate);
         _other.react(CharacterReaction.celebrate, say: _cheer(l10n));
         _snapshot(state.form).then((_) {
-          _saveDrawings();
           _later(const Duration(milliseconds: 1400), () {
             _sound.play(SoundEvent.levelComplete);
             setState(() => _resultPassed = true);
+            // Get the share picture ready now: browsers only allow sharing
+            // right after the tap, so it can't be drawn then.
+            _card = _buildShareCard();
           });
         });
     }
@@ -262,12 +269,6 @@ class _WritingPageState extends State<WritingPage> {
       png = null; // No picture this time; the game goes on.
     }
     if (png != null) _shots[form] = png;
-  }
-
-  void _saveDrawings() {
-    for (final MapEntry(:key, :value) in _shots.entries) {
-      _drawings.save(_letter.id, key, value);
-    }
   }
 
   void _onWipeDone() {
@@ -302,6 +303,53 @@ class _WritingPageState extends State<WritingPage> {
   void _playAgain() {
     _sound.play(SoundEvent.tap);
     _start();
+  }
+
+  Future<Uint8List> _buildShareCard() {
+    final l10n = context.l10n;
+    final lang = Localizations.localeOf(context).languageCode;
+    final heroName = _heroId == CharacterId.nono ? l10n.nono : l10n.fofo;
+    return WritingShareCard(
+      drawings: [for (final form in LetterForm.values) ?_shots[form]],
+      title: l10n.writingShareTitle(
+        widget.args.setup.name,
+        _letter.nameIn(lang),
+      ),
+      subtitle: l10n.writingShareWith(heroName),
+      appTitle: l10n.appTitle,
+      script: lang == 'ar' ? AppScript.arabic : AppScript.english,
+      direction: Directionality.of(context),
+      heroAsset: context
+          .read<CharacterRoster>()
+          .pose(_heroId, CharacterAction.celebrate)
+          ?.asset,
+    ).render();
+  }
+
+  Future<void> _share(Rect origin) async {
+    _sound.play(SoundEvent.tap);
+    final l10n = context.l10n;
+    final lang = Localizations.localeOf(context).languageCode;
+    final text = l10n.writingShareText(
+      widget.args.setup.name,
+      _letter.nameIn(lang),
+    );
+    final fileName = 'nono-fofo-${_letter.id}.png';
+    try {
+      final card = await (_card ??= _buildShareCard());
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile.fromData(card, mimeType: 'image/png', name: fileName)],
+          fileNameOverrides: [fileName],
+          text: text,
+          sharePositionOrigin: origin == Rect.zero ? null : origin,
+          // Browsers that can't share files save the picture instead.
+          downloadFallbackEnabled: true,
+        ),
+      );
+    } catch (_) {
+      // Sharing was cancelled or isn't available: nothing to do.
+    }
   }
 
   void _otherLetter() {
@@ -495,6 +543,7 @@ class _WritingPageState extends State<WritingPage> {
               onPlayAgain: _playAgain,
               onOtherLetter: _otherLetter,
               onBackToGames: _backToGames,
+              onShare: _resultPassed! ? _share : null,
             ),
           ),
       ],

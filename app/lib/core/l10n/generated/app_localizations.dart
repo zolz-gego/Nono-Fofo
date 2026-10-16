@@ -685,6 +685,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اكتبه تاني'**
   String get writingAgain;
+
+  /// No description provided for @writingShare.
+  ///
+  /// In ar, this message translates to:
+  /// **'شارك الرسمة'**
+  String get writingShare;
+
+  /// No description provided for @writingShareTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'برافو يا {name}! كتبت حرف {letter}'**
+  String writingShareTitle(String name, String letter);
+
+  /// No description provided for @writingShareWith.
+  ///
+  /// In ar, this message translates to:
+  /// **'مع {hero} على سبورة جدو'**
+  String writingShareWith(String hero);
+
+  /// No description provided for @writingShareText.
+  ///
+  /// In ar, this message translates to:
+  /// **'برافو يا {name}! كتبت الحرف القبطي {letter} في نونو وفوفو'**
+  String writingShareText(String name, String letter);
 }
 
 class _AppLocalizationsDelegate
