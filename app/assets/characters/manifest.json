@@ -167,6 +167,21 @@
           640,
           16
         ]
+      },
+      "jump": {
+        "file": "nono/jump.png",
+        "small": "nono/small/jump.png",
+        "width": 569,
+        "height": 983,
+        "source": "Balloons Poses.webp",
+        "head_center": [
+          197,
+          174
+        ],
+        "hand": [
+          502,
+          66
+        ]
       }
     },
     "fofo": {
@@ -330,6 +345,21 @@
         "rod_tip": [
           537,
           13
+        ]
+      },
+      "hold": {
+        "file": "fofo/hold.png",
+        "small": "fofo/small/hold.png",
+        "width": 409,
+        "height": 735,
+        "source": "Balloons Poses.webp",
+        "head_center": [
+          142,
+          113
+        ],
+        "hand": [
+          354,
+          51
         ]
       }
     }

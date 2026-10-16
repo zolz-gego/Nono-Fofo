@@ -51,8 +51,10 @@ class SoundRepositoryImpl implements SoundRepository {
         },
       );
     }
-    final musicSlots = _section(map, 'music')
-        .map((k, v) => MapEntry(k, v as String));
+    final musicSlots = _section(
+      map,
+      'music',
+    ).map((k, v) => MapEntry(k, v as String));
 
     final catalog = SoundCatalog(
       cues: cues,
@@ -83,7 +85,9 @@ class SoundRepositoryImpl implements SoundRepository {
       e.value.voice.forEach((ch, ids) {
         for (final id in ids) {
           if (c.voicePath(ch, id) == null) {
-            debugPrint('[sound_map] "${e.key}": unknown ${ch.name} voice "$id"');
+            debugPrint(
+              '[sound_map] "${e.key}": unknown ${ch.name} voice "$id"',
+            );
           }
         }
       });

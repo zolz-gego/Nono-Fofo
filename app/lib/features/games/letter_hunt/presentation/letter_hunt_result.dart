@@ -14,10 +14,10 @@ import '../../../../core/widgets/text/app_texts.dart';
 import '../../../../engines/sound/application/sound_service.dart';
 import '../../../../engines/sound/domain/sound_event.dart';
 
-/// End of a fishing game: the stars won (one by one, each with its sound),
+/// End of a "find the letter" game: the stars won (one by one, each with its sound),
 /// confetti, and what to do next.
-class FishingResult extends StatefulWidget {
-  const FishingResult({
+class LetterHuntResult extends StatefulWidget {
+  const LetterHuntResult({
     super.key,
     required this.stars,
     required this.isNewBest,
@@ -33,10 +33,10 @@ class FishingResult extends StatefulWidget {
   final VoidCallback onBackToGames;
 
   @override
-  State<FishingResult> createState() => _FishingResultState();
+  State<LetterHuntResult> createState() => _LetterHuntResultState();
 }
 
-class _FishingResultState extends State<FishingResult> {
+class _LetterHuntResultState extends State<LetterHuntResult> {
   final ConfettiController _confetti = ConfettiController(
     duration: const Duration(seconds: 2),
   );

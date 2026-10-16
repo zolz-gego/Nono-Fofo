@@ -190,7 +190,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get gameWriteLetter => 'اكتب الحرف';
 
   @override
-  String get gameBalloons => 'فرقع البالونة';
+  String get gameBalloons => 'امسك البالونة';
 
   @override
   String gameChallenge(String opponent) {
@@ -255,4 +255,20 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get otherLetter => 'حرف تاني';
+
+  @override
+  String get balloonsPickLetter => 'اختار الحرف اللي هتمسكه!';
+
+  @override
+  String get balloonsCatch => 'هات';
+
+  @override
+  String balloonsStart(String name, String letter) {
+    return 'يلا يا $name! هاتلي البالونة اللي عليها $letter';
+  }
+
+  @override
+  String balloonsMissed(String target) {
+    return 'بالونة $target طارت! خلّي عينك عليها';
+  }
 }

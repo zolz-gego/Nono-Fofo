@@ -46,8 +46,12 @@ class CharacterComponent extends PositionComponent {
 
   @override
   Future<void> onLoad() async {
-    for (final pose in roster.posesOf(character)) {
-      _sprites[pose.action] = await _images.load(pose.asset);
+    final poses = roster.posesOf(character).toList();
+    final images = await Future.wait([
+      for (final pose in poses) _images.load(pose.asset),
+    ]);
+    for (final (i, pose) in poses.indexed) {
+      _sprites[pose.action] = images[i];
     }
     final idle = roster.pose(character, CharacterAction.idle)!;
     size = Vector2(idle.width * _k, idle.height * _k);
@@ -60,13 +64,19 @@ class CharacterComponent extends PositionComponent {
 
   /// Where the fishing rod's tip is, relative to [position] (the feet), or
   /// null if the current pose holds no rod.
-  Offset? get rodTip {
+  Offset? get rodTip => _fromFeet((pose) => pose.rodTip);
+
+  /// Where the raised fist holding balloon strings is, relative to
+  /// [position] (the feet), or null if the current pose has none.
+  Offset? get hand => _fromFeet((pose) => pose.hand);
+
+  Offset? _fromFeet(Offset? Function(CharacterPose pose) point) {
     final pose = roster.pose(character, _action);
-    final tip = pose?.rodTip;
-    if (pose == null || tip == null) return null;
+    final p = pose == null ? null : point(pose);
+    if (pose == null || p == null) return null;
     final k = _k * scale.x;
-    final x = (tip.dx - pose.headCenter.dx) * k;
-    return Offset(mirror ? -x : x, (tip.dy - pose.height) * k);
+    final x = (p.dx - pose.headCenter.dx) * k;
+    return Offset(mirror ? -x : x, (p.dy - pose.height) * k);
   }
 
   void play(CharacterAction action) {

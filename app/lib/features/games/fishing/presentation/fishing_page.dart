@@ -13,7 +13,6 @@ import '../../../../core/domain/character_id.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_icons.dart';
-import '../../../../core/typography/app_text_styles.dart';
 import '../../../../core/widgets/app_top_bar.dart';
 import '../../../../engines/characters/domain/character_action.dart';
 import '../../../../engines/characters/domain/character_pose.dart';
@@ -23,8 +22,6 @@ import '../../../../engines/characters/presentation/character_controller.dart';
 import '../../../../engines/characters/presentation/speech_bubble.dart';
 import '../../../../engines/sound/application/sound_service.dart';
 import '../../../../engines/sound/domain/sound_event.dart';
-import '../../../letters/domain/coptic_letter.dart';
-import '../../../levels/domain/game_level.dart';
 import '../../../settings/presentation/language_button.dart';
 import '../../../settings/presentation/mute_button.dart';
 import '../../progress/domain/game_progress_repository.dart';
@@ -33,30 +30,19 @@ import '../domain/fishing_config.dart';
 import '../domain/fishing_round.dart';
 import '../game/fishing_game.dart';
 import '../game/fishing_layout.dart';
+import '../../letter_hunt/presentation/coptic_mixed_text.dart';
+import '../../letter_hunt/presentation/letter_hunt_cubit.dart';
+import '../../letter_hunt/presentation/letter_hunt_hud.dart';
+import '../../letter_hunt/presentation/letter_hunt_result.dart';
+import '../../letter_hunt/presentation/letter_pick_page.dart';
 import 'fishing_cubit.dart';
-import 'fishing_hud.dart';
-import 'fishing_result.dart';
-
-/// What the fishing game needs: who plays, the letter to catch and the
-/// letters the other fish may carry.
-class FishingArgs {
-  const FishingArgs({
-    required this.setup,
-    required this.target,
-    required this.pool,
-  });
-
-  final PlayerSetup setup;
-  final CopticLetter target;
-  final List<CopticLetter> pool;
-}
 
 /// The fishing game screen: the Flame scene with the hero and his rod, the
 /// target card and basket on top, and the other brother as the referee.
 class FishingPage extends StatefulWidget {
   const FishingPage({super.key, required this.args});
 
-  final FishingArgs args;
+  final LetterHuntArgs args;
 
   @override
   State<FishingPage> createState() => _FishingPageState();
@@ -77,7 +63,7 @@ class _FishingPageState extends State<FishingPage> {
 
   /// The referee's speech bubble (kept here so Coptic letters can be mixed
   /// into the text).
-  ({String key, InlineSpan span})? _bubble;
+  MixedText? _bubble;
   Timer? _bubbleTimer;
   DateTime _lastMissedLine = DateTime(0);
   bool _showResult = false;
@@ -126,8 +112,8 @@ class _FishingPageState extends State<FishingPage> {
       if (!mounted) return;
       final l10n = context.l10n;
       _say(
-        _mixed(l10n.fishingStart(widget.args.setup.name, _m1), {
-          _m1: widget.args.target.small,
+        _mixed(l10n.fishingStart(widget.args.setup.name, copticSlot1), {
+          copticSlot1: widget.args.target.small,
         }),
       );
     });
@@ -147,48 +133,11 @@ class _FishingPageState extends State<FishingPage> {
   // Referee
   // ---------------------------------------------------------------------------
 
-  // Placeholders put into translated text where a Coptic letter goes.
-  static const String _m1 = '\u0001';
-  static const String _m2 = '\u0002';
-
-  /// Builds text in the UI language with Coptic letters swapped in for the
-  /// [coptic] placeholders.
-  ({String key, InlineSpan span}) _mixed(
-    String text,
-    Map<String, String> coptic,
-  ) {
-    final ui = Localizations.localeOf(context).languageCode == 'ar'
-        ? AppTextStyles.arabic(AppTextVariant.body)
-        : AppTextStyles.english(AppTextVariant.body);
-    final letter = AppTextStyles.coptic(AppTextVariant.h3);
-    final spans = <InlineSpan>[];
-    final buffer = StringBuffer();
-    void flush() {
-      if (buffer.isEmpty) return;
-      spans.add(TextSpan(text: buffer.toString(), style: ui));
-      buffer.clear();
-    }
-
-    for (final ch in text.split('')) {
-      final key = coptic[ch];
-      if (key == null) {
-        buffer.write(ch);
-      } else {
-        flush();
-        // Isolated, so the letter never pulls punctuation around it.
-        spans.add(TextSpan(text: '\u2068 $key \u2069', style: letter));
-      }
-    }
-    flush();
-    final key = text.replaceAllMapped(
-      RegExp('[$_m1$_m2]'),
-      (m) => coptic[m[0]] ?? '',
-    );
-    return (key: key, span: TextSpan(children: spans));
-  }
+  MixedText _mixed(String text, [Map<String, String> coptic = const {}]) =>
+      copticMixedText(context, text, coptic);
 
   void _say(
-    ({String key, InlineSpan span}) bubble, {
+    MixedText bubble, {
     Duration duration = const Duration(milliseconds: 2400),
   }) {
     _bubbleTimer?.cancel();
@@ -209,21 +158,21 @@ class _FishingPageState extends State<FishingPage> {
     final l10n = context.l10n;
     final target = state.round.target.small;
     switch (state.event) {
-      case FishingEvent.start:
+      case LetterHuntEvent.start:
         break;
-      case FishingEvent.correct:
+      case LetterHuntEvent.correct:
         _referee.react(CharacterReaction.correct);
         _say(_mixed(_cheer(l10n), const {}));
-      case FishingEvent.wrong:
+      case LetterHuntEvent.wrong:
         _referee.react(CharacterReaction.wrong);
         _say(
-          _mixed(l10n.fishingWrong(_m1, _m2), {
-            _m1: state.letter!.small,
-            _m2: target,
+          _mixed(l10n.fishingWrong(copticSlot1, copticSlot2), {
+            copticSlot1: state.letter!.small,
+            copticSlot2: target,
           }),
           duration: const Duration(milliseconds: 2800),
         );
-      case FishingEvent.missed:
+      case LetterHuntEvent.missed:
         // Don't nag: at most one "it got away" every few seconds.
         final now = DateTime.now();
         if (now.difference(_lastMissedLine) < const Duration(seconds: 4)) {
@@ -231,8 +180,8 @@ class _FishingPageState extends State<FishingPage> {
         }
         _lastMissedLine = now;
         _referee.react(CharacterReaction.surprised, withSound: false);
-        _say(_mixed(l10n.fishingMissed(_m1), {_m1: target}));
-      case FishingEvent.finished:
+        _say(_mixed(l10n.fishingMissed(copticSlot1), {copticSlot1: target}));
+      case LetterHuntEvent.finished:
         _game?.celebrate();
         _referee.play(CharacterAction.celebrate);
         _sound.play(SoundEvent.levelComplete);
@@ -382,7 +331,12 @@ class _FishingPageState extends State<FishingPage> {
         Positioned.fill(
           child: GameWidget(key: ObjectKey(game), game: game),
         ),
-        FishingHud(layout: layout),
+        LetterHuntHud(
+          layout: layout,
+          cubit: _cubit!,
+          label: context.l10n.catchLetter,
+          icon: AppIcons.fishing,
+        ),
         Positioned(
           left: feet.dx - boxW / 2,
           top: feet.dy - boxH,
@@ -395,7 +349,7 @@ class _FishingPageState extends State<FishingPage> {
         bubbleBox,
         if (_showResult)
           Positioned.fill(
-            child: FishingResult(
+            child: LetterHuntResult(
               stars: _cubit!.state.round.stars,
               isNewBest: _cubit!.state.isNewBest,
               onPlayAgain: _playAgain,

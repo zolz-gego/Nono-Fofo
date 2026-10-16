@@ -7,7 +7,11 @@ abstract interface class AudioEngine {
 
   /// Voices never overlap: a new clip stops the previous one.
   Future<void> playVoice(String assetPath, {double volume = 1});
-  Future<void> playMusic(String assetPath, {double volume = 1, bool loop = true});
+  Future<void> playMusic(
+    String assetPath, {
+    double volume = 1,
+    bool loop = true,
+  });
   Future<void> setMusicVolume(double volume);
   Future<void> stopMusic();
   Future<void> pauseAll();

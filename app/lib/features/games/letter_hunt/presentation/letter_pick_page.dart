@@ -26,21 +26,51 @@ import '../../../levels/domain/game_level.dart';
 import '../../../settings/presentation/language_button.dart';
 import '../../../settings/presentation/mute_button.dart';
 import '../../progress/domain/game_progress_repository.dart';
-import 'fishing_cubit.dart';
-import 'fishing_page.dart';
 
-/// Before fishing: the child picks the letter to catch, or lets the dice
-/// pick one. Each letter shows the best stars won with it.
-class FishingLetterPage extends StatefulWidget {
-  const FishingLetterPage({super.key, required this.setup});
+/// What a "find the letter" game needs: who plays, the letter to catch and
+/// the letters the other items may carry.
+class LetterHuntArgs {
+  const LetterHuntArgs({
+    required this.setup,
+    required this.target,
+    required this.pool,
+  });
+
+  final PlayerSetup setup;
+  final CopticLetter target;
+  final List<CopticLetter> pool;
+}
+
+/// Before a "find the letter" game: the child picks the letter to catch, or
+/// lets the dice pick one. Each letter shows the best stars won with it in
+/// that game.
+class LetterPickPage extends StatefulWidget {
+  const LetterPickPage({
+    super.key,
+    required this.setup,
+    required this.gameId,
+    required this.title,
+    required this.prompt,
+    required this.playRoute,
+  });
 
   final PlayerSetup setup;
 
+  /// Key the best stars are saved under.
+  final String gameId;
+  final String title;
+
+  /// What the buddy asks, e.g. "Pick the letter you'll catch!".
+  final String prompt;
+
+  /// Route of the game itself; gets [LetterHuntArgs] as `extra`.
+  final String playRoute;
+
   @override
-  State<FishingLetterPage> createState() => _FishingLetterPageState();
+  State<LetterPickPage> createState() => _LetterPickPageState();
 }
 
-class _FishingLetterPageState extends State<FishingLetterPage> {
+class _LetterPickPageState extends State<LetterPickPage> {
   late final SoundService _sound = context.read<SoundService>();
   late final Future<List<CopticLetter>> _letters = sl<LetterRepository>()
       .lettersOf(widget.setup.level);
@@ -57,7 +87,7 @@ class _FishingLetterPageState extends State<FishingLetterPage> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(milliseconds: 400), () {
-      if (mounted) _buddy.say(context.l10n.pickLetter);
+      if (mounted) _buddy.say(widget.prompt);
     });
   }
 
@@ -70,8 +100,8 @@ class _FishingLetterPageState extends State<FishingLetterPage> {
   Future<void> _play(CopticLetter letter, List<CopticLetter> pool) async {
     _sound.play(SoundEvent.select);
     await context.push(
-      AppRoutes.fishingPlay,
-      extra: FishingArgs(setup: widget.setup, target: letter, pool: pool),
+      widget.playRoute,
+      extra: LetterHuntArgs(setup: widget.setup, target: letter, pool: pool),
     );
     if (mounted) setState(() {}); // Show any new stars.
   }
@@ -95,7 +125,7 @@ class _FishingLetterPageState extends State<FishingLetterPage> {
     final l10n = context.l10n;
     return Scaffold(
       appBar: AppTopBar(
-        title: l10n.gameFishing,
+        title: widget.title,
         onLogoTap: () => context.go(AppRoutes.home),
         actions: [
           IconButton(
@@ -142,7 +172,7 @@ class _FishingLetterPageState extends State<FishingLetterPage> {
                           _LetterTile(
                                 letter: letters[i],
                                 stars: _progress.bestStars(
-                                  FishingCubit.gameId,
+                                  widget.gameId,
                                   letters[i].id,
                                 ),
                                 onTap: () => _play(letters[i], letters),
@@ -177,7 +207,7 @@ class _FishingLetterPageState extends State<FishingLetterPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AppText.h2(context.l10n.pickLetter),
+                AppText.h2(widget.prompt),
                 const SizedBox(height: AppDimens.spaceMd),
                 FilledButton.icon(
                   onPressed: () => _playRandom(letters),

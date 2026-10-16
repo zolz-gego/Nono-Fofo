@@ -25,6 +25,10 @@ class CharacterController extends ChangeNotifier {
   final SoundService? sound;
 
   CharacterAction _action;
+
+  /// The pose to go back to after a timed one (e.g. a reaction). Idle unless
+  /// a game says otherwise (holding balloons, say).
+  CharacterAction rest = CharacterAction.idle;
   int _playToken = 0;
   String? _speech;
   Timer? _holdTimer;
@@ -37,18 +41,15 @@ class CharacterController extends ChangeNotifier {
   /// Changes every time a motion should restart (even for the same action).
   int get playToken => _playToken;
 
-  /// Shows [action]. With [hold], returns to [then] (idle) afterwards.
-  void play(
-    CharacterAction action, {
-    Duration? hold,
-    CharacterAction then = CharacterAction.idle,
-  }) {
+  /// Shows [action]. With [hold], returns to [then] ([rest] unless given)
+  /// afterwards.
+  void play(CharacterAction action, {Duration? hold, CharacterAction? then}) {
     _holdTimer?.cancel();
     _action = action;
     _playToken++;
     _notify();
     if (hold != null) {
-      _holdTimer = Timer(hold, () => play(then));
+      _holdTimer = Timer(hold, () => play(then ?? rest));
     }
   }
 

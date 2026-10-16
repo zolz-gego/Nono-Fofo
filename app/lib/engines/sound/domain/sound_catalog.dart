@@ -26,7 +26,12 @@ class SoundCatalog {
   });
 
   static const empty = SoundCatalog(
-      cues: {}, musicSlots: {}, sfxPaths: {}, voicePaths: {}, musicPaths: {});
+    cues: {},
+    musicSlots: {},
+    sfxPaths: {},
+    voicePaths: {},
+    musicPaths: {},
+  );
 
   final Map<String, SoundCue> cues;
   final Map<String, String> musicSlots;
