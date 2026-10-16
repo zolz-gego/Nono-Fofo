@@ -25,4 +25,17 @@ enum CharacterAction {
 
   /// Standing with one fist up, holding balloon strings (balloons game).
   hold,
+
+  /// Writing on the chalkboard with a stick of chalk (writing game).
+  chalk,
+
+  /// Wiping the chalkboard with a sponge (writing game).
+  sponge;
+
+  /// The pose shown while this one has no picture yet.
+  CharacterAction? get fallback => switch (this) {
+    chalk => write,
+    sponge => encourage,
+    _ => null,
+  };
 }

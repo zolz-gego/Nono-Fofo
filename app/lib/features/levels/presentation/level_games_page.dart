@@ -79,6 +79,7 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
     final route = switch (game) {
       LevelGame.fishing => AppRoutes.fishing,
       LevelGame.balloons => AppRoutes.balloons,
+      LevelGame.writeLetter => AppRoutes.writing,
       _ => null,
     };
     if (route != null) {

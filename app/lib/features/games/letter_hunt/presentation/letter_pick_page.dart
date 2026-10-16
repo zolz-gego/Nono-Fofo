@@ -43,7 +43,7 @@ class LetterHuntArgs {
 
 /// Before a "find the letter" game: the child picks the letter to catch, or
 /// lets the dice pick one. Each letter shows the best stars won with it in
-/// that game.
+/// that game, or for a pass / not-passed game ([passFail]) a green tick.
 class LetterPickPage extends StatefulWidget {
   const LetterPickPage({
     super.key,
@@ -52,6 +52,8 @@ class LetterPickPage extends StatefulWidget {
     required this.title,
     required this.prompt,
     required this.playRoute,
+    this.passFail = false,
+    this.allLetters = false,
   });
 
   final PlayerSetup setup;
@@ -66,14 +68,21 @@ class LetterPickPage extends StatefulWidget {
   /// Route of the game itself; gets [LetterHuntArgs] as `extra`.
   final String playRoute;
 
+  /// The game has no stars, only passed / not passed (the writing game).
+  final bool passFail;
+
+  /// Offer the whole alphabet instead of the level's letters.
+  final bool allLetters;
+
   @override
   State<LetterPickPage> createState() => _LetterPickPageState();
 }
 
 class _LetterPickPageState extends State<LetterPickPage> {
   late final SoundService _sound = context.read<SoundService>();
-  late final Future<List<CopticLetter>> _letters = sl<LetterRepository>()
-      .lettersOf(widget.setup.level);
+  late final Future<List<CopticLetter>> _letters = widget.allLetters
+      ? sl<LetterRepository>().allLetters()
+      : sl<LetterRepository>().lettersOf(widget.setup.level);
   late final CharacterController _buddy = CharacterController(
     widget.setup.buddy,
     sound: _sound,
@@ -171,10 +180,18 @@ class _LetterPickPageState extends State<LetterPickPage> {
                       itemBuilder: (context, i) =>
                           _LetterTile(
                                 letter: letters[i],
-                                stars: _progress.bestStars(
-                                  widget.gameId,
-                                  letters[i].id,
-                                ),
+                                stars: widget.passFail
+                                    ? null
+                                    : _progress.bestStars(
+                                        widget.gameId,
+                                        letters[i].id,
+                                      ),
+                                passed:
+                                    widget.passFail &&
+                                    _progress.hasPassed(
+                                      widget.gameId,
+                                      letters[i].id,
+                                    ),
                                 onTap: () => _play(letters[i], letters),
                               )
                               .animate(delay: (40 * i).ms)
@@ -228,10 +245,14 @@ class _LetterTile extends StatelessWidget {
     required this.letter,
     required this.stars,
     required this.onTap,
+    this.passed = false,
   });
 
   final CopticLetter letter;
-  final int stars;
+
+  /// Best stars, or null for a pass / not-passed game.
+  final int? stars;
+  final bool passed;
   final VoidCallback onTap;
 
   @override
@@ -253,7 +274,14 @@ class _LetterTile extends StatelessWidget {
               Expanded(
                 child: FittedBox(
                   child: Text(
-                    letter.small,
+                    // Pass / not-passed (writing) levels play both
+                    // forms: show the capital and the small one.
+                    stars == null
+                        ? '${letter.capital} ${letter.small}'
+                        : letter.small,
+                    // Coptic keys like ")" must not be mirrored in
+                    // Arabic (right-to-left) layouts.
+                    textDirection: TextDirection.ltr,
                     style: AppTextStyles.coptic(AppTextVariant.h1)
                         .copyWith(fontSize: 64, height: 1.1),
                   ),
@@ -265,20 +293,34 @@ class _LetterTile extends StatelessWidget {
                 color: AppColors.textMuted,
               ),
               const SizedBox(height: AppDimens.spaceXs),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var i = 0; i < 3; i++)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 1),
-                      child: FaIcon(
-                        i < stars ? AppIcons.star : AppIcons.starEmpty,
-                        size: 14,
-                        color: i < stars ? AppColors.star : AppColors.outline,
+              if (stars == null)
+                SizedBox(
+                  height: 18,
+                  child: passed
+                      ? const FaIcon(
+                          AppIcons.passed,
+                          size: 18,
+                          color: AppColors.correct,
+                        )
+                      : null,
+                )
+              else
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    for (var i = 0; i < 3; i++)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 1),
+                        child: FaIcon(
+                          i < stars! ? AppIcons.star : AppIcons.starEmpty,
+                          size: 14,
+                          color: i < stars!
+                              ? AppColors.star
+                              : AppColors.outline,
+                        ),
                       ),
-                    ),
-                ],
-              ),
+                  ],
+                ),
             ],
           ),
         ),

@@ -123,6 +123,67 @@ abstract final class AppColors {
   /// Balloon colors (the same bright set as the fish).
   static const List<Color> balloons = fish;
 
+  // ---------------------------------------------------------------------------
+  // Writing game (the chalkboard in Grandpa's study)
+  // ---------------------------------------------------------------------------
+  static const Color board = Color(0xFF2F5D4E);
+  static const Color boardDark = Color(0xFF244A3E);
+  static const Color boardSmudge = Color(0x14FFFFFF);
+  static const Color boardFrame = Color(0xFF8A5A3B);
+  static const Color boardFrameLight = Color(0xFFA9744F);
+  static const Color boardFrameDark = Color(0xFF6B4430);
+  static const Color letterHollow = Color(0x12FFFFFF);
+  static const Color letterDots = Color(0xE6FFFBF4);
+  static const Color demoChalk = Color(0xD9FFFBF4);
+  static const Color guide = sunYellow;
+  static const Color guideText = cocoa;
+  static const Color sponge = Color(0xFFFFD65C);
+  static const Color spongeHoles = Color(0xFFE8B43A);
+  static const Color passGlow = leafGreen;
+
+  /// Chalk sticks in the tray (bright, so they show on the green board).
+  static const List<Color> chalk = [
+    Color(0xFFF7F4EC), // white
+    Color(0xFFFFF3A0), // pale yellow
+    Color(0xFFFFD23F), // yellow
+    Color(0xFFFFB36B), // orange
+    Color(0xFFFF8A65), // coral
+    Color(0xFFFF6B6B), // red
+    Color(0xFFFFB3C7), // pink
+    Color(0xFFF78FD1), // magenta
+    Color(0xFFD7B4F3), // lilac
+    Color(0xFFA78BFA), // violet
+    Color(0xFF9FD8F0), // sky blue
+    Color(0xFF6CB4FF), // blue
+    Color(0xFF7EE0C3), // mint
+    Color(0xFF9BE36B), // green
+    Color(0xFFD9C3A0), // sand
+  ];
+
+  // Grandpa's study (placeholder art).
+  static const Color studyWall = Color(0xFFEBDCC3);
+  static const Color studyWallShade = Color(0xFFDCC8A8);
+  static const Color studyFloor = Color(0xFFB98A5E);
+  static const Color studyFloorLine = Color(0xFFA27650);
+  static const Color studyShelf = Color(0xFF7A5238);
+  static const Color studyRug = Color(0xFF4F7C82);
+  static const Color studyRugBorder = Color(0xFFFF9F7F);
+  static const Color studyWindow = Color(0xFFFFE9B0);
+  static const Color studyMashrabiya = Color(0xFF7A5238);
+  static const Color studyArmchair = Color(0xFFB4533C);
+  static const Color studyLight = Color(0x33FFE9B0);
+
+  /// Book spines on the shelves.
+  static const List<Color> books = [
+    deepTeal,
+    coral,
+    sunYellow,
+    slateTeal,
+    cocoa,
+    leafGreen,
+    Color(0xFFB57EDC),
+  ];
+
   /// Confetti / celebration colors.
   static const List<Color> celebration = [
     sunYellow,

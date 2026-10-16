@@ -704,6 +704,14 @@ def _():
     return tone("E4", 0.12, "tri", 0.005, 0.06)
 
 
+@sfx("sponge_wipe", "writing", "Sponge wipes the chalkboard: three soft swishes", 0.55)
+def _():
+    m = Mix()
+    for i, (lo, hi) in enumerate([(700, 2200), (900, 2600), (650, 2000)]):
+        m.add(whoosh(0.4, lo, hi, gain=0.7), i * 0.42)
+    return m.out()
+
+
 # ================================================================ word race
 
 @sfx("race_zoom", "race", "Racer zooms past", 0.6)
