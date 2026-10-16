@@ -116,5 +116,6 @@
   "writingShareTitle": "Bravo {name}! You wrote the letter {letter}",
   "writingShareWith": "With {hero} at Grandpa's chalkboard",
   "writingShareText": "Bravo {name}! You wrote the Coptic letter {letter} in Nono & Fofo",
-  "writingEraser": "Eraser"
+  "writingEraser": "Eraser",
+  "writingShareSaved": "Picture saved to your downloads"
 }

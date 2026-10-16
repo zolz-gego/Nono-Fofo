@@ -715,6 +715,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'أستيكة'**
   String get writingEraser;
+
+  /// No description provided for @writingShareSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتحفظت الصورة في التنزيلات'**
+  String get writingShareSaved;
 }
 
 class _AppLocalizationsDelegate

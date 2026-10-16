@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -13,6 +14,7 @@ import '../../../../app/router.dart';
 import '../../../../core/domain/character_id.dart';
 import '../../../../core/typography/app_text_styles.dart';
 import '../../../../core/l10n/l10n.dart';
+import '../../../../core/share/web_files.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_icons.dart';
@@ -351,20 +353,39 @@ class _WritingPageState extends State<WritingPage> {
       _letter.nameIn(lang),
     );
     final fileName = 'nono-fofo-${_letter.id}.png';
+    const type = 'image/png';
+    final messenger = ScaffoldMessenger.of(context);
+    final saved = l10n.writingShareSaved;
+    Future<void> download(Uint8List card) async {
+      await webDownloadFile(card, fileName, type);
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(saved)));
+    }
+
+    final Uint8List card;
     try {
-      final card = await (_card ??= _buildShareCard());
+      card = await (_card ??= _buildShareCard());
+    } catch (_) {
+      return; // The picture couldn't be drawn; nothing to share.
+    }
+    // Browsers without a share sheet (e.g. Chrome on a Mac) save the
+    // picture instead, and say so.
+    if (kIsWeb && !webCanShareFile(card, fileName, type)) {
+      return download(card);
+    }
+    try {
       await SharePlus.instance.share(
         ShareParams(
-          files: [XFile.fromData(card, mimeType: 'image/png', name: fileName)],
+          files: [XFile.fromData(card, mimeType: type, name: fileName)],
           fileNameOverrides: [fileName],
           text: text,
           sharePositionOrigin: origin == Rect.zero ? null : origin,
-          // Browsers that can't share files save the picture instead.
-          downloadFallbackEnabled: true,
         ),
       );
     } catch (_) {
-      // Sharing was cancelled or isn't available: nothing to do.
+      // The share sheet failed (not cancelled): save it instead on the web.
+      if (kIsWeb) await download(card);
     }
   }
 

@@ -357,4 +357,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get writingEraser => 'Eraser';
+
+  @override
+  String get writingShareSaved => 'Picture saved to your downloads';
 }

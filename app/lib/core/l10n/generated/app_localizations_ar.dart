@@ -356,4 +356,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get writingEraser => 'أستيكة';
+
+  @override
+  String get writingShareSaved => 'اتحفظت الصورة في التنزيلات';
 }
