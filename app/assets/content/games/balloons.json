@@ -12,14 +12,23 @@
     "threeStarsMaxMistakes": 0,
     "twoStarsMaxMistakes": 2
   },
-  "balloonImages": [],
+  "balloonImages": [
+    "assets/games/balloons/balloon_orange.png",
+    "assets/games/balloons/balloon_coral.png",
+    "assets/games/balloons/balloon_yellow.png",
+    "assets/games/balloons/balloon_green.png",
+    "assets/games/balloons/balloon_mint.png",
+    "assets/games/balloons/balloon_blue.png",
+    "assets/games/balloons/balloon_lilac.png",
+    "assets/games/balloons/balloon_pink.png"
+  ],
   "balloonLetterSpot": {
     "x": 0.5,
-    "y": 0.4,
-    "size": 0.42
+    "y": 0.418,
+    "size": 0.66
   },
   "background": "assets/games/balloons/village.webp",
   "backgroundMarks": {
-    "feetY": 0.9
+    "feetY": 0.88
   }
 }

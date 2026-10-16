@@ -51,8 +51,31 @@ class BalloonsGame extends FlameGame {
   /// The background picture once loaded (the layout lines up with it).
   VillageArt? art;
 
-  BalloonsLayout _layoutFor(ui.Size size) =>
-      BalloonsLayout(size, goal: cubit.round.goal, rtl: rtl, art: art);
+  BalloonsLayout _layoutFor(ui.Size size) => BalloonsLayout(
+    size,
+    goal: cubit.round.goal,
+    rtl: rtl,
+    art: art,
+    receiverFist: receiverFist,
+  );
+
+  /// The other brother's raised fist in his "hold" pose (he stands on the
+  /// right, mirrored), relative to his feet in units of his size; null if
+  /// he has no such pose.
+  late final ui.Offset? receiverFist = () {
+    final pose = roster.pose(hero.other, CharacterAction.hold);
+    final hand = pose?.hand;
+    if (pose == null || hand == null || pose.action != CharacterAction.hold) {
+      return null;
+    }
+    return ui.Offset(-(hand.dx - pose.headCenter.dx), hand.dy - pose.height) /
+        roster.referenceHeight;
+  }();
+
+  /// The buddy's pose for jumping up to a string.
+  CharacterAction get _jumpPose => _hero.hasPose(CharacterAction.jump)
+      ? CharacterAction.jump
+      : CharacterAction.cheer;
   BalloonsConfig get config => cubit.round.config;
 
   late final CharacterComponent _hero;
@@ -146,12 +169,18 @@ class BalloonsGame extends FlameGame {
 
   double get _heroHeight => _hero.size.y * _hero.scale.y;
 
-  /// The buddy's hand: above his head while jumping or cheering, at his
-  /// side while running with a balloon.
-  ui.Offset _heroHand({required bool up}) => ui.Offset(
-    _heroX + (_hero.mirror ? -1 : 1) * layout.characterSize * 0.08,
-    layout.groundY - _heroLift - _heroHeight * (up ? 1.02 : 0.6),
-  );
+  /// The buddy's hand: his raised fist when the pose has one, else above
+  /// his head (jumping, cheering) or at his side (running with a balloon).
+  ui.Offset _heroHand({required bool up}) {
+    final feet = ui.Offset(_heroX, layout.groundY - _heroLift);
+    final fist = _hero.hand;
+    if (fist != null) return feet + fist;
+    return feet +
+        ui.Offset(
+          (_hero.mirror ? -1 : 1) * layout.characterSize * 0.08,
+          -_heroHeight * (up ? 1.02 : 0.6),
+        );
+  }
 
   /// Puts the buddy and the balloons where the current layout says.
   void _place() {
@@ -358,8 +387,8 @@ class _Catch {
     _targetX = balloon.x.clamp(l.buddyMinX, l.buddyMaxX);
     _from = ui.Offset(balloon.x, balloon.y);
     // At the top of the jump, the end of the string is in his hand.
-    final reach =
-        l.groundY - game._heroHeight * 1.02 - _jumpHeight - l.stringLength;
+    final fist = _fistHeight();
+    final reach = l.groundY - fist - _jumpHeight - l.stringLength;
     _to = ui.Offset(_targetX, reach - balloon.size.y / 2);
     _approachTime = max(
       0.55,
@@ -380,6 +409,15 @@ class _Catch {
   bool _grabbed = false;
 
   double get _jumpHeight => game._heroHeight * 0.32;
+
+  /// How high above his feet the buddy's hand is in the jump pose.
+  double _fistHeight() {
+    final pose = game.roster.pose(game.hero, game._jumpPose);
+    final hand = pose?.hand;
+    if (pose == null || hand == null) return game._heroHeight * 1.02;
+    final k = game.layout.characterSize / game.roster.referenceHeight;
+    return (pose.height - hand.dy) * k;
+  }
 
   static const double _jumpTime = 0.5;
   static const double _wrongHold = 1.3;
@@ -423,7 +461,7 @@ class _Catch {
         if (k >= 1) {
           game._hero
             ..mirror = false
-            ..play(CharacterAction.cheer);
+            ..play(game._jumpPose);
           game.sound.play(SoundEvent.charJump);
           _go(_Phase.jump);
         }

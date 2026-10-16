@@ -20,7 +20,13 @@ class VillageArt {
 /// The child's buddy starts on the left and runs around the path; the other
 /// brother stands on the right and keeps the bunch of correct balloons.
 class BalloonsLayout with TargetCardLayout {
-  BalloonsLayout(this.size, {required this.goal, this.rtl = false, this.art}) {
+  BalloonsLayout(
+    this.size, {
+    required this.goal,
+    this.rtl = false,
+    this.art,
+    this.receiverFist,
+  }) {
     _fitArt();
   }
 
@@ -34,6 +40,10 @@ class BalloonsLayout with TargetCardLayout {
   final bool rtl;
 
   final VillageArt? art;
+
+  /// The receiver's raised fist in his "hold" pose, relative to his feet,
+  /// in units of [characterSize] (null when he has no such pose).
+  final Offset? receiverFist;
 
   @override
   double get slotMaxSize => balloonWidth * 0.5;
@@ -71,11 +81,11 @@ class BalloonsLayout with TargetCardLayout {
   /// Feet of the brother who keeps the balloons.
   Offset get receiverFeet => Offset(width - max(width * 0.11, 64), groundY);
 
-  /// Where the receiver holds the strings of his bunch.
-  Offset get receiverHand => Offset(
-    receiverFeet.dx - characterSize * 0.3,
-    groundY - characterSize * 0.52,
-  );
+  /// Where the receiver holds the strings of his bunch: his raised fist,
+  /// or at his side when he has no "hold" pose.
+  Offset get receiverHand =>
+      receiverFeet +
+      (receiverFist ?? const Offset(-0.3, -0.52)) * characterSize;
 
   /// Where the buddy waits between catches.
   double get buddyHomeX => max(width * 0.18, 70);
@@ -124,7 +134,7 @@ class BalloonsLayout with TargetCardLayout {
   Offset bunchSlot(int index) {
     final n = max(goal, 2);
     final t = (index % n) / (n - 1);
-    final angle = lerpDouble(-0.95, 0.1, t)!;
+    final angle = lerpDouble(-0.75, 0.3, t)!;
     final length =
         (stringLength + balloonHeight * 0.5) * bunchScale * 1.25 +
         (index.isOdd ? balloonWidth * 0.32 : 0);

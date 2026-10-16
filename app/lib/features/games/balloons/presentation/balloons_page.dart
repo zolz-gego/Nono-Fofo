@@ -107,7 +107,9 @@ class _BalloonsPageState extends State<BalloonsPage> {
     game.loaded.then((_) {
       if (mounted && _game == game) setState(() {});
     });
-    _receiver.idle();
+    _receiver
+      ..rest = CharacterAction.idle
+      ..idle();
     _sound.play(SoundEvent.levelStart);
     Future.delayed(const Duration(milliseconds: 500), () {
       if (!mounted) return;
@@ -149,6 +151,24 @@ class _BalloonsPageState extends State<BalloonsPage> {
     });
   }
 
+  /// Once he holds balloons (and has the pose for it) the receiver keeps
+  /// his fist up, so the strings stay in his hand: he then reacts with
+  /// sounds and words only.
+  bool get _holding => _receiver.rest == CharacterAction.hold;
+
+  void _react(CharacterReaction reaction) {
+    if (!_holding) return _receiver.react(reaction);
+    final sound = reaction.sound;
+    if (sound != null) _sound.play(sound, by: _receiverId);
+  }
+
+  void _onLanded(BuildContext context, BalloonsState state) {
+    if (state.landed != 1 || _game?.receiverFist == null) return;
+    _receiver
+      ..rest = CharacterAction.hold
+      ..play(CharacterAction.hold);
+  }
+
   String _cheer(AppLocalizations l10n) => switch (_random.nextInt(4)) {
     0 => l10n.fishingCheer1,
     1 => l10n.fishingCheer2(widget.args.setup.name),
@@ -163,10 +183,10 @@ class _BalloonsPageState extends State<BalloonsPage> {
       case LetterHuntEvent.start:
         break;
       case LetterHuntEvent.correct:
-        _receiver.react(CharacterReaction.correct);
+        _react(CharacterReaction.correct);
         _say(_mixed(_cheer(l10n)));
       case LetterHuntEvent.wrong:
-        _receiver.react(CharacterReaction.wrong);
+        _react(CharacterReaction.wrong);
         _say(
           _mixed(l10n.fishingWrong(copticSlot1, copticSlot2), {
             copticSlot1: state.letter!.small,
@@ -181,11 +201,13 @@ class _BalloonsPageState extends State<BalloonsPage> {
           return;
         }
         _lastMissedLine = now;
-        _receiver.react(CharacterReaction.surprised, withSound: false);
+        if (!_holding) {
+          _receiver.react(CharacterReaction.surprised, withSound: false);
+        }
         _say(_mixed(l10n.balloonsMissed(copticSlot1), {copticSlot1: target}));
       case LetterHuntEvent.finished:
         _game?.celebrate();
-        _receiver.play(CharacterAction.celebrate);
+        if (!_holding) _receiver.play(CharacterAction.celebrate);
         _sound.play(SoundEvent.levelComplete);
         _say(_mixed(_cheer(l10n)));
         _resultTimer = Timer(const Duration(milliseconds: 1400), () {
@@ -239,10 +261,19 @@ class _BalloonsPageState extends State<BalloonsPage> {
       ),
       body: cubit == null || game == null
           ? const Center(child: CircularProgressIndicator())
-          : BlocListener<BalloonsCubit, BalloonsState>(
-              bloc: cubit,
-              listenWhen: (a, b) => a.eventId != b.eventId,
-              listener: _onEvent,
+          : MultiBlocListener(
+              listeners: [
+                BlocListener<BalloonsCubit, BalloonsState>(
+                  bloc: cubit,
+                  listenWhen: (a, b) => a.eventId != b.eventId,
+                  listener: _onEvent,
+                ),
+                BlocListener<BalloonsCubit, BalloonsState>(
+                  bloc: cubit,
+                  listenWhen: (a, b) => a.landed != b.landed,
+                  listener: _onLanded,
+                ),
+              ],
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   final rtl = Directionality.of(context) == TextDirection.rtl;
@@ -253,6 +284,7 @@ class _BalloonsPageState extends State<BalloonsPage> {
                       goal: cubit.round.goal,
                       rtl: rtl,
                       art: game.art,
+                      receiverFist: game.receiverFist,
                     ),
                     game,
                     cubit,

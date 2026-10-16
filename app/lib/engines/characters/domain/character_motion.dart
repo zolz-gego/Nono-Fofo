@@ -43,7 +43,9 @@ abstract final class CharacterMotions {
   static MotionSpec of(CharacterAction action) => switch (action) {
     CharacterAction.idle ||
     CharacterAction.fish ||
-    CharacterAction.reel => breathe,
+    CharacterAction.reel ||
+    CharacterAction.jump ||
+    CharacterAction.hold => breathe,
     CharacterAction.run => const MotionSpec(Duration(milliseconds: 420), _run),
     CharacterAction.cheer => const MotionSpec(
       Duration(milliseconds: 700),

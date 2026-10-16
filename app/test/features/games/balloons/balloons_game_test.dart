@@ -50,9 +50,8 @@ void main() {
 
     late BalloonsGame game;
     await tester.runAsync(() async {
-      final roster = await CharacterRepositoryImpl(
-        JsonAssetLoader(rootBundle),
-      ).loadRoster();
+      final roster = await CharacterRepositoryImpl(JsonAssetLoader(rootBundle))
+          .loadRoster();
       game = BalloonsGame(
         cubit: cubit,
         hero: CharacterId.fofo,

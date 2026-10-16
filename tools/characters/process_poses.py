@@ -29,6 +29,7 @@ SOURCES = {
         "run": "Nono Run.jpeg", "wave": "Nono hello.jpeg", "write": "Nono Write.jpeg",
         "read": "Nono Read.jpeg", "sleep": "Nono Sleep.jpeg", "surprised": "Nono surprised.jpeg",
         "fish": "Nono Fishing.webp", "reel": "Nono Fishing.webp",
+        "jump": "Balloons Poses.webp",
     },
     "fofo": {
         "idle": "Fofo idle.jpeg", "cheer": "Fofo Cheer.jpeg", "wrong": "Fofo oops.jpeg",
@@ -36,6 +37,7 @@ SOURCES = {
         "run": "Fofo Run.jpeg", "wave": "Fofo Hello.jpeg", "write": "Fofo Write 2.jpeg",
         "read": "Fofo Read.jpeg", "sleep": "Fofo Sleep.jpeg", "surprised": "Fofo Surprised.jpeg",
         "fish": "Fofo Fishing.webp", "reel": "Fofo Fishing.webp",
+        "hold": "Balloons Poses.webp",
     },
 }
 
@@ -52,7 +54,17 @@ HOLES = {
 PICK = {
     ("nono", "fish"): (180, 563), ("nono", "reel"): (717, 563),
     ("fofo", "fish"): (150, 560), ("fofo", "reel"): (690, 600),
+    # balloons sheet: Nono jumping (left), Fofo holding strings (right)
+    ("nono", "jump"): (455, 330), ("fofo", "hold"): (850, 400),
 }
+
+# Poses with a raised fist that holds balloon strings: the manifest gets the
+# fist, where the game ties the strings. (x, y) in source pixels.
+HAND = {("nono", "jump"): (598, 48), ("fofo", "hold"): (953, 172)}
+
+# Poses drawn with other proportions than the main set: sized by height
+# (hair top to feet, like idle) instead of head width.
+BY_HEIGHT = {"fish", "jump", "hold"}
 
 # Poses holding the fishing rod: the manifest gets the rod tip, where the
 # game starts the fishing line.
@@ -276,9 +288,10 @@ def main():
             bbox = rgba.getchannel("A").point(lambda v: 255 if v > 8 else 0).getbbox()
             if pose == "idle":
                 idle_height[name] = (bbox[3] - hy0) * scale
-            elif pose == "fish":
+            elif pose in BY_HEIGHT:
                 scale = idle_height[name] / (bbox[3] - hy0)
-                rod_scale = scale
+                if pose == "fish":
+                    rod_scale = scale
             elif pose in ROD:
                 scale = rod_scale  # same size as "fish", so the brother doesn't jump
             pad = 12
@@ -300,6 +313,11 @@ def main():
                 tx, ty = rod_tip(rgba)
                 manifest["characters"][name][pose]["rod_tip"] = [
                     round((tx - box[0]) * scale), round((ty - box[1]) * scale)]
+            if (name, pose) in HAND:
+                hx, hy = HAND[(name, pose)]
+                hx, hy = hx - 3, hy - 3  # fix_source trims 3 px
+                manifest["characters"][name][pose]["hand"] = [
+                    round((hx - box[0]) * scale), round((hy - box[1]) * scale)]
             print(f"{name:5} {pose:10} {full.width}x{full.height}  head {hx1 - hx0}px -> x{scale:.2f}")
     with open(os.path.join(OUT, "manifest.json"), "w") as fh:
         json.dump(manifest, fh, indent=2)
