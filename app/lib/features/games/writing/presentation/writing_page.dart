@@ -441,41 +441,102 @@ class _WritingPageState extends State<WritingPage> {
     final roster = context.read<CharacterRoster>();
     final rtl = Directionality.of(context) == TextDirection.rtl;
 
+    // Wide screens: the board in the middle, a brother on each side.
+    // Tall screens (phones and tablets held upright): the board takes the
+    // full width and the brothers stand smaller in the bottom corners.
+    // Short screens (phones held sideways): the board takes the full height,
+    // the chalk tray stands beside it and the brothers on the start side.
+    final portrait = size.width < size.height;
+    final short = !portrait && size.height < 520;
     const hudH = 64.0, trayH = 92.0, gap = AppDimens.spaceSm;
-    final boardMaxW = size.width * 0.6;
-    final boardMaxH = size.height - hudH - trayH - gap * 4;
+    final trayW = short ? min(size.width * 0.24, 200.0) : 0.0;
+    final charZoneW = short ? size.width * 0.22 : 0.0;
+    final minCharH = portrait ? size.height * 0.22 : 0.0;
+    final boardMaxW = portrait
+        ? size.width - gap * 2
+        : short
+        ? size.width - charZoneW - trayW - gap * 4
+        : size.width * 0.6;
+    final boardMaxH = short
+        ? size.height - hudH - gap * 2
+        : size.height - hudH - trayH - gap * 4 - minCharH;
     final (design, _) = Chalkboard.layoutFor(
       config.board == null ? null : config.boardSurface,
     );
     final scale = min(boardMaxW / design.width, boardMaxH / design.height);
     final boardW = design.width * scale;
     final boardH = design.height * scale;
-    final boardLeft = (size.width - boardW) / 2;
     const boardTop = hudH + gap;
+    // Measured from the start side (left in English, right in Arabic).
+    final boardStart = short
+        ? charZoneW +
+              gap +
+              (size.width - charZoneW - gap - boardW - gap - trayW) / 2
+        : (size.width - boardW) / 2;
+    double fromStart(double start, double width) =>
+        rtl ? size.width - start - width : start;
+    final boardLeft = fromStart(boardStart, boardW);
+    final trayRect = short
+        ? Rect.fromLTWH(
+            fromStart(boardStart + boardW + gap, trayW),
+            boardTop,
+            trayW,
+            boardH,
+          )
+        : Rect.fromLTWH(0, boardTop + boardH + gap, size.width, trayH);
 
-    // Characters stand on the floor beside the board: the hero on the
-    // reading-start side, the other brother on the far side.
-    final charSize = min(size.height * 0.6, 460.0);
-    final leftX = boardLeft / 2;
-    final rightX = boardLeft + boardW + boardLeft / 2;
+    // Characters stand on the floor, the hero on the start side.
     final feetY = size.height - AppDimens.spaceSm;
+    double idleW(CharacterController c) =>
+        roster.pose(c.character, CharacterAction.idle)?.width ?? 0;
+    final heroW = idleW(_hero), otherW = idleW(_other);
+    final ref = roster.referenceHeight;
+    final double charSize;
+    if (portrait) {
+      charSize = max(
+        minCharH,
+        min(feetY - trayRect.bottom, size.height * 0.36),
+      );
+    } else if (short) {
+      charSize = min(
+        size.height * 0.75,
+        heroW + otherW == 0
+            ? double.infinity
+            : (charZoneW - gap) * ref / (heroW + otherW),
+      );
+    } else {
+      final sideW = (size.width - boardW) / 2;
+      charSize = min(
+        min(size.height * 0.6, 460.0),
+        max(heroW, otherW) == 0
+            ? double.infinity
+            : (sideW - gap) * ref / max(heroW, otherW),
+      );
+    }
+    final k = charSize / ref;
+    // Each brother's centre, measured from the start side.
+    final (heroX, otherX) = portrait
+        ? (gap + heroW * k / 2, size.width - gap - otherW * k / 2)
+        : short
+        ? (gap + heroW * k / 2, gap + (heroW + otherW / 2) * k)
+        : ((size.width - boardW) / 4, size.width - (size.width - boardW) / 4);
 
-    Positioned standing(
-      CharacterController c,
-      double x, {
-      required bool mirror,
-    }) {
+    Positioned standing(CharacterController c, double startX, bool facesEnd) {
       final idle = roster.pose(c.character, CharacterAction.idle);
-      final k = charSize / roster.referenceHeight;
       final w = (idle?.width ?? 0) * k, h = (idle?.height ?? 0) * k;
+      // Unmirrored characters face right; [facesEnd] turns them towards the
+      // end side (right in English).
       return Positioned(
-        left: x - w / 2,
+        left: fromStart(startX - w / 2, w),
         top: feetY - h,
-        child: AnimatedCharacter(controller: c, size: charSize, mirror: mirror),
+        child: AnimatedCharacter(
+          controller: c,
+          size: charSize,
+          mirror: facesEnd == rtl,
+        ),
       );
     }
 
-    final heroOnLeft = !rtl;
     return Stack(
       clipBehavior: Clip.hardEdge,
       children: [
@@ -538,14 +599,12 @@ class _WritingPageState extends State<WritingPage> {
             ),
           ),
         ),
-        Positioned(
-          top: boardTop + boardH + gap,
-          left: 0,
-          right: 0,
-          height: trayH,
+        Positioned.fromRect(
+          rect: trayRect,
           child: Center(
             child: FittedBox(
               child: ChalkTray(
+                vertical: short,
                 colorIndex: _colorIndex,
                 sizeIndex: _sizeIndex,
                 sizes: config.chalkSizes,
@@ -570,15 +629,8 @@ class _WritingPageState extends State<WritingPage> {
           ),
         ),
         // The hero's arm "writes" while the child draws.
-        _Scribbling(
-          active: _drawing,
-          child: standing(
-            _hero,
-            heroOnLeft ? leftX : rightX,
-            mirror: !heroOnLeft,
-          ),
-        ),
-        standing(_other, heroOnLeft ? rightX : leftX, mirror: heroOnLeft),
+        _Scribbling(active: _drawing, child: standing(_hero, heroX, true)),
+        standing(_other, otherX, short),
         if (_resultPassed != null)
           Positioned.fill(
             child: WritingResult(
