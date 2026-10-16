@@ -46,8 +46,12 @@ class CharacterComponent extends PositionComponent {
 
   @override
   Future<void> onLoad() async {
-    for (final pose in roster.posesOf(character)) {
-      _sprites[pose.action] = await _images.load(pose.asset);
+    final poses = roster.posesOf(character).toList();
+    final images = await Future.wait([
+      for (final pose in poses) _images.load(pose.asset),
+    ]);
+    for (final (i, pose) in poses.indexed) {
+      _sprites[pose.action] = images[i];
     }
     final idle = roster.pose(character, CharacterAction.idle)!;
     size = Vector2(idle.width * _k, idle.height * _k);

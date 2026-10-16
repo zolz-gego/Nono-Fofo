@@ -114,7 +114,12 @@ class BalloonsGame extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    final picture = await _tryLoad(config.background);
+    // Load everything at once; one by one the scene stays empty for seconds.
+    final loaded = await Future.wait([
+      _tryLoad(config.background),
+      for (final path in config.balloonImages) _tryLoad(path),
+    ]);
+    final picture = loaded.first;
     if (picture != null) {
       art = VillageArt(
         ui.Size(picture.width.toDouble(), picture.height.toDouble()),
@@ -122,10 +127,7 @@ class BalloonsGame extends FlameGame {
       );
       layout = _layoutFor(layout.size);
     }
-    for (final path in config.balloonImages) {
-      final img = await _tryLoad(path);
-      if (img != null) _sprites.add(img);
-    }
+    _sprites.addAll(loaded.skip(1).whereType<ui.Image>());
     _hero = CharacterComponent(
       character: hero,
       roster: roster,
