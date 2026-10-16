@@ -14,7 +14,7 @@ One illustration per game card on the level road. Same tool and workflow as
 |---|---|
 | صيد السمك / Fish catch | `fishing.png` |
 | اكتب الحرف / Write the letter | `writeLetter.png` |
-| فرقع البالونة / Pop the balloon | `balloons.png` |
+| امسك البالونة / Catch the balloon | `balloons.png` |
 | تحدّى أخوك / Challenge your brother | `challenge.png` |
 
 ---
@@ -39,10 +39,10 @@ A calm blue river scene seen from the side: mist-blue #A8DADC water with gentle 
 A small deep-teal #0F4C5C chalkboard with a cocoa-brown #5B4B3A wooden frame, slightly tilted. On it, a big Coptic letter Ⲁ drawn with dotted cream guide lines, half traced in a bold sunny-yellow #FFC845 line, with small arrows showing the stroke direction. A big chunky sunny-yellow pencil with a coral #FF7A5C eraser leans against the board as if it is writing. A few small sparkles around the letter. Simple, clean and friendly.
 ```
 
-### 3. Pop the balloon: `balloons.png`
+### 3. Catch the balloon: `balloons.png`
 
 ```
-Four shiny round party balloons floating up at different heights, in coral #FF7A5C, sunny yellow #FFC845, leaf green #6CC24A and mist blue #A8DADC, each with a curly cocoa-brown string and a big Coptic letter on it (Ⲁ, Ⲃ, Ⲅ, Ⲇ). One balloon in the middle is popping: a cartoon burst shape with small colorful confetti pieces and little star sparkles flying out. Joyful and full of energy.
+Four shiny round helium balloons floating up at different heights, in coral #FF7A5C, sunny yellow #FFC845, leaf green #6CC24A and mist blue #A8DADC, each with a thin curly cocoa-brown string and a big Coptic letter on it (Ⲁ, Ⲃ, Ⲅ, Ⲇ). A child's hand reaches up from the bottom edge and holds the string of the coral balloon. A few small star sparkles around. Joyful and full of energy.
 ```
 
 ### 4. Challenge your brother: `challenge.png`
@@ -94,4 +94,50 @@ plain background, facing RIGHT (toward the water):
 
 ```
 Using the attached reference for the exact look, clothes and colors: [NONO / FOFO] standing, full body, turned three-quarters to the RIGHT, holding a simple brown wooden fishing rod (صنارة) with both hands at hip height; the rod points up and to the right, at about 35° above horizontal, and its tip reaches beyond his head height. No line, no hook (the game draws them). Pose 1 "fish": calm and focused, looking at the water with a small hopeful smile. Pose 2 "reel": leaning back a little, pulling the rod up with an excited big smile, as if a fish just bit. Same flat 2D style, thin warm-brown outlines. Plain solid white background, no shadow, no text.
+```
+
+---
+
+## Balloons game art (امسك البالونة), for ElevenLabs
+
+Made with **ElevenLabs image generation** (Image & Video). Use the same
+workflow as the other art: if the model you pick accepts a reference image,
+attach `design/reference/nono-fofo-approved.webp` so the style matches the
+brothers. Paste each prompt as it is.
+
+| What | Save the original as | Then run |
+|---|---|---|
+| Village background | `design/reference/balloons/village.webp` | `tools/.venv/bin/python tools/games/process_balloons.py`; if the path sits higher or lower, change `backgroundMarks.feetY` in `app/assets/content/games/balloons.json` |
+| Balloon (one ORANGE balloon; the script makes the 8 colors) | `design/reference/balloons/balloon.webp` | same script; copy the `balloonLetterSpot` and `balloonImages` lines it prints into `balloons.json` |
+| Nono / Fofo balloon poses (later) | `Characters/Nono Balloons.webp`, `Characters/Fofo Balloons.webp` | `tools/.venv/bin/python tools/characters/process_poses.py` (add them to `SOURCES` first) |
+
+Until a file is there the game draws that part in code, so the game works
+without them. The app converts any picture you save (PNG or JPG is fine too,
+just rename the extension the script expects or save as WebP).
+
+### Village background (wide, landscape 16:9)
+
+The brothers stand on the dirt path at the bottom, about 90% of the way
+down, and balloons rise through the sky, so the sky has to be big and calm.
+
+```
+Wide landscape (16:9) background for a children's game, flat 2D vector cartoon style: thin warm-brown outlines, flat colors with soft shading, rounded friendly shapes, cheerful and simple. A sunny Egyptian countryside village seen from the front, side-on, like a stage. Top 50%: a big soft light-blue sky, a soft yellow sun in the top-left corner and a few round cream clouds; keep the top-center of the sky completely empty (a score card goes there). Middle: one long row of small traditional mud-brick village houses in soft pastel colors (sand, peach, pale blue, pale pink, pale yellow), flat roofs, some with a pile of straw or palm fronds on top, small arched wooden doors and little windows; one round white pigeon tower (برج حمام) with rows of little holes, a few date palms behind the houses. Below the houses: a strip of green fields with crop rows, then a narrow light-turquoise irrigation canal running across the whole picture. Bottom 15%: a wide, flat, empty warm-sand dirt path running across the whole width with a few small pebbles; keep it completely empty (two children will stand on it, one on the left and one on the right). Use this palette: deep teal #0F4C5C, mist blue #A8DADC, warm sand #EFE6D8, slate teal #4F7C82, cocoa brown #5B4B3A, sunny yellow #FFC845, coral #FF7A5C, leaf green #6CC24A, cream #FFFBF4. No people, no animals in the foreground, no balloons, no text, no letters, no logos, no watermark, no religious symbols.
+```
+
+### Balloon (generate once, in orange)
+
+The game writes the letter in the cream circle and draws the string itself,
+so the picture must have **no string** and an **empty** circle.
+
+```
+A single cute cartoon helium party balloon for a children's game, flat 2D vector style: thin warm-brown #5B4B3A outline, flat colors with soft shading, rounded friendly shape. Classic round balloon shape, slightly taller than wide, a small tied knot at the bottom center, front view, standing straight up. The balloon rubber is bright orange #FF9F43 with a slightly darker orange on one side and one big soft white shine highlight on the upper left. In the middle of the balloon there is a large EMPTY plain cream #FFFBF4 circle with a thin brown outline (about half the balloon width), slightly above the center; leave it completely empty, no letter, no pattern inside. NO string, nothing hanging below the knot. Whole balloon visible, centered, nothing else in the picture. Plain flat pure white background so it can be cut out. No text, no letters, no watermark.
+```
+
+### Balloon poses for Nono and Fofo (later)
+
+Not needed to play: for now the game uses the existing poses and moves them
+in code. One sheet per brother, two poses side by side, full body:
+
+```
+Using the attached reference for the exact look, clothes and colors: [NONO / FOFO], full body, two poses side by side on one sheet, both facing RIGHT. Pose 1 "jump" (left): jumping up with both feet off the ground, one arm stretched straight up with the hand closed in a fist as if grabbing a string, big excited smile. Pose 2 "hold" (right): standing, one hand raised above his head with the fist closed as if holding several balloon strings, the other hand on his hip, proud happy smile. No balloons and no strings (the game draws them). Same flat 2D style, thin warm-brown outlines. Plain solid white background, no shadow, no text.
 ```
