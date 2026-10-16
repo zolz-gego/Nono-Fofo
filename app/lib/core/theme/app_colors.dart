@@ -95,6 +95,34 @@ abstract final class AppColors {
     Color(0xFF3FBFA0), // mint
   ];
 
+  // ---------------------------------------------------------------------------
+  // Balloons game (the village scene)
+  // ---------------------------------------------------------------------------
+  static const Color villageField = Color(0xFF8CC66A);
+  static const Color villageFieldRow = Color(0xFF6FAE52);
+  static const Color villageCanal = Color(0xFF6FC3D0);
+  static const Color villagePath = Color(0xFFD9BE8F);
+  static const Color villagePathEdge = Color(0xFFC2A271);
+  static const Color houseDoor = Color(0xFF6B4F3A);
+  static const Color houseWindow = slateTeal;
+  static const Color roofStraw = Color(0xFFD9B26A);
+  static const Color pigeonTower = Color(0xFFF1E6D2);
+
+  /// Mud-brick house walls (soft pastels).
+  static const List<Color> houses = [
+    Color(0xFFF3D9B1), // sand
+    Color(0xFFF6C6A8), // peach
+    Color(0xFFBFE0E6), // pale blue
+    Color(0xFFF4C7CF), // pale pink
+    Color(0xFFF7E3A1), // pale yellow
+    Color(0xFFE9E1D3), // cream
+  ];
+
+  static const Color balloonString = cocoa;
+
+  /// Balloon colors (the same bright set as the fish).
+  static const List<Color> balloons = fish;
+
   /// Confetti / celebration colors.
   static const List<Color> celebration = [
     sunYellow,

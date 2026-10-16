@@ -8,8 +8,9 @@ import 'app_dimens.dart';
 /// stock widgets (buttons, dialogs, app bars) follow the app palette too.
 abstract final class AppTheme {
   static ThemeData light(Locale locale) {
-    final script =
-        locale.languageCode == 'ar' ? AppScript.arabic : AppScript.english;
+    final script = locale.languageCode == 'ar'
+        ? AppScript.arabic
+        : AppScript.english;
     TextStyle t(AppTextVariant v) => AppTextStyles.of(script, v);
 
     const scheme = ColorScheme(
@@ -35,7 +36,9 @@ abstract final class AppTheme {
       useMaterial3: true,
       colorScheme: scheme,
       scaffoldBackgroundColor: AppColors.background,
-      fontFamily: script == AppScript.arabic ? AppFonts.arabic : AppFonts.english,
+      fontFamily: script == AppScript.arabic
+          ? AppFonts.arabic
+          : AppFonts.english,
       textTheme: TextTheme(
         displayLarge: t(AppTextVariant.h1),
         headlineLarge: t(AppTextVariant.h1),
@@ -51,14 +54,17 @@ abstract final class AppTheme {
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.onPrimary,
         centerTitle: true,
-        titleTextStyle:
-            t(AppTextVariant.h3).copyWith(color: AppColors.textOnDark),
+        titleTextStyle: t(AppTextVariant.h3)
+            .copyWith(color: AppColors.textOnDark),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.onPrimary,
-          minimumSize: const Size(AppDimens.minTapTarget, AppDimens.minTapTarget),
+          minimumSize: const Size(
+            AppDimens.minTapTarget,
+            AppDimens.minTapTarget,
+          ),
           shape: buttonShape,
           textStyle: t(AppTextVariant.body),
         ),
@@ -67,7 +73,10 @@ abstract final class AppTheme {
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.primary,
           side: const BorderSide(color: AppColors.outline, width: 2),
-          minimumSize: const Size(AppDimens.minTapTarget, AppDimens.minTapTarget),
+          minimumSize: const Size(
+            AppDimens.minTapTarget,
+            AppDimens.minTapTarget,
+          ),
           shape: buttonShape,
           textStyle: t(AppTextVariant.bodySmall),
         ),

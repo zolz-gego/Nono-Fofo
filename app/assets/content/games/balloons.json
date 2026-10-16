@@ -1,0 +1,25 @@
+{
+  "_readme": "Settings for the balloons game (the village). Change numbers here; no code change needed. catchesToWin: correct balloons needed to finish. maxDifferentLetters: how many different letters fly in one game (the target included). targetChance: 0..1, how often a new balloon carries the target letter. riseSeconds: how long a balloon takes to float from the bottom to the top (bigger = slower). Stars: a mistake is a wrong balloon, or (if countMissedAsMistake) a target balloon that floated away. 0..threeStarsMaxMistakes = 3 stars, up to twoStarsMaxMistakes = 2 stars, more = 1 star. balloonImages: painted balloons, made by tools/games/process_balloons.py; when empty the balloons are drawn in code. balloonLetterSpot: where the letter goes on those images (center x/y and size, as fractions of the image; the script prints it). background: the village picture (drawn in code when missing). backgroundMarks.feetY: where the brothers' feet go in that picture, as a fraction of its height (the middle of the dirt path).",
+  "version": 1,
+  "catchesToWin": 5,
+  "maxDifferentLetters": 7,
+  "targetChance": 0.35,
+  "maxBalloonsOnScreen": 7,
+  "spawnEverySeconds": 1.2,
+  "riseSeconds": 11,
+  "countMissedAsMistake": true,
+  "stars": {
+    "threeStarsMaxMistakes": 0,
+    "twoStarsMaxMistakes": 2
+  },
+  "balloonImages": [],
+  "balloonLetterSpot": {
+    "x": 0.5,
+    "y": 0.4,
+    "size": 0.42
+  },
+  "background": "assets/games/balloons/village.webp",
+  "backgroundMarks": {
+    "feetY": 0.9
+  }
+}

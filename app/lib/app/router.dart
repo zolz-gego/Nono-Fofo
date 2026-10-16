@@ -2,8 +2,12 @@ import 'package:go_router/go_router.dart';
 
 import '../features/about/presentation/about_page.dart';
 import '../features/home/presentation/home_page.dart';
-import '../features/games/fishing/presentation/fishing_letter_page.dart';
+import '../core/l10n/l10n.dart';
+import '../features/games/balloons/presentation/balloons_cubit.dart';
+import '../features/games/balloons/presentation/balloons_page.dart';
+import '../features/games/fishing/presentation/fishing_cubit.dart';
 import '../features/games/fishing/presentation/fishing_page.dart';
+import '../features/games/letter_hunt/presentation/letter_pick_page.dart';
 import '../features/levels/domain/game_level.dart';
 import '../features/levels/presentation/level_games_page.dart';
 
@@ -16,9 +20,14 @@ abstract final class AppRoutes {
   static const level = '/level';
 
   /// Fishing: pick a letter (extra: [PlayerSetup]), then play
-  /// (extra: [FishingArgs]).
+  /// (extra: [LetterHuntArgs]).
   static const fishing = '/level/fishing';
   static const fishingPlay = '/level/fishing/play';
+
+  /// Balloons: pick a letter (extra: [PlayerSetup]), then play
+  /// (extra: [LetterHuntArgs]).
+  static const balloons = '/level/balloons';
+  static const balloonsPlay = '/level/balloons/play';
 }
 
 final GoRouter appRouter = GoRouter(
@@ -43,15 +52,39 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.fishing,
       redirect: (context, state) =>
           state.extra is PlayerSetup ? null : AppRoutes.home,
-      builder: (context, state) =>
-          FishingLetterPage(setup: state.extra! as PlayerSetup),
+      builder: (context, state) => LetterPickPage(
+        setup: state.extra! as PlayerSetup,
+        gameId: FishingCubit.id,
+        title: context.l10n.gameFishing,
+        prompt: context.l10n.pickLetter,
+        playRoute: AppRoutes.fishingPlay,
+      ),
     ),
     GoRoute(
       path: AppRoutes.fishingPlay,
       redirect: (context, state) =>
-          state.extra is FishingArgs ? null : AppRoutes.home,
+          state.extra is LetterHuntArgs ? null : AppRoutes.home,
       builder: (context, state) =>
-          FishingPage(args: state.extra! as FishingArgs),
+          FishingPage(args: state.extra! as LetterHuntArgs),
+    ),
+    GoRoute(
+      path: AppRoutes.balloons,
+      redirect: (context, state) =>
+          state.extra is PlayerSetup ? null : AppRoutes.home,
+      builder: (context, state) => LetterPickPage(
+        setup: state.extra! as PlayerSetup,
+        gameId: BalloonsCubit.id,
+        title: context.l10n.gameBalloons,
+        prompt: context.l10n.balloonsPickLetter,
+        playRoute: AppRoutes.balloonsPlay,
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.balloonsPlay,
+      redirect: (context, state) =>
+          state.extra is LetterHuntArgs ? null : AppRoutes.home,
+      builder: (context, state) =>
+          BalloonsPage(args: state.extra! as LetterHuntArgs),
     ),
   ],
 );

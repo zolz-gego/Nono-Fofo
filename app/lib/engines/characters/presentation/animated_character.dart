@@ -147,10 +147,8 @@ class _AnimatedCharacterState extends State<AnimatedCharacter>
           child: child,
         ),
       ),
-      layoutBuilder: (current, previous) => Stack(
-        clipBehavior: Clip.none,
-        children: [...previous, ?current],
-      ),
+      layoutBuilder: (current, previous) =>
+          Stack(clipBehavior: Clip.none, children: [...previous, ?current]),
       child: _PoseImage(
         key: ValueKey(pose.action),
         pose: pose,
@@ -187,10 +185,14 @@ class _AnimatedCharacterState extends State<AnimatedCharacter>
                         flipX: widget.mirror,
                         child: Transform(
                           alignment: Alignment.bottomCenter,
-                          transform: Matrix4.translationValues(
-                              f.dx * drawnHeight, f.dy * drawnHeight, 0)
-                            ..rotateZ(f.rotation)
-                            ..scaleByDouble(f.scaleX, f.scaleY, 1, 1),
+                          transform:
+                              Matrix4.translationValues(
+                                  f.dx * drawnHeight,
+                                  f.dy * drawnHeight,
+                                  0,
+                                )
+                                ..rotateZ(f.rotation)
+                                ..scaleByDouble(f.scaleX, f.scaleY, 1, 1),
                           child: child,
                         ),
                       ),
@@ -278,7 +280,9 @@ class _GroundShadow extends StatelessWidget {
         height: width * 0.12 * shrink,
         decoration: BoxDecoration(
           color: AppColors.shadow,
-          borderRadius: BorderRadius.all(Radius.elliptical(width, width * 0.12)),
+          borderRadius: BorderRadius.all(
+            Radius.elliptical(width, width * 0.12),
+          ),
         ),
       ),
     );

@@ -190,7 +190,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gameWriteLetter => 'Write the letter';
 
   @override
-  String get gameBalloons => 'Pop the balloon';
+  String get gameBalloons => 'Catch the balloon';
 
   @override
   String gameChallenge(String opponent) {
@@ -255,4 +255,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get otherLetter => 'Another letter';
+
+  @override
+  String get balloonsPickLetter => 'Pick the letter you\'ll catch!';
+
+  @override
+  String get balloonsCatch => 'Bring';
+
+  @override
+  String balloonsStart(String name, String letter) {
+    return 'Come on, $name! Bring me the $letter balloon';
+  }
+
+  @override
+  String balloonsMissed(String target) {
+    return 'The $target balloon floated away! Keep an eye out';
+  }
 }

@@ -11,6 +11,7 @@ import '../../engines/sound/data/audioplayers_audio_engine.dart';
 import '../../engines/sound/data/sound_repository_impl.dart';
 import '../../engines/sound/domain/audio_engine.dart';
 import '../../engines/sound/domain/sound_repository.dart';
+import '../../features/games/balloons/data/balloons_config_repository.dart';
 import '../../features/games/fishing/data/fishing_config_repository.dart';
 import '../../features/games/progress/data/game_progress_repository_impl.dart';
 import '../../features/games/progress/domain/game_progress_repository.dart';
@@ -31,7 +32,9 @@ final GetIt sl = GetIt.instance;
 
 Future<void> configureDependencies() async {
   // External
-  sl.registerSingleton<SharedPreferences>(await SharedPreferences.getInstance());
+  sl.registerSingleton<SharedPreferences>(
+    await SharedPreferences.getInstance(),
+  );
   sl.registerLazySingleton(() => JsonAssetLoader(rootBundle));
 
   // Sound engine
@@ -41,27 +44,33 @@ Future<void> configureDependencies() async {
 
   // Character engine
   sl.registerLazySingleton<CharacterRepository>(
-      () => CharacterRepositoryImpl(sl()));
+    () => CharacterRepositoryImpl(sl()),
+  );
 
   // Settings
   sl.registerLazySingleton<SettingsRepository>(
-      () => SettingsRepositoryImpl(sl()));
+    () => SettingsRepositoryImpl(sl()),
+  );
   sl.registerFactory(() => SettingsCubit(sl(), sl()));
 
   // Questions — register a parser per question type here.
   sl.registerLazySingleton(QuestionParserRegistry.new);
   sl.registerLazySingleton<QuestionRepository>(
-      () => QuestionRepositoryImpl(sl(), sl()));
+    () => QuestionRepositoryImpl(sl(), sl()),
+  );
   sl.registerFactory(() => LoadQuestions(sl()));
 
   // Letters & games
   sl.registerLazySingleton<LetterRepository>(() => LetterRepositoryImpl(sl()));
   sl.registerLazySingleton<GameProgressRepository>(
-      () => GameProgressRepositoryImpl(sl()));
+    () => GameProgressRepositoryImpl(sl()),
+  );
   sl.registerLazySingleton(() => FishingConfigRepository(sl()));
+  sl.registerLazySingleton(() => BalloonsConfigRepository(sl()));
 
   // Warm up engines before the first frame.
   await sl<SoundService>().init();
   sl.registerSingleton<CharacterRoster>(
-      await sl<CharacterRepository>().loadRoster());
+    await sl<CharacterRepository>().loadRoster(),
+  );
 }

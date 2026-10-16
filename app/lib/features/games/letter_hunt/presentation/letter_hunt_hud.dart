@@ -3,26 +3,39 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../../core/l10n/l10n.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
-import '../../../../core/theme/app_icons.dart';
 import '../../../../core/typography/app_text_styles.dart';
 import '../../../../core/widgets/text/app_texts.dart';
-import '../game/fishing_layout.dart';
-import 'fishing_cubit.dart';
+import '../domain/letter_hunt_rules.dart';
+import '../game/target_card_layout.dart';
+import 'letter_hunt_cubit.dart';
 
-/// The card at the top: the letter to catch, and the basket with one slot
-/// per fish to win. Slot positions come from [FishingLayout] so caught fish
-/// fly exactly into them.
-class FishingHud extends StatelessWidget {
-  const FishingHud({super.key, required this.layout});
+/// The card at the top: [label] + the letter to catch, and one slot per
+/// item to win (showing [icon] once filled). Slot positions come from
+/// [layout] so caught items fly exactly into them.
+class LetterHuntHud extends StatelessWidget {
+  const LetterHuntHud({
+    super.key,
+    required this.layout,
+    required this.cubit,
+    required this.label,
+    required this.icon,
+  });
 
-  final FishingLayout layout;
+  final TargetCardLayout layout;
+  final LetterHuntCubit<LetterHuntRules> cubit;
+  final String label;
+  final FaIconData icon;
 
   @override
-  Widget build(BuildContext context) {
-    final state = context.watch<FishingCubit>().state;
+  Widget build(BuildContext context) =>
+      BlocBuilder<
+        LetterHuntCubit<LetterHuntRules>,
+        LetterHuntState<LetterHuntRules>
+      >(bloc: cubit, builder: _card);
+
+  Widget _card(BuildContext context, LetterHuntState<LetterHuntRules> state) {
     final round = state.round;
     final l = layout;
     final width = l.cardWidth;
@@ -30,7 +43,8 @@ class FishingHud extends StatelessWidget {
 
     // A wrong catch or a missed fish gives the card a little shake.
     final shake =
-        state.event == FishingEvent.wrong || state.event == FishingEvent.missed;
+        state.event == LetterHuntEvent.wrong ||
+        state.event == LetterHuntEvent.missed;
 
     return Positioned(
       top: l.cardTop,
@@ -56,7 +70,7 @@ class FishingHud extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  AppText.h3(context.l10n.catchLetter),
+                  AppText.h3(label),
                   const SizedBox(width: AppDimens.spaceSm),
                   Text(
                         round.target.small,
@@ -82,7 +96,7 @@ class FishingHud extends StatelessWidget {
               children: [
                 for (var i = 0; i < round.goal; i++) ...[
                   if (i > 0) SizedBox(width: l.slotGap),
-                  _Slot(size: l.slotSize, filled: i < state.basket),
+                  _Slot(size: l.slotSize, filled: i < state.landed, icon: icon),
                 ],
               ],
             ),
@@ -95,10 +109,11 @@ class FishingHud extends StatelessWidget {
 }
 
 class _Slot extends StatelessWidget {
-  const _Slot({required this.size, required this.filled});
+  const _Slot({required this.size, required this.filled, required this.icon});
 
   final double size;
   final bool filled;
+  final FaIconData icon;
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +134,7 @@ class _Slot extends StatelessWidget {
       ),
       alignment: Alignment.center,
       child: FaIcon(
-        AppIcons.fishing,
+        icon,
         size: size * 0.5,
         color: filled
             ? AppColors.white

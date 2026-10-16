@@ -76,7 +76,7 @@
   "gamesComingSoon": "ألعاب المستوى ده جاية قريب.",
   "gameFishing": "صيد السمك",
   "gameWriteLetter": "اكتب الحرف",
-  "gameBalloons": "فرقع البالونة",
+  "gameBalloons": "امسك البالونة",
   "gameChallenge": "تحدّى {opponent}",
   "@gameChallenge": {
     "placeholders": {
@@ -143,5 +143,26 @@
   "fishingStars1": "خلصتها! العب تاني عشان تجمع نجوم أكتر",
   "newBest": "رقم جديد!",
   "playAgain": "العب تاني",
-  "otherLetter": "حرف تاني"
+  "otherLetter": "حرف تاني",
+  "balloonsPickLetter": "اختار الحرف اللي هتمسكه!",
+  "balloonsCatch": "هات",
+  "balloonsStart": "يلا يا {name}! هاتلي البالونة اللي عليها {letter}",
+  "balloonsMissed": "بالونة {target} طارت! خلّي عينك عليها",
+  "@balloonsStart": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "letter": {
+        "type": "String"
+      }
+    }
+  },
+  "@balloonsMissed": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  }
 }

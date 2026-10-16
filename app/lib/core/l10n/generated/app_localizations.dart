@@ -431,7 +431,7 @@ abstract class AppLocalizations {
   /// No description provided for @gameBalloons.
   ///
   /// In ar, this message translates to:
-  /// **'فرقع البالونة'**
+  /// **'امسك البالونة'**
   String get gameBalloons;
 
   /// No description provided for @gameChallenge.
@@ -541,6 +541,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'حرف تاني'**
   String get otherLetter;
+
+  /// No description provided for @balloonsPickLetter.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار الحرف اللي هتمسكه!'**
+  String get balloonsPickLetter;
+
+  /// No description provided for @balloonsCatch.
+  ///
+  /// In ar, this message translates to:
+  /// **'هات'**
+  String get balloonsCatch;
+
+  /// No description provided for @balloonsStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'يلا يا {name}! هاتلي البالونة اللي عليها {letter}'**
+  String balloonsStart(String name, String letter);
+
+  /// No description provided for @balloonsMissed.
+  ///
+  /// In ar, this message translates to:
+  /// **'بالونة {target} طارت! خلّي عينك عليها'**
+  String balloonsMissed(String target);
 }
 
 class _AppLocalizationsDelegate

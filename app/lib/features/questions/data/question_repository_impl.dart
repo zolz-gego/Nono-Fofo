@@ -32,9 +32,9 @@ class QuestionRepositoryImpl implements QuestionRepository {
 
   @override
   Future<List<Question>> loadType(String type) async => [
-        for (final set in await loadAll())
-          if (set.type == type) ...set.questions,
-      ];
+    for (final set in await loadAll())
+      if (set.type == type) ...set.questions,
+  ];
 
   QuestionSet _parseFile(String path, Map<String, dynamic> json) {
     final type = json['type'];

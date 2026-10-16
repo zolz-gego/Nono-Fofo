@@ -206,7 +206,7 @@ class FishingGame extends FlameGame {
         (_sinceTarget >= _maxBetweenTargets ? true : null)) {
       true => round.target,
       false => round.randomDistractor(_random),
-      null => round.nextFishLetter(_random, targetsSwimming: _targetsSwimming),
+      null => round.nextLetter(_random, targetsShowing: _targetsSwimming),
     };
     _sinceTarget = round.isTarget(letter) ? 0 : _sinceTarget + 1;
     final colors = _fishSprites.isEmpty
@@ -418,14 +418,14 @@ class _Cast {
           );
         if (_t >= _flyTime) {
           game._removeFish(fish);
-          game.cubit.fishInBasket();
+          game.cubit.landed();
           game._flying.remove(this);
         }
     }
   }
 
   void _judge() {
-    _correct = game.cubit.catchFish(fish.letter);
+    _correct = game.cubit.pick(fish.letter);
     if (_correct) {
       fish.state = FishState.caught;
       game.sound.playKey('fishing.fish_catch');

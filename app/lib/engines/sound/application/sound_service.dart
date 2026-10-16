@@ -15,7 +15,7 @@ import '../domain/sound_repository.dart';
 /// ```
 class SoundService {
   SoundService(this._repository, this._engine, {Random? random})
-      : _random = random ?? Random();
+    : _random = random ?? Random();
 
   final SoundRepository _repository;
   final AudioEngine _engine;
@@ -57,7 +57,11 @@ class SoundService {
   }
 
   /// Plays one of [ids] in the brother's voice.
-  Future<void> playVoice(CharacterId who, List<String> ids, {String? key}) async {
+  Future<void> playVoice(
+    CharacterId who,
+    List<String> ids, {
+    String? key,
+  }) async {
     if (_muted) return;
     final id = _pick('${key ?? ids.join()}#${who.name}', ids);
     final path = id == null ? null : _catalog.voicePath(who, id);

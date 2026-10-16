@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import '../../letter_hunt/game/target_card_layout.dart';
 import '../domain/fishing_config.dart';
 
 /// The Nile background picture and where its banks and water are.
@@ -15,54 +16,26 @@ class NileArt {
 /// background picture, when there is one). Both the Flame game and the
 /// Flutter overlay (target card, basket, referee) use it, so they always
 /// line up.
-class FishingLayout {
+class FishingLayout with TargetCardLayout {
   FishingLayout(this.size, {required this.goal, this.rtl = false, this.art}) {
     _fitArt();
   }
 
+  @override
   final Size size;
 
   /// Number of basket slots (fish to catch).
+  @override
   final int goal;
 
   /// Right-to-left UI: the basket fills from the right.
+  @override
   final bool rtl;
 
   final NileArt? art;
 
-  double get width => size.width;
-  double get height => size.height;
-  bool get isPortrait => height > width;
-
-  // ---------------------------------------------------------------------------
-  // Top card
-  // ---------------------------------------------------------------------------
-
-  double get cardTop => 8;
-  double get cardLetterSize => (height * 0.1).clamp(44.0, 72.0);
-  double get slotGap => 6;
-  static const double cardPadding = 16;
-
-  /// Slots shrink on narrow screens so the card stays between the brothers.
-  double get slotSize {
-    final room = width * 0.56 - cardPadding * 2 - (goal - 1) * slotGap;
-    return min(fishWidth * 0.42, room / goal).clamp(18.0, 46.0);
-  }
-
-  double get slotsTop => cardTop + 10 + cardLetterSize * 1.25 + 26;
-  double get slotsWidth => goal * slotSize + (goal - 1) * slotGap;
-  double get cardWidth => min(width, max(170, slotsWidth + cardPadding * 2));
-  double get cardBottom => slotsTop + slotSize + 10;
-
-  /// Center of basket slot [index] (0 = the first to fill).
-  Offset slotCenter(int index) {
-    final left = width / 2 - slotsWidth / 2;
-    final column = rtl ? goal - 1 - index : index;
-    return Offset(
-      left + column * (slotSize + slotGap) + slotSize / 2,
-      slotsTop + slotSize / 2,
-    );
-  }
+  @override
+  double get slotMaxSize => fishWidth * 0.42;
 
   // ---------------------------------------------------------------------------
   // Brothers and the river

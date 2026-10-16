@@ -6,14 +6,28 @@ import 'character_action.dart';
 /// instead of wiring poses and sounds every time.
 enum CharacterReaction {
   greet(CharacterAction.wave, SoundEvent.charIdleTap, Duration(seconds: 2)),
-  correct(CharacterAction.cheer, SoundEvent.correctAnswer, Duration(seconds: 2)),
+  correct(
+    CharacterAction.cheer,
+    SoundEvent.correctAnswer,
+    Duration(seconds: 2),
+  ),
   wrong(CharacterAction.wrong, SoundEvent.wrongAnswer, Duration(seconds: 2)),
   think(CharacterAction.hint, SoundEvent.hint, Duration(seconds: 3)),
-  encourage(CharacterAction.encourage, SoundEvent.tryAgain, Duration(seconds: 2)),
+  encourage(
+    CharacterAction.encourage,
+    SoundEvent.tryAgain,
+    Duration(seconds: 2),
+  ),
   celebrate(
-      CharacterAction.celebrate, SoundEvent.levelComplete, Duration(seconds: 3)),
+    CharacterAction.celebrate,
+    SoundEvent.levelComplete,
+    Duration(seconds: 3),
+  ),
   surprised(
-      CharacterAction.surprised, SoundEvent.charSurprise, Duration(seconds: 2)),
+    CharacterAction.surprised,
+    SoundEvent.charSurprise,
+    Duration(seconds: 2),
+  ),
   win(CharacterAction.celebrate, SoundEvent.gameWin, Duration(seconds: 3)),
   lose(CharacterAction.wrong, SoundEvent.gameLose, Duration(seconds: 3)),
   run(CharacterAction.run, SoundEvent.charRun, null),
