@@ -112,8 +112,8 @@ brothers. Paste each prompt as it is.
 | Nono / Fofo balloon poses (later) | `Characters/Nono Balloons.webp`, `Characters/Fofo Balloons.webp` | `tools/.venv/bin/python tools/characters/process_poses.py` (add them to `SOURCES` first) |
 
 Until a file is there the game draws that part in code, so the game works
-without them. The app converts any picture you save (PNG or JPG is fine too,
-just rename the extension the script expects or save as WebP).
+without them. If ElevenLabs gives you a PNG or JPG, save it under the `.webp`
+name above anyway: the script reads the file's content, not its extension.
 
 ### Village background (wide, landscape 16:9)
 
