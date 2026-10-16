@@ -130,6 +130,7 @@ class _FormChip extends StatelessWidget {
         children: [
           Text(
             glyph,
+            textDirection: TextDirection.ltr,
             style: AppTextStyles.coptic(AppTextVariant.h2).copyWith(
               color: active ? AppColors.chalk.first : AppColors.coptic,
               height: 1.2,

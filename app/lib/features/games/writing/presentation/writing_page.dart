@@ -255,7 +255,12 @@ class _WritingPageState extends State<WritingPage> {
             width: max(ink.width, ink.height * 0.75),
             height: ink.height,
           );
-    final png = await _board.capturePng(crop: crop);
+    Uint8List? png;
+    try {
+      png = await _board.capturePng(crop: crop);
+    } catch (_) {
+      png = null; // No picture this time; the game goes on.
+    }
     if (png != null) _shots[form] = png;
   }
 

@@ -241,7 +241,9 @@ class _ChalkboardState extends State<Chalkboard> with TickerProviderStateMixin {
     super.didUpdateWidget(old);
     if (old.mask != widget.mask || old.strokes != widget.strokes) _prepare();
     if (widget.phase != old.phase) {
-      if (!_canDraw) _stopDrawing();
+      // The board can pass (or get wiped) while a finger is still down:
+      // end that stroke, but tell the page after this build is done.
+      if (!_canDraw) _stopDrawing(duringBuild: true);
       if (widget.phase == WritingPhase.demo) _startDemo();
       if (_isWipe(widget.phase) && !_isWipe(old.phase)) {
         _wipe.forward(from: 0);
@@ -349,12 +351,15 @@ class _ChalkboardState extends State<Chalkboard> with TickerProviderStateMixin {
     _stopDrawing();
   }
 
-  void _stopDrawing() {
+  void _stopDrawing({bool duringBuild = false}) {
     if (_pointer == null) return;
     _pointer = null;
     _last = null;
     _c.end();
-    widget.onDrawing(false);
+    if (!duringBuild) return widget.onDrawing(false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) widget.onDrawing(false);
+    });
   }
 
   @override

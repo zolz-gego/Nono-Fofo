@@ -316,6 +316,9 @@ class _LetterTile extends StatelessWidget {
                           stars == null
                               ? '${letter.capital} ${letter.small}'
                               : letter.small,
+                          // Coptic keys like ")" must not be mirrored in
+                          // Arabic (right-to-left) layouts.
+                          textDirection: TextDirection.ltr,
                           style: AppTextStyles.coptic(AppTextVariant.h1)
                               .copyWith(fontSize: 64, height: 1.1),
                         ),
