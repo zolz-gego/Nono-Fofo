@@ -7,6 +7,7 @@
     { "id": "gamma", "small": "j", "capital": "J", "name": { "ar": "غما", "en": "Gamma" } },
     { "id": "delta", "small": "d", "capital": "D", "name": { "ar": "دلتا", "en": "Delta" } },
     { "id": "ei", "small": "e", "capital": "E", "name": { "ar": "اي", "en": "Ei" } },
+    { "id": "so", "small": "6", "capital": "^", "name": { "ar": "سو", "en": "So" } },
     { "id": "zita", "small": "z", "capital": "Z", "name": { "ar": "زيتا", "en": "Zita" } },
     { "id": "ita", "small": "3", "capital": "#", "name": { "ar": "ايتا", "en": "Ita" } },
     { "id": "thita", "small": "0", "capital": ")", "name": { "ar": "ثيتا", "en": "Thita" } },
