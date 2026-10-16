@@ -231,5 +231,7 @@
     }
   },
   "writingEraser": "أستيكة",
-  "writingShareSaved": "اتحفظت الصورة في التنزيلات"
+  "writingShareSaved": "اتحفظت الصورة في التنزيلات",
+  "writingFullScreen": "كبّر السبورة",
+  "writingExitFullScreen": "رجّع السبورة زي ما كانت"
 }

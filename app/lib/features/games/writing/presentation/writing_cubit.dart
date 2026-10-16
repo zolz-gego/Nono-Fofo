@@ -109,8 +109,14 @@ class WritingCubit extends Cubit<WritingState> {
   bool _cheered = false;
 
   /// The letter for the current board is ready; [withDemo] plays the
-  /// stroke-order demo first.
-  void boardReady(LetterMask mask, {bool withDemo = true}) {
+  /// stroke-order demo first. [announce] is false when the same board was
+  /// only redrawn in a new shape (the screen turned), so nobody repeats
+  /// their lines.
+  void boardReady(
+    LetterMask mask, {
+    bool withDemo = true,
+    bool announce = true,
+  }) {
     _coverage = ChalkCoverage(mask);
     _warned = false;
     _cheered = false;
@@ -119,7 +125,7 @@ class WritingCubit extends Cubit<WritingState> {
         phase: withDemo ? WritingPhase.demo : WritingPhase.drawing,
         filled: 0,
         mess: 0,
-        event: WritingEvent.boardStart,
+        event: announce ? WritingEvent.boardStart : null,
       ),
     );
   }

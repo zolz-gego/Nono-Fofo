@@ -7,7 +7,9 @@ import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_icons.dart';
 
 /// The wooden ledge under the board: pick a chalk colour (two rows of
-/// sticks), the eraser, and the thickness.
+/// sticks), the eraser, and the thickness. [vertical] packs it into a
+/// square (thickness and eraser on top, the colours in a grid below), for
+/// small screens.
 class ChalkTray extends StatelessWidget {
   const ChalkTray({
     super.key,
@@ -18,6 +20,7 @@ class ChalkTray extends StatelessWidget {
     required this.onColor,
     required this.onSize,
     required this.onEraser,
+    this.vertical = false,
   });
 
   final int colorIndex;
@@ -31,8 +34,10 @@ class ChalkTray extends StatelessWidget {
   final ValueChanged<int> onColor;
   final ValueChanged<int> onSize;
   final VoidCallback onEraser;
+  final bool vertical;
 
   static const int _perRow = 8;
+  static const int _perRowVertical = 4;
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +45,11 @@ class ChalkTray extends StatelessWidget {
     final sizeNames = [l10n.writingThin, l10n.writingMedium, l10n.writingThick];
     final colors = AppColors.chalk;
     final dot = erasing ? AppColors.white : colors[colorIndex];
+    final perRow = vertical ? _perRowVertical : _perRow;
     Widget row(int from) => Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        for (var i = from; i < colors.length && i < from + _perRow; i++)
+        for (var i = from; i < colors.length && i < from + perRow; i++)
           _ChalkStick(
             color: colors[i],
             selected: !erasing && i == colorIndex,
@@ -51,6 +57,29 @@ class ChalkTray extends StatelessWidget {
           ),
       ],
     );
+    final sticks = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (var from = 0; from < colors.length; from += perRow) row(from),
+      ],
+    );
+    final eraser = Tooltip(
+      message: l10n.writingEraser,
+      child: _EraserButton(selected: erasing, onTap: onEraser),
+    );
+    final sizeDots = [
+      for (var i = 0; i < sizes.length; i++)
+        Tooltip(
+          message: i < sizeNames.length ? sizeNames[i] : '',
+          child: _SizeDot(
+            diameter: 8 + i * 8,
+            color: dot,
+            selected: i == sizeIndex,
+            onTap: () => onSize(i),
+          ),
+        ),
+    ];
     return DecoratedBox(
       decoration: BoxDecoration(
         color: AppColors.boardFrame,
@@ -69,48 +98,45 @@ class ChalkTray extends StatelessWidget {
           horizontal: AppDimens.spaceSm,
           vertical: AppDimens.spaceXs,
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                for (var from = 0; from < colors.length; from += _perRow)
-                  row(from),
-              ],
-            ),
-            const _Divider(),
-            Tooltip(
-              message: l10n.writingEraser,
-              child: _EraserButton(selected: erasing, onTap: onEraser),
-            ),
-            const _Divider(),
-            for (var i = 0; i < sizes.length; i++)
-              Tooltip(
-                message: i < sizeNames.length ? sizeNames[i] : '',
-                child: _SizeDot(
-                  diameter: 8 + i * 8,
-                  color: dot,
-                  selected: i == sizeIndex,
-                  onTap: () => onSize(i),
-                ),
+        child: vertical
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [...sizeDots, const _Divider(), eraser],
+                  ),
+                  const _Divider(horizontal: true),
+                  sticks,
+                ],
+              )
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  sticks,
+                  const _Divider(),
+                  eraser,
+                  const _Divider(),
+                  ...sizeDots,
+                ],
               ),
-          ],
-        ),
       ),
     );
   }
 }
 
 class _Divider extends StatelessWidget {
-  const _Divider();
+  const _Divider({this.horizontal = false});
+
+  final bool horizontal;
 
   @override
   Widget build(BuildContext context) => Container(
-    width: 2,
-    height: 48,
-    margin: const EdgeInsets.symmetric(horizontal: AppDimens.spaceSm),
+    width: horizontal ? 160 : 2,
+    height: horizontal ? 2 : 48,
+    margin: horizontal
+        ? const EdgeInsets.symmetric(vertical: AppDimens.spaceXs)
+        : const EdgeInsets.symmetric(horizontal: AppDimens.spaceSm),
     color: AppColors.boardFrameDark,
   );
 }
