@@ -36,6 +36,7 @@ import '../data/letter_mask_builder.dart';
 import '../data/writing_config_repository.dart';
 import '../domain/letter_mask.dart';
 import '../domain/letter_strokes.dart';
+import '../domain/writing_board.dart';
 import '../domain/writing_config.dart';
 import 'chalk_tray.dart';
 import 'chalkboard.dart';
@@ -91,6 +92,13 @@ class _WritingPageState extends State<WritingPage> {
   /// The top bar and the other brother are hidden, so the board can grow;
   /// the hero stays, small, in a corner and says his brother's lines too.
   bool _fullScreen = false;
+
+  /// The board shape this screen wants (worked out while laying out) and
+  /// the one the current letter was built for. A tall screen gets a tall
+  /// board, so the letter can be bigger.
+  WritingBoard _wantedShape = WritingBoard.standard;
+  WritingBoard _shape = WritingBoard.standard;
+  bool _reshaping = false;
 
   /// Says the other brother's lines (the hero, in full screen).
   CharacterController get _voice => _fullScreen ? _hero : _other;
@@ -159,25 +167,49 @@ class _WritingPageState extends State<WritingPage> {
     _prepareBoard(LetterForm.small);
   }
 
-  Future<void> _prepareBoard(LetterForm form) async {
+  Future<void> _prepareBoard(
+    LetterForm form, {
+    bool announce = true,
+    bool withDemo = true,
+  }) async {
     final cubit = _cubit!;
+    // Wait for a layout, so the board shape for this screen is known.
+    await WidgetsBinding.instance.endOfFrame;
+    if (!mounted || _cubit != cubit) return;
+    final shape = _wantedShape;
     final glyph = form == LetterForm.small ? _letter.small : _letter.capital;
-    var mask = await const LetterMaskBuilder().build(
+    Future<LetterMask> build() => const LetterMaskBuilder().build(
       glyph,
       thicken: _config!.letterThicken,
+      board: shape,
     );
+    var mask = await build();
     // The font may still be loading on the very first board: try again.
     for (var i = 0; i < 5 && mask.insideCount == 0; i++) {
       await Future<void>.delayed(const Duration(milliseconds: 300));
-      mask = await const LetterMaskBuilder().build(
-        glyph,
-        thicken: _config!.letterThicken,
-      );
+      mask = await build();
     }
     if (!mounted || _cubit != cubit) return;
     _board.clear();
-    setState(() => _mask = mask);
-    cubit.boardReady(mask);
+    setState(() {
+      _mask = mask;
+      _shape = shape;
+    });
+    cubit.boardReady(mask, withDemo: withDemo, announce: announce);
+  }
+
+  /// The screen changed shape (turned, or full screen) before the child
+  /// drew anything: build the same letter again for the new board shape.
+  Future<void> _reshape() async {
+    final cubit = _cubit;
+    if (cubit != null && mounted) {
+      await _prepareBoard(
+        cubit.state.form,
+        announce: false,
+        withDemo: cubit.state.phase == WritingPhase.demo,
+      );
+    }
+    _reshaping = false;
   }
 
   @override
@@ -471,65 +503,106 @@ class _WritingPageState extends State<WritingPage> {
     final roster = context.read<CharacterRoster>();
     final rtl = Directionality.of(context) == TextDirection.rtl;
 
-    // Wide screens: the board in the middle, a brother on each side.
-    // Tall screens (phones and tablets held upright): the board takes the
-    // full width and the brothers stand smaller in the bottom corners.
-    // Short screens (phones held sideways): the board takes the full height,
-    // the chalk tray stands beside it and the brothers on the start side.
-    // Full screen: the same, with only the hero, smaller, so the board grows.
+    // Wide screens: the board in the middle, a brother on each side, the
+    // chalk tray under it. Upright screens: a tall board fills the width
+    // and the height down to a strip at the bottom, where the brothers stand
+    // in the corners with a square chalk tray between them. Short screens
+    // (phones held sideways): the board takes the full height, the square
+    // tray stands beside it and the brothers on the start side.
+    // Full screen: the same, with only the hero, smaller, so the board grows
+    // (upright, the tray stands right beside him).
     final full = _fullScreen;
     final portrait = size.width < size.height;
     final short = !portrait && size.height < 520;
     const hudH = 64.0, trayH = 92.0, gap = AppDimens.spaceSm, exitW = 64.0;
-    final trayW = short ? min(size.width * 0.24, 200.0) : 0.0;
-    final charZoneW = short ? size.width * (full ? 0.13 : 0.22) : 0.0;
-    final minCharH = portrait ? size.height * (full ? 0.14 : 0.22) : 0.0;
-    final boardMaxW = portrait
-        ? size.width - gap * 2
-        : short
-        ? size.width - charZoneW - trayW - gap * 4
-        : size.width * (full ? 0.74 : 0.6);
-    final boardMaxH = short
-        ? size.height - hudH - gap * 2
-        : size.height - hudH - trayH - gap * 4 - minCharH;
-    final (design, _) = Chalkboard.layoutFor(
-      config.board == null ? null : config.boardSurface,
-    );
-    final scale = min(boardMaxW / design.width, boardMaxH / design.height);
-    final boardW = design.width * scale;
-    final boardH = design.height * scale;
     const boardTop = hudH + gap;
-    // Measured from the start side (left in English, right in Arabic).
-    final boardStart = short
-        ? charZoneW +
-              gap +
-              (size.width - charZoneW - gap - boardW - gap - trayW) / 2
-        : (size.width - boardW) / 2;
-    double fromStart(double start, double width) =>
-        rtl ? size.width - start - width : start;
-    final boardLeft = fromStart(boardStart, boardW);
-    final trayRect = short
-        ? Rect.fromLTWH(
-            fromStart(boardStart + boardW + gap, trayW),
-            boardTop,
-            trayW,
-            boardH,
-          )
-        : Rect.fromLTWH(0, boardTop + boardH + gap, size.width, trayH);
+    final feetY = size.height - gap;
+    final surface = config.board == null ? null : config.boardSurface;
 
-    // Characters stand on the floor, the hero on the start side.
-    final feetY = size.height - AppDimens.spaceSm;
     double idleW(CharacterController c) =>
         roster.pose(c.character, CharacterAction.idle)?.width ?? 0;
     // In full screen the other brother is away: only the hero is measured.
     final heroW = idleW(_hero), otherW = full ? 0.0 : idleW(_other);
     final ref = roster.referenceHeight;
+
+    // Where the board may go, measured from the start side (left in
+    // English, right in Arabic).
+    final Rect boardArea;
+    final trayW = short ? min(size.width * 0.24, 200.0) : 0.0;
+    final charZoneW = short ? size.width * (full ? 0.13 : 0.22) : 0.0;
+    final stripH = portrait ? size.height * (full ? 0.19 : 0.25) : 0.0;
+    if (portrait) {
+      boardArea = Rect.fromLTRB(
+        gap,
+        boardTop,
+        size.width - gap,
+        feetY - stripH - gap,
+      );
+    } else if (short) {
+      boardArea = Rect.fromLTRB(
+        charZoneW + gap,
+        boardTop,
+        size.width - trayW - gap * 2,
+        size.height - gap,
+      );
+    } else {
+      final w = size.width * (full ? 0.74 : 0.6);
+      boardArea = Rect.fromLTWH(
+        (size.width - w) / 2,
+        boardTop,
+        w,
+        size.height - hudH - trayH - gap * 4,
+      );
+    }
+
+    // Upright, the board grows taller to fill its area. A new shape needs
+    // the letter built again: only done while the board is still clean.
+    final WritingBoard wanted;
+    if (portrait) {
+      final (std, _) = Chalkboard.layoutFor(surface);
+      final s = boardArea.width / std.width;
+      final frameH = std.height - WritingBoard.standardHeight;
+      final h = ((boardArea.height / s - frameH) / 20).floor() * 20.0;
+      wanted = WritingBoard(
+        height: h.clamp(WritingBoard.standardHeight, WritingBoard.maxHeight),
+      );
+    } else {
+      wanted = WritingBoard.standard;
+    }
+    _wantedShape = wanted;
+    if (wanted != _shape &&
+        !_reshaping &&
+        _mask != null &&
+        _board.isEmpty &&
+        (state.phase == WritingPhase.demo ||
+            state.phase == WritingPhase.drawing)) {
+      _reshaping = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) => _reshape());
+    }
+
+    final (design, _) = Chalkboard.layoutFor(surface, _shape);
+    final scale = min(
+      boardArea.width / design.width,
+      boardArea.height / design.height,
+    );
+    final boardW = design.width * scale;
+    final boardH = design.height * scale;
+    final boardY = portrait
+        ? boardArea.top + (boardArea.height - boardH) / 2
+        : boardTop;
+    final boardStart = short
+        ? charZoneW +
+              gap +
+              (size.width - charZoneW - gap - boardW - gap - trayW) / 2
+        : boardArea.left + (boardArea.width - boardW) / 2;
+    double fromStart(double start, double width) =>
+        rtl ? size.width - start - width : start;
+    final boardLeft = fromStart(boardStart, boardW);
+
+    // Characters stand on the floor, the hero on the start side.
     final double charSize;
     if (portrait) {
-      charSize = max(
-        minCharH,
-        min(feetY - trayRect.bottom, size.height * (full ? 0.22 : 0.36)),
-      );
+      charSize = stripH;
     } else if (short) {
       charSize = min(
         size.height * 0.75,
@@ -553,6 +626,30 @@ class _WritingPageState extends State<WritingPage> {
         : short
         ? (gap + heroW * k / 2, gap + (heroW + otherW / 2) * k)
         : ((size.width - boardW) / 4, size.width - (size.width - boardW) / 4);
+
+    // The chalk tray: square beside the board or between the brothers,
+    // a long ledge under the board on wide screens.
+    final squareTray = portrait || short;
+    final Rect trayRect;
+    if (portrait) {
+      final start = gap * 2 + heroW * k;
+      final end = full ? size.width - gap : size.width - gap * 2 - otherW * k;
+      trayRect = Rect.fromLTRB(
+        fromStart(start, end - start),
+        feetY - stripH,
+        fromStart(start, end - start) + end - start,
+        feetY,
+      );
+    } else if (short) {
+      trayRect = Rect.fromLTWH(
+        fromStart(boardStart + boardW + gap, trayW),
+        boardY,
+        trayW,
+        boardH,
+      );
+    } else {
+      trayRect = Rect.fromLTWH(0, boardY + boardH + gap, size.width, trayH);
+    }
 
     Positioned standing(CharacterController c, double startX, bool facesEnd) {
       final idle = roster.pose(c.character, CharacterAction.idle);
@@ -582,11 +679,12 @@ class _WritingPageState extends State<WritingPage> {
         ),
         Positioned(
           left: boardLeft,
-          top: boardTop,
+          top: boardY,
           width: boardW,
           height: boardH,
           child: FittedBox(
             child: Chalkboard(
+              board: _shape,
               controller: _board,
               mask: _mask,
               strokes: _book?.of(_letter.id, state.form) ?? LetterStrokes.none,
@@ -610,7 +708,7 @@ class _WritingPageState extends State<WritingPage> {
         if (_mask == null)
           Positioned(
             left: boardLeft,
-            top: boardTop,
+            top: boardY,
             width: boardW,
             height: boardH,
             child: const Center(child: CircularProgressIndicator()),
@@ -635,10 +733,14 @@ class _WritingPageState extends State<WritingPage> {
         ),
         Positioned.fromRect(
           rect: trayRect,
-          child: Center(
+          child: Align(
+            // In full screen (upright) the tray stands right by the hero.
+            alignment: portrait && full
+                ? AlignmentDirectional.centerStart
+                : Alignment.center,
             child: FittedBox(
               child: ChalkTray(
-                vertical: short,
+                vertical: squareTray,
                 colorIndex: _colorIndex,
                 sizeIndex: _sizeIndex,
                 sizes: config.chalkSizes,

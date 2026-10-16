@@ -11,7 +11,7 @@ import 'package:nonofofo/features/games/writing/presentation/writing_cubit.dart'
 LetterMask _mask() {
   final (cols, rows) = LetterMask.gridFor(
     WritingBoard.width,
-    WritingBoard.height,
+    WritingBoard.standardHeight,
     WritingBoard.cell,
   );
   final cells = Uint8List(cols * rows);

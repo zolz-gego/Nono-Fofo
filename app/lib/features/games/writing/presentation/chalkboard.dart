@@ -169,29 +169,44 @@ class Chalkboard extends StatefulWidget {
     this.art,
     this.artSurface,
     this.erasing = false,
+    this.board = WritingBoard.standard,
   });
 
   /// Frame thickness of the code-drawn board.
   static const double frame = 30;
 
   /// The whole board's size (frame included) and where the chalk surface
-  /// ([WritingBoard.size]) sits in it. With a painted board, [artSurface]
-  /// says where its green is (fractions of the picture) and the picture is
-  /// stretched so that green lands exactly under the surface.
-  static (Size, Offset) layoutFor(Rect? artSurface) {
+  /// ([board]'s size) sits in it. With a painted board, [artSurface] says
+  /// where its green is (fractions of the picture) and the picture is
+  /// stretched so that green lands exactly under a standard surface; a
+  /// taller board keeps the same frame and only grows its sides.
+  static (Size, Offset) layoutFor(
+    Rect? artSurface, [
+    WritingBoard board = WritingBoard.standard,
+  ]) {
     if (artSurface == null || artSurface.width <= 0 || artSurface.height <= 0) {
       return (
-        const Size(
-          WritingBoard.width + frame * 2,
-          WritingBoard.height + frame * 2,
-        ),
+        Size(WritingBoard.width + frame * 2, board.height + frame * 2),
         const Offset(frame, frame),
       );
     }
-    final w = WritingBoard.width / artSurface.width;
-    final h = WritingBoard.height / artSurface.height;
-    return (Size(w, h), Offset(artSurface.left * w, artSurface.top * h));
+    final art = _artSize(artSurface);
+    final top = artSurface.top * art.height;
+    final bottom = (1 - artSurface.bottom) * art.height;
+    return (
+      Size(art.width, top + board.height + bottom),
+      Offset(artSurface.left * art.width, top),
+    );
   }
+
+  /// The painted board's size around a standard surface.
+  static Size _artSize(Rect artSurface) => Size(
+    WritingBoard.width / artSurface.width,
+    WritingBoard.standardHeight / artSurface.height,
+  );
+
+  /// The chalk surface's shape.
+  final WritingBoard board;
 
   final ChalkboardController controller;
   final LetterMask? mask;
@@ -331,9 +346,9 @@ class _ChalkboardState extends State<Chalkboard> with TickerProviderStateMixin {
   // Drawing
   // ---------------------------------------------------------------------------
 
-  static Offset _clamp(Offset p) => Offset(
+  Offset _clamp(Offset p) => Offset(
     p.dx.clamp(0, WritingBoard.width),
-    p.dy.clamp(0, WritingBoard.height),
+    p.dy.clamp(0, widget.board.height),
   );
 
   void _down(PointerDownEvent e) {
@@ -394,7 +409,7 @@ class _ChalkboardState extends State<Chalkboard> with TickerProviderStateMixin {
         widget.phase == WritingPhase.boardPassed ||
         widget.phase == WritingPhase.passed;
     final surface = SizedBox.fromSize(
-      size: WritingBoard.size,
+      size: widget.board.size,
       child: Listener(
         behavior: HitTestBehavior.opaque,
         onPointerDown: _down,
@@ -467,6 +482,7 @@ class _ChalkboardState extends State<Chalkboard> with TickerProviderStateMixin {
 
     final (size, offset) = Chalkboard.layoutFor(
       widget.art == null ? null : widget.artSurface,
+      widget.board,
     );
     return SizedBox.fromSize(
       size: size,
@@ -475,11 +491,9 @@ class _ChalkboardState extends State<Chalkboard> with TickerProviderStateMixin {
           Positioned.fill(
             child: widget.art == null
                 ? const CustomPaint(painter: _FramePainter())
-                : Image(
+                : _PaintedFrame(
                     image: widget.art!,
-                    fit: BoxFit.fill,
-                    errorBuilder: (_, _, _) =>
-                        const CustomPaint(painter: _FramePainter()),
+                    standard: Chalkboard._artSize(widget.artSurface!),
                   ),
           ),
           Positioned(
@@ -567,6 +581,64 @@ class _SurfacePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_SurfacePainter old) => false;
+}
+
+/// The painted board picture. At its [standard] size it is simply
+/// stretched to fit; when the board is taller, the top and bottom halves
+/// keep their size and a thin row from the middle (the plain wooden sides)
+/// is stretched to fill the gap.
+class _PaintedFrame extends StatelessWidget {
+  const _PaintedFrame({required this.image, required this.standard});
+
+  final ImageProvider image;
+  final Size standard;
+
+  @override
+  Widget build(BuildContext context) {
+    final picture = Image(
+      image: image,
+      width: standard.width,
+      height: standard.height,
+      fit: BoxFit.fill,
+      errorBuilder: (_, _, _) => const CustomPaint(painter: _FramePainter()),
+    );
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final gap = constraints.maxHeight - standard.height;
+        if (gap < 1) return SizedBox.expand(child: picture);
+        final half = standard.height / 2;
+        // Rows [from, from + h) of the picture at its standard size.
+        Widget rows(double from, double h) => ClipRect(
+          child: SizedBox(
+            width: standard.width,
+            height: h,
+            child: OverflowBox(
+              alignment: Alignment.topLeft,
+              minWidth: standard.width,
+              maxWidth: standard.width,
+              minHeight: standard.height,
+              maxHeight: standard.height,
+              child: Transform.translate(
+                offset: Offset(0, -from),
+                child: picture,
+              ),
+            ),
+          ),
+        );
+        return Column(
+          children: [
+            rows(0, half),
+            SizedBox(
+              width: standard.width,
+              height: gap,
+              child: FittedBox(fit: BoxFit.fill, child: rows(half - 1, 2)),
+            ),
+            rows(half, half),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class _FramePainter extends CustomPainter {
@@ -662,10 +734,12 @@ class _ChalkPainter extends CustomPainter {
 
   static final Float32List _grain = () {
     final r = math.Random(7);
+    const maxH = WritingBoard.maxHeight;
     return Float32List.fromList([
-      for (var i = 0; i < 9000; i++) ...[
+      // As dense as 9000 points on a standard board, up to the tallest.
+      for (var i = 0; i < 9000 * maxH / WritingBoard.standardHeight; i++) ...[
         r.nextDouble() * WritingBoard.width,
-        r.nextDouble() * WritingBoard.height,
+        r.nextDouble() * maxH,
       ],
     ]);
   }();
@@ -843,7 +917,8 @@ class _SpongePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    const rows = 3;
+    // Three passes on a standard board, more on a taller one.
+    final rows = math.max(3, (size.height / 157).round());
     final row = math.min(rows - 1, (t * rows).floor());
     final local = t * rows - row;
     final leftToRight = row.isEven;

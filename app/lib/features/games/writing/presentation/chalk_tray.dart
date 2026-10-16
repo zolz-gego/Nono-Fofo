@@ -7,8 +7,9 @@ import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_icons.dart';
 
 /// The wooden ledge under the board: pick a chalk colour (two rows of
-/// sticks), the eraser, and the thickness. [vertical] stacks it into a
-/// narrow column, for standing beside the board on short screens.
+/// sticks), the eraser, and the thickness. [vertical] packs it into a
+/// square (thickness and eraser on top, the colours in a grid below), for
+/// small screens.
 class ChalkTray extends StatelessWidget {
   const ChalkTray({
     super.key,
@@ -101,9 +102,10 @@ class ChalkTray extends StatelessWidget {
             ? Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(mainAxisSize: MainAxisSize.min, children: sizeDots),
-                  const _Divider(horizontal: true),
-                  eraser,
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [...sizeDots, const _Divider(), eraser],
+                  ),
                   const _Divider(horizontal: true),
                   sticks,
                 ],
@@ -130,7 +132,7 @@ class _Divider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    width: horizontal ? 48 : 2,
+    width: horizontal ? 160 : 2,
     height: horizontal ? 2 : 48,
     margin: horizontal
         ? const EdgeInsets.symmetric(vertical: AppDimens.spaceXs)
