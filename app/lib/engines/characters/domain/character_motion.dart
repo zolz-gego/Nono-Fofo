@@ -41,34 +41,51 @@ abstract final class CharacterMotions {
   static const _tau = 2 * math.pi;
 
   static MotionSpec of(CharacterAction action) => switch (action) {
-        CharacterAction.idle ||
-        CharacterAction.fish ||
-        CharacterAction.reel =>
-          breathe,
-        CharacterAction.run => const MotionSpec(
-            Duration(milliseconds: 420), _run),
-        CharacterAction.cheer => const MotionSpec(
-            Duration(milliseconds: 700), _cheer),
-        CharacterAction.celebrate => const MotionSpec(
-            Duration(milliseconds: 900), _celebrate),
-        CharacterAction.wrong => const MotionSpec(
-            Duration(milliseconds: 650), _shake,
-            loop: false),
-        CharacterAction.surprised => const MotionSpec(
-            Duration(milliseconds: 500), _pop,
-            loop: false),
-        CharacterAction.hint => const MotionSpec(
-            Duration(milliseconds: 2200), _ponder),
-        CharacterAction.encourage => const MotionSpec(
-            Duration(milliseconds: 1000), _nod),
-        CharacterAction.wave => const MotionSpec(
-            Duration(milliseconds: 1100), _rock),
-        CharacterAction.write ||
-        CharacterAction.read =>
-          const MotionSpec(Duration(milliseconds: 2400), _sway),
-        CharacterAction.sleep => const MotionSpec(
-            Duration(milliseconds: 3400), _sleep),
-      };
+    CharacterAction.idle ||
+    CharacterAction.fish ||
+    CharacterAction.reel ||
+    CharacterAction.jump ||
+    CharacterAction.hold => breathe,
+    CharacterAction.run => const MotionSpec(Duration(milliseconds: 420), _run),
+    CharacterAction.cheer => const MotionSpec(
+      Duration(milliseconds: 700),
+      _cheer,
+    ),
+    CharacterAction.celebrate => const MotionSpec(
+      Duration(milliseconds: 900),
+      _celebrate,
+    ),
+    CharacterAction.wrong => const MotionSpec(
+      Duration(milliseconds: 650),
+      _shake,
+      loop: false,
+    ),
+    CharacterAction.surprised => const MotionSpec(
+      Duration(milliseconds: 500),
+      _pop,
+      loop: false,
+    ),
+    CharacterAction.hint => const MotionSpec(
+      Duration(milliseconds: 2200),
+      _ponder,
+    ),
+    CharacterAction.encourage => const MotionSpec(
+      Duration(milliseconds: 1000),
+      _nod,
+    ),
+    CharacterAction.wave => const MotionSpec(
+      Duration(milliseconds: 1100),
+      _rock,
+    ),
+    CharacterAction.write || CharacterAction.read => const MotionSpec(
+      Duration(milliseconds: 2400),
+      _sway,
+    ),
+    CharacterAction.sleep => const MotionSpec(
+      Duration(milliseconds: 3400),
+      _sleep,
+    ),
+  };
 
   /// Gentle breathing, also used after one-shot motions finish.
   static const breathe = MotionSpec(Duration(milliseconds: 2400), _breathe);
@@ -90,7 +107,11 @@ abstract final class CharacterMotions {
   static MotionFrame _jump(double t, double height) {
     final air = math.sin(t * math.pi);
     final squash = math.pow(1 - air, 4) * 0.07;
-    return MotionFrame(dy: -height * air, scaleY: 1 - squash, scaleX: 1 + squash);
+    return MotionFrame(
+      dy: -height * air,
+      scaleY: 1 - squash,
+      scaleX: 1 + squash,
+    );
   }
 
   static MotionFrame _cheer(double t) => _jump(t, 0.07);
@@ -106,13 +127,17 @@ abstract final class CharacterMotions {
   }
 
   static MotionFrame _shake(double t) => MotionFrame(
-        dx: 0.025 * math.sin(t * 3 * _tau) * (1 - t),
-        scaleY: 1 - 0.03 * math.sin(t * math.pi),
-      );
+    dx: 0.025 * math.sin(t * 3 * _tau) * (1 - t),
+    scaleY: 1 - 0.03 * math.sin(t * math.pi),
+  );
 
   static MotionFrame _pop(double t) {
     final p = math.sin(t * math.pi);
-    return MotionFrame(dy: -0.04 * p, scaleX: 1 + 0.08 * p, scaleY: 1 + 0.1 * p);
+    return MotionFrame(
+      dy: -0.04 * p,
+      scaleX: 1 + 0.08 * p,
+      scaleY: 1 + 0.1 * p,
+    );
   }
 
   static MotionFrame _ponder(double t) =>
@@ -127,9 +152,9 @@ abstract final class CharacterMotions {
       MotionFrame(rotation: 0.035 * math.sin(t * _tau));
 
   static MotionFrame _sway(double t) => MotionFrame(
-        rotation: 0.015 * math.sin(t * _tau),
-        scaleY: 1 + 0.008 * math.sin(t * 2 * _tau),
-      );
+    rotation: 0.015 * math.sin(t * _tau),
+    scaleY: 1 + 0.008 * math.sin(t * 2 * _tau),
+  );
 
   static MotionFrame _sleep(double t) {
     final s = math.sin(t * _tau);

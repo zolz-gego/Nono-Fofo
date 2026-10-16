@@ -25,17 +25,25 @@ abstract final class AppTextStyles {
     AppTextVariant.h2: _Spec(size: 28, weight: FontWeight.w700, height: 1.25),
     AppTextVariant.h3: _Spec(size: 22, weight: FontWeight.w700, height: 1.3),
     AppTextVariant.body: _Spec(size: 18, weight: FontWeight.w500, height: 1.5),
-    AppTextVariant.bodySmall:
-        _Spec(size: 15, weight: FontWeight.w500, height: 1.45),
-    AppTextVariant.caption:
-        _Spec(size: 13, weight: FontWeight.w600, height: 1.4),
+    AppTextVariant.bodySmall: _Spec(
+      size: 15,
+      weight: FontWeight.w500,
+      height: 1.45,
+    ),
+    AppTextVariant.caption: _Spec(
+      size: 13,
+      weight: FontWeight.w600,
+      height: 1.4,
+    ),
   };
 
   /// Avva Shenouda glyphs look small next to Baloo at the same size.
   static const double _copticScale = 1.25;
 
   static bool isHeader(AppTextVariant v) =>
-      v == AppTextVariant.h1 || v == AppTextVariant.h2 || v == AppTextVariant.h3;
+      v == AppTextVariant.h1 ||
+      v == AppTextVariant.h2 ||
+      v == AppTextVariant.h3;
 
   static TextStyle of(AppScript script, AppTextVariant variant) {
     final spec = _specs[variant]!;
@@ -55,8 +63,9 @@ abstract final class AppTextStyles {
       // Baloo fonts are variable fonts; set the axis too so every renderer
       // (web/CanvasKit included) picks up the weight.
       fontWeight: isCoptic ? FontWeight.normal : spec.weight,
-      fontVariations:
-          isCoptic ? null : [FontVariation.weight(spec.weight.value.toDouble())],
+      fontVariations: isCoptic
+          ? null
+          : [FontVariation.weight(spec.weight.value.toDouble())],
       height: spec.height,
       color: color,
     );

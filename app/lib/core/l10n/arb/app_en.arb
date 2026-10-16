@@ -69,7 +69,7 @@
   "gamesComingSoon": "This level's games are coming soon.",
   "gameFishing": "Fish catch",
   "gameWriteLetter": "Write the letter",
-  "gameBalloons": "Pop the balloon",
+  "gameBalloons": "Catch the balloon",
   "gameChallenge": "Challenge {opponent}",
   "pickLetter": "Pick the letter you'll catch!",
   "randomLetter": "Pick one for me",
@@ -87,5 +87,9 @@
   "fishingStars1": "You did it! Play again for more stars",
   "newBest": "New best!",
   "playAgain": "Play again",
-  "otherLetter": "Another letter"
+  "otherLetter": "Another letter",
+  "balloonsPickLetter": "Pick the letter you'll catch!",
+  "balloonsCatch": "Bring",
+  "balloonsStart": "Come on, {name}! Bring me the {letter} balloon",
+  "balloonsMissed": "The {target} balloon floated away! Keep an eye out"
 }

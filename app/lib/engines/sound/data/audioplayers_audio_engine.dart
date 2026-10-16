@@ -56,8 +56,11 @@ class AudioplayersAudioEngine implements AudioEngine {
   }
 
   @override
-  Future<void> playMusic(String assetPath,
-      {double volume = 1, bool loop = true}) async {
+  Future<void> playMusic(
+    String assetPath, {
+    double volume = 1,
+    bool loop = true,
+  }) async {
     if (_currentMusic == assetPath && _music.state == PlayerState.playing) {
       return setMusicVolume(volume);
     }
@@ -86,14 +89,14 @@ class AudioplayersAudioEngine implements AudioEngine {
 
   @override
   Future<void> pauseAll() => _guard(() async {
-        await _music.pause();
-        await _voice.pause();
-      });
+    await _music.pause();
+    await _voice.pause();
+  });
 
   @override
   Future<void> resumeAll() => _guard(() async {
-        if (_currentMusic != null) await _music.resume();
-      });
+    if (_currentMusic != null) await _music.resume();
+  });
 
   @override
   Future<void> dispose() async {
@@ -103,8 +106,11 @@ class AudioplayersAudioEngine implements AudioEngine {
     _effects.clear();
   }
 
-  Future<void> _fade(double from, double to,
-      {Duration duration = const Duration(milliseconds: 400)}) async {
+  Future<void> _fade(
+    double from,
+    double to, {
+    Duration duration = const Duration(milliseconds: 400),
+  }) async {
     const steps = 8;
     for (var i = 1; i <= steps; i++) {
       await _music.setVolume(from + (to - from) * i / steps);

@@ -1,5 +1,7 @@
 import 'dart:ui' show Offset;
 
+import '../../letter_hunt/domain/letter_hunt_rules.dart';
+
 /// Where the letter goes on a painted fish image, as fractions of the image:
 /// center ([center].dx of the width, [center].dy of the height) and the
 /// letter size (of the height).
@@ -51,7 +53,7 @@ enum SwimDirection { ltr, rtl, both }
 
 /// Settings from `assets/content/games/fishing.json`. Defaults here are only
 /// used for keys missing from the file.
-class FishingConfig {
+class FishingConfig implements LetterHuntRules {
   const FishingConfig({
     this.catchesToWin = 5,
     this.maxDifferentLetters = 7,
@@ -114,13 +116,17 @@ class FishingConfig {
     );
   }
 
+  @override
   final int catchesToWin;
+  @override
   final int maxDifferentLetters;
+  @override
   final double targetChance;
   final int maxFishOnScreen;
   final double spawnEverySeconds;
   final double swimSeconds;
   final SwimDirection swimDirection;
+  @override
   final bool countMissedAsMistake;
   final int threeStarsMaxMistakes;
   final int twoStarsMaxMistakes;
@@ -129,9 +135,10 @@ class FishingConfig {
   final String? background;
   final BackgroundMarks backgroundMarks;
 
-  int starsFor(int mistakes) {
-    if (mistakes <= threeStarsMaxMistakes) return 3;
-    if (mistakes <= twoStarsMaxMistakes) return 2;
-    return 1;
-  }
+  @override
+  int starsFor(int mistakes) => starsForMistakes(
+    mistakes,
+    threeStarsMax: threeStarsMaxMistakes,
+    twoStarsMax: twoStarsMaxMistakes,
+  );
 }

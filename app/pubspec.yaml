@@ -87,6 +87,7 @@ flutter:
     - assets/content/questions/
     - assets/games/
     - assets/games/fishing/
+    - assets/games/balloons/
 
   fonts:
     - family: BalooBhaijaan2

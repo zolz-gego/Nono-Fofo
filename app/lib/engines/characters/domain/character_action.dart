@@ -19,4 +19,10 @@ enum CharacterAction {
 
   /// Pulling the rod up, excited (fishing game).
   reel,
+
+  /// Jumping with one fist up, grabbing a balloon string (balloons game).
+  jump,
+
+  /// Standing with one fist up, holding balloon strings (balloons game).
+  hold,
 }

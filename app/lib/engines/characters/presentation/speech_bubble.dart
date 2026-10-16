@@ -33,44 +33,49 @@ class SpeechBubble extends StatelessWidget {
       child: text == null
           ? const SizedBox.shrink()
           : Column(
-              key: ValueKey(text),
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  constraints: BoxConstraints(maxWidth: maxWidth),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: AppDimens.spaceMd,
-                      vertical: AppDimens.spaceSm),
-                  decoration: BoxDecoration(
-                    color: AppColors.speechBubble,
-                    borderRadius: BorderRadius.circular(AppDimens.radiusMd),
-                    border: Border.all(
-                        color: AppColors.speechBubbleBorder, width: 2),
-                    boxShadow: [
-                      BoxShadow(
-                          color: AppColors.shadow,
-                          blurRadius: 6,
-                          offset: const Offset(0, 3)),
-                    ],
-                  ),
-                  child: richText == null
-                      ? AppText.body(text!, textAlign: TextAlign.center)
-                      : Text.rich(richText!, textAlign: TextAlign.center),
-                ),
-                if (showTail)
-                  CustomPaint(
-                    size: const Size(18, 10),
-                    painter: _TailPainter(),
-                  ),
-              ],
-            )
-              .animate()
-              .scale(
+                  key: ValueKey(text),
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      constraints: BoxConstraints(maxWidth: maxWidth),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppDimens.spaceMd,
+                        vertical: AppDimens.spaceSm,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.speechBubble,
+                        borderRadius: BorderRadius.circular(AppDimens.radiusMd),
+                        border: Border.all(
+                          color: AppColors.speechBubbleBorder,
+                          width: 2,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.shadow,
+                            blurRadius: 6,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: richText == null
+                          ? AppText.body(text!, textAlign: TextAlign.center)
+                          : Text.rich(richText!, textAlign: TextAlign.center),
+                    ),
+                    if (showTail)
+                      CustomPaint(
+                        size: const Size(18, 10),
+                        painter: _TailPainter(),
+                      ),
+                  ],
+                )
+                .animate()
+                .scale(
                   begin: const Offset(0.6, 0.6),
                   alignment: Alignment.bottomCenter,
                   curve: Curves.easeOutBack,
-                  duration: AppDimens.normal)
-              .fadeIn(duration: AppDimens.fast),
+                  duration: AppDimens.normal,
+                )
+                .fadeIn(duration: AppDimens.fast),
     );
   }
 }

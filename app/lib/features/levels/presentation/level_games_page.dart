@@ -76,9 +76,14 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
 
   void _arrived() {
     final game = LevelGame.of(widget.setup.level)[_at];
-    if (game == LevelGame.fishing) {
+    final route = switch (game) {
+      LevelGame.fishing => AppRoutes.fishing,
+      LevelGame.balloons => AppRoutes.balloons,
+      _ => null,
+    };
+    if (route != null) {
       _buddy.play(CharacterAction.cheer, hold: const Duration(seconds: 1));
-      context.push(AppRoutes.fishing, extra: widget.setup);
+      context.push(route, extra: widget.setup);
       return;
     }
     _buddy

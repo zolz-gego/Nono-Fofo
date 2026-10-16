@@ -40,6 +40,18 @@ Catch the fish that carry the letter you're looking for.
 
 ![Fishing game](screenshots/06-fishing.jpg)
 
+### Balloons: pick a letter
+
+![Balloons letter picker](screenshots/08-balloons-letters.jpg)
+
+### Catch the balloon in the village
+
+Tap a balloon with your letter: your buddy jumps for its string and hands it to his brother, who holds the bunch.
+
+![Balloons game](screenshots/09-balloons.jpg)
+
+![Balloons game in English](screenshots/10-balloons-english.jpg)
+
 ## For developers
 
 The Flutter app lives in [`app/`](app/). See [`app/README.md`](app/README.md) to run it.

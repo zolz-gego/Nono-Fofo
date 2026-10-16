@@ -9,7 +9,7 @@ import 'package:nonofofo/features/questions/domain/question.dart';
 
 class _PickLetter extends Question {
   const _PickLetter({required super.id, required this.letter})
-      : super(type: 'pick_letter');
+    : super(type: 'pick_letter');
   final String letter;
 }
 
@@ -29,8 +29,11 @@ class _FakeLoader extends JsonAssetLoader {
 void main() {
   test('each JSON file becomes a typed set; unknown types stay raw', () async {
     final registry = QuestionParserRegistry()
-      ..register('pick_letter',
-          (j) => _PickLetter(id: j['id'] as String, letter: j['letter'] as String));
+      ..register(
+        'pick_letter',
+        (j) =>
+            _PickLetter(id: j['id'] as String, letter: j['letter'] as String),
+      );
     final repo = QuestionRepositoryImpl(
       _FakeLoader({
         'assets/content/questions/pick_letter.json': {
