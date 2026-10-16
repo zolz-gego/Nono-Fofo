@@ -6,11 +6,25 @@ import '../../../core/theme/app_dimens.dart';
 import '../../../core/widgets/text/app_texts.dart';
 
 /// Comic speech bubble shown above a character. Animates in and out.
+///
+/// For mixed scripts (e.g. Arabic with a Coptic letter inside) pass
+/// [richText]; [text] then only identifies the message for the animation.
 class SpeechBubble extends StatelessWidget {
-  const SpeechBubble({super.key, required this.text, this.maxWidth = 220});
+  const SpeechBubble({
+    super.key,
+    required this.text,
+    this.richText,
+    this.maxWidth = 220,
+    this.showTail = true,
+  });
 
   final String? text;
+  final InlineSpan? richText;
   final double maxWidth;
+
+  /// The little point toward the speaker, under the bubble. Turn it off
+  /// when the bubble sits beside the speaker instead of above.
+  final bool showTail;
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +53,15 @@ class SpeechBubble extends StatelessWidget {
                           offset: const Offset(0, 3)),
                     ],
                   ),
-                  child: AppText.body(text!, textAlign: TextAlign.center),
+                  child: richText == null
+                      ? AppText.body(text!, textAlign: TextAlign.center)
+                      : Text.rich(richText!, textAlign: TextAlign.center),
                 ),
-                CustomPaint(
-                  size: const Size(18, 10),
-                  painter: _TailPainter(),
-                ),
+                if (showTail)
+                  CustomPaint(
+                    size: const Size(18, 10),
+                    painter: _TailPainter(),
+                  ),
               ],
             )
               .animate()

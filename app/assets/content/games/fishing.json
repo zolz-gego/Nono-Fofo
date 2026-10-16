@@ -1,0 +1,40 @@
+{
+  "_readme": "Settings for the fishing game. Change numbers here; no code change needed. catchesToWin: correct fish needed to finish. maxDifferentLetters: how many different letters swim in one game (the target included). targetChance: 0..1, how often a new fish carries the target letter. swimSeconds: how long a fish takes to cross the screen (bigger = slower). swimDirection: 'ltr' (left to right), 'rtl', or 'both' (lanes alternate). Stars: a mistake is a wrong catch, or (if countMissedAsMistake) a target fish that swam away. 0..threeStarsMaxMistakes = 3 stars, up to twoStarsMaxMistakes = 2 stars, more = 1 star. fishImages: painted fish (facing right), made by tools/games/process_fishing.py; when empty the fish are drawn in code. fishLetterSpot: where the letter goes on those images (center x/y and size, as fractions of the image; the script prints it). background: the Nile picture (drawn in code when missing). backgroundMarks: where things are in that picture, as fractions of its height (y) or width (x): top of the underwater part, top of the grassy banks, middle of each bank, right edge of the left bank, top of the sand.",
+  "version": 1,
+  "catchesToWin": 5,
+  "maxDifferentLetters": 7,
+  "targetChance": 0.35,
+  "maxFishOnScreen": 6,
+  "spawnEverySeconds": 1.4,
+  "swimSeconds": 14,
+  "swimDirection": "ltr",
+  "countMissedAsMistake": true,
+  "stars": {
+    "threeStarsMaxMistakes": 0,
+    "twoStarsMaxMistakes": 2
+  },
+  "fishImages": [
+    "assets/games/fishing/fish_orange.png",
+    "assets/games/fishing/fish_coral.png",
+    "assets/games/fishing/fish_yellow.png",
+    "assets/games/fishing/fish_green.png",
+    "assets/games/fishing/fish_mint.png",
+    "assets/games/fishing/fish_blue.png",
+    "assets/games/fishing/fish_lilac.png",
+    "assets/games/fishing/fish_pink.png"
+  ],
+  "background": "assets/games/fishing/nile.webp",
+  "fishLetterSpot": {
+    "x": 0.543,
+    "y": 0.496,
+    "size": 0.441
+  },
+  "backgroundMarks": {
+    "waterTop": 0.42,
+    "bankTop": 0.327,
+    "leftBankX": 0.08,
+    "rightBankX": 0.92,
+    "leftBankEdge": 0.165,
+    "bedTop": 0.87
+  }
+}

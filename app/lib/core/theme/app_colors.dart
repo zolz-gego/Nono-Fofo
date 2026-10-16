@@ -61,6 +61,40 @@ abstract final class AppColors {
   static Color shadow = ink.withValues(alpha: 0.18);
   static Color scrim = ink.withValues(alpha: 0.45);
 
+  // ---------------------------------------------------------------------------
+  // Fishing game (the Nile scene)
+  // ---------------------------------------------------------------------------
+  static const Color skyTop = Color(0xFF8FD0E0);
+  static const Color skyBottom = Color(0xFFE8F4EE);
+  static const Color sunGlow = Color(0x55FFC845);
+  static const Color farBank = Color(0xFFB9C98A);
+  static const Color palmTrunk = Color(0xFF8A6B4E);
+  static const Color palmLeaf = Color(0xFF5E9E45);
+  static const Color waterTop = Color(0xFF6FC3D0);
+  static const Color waterDeep = deepTeal;
+  static const Color waterShine = Color(0x99FFFFFF);
+  static const Color riverBed = Color(0xFFC9B48E);
+  static const Color pebble = Color(0xFFA48F6E);
+  static const Color reed = Color(0xFF4E9A5A);
+  static const Color bankEarth = Color(0xFFB08A5E);
+  static const Color rod = cocoa;
+  static const Color rodHandle = Color(0xFF3E3227);
+  static const Color fishingLine = Color(0xFF3E3227);
+  static const Color bobberTop = coral;
+  static const Color bobberBottom = white;
+
+  /// Fish body colors (bright and different from each other).
+  static const List<Color> fish = [
+    coral,
+    sunYellow,
+    leafGreen,
+    Color(0xFFB57EDC), // lilac
+    Color(0xFFFF9FC4), // pink
+    Color(0xFFFF9F43), // orange
+    Color(0xFF5EC8E5), // sky blue
+    Color(0xFF3FBFA0), // mint
+  ];
+
   /// Confetti / celebration colors.
   static const List<Color> celebration = [
     sunYellow,

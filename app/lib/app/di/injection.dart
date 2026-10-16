@@ -11,6 +11,11 @@ import '../../engines/sound/data/audioplayers_audio_engine.dart';
 import '../../engines/sound/data/sound_repository_impl.dart';
 import '../../engines/sound/domain/audio_engine.dart';
 import '../../engines/sound/domain/sound_repository.dart';
+import '../../features/games/fishing/data/fishing_config_repository.dart';
+import '../../features/games/progress/data/game_progress_repository_impl.dart';
+import '../../features/games/progress/domain/game_progress_repository.dart';
+import '../../features/letters/data/letter_repository_impl.dart';
+import '../../features/letters/domain/letter_repository.dart';
 import '../../features/questions/data/question_parser_registry.dart';
 import '../../features/questions/data/question_repository_impl.dart';
 import '../../features/questions/domain/load_questions.dart';
@@ -48,6 +53,12 @@ Future<void> configureDependencies() async {
   sl.registerLazySingleton<QuestionRepository>(
       () => QuestionRepositoryImpl(sl(), sl()));
   sl.registerFactory(() => LoadQuestions(sl()));
+
+  // Letters & games
+  sl.registerLazySingleton<LetterRepository>(() => LetterRepositoryImpl(sl()));
+  sl.registerLazySingleton<GameProgressRepository>(
+      () => GameProgressRepositoryImpl(sl()));
+  sl.registerLazySingleton(() => FishingConfigRepository(sl()));
 
   // Warm up engines before the first frame.
   await sl<SoundService>().init();

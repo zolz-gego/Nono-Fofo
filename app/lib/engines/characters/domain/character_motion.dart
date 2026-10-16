@@ -41,7 +41,10 @@ abstract final class CharacterMotions {
   static const _tau = 2 * math.pi;
 
   static MotionSpec of(CharacterAction action) => switch (action) {
-        CharacterAction.idle => breathe,
+        CharacterAction.idle ||
+        CharacterAction.fish ||
+        CharacterAction.reel =>
+          breathe,
         CharacterAction.run => const MotionSpec(
             Duration(milliseconds: 420), _run),
         CharacterAction.cheer => const MotionSpec(

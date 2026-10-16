@@ -2,6 +2,8 @@ import 'package:go_router/go_router.dart';
 
 import '../features/about/presentation/about_page.dart';
 import '../features/home/presentation/home_page.dart';
+import '../features/games/fishing/presentation/fishing_letter_page.dart';
+import '../features/games/fishing/presentation/fishing_page.dart';
 import '../features/levels/domain/game_level.dart';
 import '../features/levels/presentation/level_games_page.dart';
 
@@ -12,6 +14,11 @@ abstract final class AppRoutes {
   /// A level's games. Needs the [PlayerSetup] as `extra`; without it
   /// (e.g. after a browser refresh) it goes back home.
   static const level = '/level';
+
+  /// Fishing: pick a letter (extra: [PlayerSetup]), then play
+  /// (extra: [FishingArgs]).
+  static const fishing = '/level/fishing';
+  static const fishingPlay = '/level/fishing/play';
 }
 
 final GoRouter appRouter = GoRouter(
@@ -31,6 +38,20 @@ final GoRouter appRouter = GoRouter(
           state.extra is PlayerSetup ? null : AppRoutes.home,
       builder: (context, state) =>
           LevelGamesPage(setup: state.extra! as PlayerSetup),
+    ),
+    GoRoute(
+      path: AppRoutes.fishing,
+      redirect: (context, state) =>
+          state.extra is PlayerSetup ? null : AppRoutes.home,
+      builder: (context, state) =>
+          FishingLetterPage(setup: state.extra! as PlayerSetup),
+    ),
+    GoRoute(
+      path: AppRoutes.fishingPlay,
+      redirect: (context, state) =>
+          state.extra is FishingArgs ? null : AppRoutes.home,
+      builder: (context, state) =>
+          FishingPage(args: state.extra! as FishingArgs),
     ),
   ],
 );

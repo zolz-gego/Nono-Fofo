@@ -1,0 +1,23 @@
+{
+  "_readme": "Coptic letters used by the games. 'small' and 'capital' are typed with the Avva Shenouda keyboard (the font maps Latin keys to Coptic glyphs), e.g. 'a' = small alpha, 'A' = capital alpha, '3' = small eta. 'levels' lists the letter ids each level uses, in order. To add a letter: add it to 'letters', then put its id in a level.",
+  "version": 1,
+  "letters": [
+    { "id": "alpha", "small": "a", "capital": "A", "name": { "ar": "الفا", "en": "Alpha" } },
+    { "id": "vida", "small": "b", "capital": "B", "name": { "ar": "بيتا", "en": "Vida" } },
+    { "id": "ei", "small": "e", "capital": "E", "name": { "ar": "اي", "en": "Ei" } },
+    { "id": "zita", "small": "z", "capital": "Z", "name": { "ar": "زيتا", "en": "Zita" } },
+    { "id": "ita", "small": "3", "capital": "#", "name": { "ar": "ايتا", "en": "Ita" } },
+    { "id": "iota", "small": "i", "capital": "I", "name": { "ar": "يوتا", "en": "Iota" } },
+    { "id": "kappa", "small": "k", "capital": "K", "name": { "ar": "كبا", "en": "Kappa" } },
+    { "id": "lola", "small": "l", "capital": "L", "name": { "ar": "لولا", "en": "Lola" } },
+    { "id": "mi", "small": "m", "capital": "M", "name": { "ar": "مي", "en": "Mi" } },
+    { "id": "ni", "small": "n", "capital": "N", "name": { "ar": "ني", "en": "Ni" } },
+    { "id": "o", "small": "o", "capital": "O", "name": { "ar": "او", "en": "O" } },
+    { "id": "sima", "small": "c", "capital": "C", "name": { "ar": "سيما", "en": "Sima" } },
+    { "id": "tav", "small": "t", "capital": "T", "name": { "ar": "تاف", "en": "Tav" } },
+    { "id": "omega", "small": "w", "capital": "W", "name": { "ar": "اوميجا", "en": "Omega" } }
+  ],
+  "levels": {
+    "1": ["alpha", "vida", "ei", "zita", "ita", "iota", "kappa", "lola", "mi", "ni", "o", "sima", "tav", "omega"]
+  }
+}

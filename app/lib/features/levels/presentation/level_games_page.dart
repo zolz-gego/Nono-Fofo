@@ -22,8 +22,9 @@ import '../domain/game_level.dart';
 import '../domain/level_game.dart';
 import 'game_road.dart';
 
-/// A level's games on a winding road, with the child's buddy at the bottom.
-/// The games themselves come later; tapping one only says so for now.
+/// A level's games on a winding road, with the child's buddy walking it.
+/// Tapping a game sends the buddy there, then opens it (games not built yet
+/// only say they're coming soon).
 class LevelGamesPage extends StatefulWidget {
   const LevelGamesPage({super.key, required this.setup});
 
@@ -63,7 +64,7 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
   int _at = 0;
 
   /// Tapping a game sends the buddy running along the road to it; once
-  /// there he says the game is coming soon.
+  /// there the game opens.
   void _openGame(int index) {
     _sound.play(SoundEvent.tap);
     if (index == _at) return _arrived();
@@ -74,6 +75,12 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
   }
 
   void _arrived() {
+    final game = LevelGame.of(widget.setup.level)[_at];
+    if (game == LevelGame.fishing) {
+      _buddy.play(CharacterAction.cheer, hold: const Duration(seconds: 1));
+      context.push(AppRoutes.fishing, extra: widget.setup);
+      return;
+    }
     _buddy
       ..play(CharacterAction.hint, hold: const Duration(seconds: 2))
       ..say(context.l10n.gameComingSoon(widget.setup.name));

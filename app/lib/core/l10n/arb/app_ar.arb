@@ -90,5 +90,58 @@
   },
   "@switchLanguage": {
     "description": "Language button label: the name of the OTHER language to switch to"
-  }
+  },
+  "pickLetter": "اختار الحرف اللي هتصطاده!",
+  "randomLetter": "اختار لي أي حرف",
+  "backToGames": "الألعاب",
+  "catchLetter": "اصطاد",
+  "fishingStart": "يلا يا {name}! اصطاد {letter}",
+  "@fishingStart": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "letter": {
+        "type": "String"
+      }
+    }
+  },
+  "fishingCheer1": "برافو!",
+  "fishingCheer2": "شاطر يا {name}!",
+  "@fishingCheer2": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "fishingCheer3": "صح كده!",
+  "fishingCheer4": "جامد!",
+  "fishingWrong": "لأ! ده {caught} مش {target}",
+  "@fishingWrong": {
+    "description": "Referee after a wrong catch. caught/target are replaced by Coptic letters.",
+    "placeholders": {
+      "caught": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "fishingMissed": "فاتك {target}! خلّي عينك عليه",
+  "@fishingMissed": {
+    "description": "A fish with the target letter swam away. target is a Coptic letter.",
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "fishingStars3": "ممتاز! ولا غلطة!",
+  "fishingStars2": "برافو! ركّز شوية وتاخد ٣ نجوم",
+  "fishingStars1": "خلصتها! العب تاني عشان تجمع نجوم أكتر",
+  "newBest": "رقم جديد!",
+  "playAgain": "العب تاني",
+  "otherLetter": "حرف تاني"
 }
