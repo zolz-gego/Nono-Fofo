@@ -252,7 +252,12 @@ class _SnakesPageState extends State<SnakesPage> {
           _sound.play(SoundEvent.yourTurn);
         }
       case SnakesEvent.correct:
-        me.react(CharacterReaction.correct, say: l10n.snakesCorrect);
+        // Just the sound and a bubble: the brother celebrates only on a
+        // ladder or a win, not before every roll.
+        _sound.play(SoundEvent.correctAnswer, by: me.character);
+        me
+          ..idle()
+          ..say(l10n.snakesCorrect);
       case SnakesEvent.wrong:
         me.react(CharacterReaction.wrong, say: l10n.snakesWrong);
       case SnakesEvent.rolled:
@@ -265,7 +270,7 @@ class _SnakesPageState extends State<SnakesPage> {
       case SnakesEvent.climb:
         _sound.playKey('board.ladder_climb');
         me
-          ..play(CharacterAction.cheer, hold: const Duration(seconds: 2))
+          ..play(CharacterAction.celebrate, hold: const Duration(seconds: 2))
           ..say(l10n.snakesLadder, duration: const Duration(seconds: 2));
       case SnakesEvent.slide:
         _sound.playKey('board.snake_slide');
