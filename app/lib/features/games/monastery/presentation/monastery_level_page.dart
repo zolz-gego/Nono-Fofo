@@ -30,7 +30,7 @@ import 'monastery_page.dart';
 
 /// Before Search the Monastery: the child picks how many letters hide.
 /// A finished level shows a green tick and its best time (with that run's
-/// wrong taps). Phones skip this page and always hide the same number.
+/// wrong taps). Phones pick too (they play without the brothers).
 class MonasteryLevelPage extends StatefulWidget {
   const MonasteryLevelPage({super.key, required this.setup});
 
@@ -53,27 +53,11 @@ class _MonasteryLevelPageState extends State<MonasteryLevelPage> {
 
   static const double _maxWidth = 960;
 
-  /// Phones went straight on to the game.
-  bool _skipped = false;
-
   @override
   void initState() {
     super.initState();
     Future.delayed(const Duration(milliseconds: 400), () {
-      if (mounted && !_skipped) _buddy.say(context.l10n.monasteryPickLevel);
-    });
-  }
-
-  /// Phones don't pick: replace this page with the game.
-  void _skipOnPhone(MonasteryConfig config) {
-    if (_skipped) return;
-    _skipped = true;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      context.pushReplacement(
-        AppRoutes.monasteryPlay,
-        extra: MonasteryArgs(setup: widget.setup, count: config.phoneLetters),
-      );
+      if (mounted) _buddy.say(context.l10n.monasteryPickLevel);
     });
   }
 
@@ -127,10 +111,6 @@ class _MonasteryLevelPageState extends State<MonasteryLevelPage> {
           if (config == null) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (config.isSmallScreen(MediaQuery.sizeOf(context).shortestSide)) {
-            _skipOnPhone(config);
-            return const Center(child: CircularProgressIndicator());
-          }
           final levels = config.letterCounts;
           return Align(
             alignment: Alignment.topCenter,
@@ -153,6 +133,7 @@ class _MonasteryLevelPageState extends State<MonasteryLevelPage> {
                       for (final (i, n) in levels.indexed)
                         _LevelTile(
                               count: n,
+                              art: config.levelArt[n],
                               best: _progress.bestTime(MonasteryCubit.id, '$n'),
                               onTap: () => _play(n),
                             )
@@ -196,11 +177,15 @@ class _LevelTile extends StatelessWidget {
     required this.count,
     required this.best,
     required this.onTap,
+    this.art,
   });
 
   final int count;
   final TimedRecord? best;
   final VoidCallback onTap;
+
+  /// The tile's picture (drawn in code without it).
+  final String? art;
 
   static const double _width = 140;
 
@@ -222,7 +207,16 @@ class _LevelTile extends StatelessWidget {
             padding: const EdgeInsets.all(AppDimens.spaceMd),
             child: Column(
               children: [
-                _LetterPeek(count: count),
+                SizedBox(
+                  height: 76,
+                  child: art == null
+                      ? _LetterPeek(count: count)
+                      : Image.asset(
+                          art!,
+                          fit: BoxFit.contain,
+                          errorBuilder: (_, _, _) => _LetterPeek(count: count),
+                        ),
+                ),
                 const SizedBox(height: AppDimens.spaceSm),
                 AppText.h3(l10n.monasteryCount(count)),
                 const SizedBox(height: AppDimens.spaceXs),

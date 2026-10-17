@@ -506,12 +506,11 @@ class _MonasteryPageState extends State<MonasteryPage> {
         title: l10n.gameMonastery,
         onLogoTap: () => context.go(AppRoutes.home),
         actions: [
-          if (!_small)
-            IconButton(
-              tooltip: l10n.monasteryOtherLevel,
-              onPressed: _otherLevel,
-              icon: const FaIcon(AppIcons.found),
-            ),
+          IconButton(
+            tooltip: l10n.monasteryOtherLevel,
+            onPressed: _otherLevel,
+            icon: const FaIcon(AppIcons.found),
+          ),
           const LanguageButton(),
           const MuteButton(),
           const SizedBox(width: AppDimens.spaceSm),
@@ -619,7 +618,7 @@ class _MonasteryPageState extends State<MonasteryPage> {
               best: state.newRecord ? null : _bestBefore,
               newRecord: state.newRecord,
               onPlayAgain: _playAgain,
-              onOtherLevel: layout.small ? null : _otherLevel,
+              onOtherLevel: _otherLevel,
               onBackToGames: _backToGames,
               onShare: _share,
             ),

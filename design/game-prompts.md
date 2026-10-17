@@ -55,8 +55,12 @@ Four chunky rounded playing cards, centered, arranged in a loose playful fan as 
 
 ### 6. Search the Monastery: `monastery.png`
 
+Save it as `design/reference/monastery/icon.webp` (any shape, white
+background is fine): `tools/games/process_monastery.py` cuts it out and
+puts it on the beige square as `app/assets/games/monastery.png`.
+
 ```
-A cozy corner inside an old Egyptian desert monastery: a warm sand-coloured plastered wall with a small arched window showing blue sky, and a cocoa-brown wooden chair and a round clay water jar standing in front of it. Two big Coptic letters are hiding: the letter Ⲃ peeks out from behind the chair, only its top half showing, and the small letter ⲁ peeks out from behind the jar, only its left side showing, both in cocoa brown #5B4B3A. A big magnifying glass with a sunny-yellow #FFC845 handle and a mist-blue lens floats in front, its lens over the peeking Ⲃ, with small sunny-yellow star sparkles around it. Playful, like a hide-and-seek picture. Same size and weight as a single object illustration: bold, simple and readable at small size.
+A cozy corner of an old Egyptian desert monastery, like a small hide-and-seek picture: a warm sand-coloured plastered wall with a small arched stone window showing blue sky and golden dunes. In front of it, an old wooden chair with a round spindle back and a round terracotta water jar with a teal zigzag band on a little wooden stand. A big Coptic letter Ⲃ peeks out from behind the chair, only its top half showing, and a small letter ⲁ peeks out from behind the jar, only its left side showing, both in cocoa brown #5B4B3A. A big magnifying glass with a sunny-yellow #FFC845 handle and a mist-blue lens floats in front at an angle, its lens over the peeking Ⲃ, with small sunny-yellow star sparkles around it. Playful and inviting. Same size and weight as a single object illustration: bold, simple and readable at small size.
 ```
 
 ### 4. Challenge your brother: `challenge.png`
@@ -263,48 +267,41 @@ Phones never scroll: they get their own **tall room**, with the same objects
 arranged differently. So the objects are made once and used in both rooms;
 only the empty room is needed twice.
 
-The hiding spots are set by hand for each object's outline, so after new
-art arrives they get lined up again (`"showSpots": true` in the JSON draws
-them as circles while doing that).
+Room and object art is done (2026-10-17): the originals are in
+`design/reference/monastery/`. To swap one, replace it there (same name) and
+run, from the repo root:
 
-### Empty room (wide, landscape 16:9)
+1. `tools/.venv/bin/python tools/games/process_monastery.py`: cuts the
+   objects out of their white background (holes too) and sizes everything
+   into `app/assets/games/monastery/`. It prints each object's width/height;
+   keep the object's `rect` in the JSON the same shape.
+2. `tools/.venv/bin/python tools/games/monastery_spots.py`: works out the
+   hiding spots from the outlines (letters about half hidden) and writes a
+   preview with every spot circled to `design/reference/monastery/preview_*.png`.
 
-Only the room itself: every object (shelf, chair, door, plants…) comes as a
-separate cut-out, so the room must stay empty.
+Still to make: the road card (prompt 6 above) and the level tiles (below).
+
+### Level tiles (one per number of letters)
+
+Each level tile in the picker shows a small picture above "5 letters",
+"6 letters"… The pictures grow busier as the level gets harder: more
+objects and more letters peeking. Paste the **level block**, then one line
+under it. Save as `design/reference/monastery/level_5.webp` …
+`level_10.webp` and run `process_monastery.py` (it cuts them out and points
+`levelArt` in the JSON at them). Until a picture is there the tile draws a
+magnifying glass over a few letters.
+
+Level block:
 
 ```
-Wide landscape (16:9) background for a children's hide-and-seek game, flat 2D vector cartoon style: thin warm-brown outlines, flat colors with soft shading, rounded friendly shapes, cheerful and simple. The inside of a quiet old hall in an Egyptian desert monastery, seen from the front like a stage. The back wall fills the top 72% of the picture: thick, softly uneven plaster in warm sand and cream, a little darker near the ceiling. Along the top edge, dark wooden ceiling beams. High on the wall: one small arched window at about 20% across and a bigger arched window at about 72-80% across, both showing soft light-blue sky and a hint of golden desert dunes; at the far right a small empty arched niche in the wall. The bottom 28% is a floor of big warm-beige stone tiles, with a long coral and sunny-yellow patterned rug running from the middle toward the front. The whole room is EMPTY: no furniture, no doors, no plants, no lamps, no objects at all, because they will be placed on top later. Soft warm afternoon light. Use this palette: deep teal #0F4C5C, mist blue #A8DADC, warm sand #EFE6D8, slate teal #4F7C82, cocoa brown #5B4B3A, sunny yellow #FFC845, coral #FF7A5C, leaf green #6CC24A, cream #FFFBF4. No people, no text, no letters, no logos, no watermark, no religious symbols.
+A small square icon for a level button in a children's hide-and-seek game, in the same flat 2D vector cartoon style as the attached reference: thin warm-brown #5B4B3A outlines, flat colors with soft shading, rounded friendly shapes, bold and readable at small size (it is shown about 100 pixels wide). A tiny scene from an old Egyptian desert monastery sitting on a small oval patch of warm beige stone floor, with a magnifying glass with a sunny-yellow #FFC845 handle and a mist-blue lens hovering over it. Coptic letters in cocoa brown #5B4B3A peek out from behind the objects, each only partly visible. Colors from this palette: deep teal #0F4C5C, mist blue #A8DADC, warm sand #EFE6D8, slate teal #4F7C82, cocoa brown #5B4B3A, sunny yellow #FFC845, coral #FF7A5C, leaf green #6CC24A, cream #FFFBF4, plus warm wood browns and terracotta. Plain flat pure white background, nothing else. No numbers, no text other than the Coptic letters, no logos, no watermark, no religious symbols. The scene:
 ```
 
-### Empty room, tall (portrait 3:5, for phones)
-
-```
-Tall portrait (3:5) background for a children's hide-and-seek game on a phone, flat 2D vector cartoon style: thin warm-brown outlines, flat colors with soft shading, rounded friendly shapes, cheerful and simple. The inside of a quiet old hall in an Egyptian desert monastery, seen from the front. The back wall fills the top 70% of the picture: thick, softly uneven plaster in warm sand and cream, a little darker near the ceiling. Along the top edge, dark wooden ceiling beams. High on the wall: a small arched window at the upper left (about 13-25% across) and a bigger arched window at the upper right (about 66-86% across), both showing soft light-blue sky and a hint of golden desert dunes. The bottom 30% is a floor of big warm-beige stone tiles, with a coral and sunny-yellow patterned rug running from the middle toward the front, wider at the bottom. The whole room is EMPTY: no furniture, no doors, no plants, no lamps, no objects at all, because they will be placed on top later. Soft warm afternoon light. Use this palette: deep teal #0F4C5C, mist blue #A8DADC, warm sand #EFE6D8, slate teal #4F7C82, cocoa brown #5B4B3A, sunny yellow #FFC845, coral #FF7A5C, leaf green #6CC24A, cream #FFFBF4. No people, no text, no letters, no logos, no watermark, no religious symbols.
-```
-
-### Objects (one picture each, plain white background)
-
-Paste the **object block**, then one object line under it. Each object is
-drawn at a fixed shape in the room, so keep the proportions given.
-
-Object block:
-
-```
-A single object for a children's hide-and-seek game, in the same flat 2D vector cartoon style as the attached reference: thin warm-brown #5B4B3A outlines, flat colors with soft shading, rounded friendly shapes. Front view, standing straight, the whole object visible and filling the picture, solid (not see-through) so things can hide behind it. Plain flat pure white background, no shadow on the ground, nothing else in the picture. Colors from this palette: deep teal #0F4C5C, mist blue #A8DADC, warm sand #EFE6D8, slate teal #4F7C82, cocoa brown #5B4B3A, sunny yellow #FFC845, coral #FF7A5C, leaf green #6CC24A, cream #FFFBF4, plus warm wood browns and clay orange. No text, no letters, no logos, no watermark, no religious symbols. The object:
-```
-
-| Save as | Object line (paste after the block) |
+| Save as | Scene line (paste after the block) |
 |---|---|
-| `shelf.png` | A tall old wooden bookshelf, about twice as tall as wide, four shelves full of old leather books in teal, coral, yellow and cocoa, some leaning, a rolled scroll on one shelf. |
-| `lamp.png` | A small brass oil lamp hanging from a short chain, about twice as tall as wide, a round bowl with a tiny warm flame on top. |
-| `chair.png` | An old wooden chair with a tall rounded back, a little taller than wide, four legs with clear gaps between them under the seat. |
-| `door.png` | A heavy arched wooden door in a stone frame, about twice as tall as wide, planks with round iron studs and a brass ring handle, closed. |
-| `candle.png` | A very tall thin brass candle stand, about six times as tall as wide, a wide three-footed base, a thin pole, a small dish with one cream candle and a flame on top. |
-| `lectern.png` | A wooden book stand (lectern), about twice as tall as wide, one central column on a small base, a slanted top holding a big open old book with cream pages. |
-| `curtain.png` | A slate-teal cloth curtain hanging from a short wooden rod, a little taller than wide, gathered and tied to one side with a sunny-yellow cord, soft folds. |
-| `plant.png` | A small palm plant in a clay pot, about two and a half times as tall as wide, several long leaves fanning up and out with gaps between them. |
-| `jar.png` | A big round clay water jar (Egyptian zeer) with a narrow neck, on a low wooden stand, a little taller than wide. |
-| `basket.png` | A woven palm-leaf basket with three round golden Egyptian loaves of bread on top, about one and a half times as wide as tall. |
-| `bench.png` | A long low wooden bench, about three times as wide as tall, a thick plank seat on two sturdy legs with a crossbar, space under the seat. |
-| `books.png` | A small stack of three old closed books lying flat, coral, deep teal and sunny yellow covers, slightly uneven, about one and a third times as wide as tall. |
-
+| `level_5.webp` | Very simple and calm: one round terracotta water jar on a little wooden stand, with one letter Ⲁ peeking out from behind it. |
+| `level_6.webp` | A terracotta water jar and a woven basket of round golden loaves side by side, with two letters (Ⲁ, Ⲃ) peeking out from behind them. |
+| `level_7.webp` | A wooden chair with a spindle back, a terracotta water jar and a woven bread basket, with three letters (Ⲁ, Ⲃ, Ⲅ) peeking out from behind them. |
+| `level_8.webp` | A small wooden bookshelf, a wooden chair and a terracotta water jar, with four letters (Ⲁ, Ⲃ, Ⲅ, Ⲇ) peeking out from behind them. |
+| `level_9.webp` | A small arched wooden door in a stone frame, a bookshelf, a chair and a potted palm, with five letters (Ⲁ, Ⲃ, Ⲅ, Ⲇ, Ⲉ) peeking out from behind them. |
+| `level_10.webp` | A busy little room corner: an arched door, a bookshelf, a chair, a potted palm, a brass candle stand and a stack of books, with six letters (Ⲁ, Ⲃ, Ⲅ, Ⲇ, Ⲉ, Ⲍ) peeking out from behind them, and a few small sunny-yellow star sparkles. |
