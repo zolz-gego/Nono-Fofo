@@ -544,4 +544,137 @@ class AppLocalizationsAr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get gameSnakes => 'السلم والتعبان';
+
+  @override
+  String get snakesPickMode => 'عايز تلعب إزاي؟';
+
+  @override
+  String snakesVsComputer(String opponent) {
+    return 'العب ضد $opponent';
+  }
+
+  @override
+  String snakesVsComputerBody(String opponent) {
+    return '$opponent بيرمي الزهر لوحده';
+  }
+
+  @override
+  String get snakesWithFriend => 'العب مع صاحبك';
+
+  @override
+  String get snakesWithFriendBody => 'اتبادلوا الأدوار على نفس الجهاز';
+
+  @override
+  String get snakesFriendName => 'اسم صاحبك';
+
+  @override
+  String snakesFriendPlaysAs(String hero) {
+    return 'صاحبك هيلعب بقطعة $hero';
+  }
+
+  @override
+  String snakesStart(String name) {
+    return 'يلا يا $name! جاوب صح عشان ترمي الزهر';
+  }
+
+  @override
+  String snakesTurn(String name) {
+    return 'دور $name';
+  }
+
+  @override
+  String get snakesWhatName => 'اسم الحرف ده إيه؟';
+
+  @override
+  String snakesWhichLetter(String name) {
+    return 'فين حرف $name؟';
+  }
+
+  @override
+  String get snakesTapDice => 'دوس على الزهر!';
+
+  @override
+  String get snakesCorrect => 'صح! ارمي الزهر';
+
+  @override
+  String get snakesWrong => 'أوبس! الدور راح';
+
+  @override
+  String snakesOvershoot(int count) {
+    return 'كتير! محتاج $count بالظبط';
+  }
+
+  @override
+  String get snakesLadder => 'اطلع السلم!';
+
+  @override
+  String get snakesSnake => 'يا خبر، تعبان!';
+
+  @override
+  String get snakesComputerThinks => 'دوري أنا!';
+
+  @override
+  String snakesWinner(String name) {
+    return '$name كسب!';
+  }
+
+  @override
+  String get snakesYouWon => 'كسبت!';
+
+  @override
+  String snakesYouWonBody(int count, String opponent) {
+    return 'وصلت للمربع $count قبل $opponent';
+  }
+
+  @override
+  String snakesYouLost(String name) {
+    return '$name كسب المرة دي!';
+  }
+
+  @override
+  String get snakesYouLostBody =>
+      'كل ما تجاوب صح أكتر، ترمي الزهر أكتر. جرب تاني!';
+
+  @override
+  String snakesFriendWonBody(String name, int count) {
+    return '$name وصل للمربع $count الأول';
+  }
+
+  @override
+  String get snakesChallengeDone => 'خلّصت التحدي!';
+
+  @override
+  String get snakesRight => 'إجابات صح';
+
+  @override
+  String get snakesRolls => 'رميات';
+
+  @override
+  String get snakesChangePlayers => 'غيّر اللاعبين';
+
+  @override
+  String get snakesShare => 'شارك';
+
+  @override
+  String snakesShareTitle(String name) {
+    return '$name كسب السلم والتعبان!';
+  }
+
+  @override
+  String snakesShareVs(String winner, String loser) {
+    return '$winner غلب $loser';
+  }
+
+  @override
+  String snakesShareWith(String hero) {
+    return 'مع $hero عند الأهرامات';
+  }
+
+  @override
+  String snakesShareText(String name, int correct, int asked) {
+    return '$name كسب السلم والتعبان في نونو وفوفو، وجاوب $correct من $asked حروف صح!';
+  }
 }

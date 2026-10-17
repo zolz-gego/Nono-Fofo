@@ -85,3 +85,12 @@ to every letter you find and the other brother says its name; found letters
 turn gold and are crossed out.
 
 ![Monastery](22-monastery.jpg)
+
+## Snakes & Ladders (Level 1 challenge)
+
+By the Pyramids, against the other brother (the computer) or a friend on
+the same device. Before every roll a letter question pops up: a right
+answer rolls the dice, a wrong one passes the turn. 64 squares with fixed
+snakes and ladders; land exactly on 64 to win.
+
+![Snakes & Ladders](23-snakes-ladders.jpg)

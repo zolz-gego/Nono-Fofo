@@ -493,4 +493,137 @@ class AppLocalizationsEn extends AppLocalizations {
   String monasteryShareText(String name, int count, String time) {
     return 'Bravo $name! Found $count hidden letters in Search the Monastery in $time, in Nono & Fofo';
   }
+
+  @override
+  String get gameSnakes => 'Snakes & Ladders';
+
+  @override
+  String get snakesPickMode => 'How do you want to play?';
+
+  @override
+  String snakesVsComputer(String opponent) {
+    return 'Play against $opponent';
+  }
+
+  @override
+  String snakesVsComputerBody(String opponent) {
+    return '$opponent rolls the dice by himself';
+  }
+
+  @override
+  String get snakesWithFriend => 'Play with a friend';
+
+  @override
+  String get snakesWithFriendBody => 'Take turns on this device';
+
+  @override
+  String get snakesFriendName => 'Your friend\'s name';
+
+  @override
+  String snakesFriendPlaysAs(String hero) {
+    return 'Your friend plays with $hero\'s token';
+  }
+
+  @override
+  String snakesStart(String name) {
+    return 'Come on, $name! Answer right to roll the dice';
+  }
+
+  @override
+  String snakesTurn(String name) {
+    return '$name\'s turn';
+  }
+
+  @override
+  String get snakesWhatName => 'What\'s this letter\'s name?';
+
+  @override
+  String snakesWhichLetter(String name) {
+    return 'Which one is $name?';
+  }
+
+  @override
+  String get snakesTapDice => 'Tap the dice!';
+
+  @override
+  String get snakesCorrect => 'Correct! Roll the dice';
+
+  @override
+  String get snakesWrong => 'Oops! The turn passes';
+
+  @override
+  String snakesOvershoot(int count) {
+    return 'Too far! You need exactly $count';
+  }
+
+  @override
+  String get snakesLadder => 'Up the ladder!';
+
+  @override
+  String get snakesSnake => 'Oh no, a snake!';
+
+  @override
+  String get snakesComputerThinks => 'My turn!';
+
+  @override
+  String snakesWinner(String name) {
+    return '$name wins!';
+  }
+
+  @override
+  String get snakesYouWon => 'You won!';
+
+  @override
+  String snakesYouWonBody(int count, String opponent) {
+    return 'You reached square $count before $opponent';
+  }
+
+  @override
+  String snakesYouLost(String name) {
+    return '$name won this time!';
+  }
+
+  @override
+  String get snakesYouLostBody =>
+      'More right answers mean more rolls. Try again!';
+
+  @override
+  String snakesFriendWonBody(String name, int count) {
+    return '$name reached square $count first';
+  }
+
+  @override
+  String get snakesChallengeDone => 'Challenge complete!';
+
+  @override
+  String get snakesRight => 'Right answers';
+
+  @override
+  String get snakesRolls => 'Rolls';
+
+  @override
+  String get snakesChangePlayers => 'Change players';
+
+  @override
+  String get snakesShare => 'Share';
+
+  @override
+  String snakesShareTitle(String name) {
+    return '$name won Snakes & Ladders!';
+  }
+
+  @override
+  String snakesShareVs(String winner, String loser) {
+    return '$winner beat $loser';
+  }
+
+  @override
+  String snakesShareWith(String hero) {
+    return 'With $hero by the Pyramids';
+  }
+
+  @override
+  String snakesShareText(String name, int correct, int asked) {
+    return '$name won Snakes & Ladders in Nono & Fofo, with $correct of $asked letters right!';
+  }
 }

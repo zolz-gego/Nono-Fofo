@@ -931,6 +931,210 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'{count, plural, few{برافو يا {name}! لقيت {count} حروف مستخبية في دوّر في الدير في {time}، في نونو وفوفو} other{برافو يا {name}! لقيت {count} حرف مستخبي في دوّر في الدير في {time}، في نونو وفوفو}}'**
   String monasteryShareText(String name, int count, String time);
+
+  /// No description provided for @gameSnakes.
+  ///
+  /// In ar, this message translates to:
+  /// **'السلم والتعبان'**
+  String get gameSnakes;
+
+  /// No description provided for @snakesPickMode.
+  ///
+  /// In ar, this message translates to:
+  /// **'عايز تلعب إزاي؟'**
+  String get snakesPickMode;
+
+  /// No description provided for @snakesVsComputer.
+  ///
+  /// In ar, this message translates to:
+  /// **'العب ضد {opponent}'**
+  String snakesVsComputer(String opponent);
+
+  /// No description provided for @snakesVsComputerBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'{opponent} بيرمي الزهر لوحده'**
+  String snakesVsComputerBody(String opponent);
+
+  /// No description provided for @snakesWithFriend.
+  ///
+  /// In ar, this message translates to:
+  /// **'العب مع صاحبك'**
+  String get snakesWithFriend;
+
+  /// No description provided for @snakesWithFriendBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتبادلوا الأدوار على نفس الجهاز'**
+  String get snakesWithFriendBody;
+
+  /// No description provided for @snakesFriendName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم صاحبك'**
+  String get snakesFriendName;
+
+  /// No description provided for @snakesFriendPlaysAs.
+  ///
+  /// In ar, this message translates to:
+  /// **'صاحبك هيلعب بقطعة {hero}'**
+  String snakesFriendPlaysAs(String hero);
+
+  /// No description provided for @snakesStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'يلا يا {name}! جاوب صح عشان ترمي الزهر'**
+  String snakesStart(String name);
+
+  /// No description provided for @snakesTurn.
+  ///
+  /// In ar, this message translates to:
+  /// **'دور {name}'**
+  String snakesTurn(String name);
+
+  /// No description provided for @snakesWhatName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الحرف ده إيه؟'**
+  String get snakesWhatName;
+
+  /// No description provided for @snakesWhichLetter.
+  ///
+  /// In ar, this message translates to:
+  /// **'فين حرف {name}؟'**
+  String snakesWhichLetter(String name);
+
+  /// No description provided for @snakesTapDice.
+  ///
+  /// In ar, this message translates to:
+  /// **'دوس على الزهر!'**
+  String get snakesTapDice;
+
+  /// No description provided for @snakesCorrect.
+  ///
+  /// In ar, this message translates to:
+  /// **'صح! ارمي الزهر'**
+  String get snakesCorrect;
+
+  /// No description provided for @snakesWrong.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوبس! الدور راح'**
+  String get snakesWrong;
+
+  /// No description provided for @snakesOvershoot.
+  ///
+  /// In ar, this message translates to:
+  /// **'كتير! محتاج {count} بالظبط'**
+  String snakesOvershoot(int count);
+
+  /// No description provided for @snakesLadder.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلع السلم!'**
+  String get snakesLadder;
+
+  /// No description provided for @snakesSnake.
+  ///
+  /// In ar, this message translates to:
+  /// **'يا خبر، تعبان!'**
+  String get snakesSnake;
+
+  /// No description provided for @snakesComputerThinks.
+  ///
+  /// In ar, this message translates to:
+  /// **'دوري أنا!'**
+  String get snakesComputerThinks;
+
+  /// No description provided for @snakesWinner.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} كسب!'**
+  String snakesWinner(String name);
+
+  /// No description provided for @snakesYouWon.
+  ///
+  /// In ar, this message translates to:
+  /// **'كسبت!'**
+  String get snakesYouWon;
+
+  /// No description provided for @snakesYouWonBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصلت للمربع {count} قبل {opponent}'**
+  String snakesYouWonBody(int count, String opponent);
+
+  /// No description provided for @snakesYouLost.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} كسب المرة دي!'**
+  String snakesYouLost(String name);
+
+  /// No description provided for @snakesYouLostBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل ما تجاوب صح أكتر، ترمي الزهر أكتر. جرب تاني!'**
+  String get snakesYouLostBody;
+
+  /// No description provided for @snakesFriendWonBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} وصل للمربع {count} الأول'**
+  String snakesFriendWonBody(String name, int count);
+
+  /// No description provided for @snakesChallengeDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'خلّصت التحدي!'**
+  String get snakesChallengeDone;
+
+  /// No description provided for @snakesRight.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجابات صح'**
+  String get snakesRight;
+
+  /// No description provided for @snakesRolls.
+  ///
+  /// In ar, this message translates to:
+  /// **'رميات'**
+  String get snakesRolls;
+
+  /// No description provided for @snakesChangePlayers.
+  ///
+  /// In ar, this message translates to:
+  /// **'غيّر اللاعبين'**
+  String get snakesChangePlayers;
+
+  /// No description provided for @snakesShare.
+  ///
+  /// In ar, this message translates to:
+  /// **'شارك'**
+  String get snakesShare;
+
+  /// No description provided for @snakesShareTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} كسب السلم والتعبان!'**
+  String snakesShareTitle(String name);
+
+  /// No description provided for @snakesShareVs.
+  ///
+  /// In ar, this message translates to:
+  /// **'{winner} غلب {loser}'**
+  String snakesShareVs(String winner, String loser);
+
+  /// No description provided for @snakesShareWith.
+  ///
+  /// In ar, this message translates to:
+  /// **'مع {hero} عند الأهرامات'**
+  String snakesShareWith(String hero);
+
+  /// No description provided for @snakesShareText.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} كسب السلم والتعبان في نونو وفوفو، وجاوب {correct} من {asked} حروف صح!'**
+  String snakesShareText(String name, int correct, int asked);
 }
 
 class _AppLocalizationsDelegate
