@@ -28,9 +28,16 @@ abstract final class AppIcons {
   static const FaIconData fullScreen = FontAwesomeIcons.expand;
   static const FaIconData exitFullScreen = FontAwesomeIcons.compress;
 
+  // Grandpa's Cards.
+  static const FaIconData timer = FontAwesomeIcons.stopwatch;
+  static const FaIconData moves = FontAwesomeIcons.handPointer;
+  static const FaIconData pairs = FontAwesomeIcons.clone;
+  static const FaIconData record = FontAwesomeIcons.trophy;
+
   // Game placeholders, shown until a game's illustration is added.
   static const FaIconData fishing = FontAwesomeIcons.fish;
   static const FaIconData writeLetter = FontAwesomeIcons.pencil;
   static const FaIconData balloons = FontAwesomeIcons.burst;
+  static const FaIconData cards = FontAwesomeIcons.clone;
   static const FaIconData challenge = FontAwesomeIcons.trophy;
 }

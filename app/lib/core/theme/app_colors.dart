@@ -184,6 +184,23 @@ abstract final class AppColors {
     Color(0xFFB57EDC),
   ];
 
+  // ---------------------------------------------------------------------------
+  // Grandpa's Cards (Alexandria & the sea, placeholder art)
+  // ---------------------------------------------------------------------------
+  static const Color seaSkyTop = Color(0xFF8FD3EA);
+  static const Color seaSkyBottom = Color(0xFFDDF2F2);
+  static const Color seaFar = Color(0xFF3FA7C0);
+  static const Color seaNear = Color(0xFF2B8BA6);
+  static const Color seaFoam = Color(0xCCFFFFFF);
+  static const Color beachSand = Color(0xFFF2DDB0);
+  static const Color beachSandDark = Color(0xFFE3C68E);
+  static const Color fortWall = Color(0xFFE9D8B4);
+  static const Color fortShade = Color(0xFFD4BE93);
+  static const Color cardBack = deepTeal;
+  static const Color cardBackPattern = Color(0x33A8DADC);
+  static const Color cardBackBorder = mistBlue;
+  static const Color cardFace = cream;
+
   /// Confetti / celebration colors.
   static const List<Color> celebration = [
     sunYellow,

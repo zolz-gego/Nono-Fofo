@@ -5,6 +5,8 @@ import '../features/home/presentation/home_page.dart';
 import '../core/l10n/l10n.dart';
 import '../features/games/balloons/presentation/balloons_cubit.dart';
 import '../features/games/balloons/presentation/balloons_page.dart';
+import '../features/games/cards/presentation/cards_level_page.dart';
+import '../features/games/cards/presentation/cards_page.dart';
 import '../features/games/fishing/presentation/fishing_cubit.dart';
 import '../features/games/fishing/presentation/fishing_page.dart';
 import '../features/games/letter_hunt/presentation/letter_pick_page.dart';
@@ -35,6 +37,11 @@ abstract final class AppRoutes {
   /// [PlayerSetup]), then write it (extra: [LetterHuntArgs]).
   static const writing = '/level/writing';
   static const writingPlay = '/level/writing/play';
+
+  /// Grandpa's Cards (Alexandria): pick how many cards (extra:
+  /// [PlayerSetup]), then play (extra: [CardsArgs]).
+  static const cards = '/level/cards';
+  static const cardsPlay = '/level/cards/play';
 }
 
 final GoRouter appRouter = GoRouter(
@@ -113,6 +120,19 @@ final GoRouter appRouter = GoRouter(
           state.extra is LetterHuntArgs ? null : AppRoutes.home,
       builder: (context, state) =>
           WritingPage(args: state.extra! as LetterHuntArgs),
+    ),
+    GoRoute(
+      path: AppRoutes.cards,
+      redirect: (context, state) =>
+          state.extra is PlayerSetup ? null : AppRoutes.home,
+      builder: (context, state) =>
+          CardsLevelPage(setup: state.extra! as PlayerSetup),
+    ),
+    GoRoute(
+      path: AppRoutes.cardsPlay,
+      redirect: (context, state) =>
+          state.extra is CardsArgs ? null : AppRoutes.home,
+      builder: (context, state) => CardsPage(args: state.extra! as CardsArgs),
     ),
   ],
 );

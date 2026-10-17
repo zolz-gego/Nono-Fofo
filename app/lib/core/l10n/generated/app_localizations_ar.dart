@@ -365,4 +365,92 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get writingExitFullScreen => 'رجّع السبورة زي ما كانت';
+
+  @override
+  String get gameCards => 'كروت جدو';
+
+  @override
+  String get cardsPickLevel => 'هتلعب بكام كارت؟';
+
+  @override
+  String cardsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count كارت',
+      few: '$count كروت',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String cardsBest(String time, int moves) {
+    return 'أحسن وقت $time · $moves حركة';
+  }
+
+  @override
+  String cardsStart(String name) {
+    return 'يلا يا $name! دوّر على كل حرف كبير وصغيره';
+  }
+
+  @override
+  String get cardsTime => 'الوقت';
+
+  @override
+  String get cardsMoves => 'الحركات';
+
+  @override
+  String get cardsPairs => 'الأزواج';
+
+  @override
+  String get cardsSolved => 'خلّصت الكروت!';
+
+  @override
+  String cardsSolvedBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'لقيت كل الأزواج في $count كارت',
+      few: 'لقيت كل الأزواج في $count كروت',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardsNewRecord => 'رقم قياسي جديد!';
+
+  @override
+  String get cardsOtherLevel => 'عدد كروت تاني';
+
+  @override
+  String get cardsShare => 'شارك وقتك';
+
+  @override
+  String cardsShareTitle(String name, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'برافو يا $name! خلّصت $count كارت',
+      few: 'برافو يا $name! خلّصت $count كروت',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String cardsShareWith(String hero) {
+    return 'مع $hero على بحر إسكندرية';
+  }
+
+  @override
+  String cardsShareText(String name, int count, String time, int moves) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'برافو يا $name! خلّصت $count كارت في كروت جدو في $time و$moves حركة، في نونو وفوفو',
+      few:
+          'برافو يا $name! خلّصت $count كروت في كروت جدو في $time و$moves حركة، في نونو وفوفو',
+    );
+    return '$_temp0';
+  }
 }

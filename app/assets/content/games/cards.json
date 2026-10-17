@@ -1,0 +1,22 @@
+{
+  "_readme": "Settings for 'Grandpa's Cards' (كروت جدو), the memory game at Alexandria & the sea. Change numbers here; no code change needed. cardCounts: the levels (number of cards; each letter's capital + small make a pair, so 64 = all 32 letters). phoneMaxCards: phones (shortest screen side under smallScreenWidth) don't offer bigger levels, the cards would be too small. smallScreenWidth: below this shortest side (logical pixels) the brothers are hidden and only peek in to flip a card. heroRunMs: how long the brother takes to reach a card (the card flips when he gets there). mismatchShowMs: how long two different cards stay up before turning back. nameBubbleMs: how long the letter's name stays in the bubble after a flip. letterColors: one colour per letter, in letters.json order (both forms of a letter share it). art.background / art.cardBack: pictures (see design/game-prompts.md); without them both are drawn in code.",
+  "version": 1,
+  "cardCounts": [4, 8, 16, 32, 64],
+  "phoneMaxCards": 32,
+  "smallScreenWidth": 600,
+  "heroRunMs": 450,
+  "mismatchShowMs": 1000,
+  "nameBubbleMs": 1500,
+  "letterColors": [
+    "#E63946", "#F3722C", "#E9A100", "#43AA8B", "#277DA1", "#7B2CBF",
+    "#D62F87", "#2A9D8F", "#B5651D", "#5A8F29", "#3A5BD9", "#C1121F",
+    "#0F7C9C", "#9C6ADE", "#E76F51", "#2B9348", "#B8860B", "#8338EC",
+    "#FF5D8F", "#118AB2", "#6A994E", "#D35400", "#4361EE", "#A0522D",
+    "#06A77D", "#C9184A", "#5E60CE", "#BC6C25", "#00838F", "#9D4EDD",
+    "#7F5539", "#EF476F"
+  ],
+  "art": {
+    "background": "assets/games/cards_seaside.webp",
+    "cardBack": null
+  }
+}
