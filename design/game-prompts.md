@@ -292,3 +292,51 @@ first, then this. Not used: the level card (`level_card.webp`) was chosen instea
 ```
 A single small wooden chair with a round spindle back, in warm cocoa-brown wood, slightly turned, centered. Two Coptic letters in cocoa brown #5B4B3A hide behind it, each only partly showing: a capital Ⲁ peeking out above the chair's back and a small ⲅ peeking out between the chair's legs. A big magnifying glass with a chunky sunny-yellow #FFC845 handle and a mist-blue #A8DADC lens leans in from one side, its lens over the peeking Ⲁ. A couple of small sunny-yellow star sparkles. No numbers. Very simple, bold and readable at small size, because it is shown only about 100 pixels wide on a button.
 ```
+
+---
+
+## Snakes & Ladders art (السلم والتعبان)
+
+The level's challenge, by the Pyramids. The board's snakes and ladders sit
+on **fixed squares** (in `app/assets/content/games/snakes_ladders.json`),
+and image models can't put them on exact squares. So the board itself (the
+8×8 squares, their numbers, and where each snake and ladder starts and
+ends) stays drawn in code, and the art comes in parts that Claude places
+and stretches onto those squares. Until a file is there the game draws that
+part in code, so it plays without them. Attach
+`design/reference/nono-fofo-approved.webp` when the model accepts a
+reference, so the style matches.
+
+| What | Save as | Then |
+|---|---|---|
+| Pyramids background, wide (16:9), for tablets and computers | `design/reference/snakes/pyramids.png` | Claude sizes it and uses it behind the board instead of the painted sky |
+| Pyramids background, tall (3:5), for phones | `design/reference/snakes/pyramids_tall.png` | Same, for phones |
+| One wooden ladder (white background) | `design/reference/snakes/ladder.png` | Claude cuts it out and stretches it between each ladder's squares |
+| Five snakes (white background), one per colour | `design/reference/snakes/snake_<colour>.png` | Claude cuts them out and lays each along a snake's head and tail squares |
+
+Paste the style block first for each one.
+
+### Pyramids background (wide, landscape 16:9)
+
+```
+A wide, calm desert scene at Giza for the background of a children's board game. The three Pyramids of Giza stand on the left half, in warm sand colours (light side #E9C27E, shaded side #C99A55), the biggest in front. A clear light-blue sky that fades to pale cream near the horizon, a soft round sun in the top right. Low rolling sand dunes across the bottom third, a few small desert plants. The middle and right of the picture stay simple and quiet (a board will sit on top of it), with no people, animals, text or letters. Flat colours with soft shading, thin warm-brown outlines.
+```
+
+For the tall one, use the same prompt but say *tall portrait picture (3:5)*,
+with the Pyramids small in the upper part and plain dunes filling the lower
+two thirds.
+
+### Ladder (generate once)
+
+```
+One straight wooden ladder lying flat, seen from straight above, pointing straight up, on a plain white background. Two light-brown wooden rails (#A0704A with darker #6E4A2F edges) and seven evenly spaced rungs (#C8935E). Chunky, simple and friendly, like a toy, with a thin warm-brown outline. Nothing else in the picture.
+```
+
+### Snakes (one per colour)
+
+Generate one per colour: green #6CC24A, coral #FF7A5C, lilac #B57EDC,
+mint #3FBFA0 and orange #FF9F43.
+
+```
+One friendly cartoon snake for a children's board game, lying in a long gentle S-curve from the top of the picture to the bottom, seen from above, on a plain white background. The head is at the top: round, with big friendly eyes, a small smile and a little red forked tongue. The body is <colour>, with a lighter round-spot pattern down its back, and it gets thinner towards the tail at the bottom. Cute, not scary. Thin warm-brown outline, flat colours with soft shading. Nothing else in the picture.
+```

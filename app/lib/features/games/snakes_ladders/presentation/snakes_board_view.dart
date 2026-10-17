@@ -1,11 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/assets/asset_paths.dart';
 import '../../../../core/domain/character_id.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/typography/app_text_styles.dart';
+import '../../../../engines/characters/domain/character_action.dart';
+import '../../../../engines/characters/domain/character_pose.dart';
 import '../domain/snakes_board.dart';
 
 /// Where things sit on a board drawn [side] wide: the squares, and the
@@ -44,7 +47,6 @@ class SnakesBoardView extends StatelessWidget {
     required this.positions,
     required this.current,
     required this.moveDuration,
-    this.image,
   });
 
   final SnakesBoard board;
@@ -55,9 +57,6 @@ class SnakesBoardView extends StatelessWidget {
   final List<int> positions;
   final int current;
   final Duration moveDuration;
-
-  /// A drawn board picture to use instead of the painted one.
-  final String? image;
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +74,7 @@ class SnakesBoardView extends StatelessWidget {
             top: 0,
             width: side,
             height: side,
-            child: _boardPicture(),
+            child: CustomPaint(painter: _BoardPainter(board)),
           ),
           Positioned(
             left: 0,
@@ -89,17 +88,6 @@ class SnakesBoardView extends StatelessWidget {
             _token(g, i, tokenSize, shared),
         ],
       ),
-    );
-  }
-
-  Widget _boardPicture() {
-    final painted = CustomPaint(painter: _BoardPainter(board));
-    final path = image;
-    if (path == null) return painted;
-    return Image.asset(
-      path,
-      fit: BoxFit.fill,
-      errorBuilder: (_, _, _) => painted,
     );
   }
 
@@ -147,6 +135,10 @@ class CharacterToken extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, c) {
         final d = c.biggest.shortestSide;
+        final pose = context.read<CharacterRoster>().pose(
+          character,
+          CharacterAction.idle,
+        );
         return AnimatedScale(
           scale: active ? 1.08 : 1,
           duration: const Duration(milliseconds: 200),
@@ -165,16 +157,19 @@ class CharacterToken extends StatelessWidget {
                 ),
               ],
             ),
+            // The head fills the top ~30% of the pose, about its full
+            // width: show the pose about as wide as the token, from the top.
             child: ClipOval(
               child: OverflowBox(
-                maxWidth: d * 1.7,
-                maxHeight: d * 1.7 * 2.6,
+                maxWidth: d,
+                maxHeight: d * 3,
                 alignment: Alignment.topCenter,
                 child: Padding(
-                  padding: EdgeInsets.only(top: d * 0.08),
+                  padding: EdgeInsets.only(top: d * 0.1),
                   child: Image.asset(
-                    AssetPaths.characterPose(character.name, 'idle'),
-                    width: d * 1.7,
+                    pose?.asset ??
+                        AssetPaths.characterPose(character.name, 'idle'),
+                    width: d * 0.92,
                     fit: BoxFit.fitWidth,
                     alignment: Alignment.topCenter,
                     gaplessPlayback: true,

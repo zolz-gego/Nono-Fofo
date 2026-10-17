@@ -226,14 +226,13 @@ class _ChoiceStateWidget extends State<_Choice> {
         ),
       ),
       child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.center,
+        fit: StackFit.expand,
         children: [
-          label,
+          Center(child: label),
           if (widget.state == _ChoiceState.right ||
               widget.state == _ChoiceState.wrong)
             PositionedDirectional(
-              top: AppDimens.spaceXs,
+              top: AppDimens.spaceSm,
               end: 0,
               child: FaIcon(
                 widget.state == _ChoiceState.right

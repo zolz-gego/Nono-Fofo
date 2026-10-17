@@ -5,7 +5,6 @@ import 'snakes_board.dart';
 class SnakesConfig {
   const SnakesConfig({
     required this.board,
-    this.boardImage,
     this.diceRoll = const Duration(milliseconds: 1000),
     this.hop = const Duration(milliseconds: 260),
     this.jump = const Duration(milliseconds: 900),
@@ -29,7 +28,6 @@ class SnakesConfig {
         ladders: jumps('ladders'),
         snakes: jumps('snakes'),
       ),
-      boardImage: json['board'] as String?,
       diceRoll: ms('diceRollMs', 1000),
       hop: ms('hopMs', 260),
       jump: ms('jumpMs', 900),
@@ -40,9 +38,6 @@ class SnakesConfig {
   }
 
   final SnakesBoard board;
-
-  /// The board picture (cut to the grid); drawn in code when null.
-  final String? boardImage;
 
   /// How long the dice tumbles.
   final Duration diceRoll;

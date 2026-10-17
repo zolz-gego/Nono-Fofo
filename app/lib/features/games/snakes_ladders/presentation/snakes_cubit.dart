@@ -36,7 +36,8 @@ enum SnakesPhase {
   /// The current player is answering [SnakesState.question].
   question,
 
-  /// A wrong answer: the right one shows before the turn passes.
+  /// Answered: the right answer glows for a moment (then the dice, or
+  /// the turn passes after a wrong one).
   answered,
 
   /// Waiting for the dice to be tapped (or for the computer).
@@ -277,13 +278,15 @@ class SnakesCubit extends Cubit<SnakesState> {
     if (right) {
       _emit(
         state.copyWith(
-          phase: SnakesPhase.roll,
+          phase: SnakesPhase.answered,
           picked: () => i,
           asked: asked,
           correct: correct,
           event: SnakesEvent.correct,
         ),
       );
+      await _wait(config.reveal ~/ 2);
+      if (!isClosed) _emit(state.copyWith(phase: SnakesPhase.roll));
       return;
     }
     _emit(

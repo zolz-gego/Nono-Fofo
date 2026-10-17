@@ -465,7 +465,6 @@ class _SnakesPageState extends State<SnakesPage> {
         final boardView = SnakesBoardView(
           board: board,
           side: side,
-          image: config.boardImage,
           tokens: [
             for (final p in state.players) (p.character, _accent(p.character)),
           ],
@@ -538,7 +537,7 @@ class _SnakesPageState extends State<SnakesPage> {
         ? (height * 0.16).clamp(64.0, 110.0)
         : (height * 0.42).clamp(52.0, 96.0);
     final charSize = vertical
-        ? (height * 0.26).clamp(70.0, 170.0)
+        ? ((height - 56) * 0.26).clamp(70.0, 160.0)
         : (height * 0.6).clamp(50.0, 170.0);
     final dice = Column(
       mainAxisSize: MainAxisSize.min,
@@ -580,9 +579,13 @@ class _SnakesPageState extends State<SnakesPage> {
       facesLeft: (i == 1) != (Directionality.of(context) == TextDirection.rtl),
     );
     return vertical
-        ? Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [player(0), dice, player(1)],
+        // Room above the top brother for his speech bubble.
+        ? Padding(
+            padding: const EdgeInsets.only(top: 56),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [player(0), dice, player(1)],
+            ),
           )
         : Row(
             crossAxisAlignment: CrossAxisAlignment.end,

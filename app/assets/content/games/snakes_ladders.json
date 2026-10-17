@@ -1,11 +1,10 @@
 {
-  "_readme": "Settings for the challenge game Snakes & Ladders (السلم والتعبان) by the Pyramids. Change numbers here; no code change needed. squares / columns: the board (64 squares, 8 to a row; square 1 is bottom-left and the numbers wind up row by row). ladders: bottom square -> top square. snakes: head square -> tail square. These are fixed on purpose (the same board every game); no two may start on the same square and none may end where another starts. A token must land exactly on the last square: a roll that goes past it stays put. board: the board picture (squares, numbers, snakes and ladders all drawn on it, square, cut to the grid); drawn in code when null. diceRollMs: how long the dice tumbles. hopMs: time per square while a token hops. jumpMs: time to climb a ladder or slide down a snake. revealMs: after a wrong answer, how long the right answer glows before the turn passes. computerWaitMs: the computer brother's pause before rolling. turnPauseMs: the pause between two turns.",
+  "_readme": "Settings for the challenge game Snakes & Ladders (السلم والتعبان) by the Pyramids. Change numbers here; no code change needed. squares / columns: the board (64 squares, 8 to a row; square 1 is bottom-left and the numbers wind up row by row). ladders: bottom square -> top square. snakes: head square -> tail square. These are fixed on purpose (the same board every game); no two may start on the same square and none may end where another starts. A token must land exactly on the last square: a roll that goes past it stays put. The board is drawn in code so the snakes and ladders always sit on these exact squares (see design/game-prompts.md for the art parts). diceRollMs: how long the dice tumbles. hopMs: time per square while a token hops. jumpMs: time to climb a ladder or slide down a snake. revealMs: after a wrong answer, how long the right answer glows before the turn passes. computerWaitMs: the computer brother's pause before rolling. turnPauseMs: the pause between two turns.",
   "version": 1,
   "squares": 64,
   "columns": 8,
   "ladders": { "4": 18, "9": 31, "21": 42, "28": 56, "46": 58 },
   "snakes": { "17": 7, "36": 15, "51": 12, "55": 33, "61": 43 },
-  "board": null,
   "diceRollMs": 1000,
   "hopMs": 260,
   "jumpMs": 900,
