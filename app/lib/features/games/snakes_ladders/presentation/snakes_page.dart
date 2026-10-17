@@ -578,23 +578,38 @@ class _SnakesPageState extends State<SnakesPage> {
       vertical: vertical,
       facesLeft: (i == 1) != (Directionality.of(context) == TextDirection.rtl),
     );
+    // Short screens: each part shrinks to fit instead of overflowing.
+    Widget fit(Widget child, Alignment alignment) => LayoutBuilder(
+      builder: (context, c) => FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: alignment,
+        child: SizedBox(width: c.maxWidth, child: child),
+      ),
+    );
     return vertical
         // Room above the top brother for his speech bubble.
         ? Padding(
             padding: const EdgeInsets.only(top: 56),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [player(0), dice, player(1)],
+              children: [
+                Flexible(child: fit(player(0), Alignment.center)),
+                Flexible(child: fit(dice, Alignment.center)),
+                Flexible(child: fit(player(1), Alignment.center)),
+              ],
             ),
           )
         : Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Expanded(child: player(0)),
+              Expanded(child: fit(player(0), Alignment.bottomCenter)),
               // Narrow, so the names beside it keep their room (the "Tap
               // the dice!" pill shrinks to fit).
-              SizedBox(width: diceSize * 1.25, child: dice),
-              Expanded(child: player(1)),
+              SizedBox(
+                width: diceSize * 1.25,
+                child: fit(dice, Alignment.bottomCenter),
+              ),
+              Expanded(child: fit(player(1), Alignment.bottomCenter)),
             ],
           );
   }
