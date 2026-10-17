@@ -76,6 +76,27 @@ class SnakesBoardView extends StatelessWidget {
             height: side,
             child: CustomPaint(painter: _BoardPainter(board)),
           ),
+          // Ladders under the snakes, both cut to the board.
+          Positioned(
+            left: 0,
+            top: 0,
+            width: side,
+            height: side,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(g.cell * 0.18),
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  for (final MapEntry(key: from, value: to)
+                      in board.ladders.entries)
+                    _BoardPiece.ladder(g, from, to),
+                  for (final (i, MapEntry(key: head, value: tail))
+                      in board.snakes.entries.indexed)
+                    _BoardPiece.snake(g, head, tail, i),
+                ],
+              ),
+            ),
+          ),
           Positioned(
             left: 0,
             top: side,
@@ -184,6 +205,81 @@ class CharacterToken extends StatelessWidget {
   }
 }
 
+/// A ladder or snake picture lying between two squares: rotated to point
+/// from [from] to [to] and stretched to reach both.
+class _BoardPiece extends StatelessWidget {
+  const _BoardPiece({
+    required this.image,
+    required this.from,
+    required this.to,
+    required this.width,
+    required this.pastFrom,
+    required this.pastTo,
+    this.flip = false,
+  });
+
+  /// From the ladder's bottom square to its top one.
+  factory _BoardPiece.ladder(BoardGeometry g, int from, int to) => _BoardPiece(
+    image: AssetPaths.snakesLadder,
+    from: g.center(from),
+    to: g.center(to),
+    width: g.cell * 0.62,
+    pastFrom: g.cell * 0.3,
+    pastTo: g.cell * 0.3,
+  );
+
+  /// From the snake's tail square to its head (the picture's head is at
+  /// its top, so it ends a little past the head square's centre). Every
+  /// other snake is mirrored, so they don't all wiggle the same way.
+  factory _BoardPiece.snake(BoardGeometry g, int head, int tail, int i) {
+    final length = (g.center(head) - g.center(tail)).distance;
+    return _BoardPiece(
+      image: AssetPaths.snake(i),
+      from: g.center(tail),
+      to: g.center(head),
+      width: min(g.cell * 1.05, length * 0.55),
+      pastFrom: g.cell * 0.1,
+      pastTo: g.cell * 0.35,
+      flip: i.isOdd,
+    );
+  }
+
+  final String image;
+  final Offset from;
+  final Offset to;
+  final double width;
+
+  /// How far the picture reaches past each square's centre.
+  final double pastFrom;
+  final double pastTo;
+  final bool flip;
+
+  @override
+  Widget build(BuildContext context) {
+    final d = to - from;
+    final u = d / d.distance;
+    final start = from - u * pastFrom, end = to + u * pastTo;
+    final length = (end - start).distance;
+    final center = (start + end) / 2;
+    return Positioned(
+      left: center.dx - width / 2,
+      top: center.dy - length / 2,
+      width: width,
+      height: length,
+      child: IgnorePointer(
+        // The picture points up; turn it to point along from -> to.
+        child: Transform.rotate(
+          angle: atan2(d.dx, -d.dy),
+          child: Transform.flip(
+            flipX: flip,
+            child: Image.asset(image, fit: BoxFit.fill),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// Sand strip under the board where tokens wait to start.
 class _StartStrip extends StatelessWidget {
   const _StartStrip();
@@ -199,8 +295,8 @@ class _StartStrip extends StatelessWidget {
   }
 }
 
-/// The painted board (until a drawn one is added): sandy squares with
-/// their numbers, wooden ladders and friendly cartoon snakes.
+/// The painted squares with their numbers (the ladders and snakes are
+/// pictures laid on top, see [_BoardPiece]).
 class _BoardPainter extends CustomPainter {
   _BoardPainter(this.board);
 
@@ -246,19 +342,6 @@ class _BoardPainter extends CustomPainter {
       number.paint(canvas, at);
     }
 
-    board.ladders.forEach((from, to) {
-      _ladder(canvas, g.center(from), g.center(to), cell);
-    });
-    var i = 0;
-    board.snakes.forEach((head, tail) {
-      _snake(
-        canvas,
-        g.center(head),
-        g.center(tail),
-        cell,
-        AppColors.snakes[i++ % AppColors.snakes.length],
-      );
-    });
     canvas.restore();
     canvas.drawRRect(
       frame,
@@ -267,143 +350,6 @@ class _BoardPainter extends CustomPainter {
         ..style = PaintingStyle.stroke
         ..strokeWidth = max(3, cell * 0.08),
     );
-  }
-
-  void _ladder(Canvas canvas, Offset a, Offset b, double cell) {
-    final dir = b - a;
-    final len = dir.distance;
-    final u = dir / len;
-    final n = Offset(-u.dy, u.dx) * (cell * 0.2);
-    // Rails run a little past both squares' centres.
-    final start = a - u * cell * 0.25, end = b + u * cell * 0.25;
-    final shadow = Paint()
-      ..color = AppColors.shadow
-      ..strokeWidth = cell * 0.11
-      ..strokeCap = StrokeCap.round;
-    final rail = Paint()
-      ..color = AppColors.ladderRail
-      ..strokeWidth = cell * 0.09
-      ..strokeCap = StrokeCap.round;
-    final railEdge = Paint()
-      ..color = AppColors.ladderRailDark
-      ..strokeWidth = cell * 0.13
-      ..strokeCap = StrokeCap.round;
-    final rung = Paint()
-      ..color = AppColors.ladderRung
-      ..strokeWidth = cell * 0.07
-      ..strokeCap = StrokeCap.round;
-    const lift = Offset(3, 4);
-    for (final side in [n, -n]) {
-      canvas.drawLine(start + side + lift, end + side + lift, shadow);
-    }
-    final total = (end - start).distance;
-    final rungs = max(2, (total / (cell * 0.38)).floor());
-    for (var k = 1; k < rungs; k++) {
-      final p = start + u * (total * k / rungs);
-      canvas
-        ..drawLine(p + n, p - n, railEdge..strokeWidth = cell * 0.09)
-        ..drawLine(p + n, p - n, rung);
-    }
-    for (final side in [n, -n]) {
-      canvas
-        ..drawLine(
-          start + side,
-          end + side,
-          railEdge..strokeWidth = cell * 0.13,
-        )
-        ..drawLine(start + side, end + side, rail);
-    }
-  }
-
-  void _snake(
-    Canvas canvas,
-    Offset head,
-    Offset tail,
-    double cell,
-    (Color, Color) colors,
-  ) {
-    final (body, belly) = colors;
-    final dir = tail - head;
-    final len = dir.distance;
-    final u = dir / len;
-    final n = Offset(-u.dy, u.dx);
-    final waves = max(1.0, (len / (cell * 2.2)).roundToDouble());
-    final amp = cell * 0.32;
-    Offset at(double t) {
-      // Wiggles calm down near the head and the tail.
-      final calm = sin(pi * t);
-      return head + dir * t + n * (sin(t * pi * 2 * waves) * amp * calm);
-    }
-
-    final samples = max(24, (len / (cell * 0.08)).round());
-    final points = [for (var k = 0; k <= samples; k++) at(k / samples)];
-    final thick = cell * 0.3;
-    double radius(double t) => thick / 2 * (1 - 0.75 * t);
-
-    final shadow = Paint()..color = AppColors.shadow;
-    final outline = Paint()..color = AppColors.cocoa.withValues(alpha: 0.6);
-    final fill = Paint()..color = body;
-    final spots = Paint()..color = belly;
-    for (final (k, p) in points.indexed) {
-      final t = k / samples;
-      canvas.drawCircle(p + const Offset(3, 4), radius(t), shadow);
-    }
-    for (final (k, p) in points.indexed) {
-      final t = k / samples;
-      canvas.drawCircle(p, radius(t) + 1.5, outline);
-    }
-    for (final (k, p) in points.indexed) {
-      final t = k / samples;
-      canvas.drawCircle(p, radius(t), fill);
-    }
-    final every = max(1, samples ~/ (waves * 6));
-    for (var k = every; k < samples - every; k += every * 2) {
-      final t = k / samples;
-      canvas.drawCircle(points[k], radius(t) * 0.45, spots);
-    }
-
-    // The head: a round face looking away from the body, with a tongue.
-    final face = -u;
-    final side = Offset(-face.dy, face.dx);
-    final hr = thick * 0.75;
-    final h = head + face * (hr * 0.2);
-    final tongue = Path()
-      ..moveTo(h.dx + face.dx * hr * 0.8, h.dy + face.dy * hr * 0.8);
-    final tip = h + face * (hr * 1.6);
-    tongue
-      ..lineTo(tip.dx, tip.dy)
-      ..moveTo(tip.dx, tip.dy)
-      ..lineTo(
-        (tip + face * (hr * 0.35) + side * (hr * 0.3)).dx,
-        (tip + face * (hr * 0.35) + side * (hr * 0.3)).dy,
-      )
-      ..moveTo(tip.dx, tip.dy)
-      ..lineTo(
-        (tip + face * (hr * 0.35) - side * (hr * 0.3)).dx,
-        (tip + face * (hr * 0.35) - side * (hr * 0.3)).dy,
-      );
-    canvas
-      ..drawPath(
-        tongue,
-        Paint()
-          ..color = AppColors.snakeTongue
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = max(1.5, cell * 0.035)
-          ..strokeCap = StrokeCap.round,
-      )
-      ..drawCircle(h + const Offset(3, 4), hr, shadow)
-      ..drawCircle(h, hr + 1.5, outline)
-      ..drawCircle(h, hr, fill);
-    for (final s in [side, -side]) {
-      final eye = h + face * (hr * 0.25) + s * (hr * 0.42);
-      canvas
-        ..drawCircle(eye, hr * 0.3, Paint()..color = AppColors.snakeEye)
-        ..drawCircle(
-          eye + face * (hr * 0.08),
-          hr * 0.15,
-          Paint()..color = AppColors.snakePupil,
-        );
-    }
   }
 
   @override

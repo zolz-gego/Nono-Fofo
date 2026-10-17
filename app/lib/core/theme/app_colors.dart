@@ -227,11 +227,9 @@ abstract final class AppColors {
   static const Color monasteryBread = Color(0xFFE2A85E);
 
   // ---------------------------------------------------------------------------
-  // Snakes & Ladders (by the Pyramids, placeholder art)
+  // Snakes & Ladders (by the Pyramids)
   // ---------------------------------------------------------------------------
   static const Color pyramidSkyTop = Color(0xFF7FC8E0);
-  static const Color pyramidSkyBottom = Color(0xFFF6E7C4);
-  static const Color pyramidLight = Color(0xFFE9C27E);
   static const Color pyramidShade = Color(0xFFC99A55);
   static const Color pyramidDune = Color(0xFFE6C88E);
   static const Color pyramidDuneDark = Color(0xFFD6B072);
@@ -240,23 +238,8 @@ abstract final class AppColors {
   static const Color snakesTileDark = Color(0xFFEBD3A0);
   static const Color snakesTileNumber = Color(0xFF8A6B4E);
   static const Color snakesFinish = sunYellow;
-  static const Color ladderRail = Color(0xFFA0704A);
-  static const Color ladderRailDark = Color(0xFF6E4A2F);
-  static const Color ladderRung = Color(0xFFC8935E);
-  static const Color snakeEye = white;
-  static const Color snakePupil = ink;
-  static const Color snakeTongue = Color(0xFFE5484D);
   static const Color diceFace = white;
   static const Color dicePip = ink;
-
-  /// Snake bodies (main colour, belly pattern), one pair per snake in turn.
-  static const List<(Color, Color)> snakes = [
-    (Color(0xFF6CC24A), Color(0xFFB8E68F)),
-    (Color(0xFFFF7A5C), Color(0xFFFFC2A8)),
-    (Color(0xFFB57EDC), Color(0xFFE2C8F4)),
-    (Color(0xFF3FBFA0), Color(0xFFA6EBD9)),
-    (Color(0xFFFF9F43), Color(0xFFFFD59E)),
-  ];
 
   /// A found letter shines gold again, like in Grandpa's book.
   static const Color letterGold = Color(0xFFE9A800);
