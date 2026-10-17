@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../core/assets/asset_paths.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimens.dart';
+import '../../../core/theme/app_icons.dart';
 import '../../../core/widgets/text/app_texts.dart';
 
 /// One stop on a [GameRoad].
@@ -16,6 +17,7 @@ class RoadStop {
     required this.title,
     required this.accent,
     required this.onTap,
+    this.done = false,
   });
 
   /// Name of the illustration in `assets/games/`.
@@ -26,6 +28,9 @@ class RoadStop {
   final String title;
   final Color accent;
   final VoidCallback onTap;
+
+  /// Finished (e.g. the challenge was won): shows a green tick.
+  final bool done;
 }
 
 /// Draws the piece that walks the road (the child's buddy). [height] is the
@@ -391,6 +396,26 @@ class _GameCardState extends State<_GameCard> {
                     child: AppText.h3('${widget.number}', color: AppColors.ink),
                   ),
                 ),
+                if (stop.done)
+                  PositionedDirectional(
+                    top: -AppDimens.spaceSm,
+                    end: -AppDimens.spaceSm,
+                    child: Container(
+                      width: _badgeSize,
+                      height: _badgeSize,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColors.surface, width: 3),
+                      ),
+                      child: const FaIcon(
+                        AppIcons.check,
+                        size: _badgeSize - 6,
+                        color: AppColors.correct,
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),

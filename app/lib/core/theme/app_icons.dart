@@ -39,6 +39,13 @@ abstract final class AppIcons {
   static const FaIconData hintBulb = FontAwesomeIcons.solidLightbulb;
   static const FaIconData miss = FontAwesomeIcons.xmark;
 
+  // Snakes & Ladders.
+  static const FaIconData dice = FontAwesomeIcons.diceFive;
+  static const FaIconData vsComputer = FontAwesomeIcons.robot;
+  static const FaIconData withFriend = FontAwesomeIcons.userGroup;
+  static const FaIconData changePlayers = FontAwesomeIcons.users;
+  static const FaIconData rightAnswer = FontAwesomeIcons.solidCircleCheck;
+
   // Game placeholders, shown until a game's illustration is added.
   static const FaIconData fishing = FontAwesomeIcons.fish;
   static const FaIconData writeLetter = FontAwesomeIcons.pencil;

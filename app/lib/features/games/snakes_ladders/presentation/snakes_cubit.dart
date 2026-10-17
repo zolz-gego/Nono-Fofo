@@ -191,13 +191,11 @@ class SnakesCubit extends Cubit<SnakesState> {
     required this.config,
     required this.level,
     required List<SnakesPlayer> players,
-    required List<LetterQuestionTemplate> templates,
-    required List<CopticLetter> pool,
+    required this.templates,
+    required this.pool,
     Random? random,
     SnakesWait? wait,
-  }) : _templates = templates,
-       _pool = pool,
-       _random = random ?? Random(),
+  }) : _random = random ?? Random(),
        _wait = wait ?? Future<void>.delayed,
        super(SnakesState(players: players));
 
@@ -210,8 +208,10 @@ class SnakesCubit extends Cubit<SnakesState> {
   final GameProgressRepository _progress;
   final SnakesConfig config;
   final GameLevel level;
-  final List<LetterQuestionTemplate> _templates;
-  final List<CopticLetter> _pool;
+
+  /// The question recipes for [level], and the letters they ask about.
+  final List<LetterQuestionTemplate> templates;
+  final List<CopticLetter> pool;
   final Random _random;
   final SnakesWait _wait;
 
@@ -241,8 +241,8 @@ class SnakesCubit extends Cubit<SnakesState> {
       return;
     }
     final q = LetterQuestion.make(
-      templates: _templates,
-      pool: _pool,
+      templates: templates,
+      pool: pool,
       random: _random,
       avoid: _recent,
     );

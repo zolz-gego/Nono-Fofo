@@ -14,8 +14,10 @@ class SnakesBoard extends Equatable {
     required this.snakes,
   }) {
     if (squares % columns != 0) {
-      throw Failure('snakes board: $squares squares don\'t fill rows of '
-          '$columns');
+      throw Failure(
+        'snakes board: $squares squares don\'t fill rows of '
+        '$columns',
+      );
     }
     final ends = <int>{};
     void check(int from, int to, String what, bool up) {
@@ -34,8 +36,10 @@ class SnakesBoard extends Equatable {
     snakes.forEach((from, to) => check(from, to, 'snake', false));
     for (final to in [...ladders.values, ...snakes.values]) {
       if (ends.contains(to)) {
-        throw Failure('snakes board: something ends on square $to, where '
-            'another snake or ladder starts');
+        throw Failure(
+          'snakes board: something ends on square $to, where '
+          'another snake or ladder starts',
+        );
       }
     }
   }

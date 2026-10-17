@@ -27,17 +27,14 @@ final _pool = [for (final id in 'abcdefghijklmn'.split('')) _letter(id)];
 
 SnakesConfig _realConfig() => SnakesConfig.fromJson(
   jsonDecode(
-        File('assets/content/games/snakes_ladders.json').readAsStringSync(),
-      )
-      as Map<String, dynamic>,
+    File('assets/content/games/snakes_ladders.json').readAsStringSync(),
+  ) as Map<String, dynamic>,
 );
 
 List<LetterQuestionTemplate> _realTemplates() {
-  final json =
-      jsonDecode(
-            File('assets/content/questions/letter_mcq.json').readAsStringSync(),
-          )
-          as Map<String, dynamic>;
+  final json = jsonDecode(
+    File('assets/content/questions/letter_mcq.json').readAsStringSync(),
+  ) as Map<String, dynamic>;
   return [
     for (final q in json['questions'] as List)
       LetterQuestionTemplate.fromJson(q as Map<String, dynamic>),
