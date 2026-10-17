@@ -70,6 +70,10 @@ BY_HEIGHT = {"fish", "jump", "hold"}
 # game starts the fishing line.
 ROD = {"fish", "reel"}
 
+# Poses drawn facing LEFT. The app expects every pose to face right (it
+# mirrors them itself when a brother walks left), so these are flipped.
+FLIP = {("fofo", "run")}
+
 # Head (hair) width in the output, in px. Fofo is smaller, like in the approved lineup.
 HEAD_W = {"nono": 300, "fofo": 262}
 SMALL_H = 256
@@ -300,6 +304,9 @@ def main():
             cut = rgba.crop(box)
             size = (round(cut.width * scale), round(cut.height * scale))
             full = cut.resize(size, Image.LANCZOS)
+            flip = (name, pose) in FLIP
+            if flip:
+                full = full.transpose(Image.FLIP_LEFT_RIGHT)
             full.save(os.path.join(OUT, name, f"{pose}.png"), optimize=True)
             sw = round(full.width * SMALL_H / full.height)
             full.resize((sw, SMALL_H), Image.LANCZOS).save(os.path.join(OUT, name, "small", f"{pose}.png"), optimize=True)
@@ -309,6 +316,9 @@ def main():
                 # head centre, so the app can line poses up when switching
                 "head_center": [round(((hx0 + hx1) / 2 - box[0]) * scale), round(((hy0 + hy1) / 2 - box[1]) * scale)],
             }
+            if flip:
+                hc = manifest["characters"][name][pose]["head_center"]
+                hc[0] = full.width - hc[0]
             if pose in ROD:
                 tx, ty = rod_tip(rgba)
                 manifest["characters"][name][pose]["rod_tip"] = [
