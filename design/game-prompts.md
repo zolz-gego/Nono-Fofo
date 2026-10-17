@@ -55,12 +55,13 @@ Four chunky rounded playing cards, centered, arranged in a loose playful fan as 
 
 ### 6. Search the Monastery: `monastery.png`
 
-Save it as `design/reference/monastery/icon.webp` (any shape, white
-background is fine): `tools/games/process_monastery.py` cuts it out and
-puts it on the beige square as `app/assets/games/monastery.png`.
+Paste the style block first, like the other cards. Save the result as
+`design/reference/monastery/icon.webp`; `tools/games/process_monastery.py`
+cuts it out and puts it on the same beige square as the other cards
+(`app/assets/games/monastery.png`).
 
 ```
-A cozy corner of an old Egyptian desert monastery, like a small hide-and-seek picture: a warm sand-coloured plastered wall with a small arched stone window showing blue sky and golden dunes. In front of it, an old wooden chair with a round spindle back and a round terracotta water jar with a teal zigzag band on a little wooden stand. A big Coptic letter Ⲃ peeks out from behind the chair, only its top half showing, and a small letter ⲁ peeks out from behind the jar, only its left side showing, both in cocoa brown #5B4B3A. A big magnifying glass with a sunny-yellow #FFC845 handle and a mist-blue lens floats in front at an angle, its lens over the peeking Ⲃ, with small sunny-yellow star sparkles around it. Playful and inviting. Same size and weight as a single object illustration: bold, simple and readable at small size.
+A round terracotta clay water jar (an Egyptian zeer) with a narrow neck and a deep-teal #0F4C5C zigzag band, standing on a small cocoa-brown wooden stand, centered. A big Coptic letter Ⲃ in cocoa brown #5B4B3A peeks out from behind the jar on one side, only half of it showing, as if it is hiding. A big magnifying glass with a chunky sunny-yellow #FFC845 handle and a mist-blue #A8DADC lens floats in front at an angle, its lens over the peeking Ⲃ so that part of the letter looks bigger through the glass. A few small sunny-yellow star sparkles around the lens. Playful hide-and-seek feeling. Same size and weight as a single object illustration: bold, simple and readable at small size.
 ```
 
 ### 4. Challenge your brother: `challenge.png`
@@ -279,29 +280,17 @@ run, from the repo root:
    hiding spots from the outlines (letters about half hidden) and writes a
    preview with every spot circled to `design/reference/monastery/preview_*.png`.
 
-Still to make: the road card (prompt 6 above) and the level tiles (below).
+Still to make: the road card (prompt 6 above) and the level tile picture
+(below).
 
-### Level tiles (one per number of letters)
+### Level tile (one picture for every level)
 
-Each level tile in the picker shows a small picture above "5 letters",
-"6 letters"… The pictures grow busier as the level gets harder: more
-objects and more letters peeking. Paste the **level block**, then one line
-under it. Save as `design/reference/monastery/level_5.webp` …
-`level_10.webp` and run `process_monastery.py` (it cuts them out and points
-`levelArt` in the JSON at them). Until a picture is there the tile draws a
-magnifying glass over a few letters.
-
-Level block:
+Every tile in the "how many letters?" picker shows this same picture, with
+the number written under it ("5 حروف", "6 حروف"…). Paste the **style block**
+first, then this. Save as `design/reference/monastery/level.webp` and run
+`process_monastery.py` (it cuts it out and points `levelArt` in the JSON at
+it). Until it's there the tiles draw a magnifying glass over a few letters.
 
 ```
-A small square icon for a level button in a children's hide-and-seek game, in the same flat 2D vector cartoon style as the attached reference: thin warm-brown #5B4B3A outlines, flat colors with soft shading, rounded friendly shapes, bold and readable at small size (it is shown about 100 pixels wide). A tiny scene from an old Egyptian desert monastery sitting on a small oval patch of warm beige stone floor, with a magnifying glass with a sunny-yellow #FFC845 handle and a mist-blue lens hovering over it. Coptic letters in cocoa brown #5B4B3A peek out from behind the objects, each only partly visible. Colors from this palette: deep teal #0F4C5C, mist blue #A8DADC, warm sand #EFE6D8, slate teal #4F7C82, cocoa brown #5B4B3A, sunny yellow #FFC845, coral #FF7A5C, leaf green #6CC24A, cream #FFFBF4, plus warm wood browns and terracotta. Plain flat pure white background, nothing else. No numbers, no text other than the Coptic letters, no logos, no watermark, no religious symbols. The scene:
+A single small wooden chair with a round spindle back, in warm cocoa-brown wood, slightly turned, centered. Two Coptic letters in cocoa brown #5B4B3A hide behind it, each only partly showing: a capital Ⲁ peeking out above the chair's back and a small ⲅ peeking out between the chair's legs. A big magnifying glass with a chunky sunny-yellow #FFC845 handle and a mist-blue #A8DADC lens leans in from one side, its lens over the peeking Ⲁ. A couple of small sunny-yellow star sparkles. No numbers. Very simple, bold and readable at small size, because it is shown only about 100 pixels wide on a button.
 ```
-
-| Save as | Scene line (paste after the block) |
-|---|---|
-| `level_5.webp` | Very simple and calm: one round terracotta water jar on a little wooden stand, with one letter Ⲁ peeking out from behind it. |
-| `level_6.webp` | A terracotta water jar and a woven basket of round golden loaves side by side, with two letters (Ⲁ, Ⲃ) peeking out from behind them. |
-| `level_7.webp` | A wooden chair with a spindle back, a terracotta water jar and a woven bread basket, with three letters (Ⲁ, Ⲃ, Ⲅ) peeking out from behind them. |
-| `level_8.webp` | A small wooden bookshelf, a wooden chair and a terracotta water jar, with four letters (Ⲁ, Ⲃ, Ⲅ, Ⲇ) peeking out from behind them. |
-| `level_9.webp` | A small arched wooden door in a stone frame, a bookshelf, a chair and a potted palm, with five letters (Ⲁ, Ⲃ, Ⲅ, Ⲇ, Ⲉ) peeking out from behind them. |
-| `level_10.webp` | A busy little room corner: an arched door, a bookshelf, a chair, a potted palm, a brass candle stand and a stack of books, with six letters (Ⲁ, Ⲃ, Ⲅ, Ⲇ, Ⲉ, Ⲍ) peeking out from behind them, and a few small sunny-yellow star sparkles. |

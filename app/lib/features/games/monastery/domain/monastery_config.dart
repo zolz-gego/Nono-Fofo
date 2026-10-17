@@ -5,7 +5,7 @@ import 'dart:ui' show Color, Rect, Size;
 class MonasteryConfig {
   const MonasteryConfig({
     this.letterCounts = const [5, 6, 7, 8, 9, 10],
-    this.levelArt = const {},
+    this.levelArt,
     this.smallScreenWidth = 600,
     this.heroRun = const Duration(milliseconds: 650),
     this.nameBubble = const Duration(milliseconds: 1500),
@@ -35,11 +35,7 @@ class MonasteryConfig {
               ?.map((e) => (e as num).toInt())
               .toList() ??
           d.letterCounts,
-      levelArt: {
-        for (final e
-            in (json['levelArt'] as Map<String, dynamic>? ?? const {}).entries)
-          if (e.value is String) int.parse(e.key): e.value as String,
-      },
+      levelArt: json['levelArt'] as String?,
       smallScreenWidth: num_('smallScreenWidth') ?? d.smallScreenWidth,
       heroRun: ms('heroRunMs') ?? d.heroRun,
       nameBubble: ms('nameBubbleMs') ?? d.nameBubble,
@@ -66,9 +62,9 @@ class MonasteryConfig {
   /// The levels: how many letters hide.
   final List<int> letterCounts;
 
-  /// A picture per level tile (by number of letters); tiles without one
-  /// are drawn in code.
-  final Map<int, String> levelArt;
+  /// The picture on every level tile (the number of letters is written
+  /// under it); drawn in code without it.
+  final String? levelArt;
 
   /// Screens whose shortest side is under this are "small": no brothers.
   final double smallScreenWidth;

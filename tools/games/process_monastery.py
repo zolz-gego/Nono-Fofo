@@ -8,8 +8,8 @@ app assets.
   AND the white holes inside it, like between chair slats or under the
   bench), trimmed to the object, at most 900 px on the long side.
 - icon.webp, if there, -> the road card (cut out, on the beige square).
-- level_5.webp ... level_10.webp, if there, -> the level tile pictures (cut
-  out, trimmed); "levelArt" in the JSON is pointed at them.
+- level.webp, if there, -> the picture on every level tile (cut out,
+  trimmed); "levelArt" in the JSON is pointed at it.
 
 The scene's "rect" for each object in app/assets/content/games/monastery.json
 should keep the trimmed picture's shape; the script prints each one's
@@ -101,7 +101,7 @@ def fit(img, longest):
 
 def main():
     os.makedirs(OUT, exist_ok=True)
-    level_art = {}
+    level_art = None
     for name in sorted(os.listdir(SRC)):
         stem, ext = os.path.splitext(name)
         # preview_*.png are monastery_spots.py's previews, not art.
@@ -112,11 +112,11 @@ def main():
             room = fit(img.convert("RGB"), ROOM_MAX)
             room.save(os.path.join(OUT, ROOMS[stem]), quality=88)
             print(f"{ROOMS[stem]:16} {room.size}  aspect {room.width / room.height:.4f}")
-        elif re.fullmatch(r"level_\d+", stem):
+        elif stem == "level":
             tile = fit(cut_out(img), LEVEL_MAX)
-            tile.save(os.path.join(OUT, f"{stem}.png"), optimize=True)
-            level_art[stem.split("_")[1]] = f"assets/games/monastery/{stem}.png"
-            print(f"{stem + '.png':16} {tile.size}")
+            tile.save(os.path.join(OUT, "level.png"), optimize=True)
+            level_art = "assets/games/monastery/level.png"
+            print(f"{'level.png':16} {tile.size}")
         elif stem == "icon":
             subject = cut_out(img)
             k = FILL * ICON_SIZE / max(subject.size)
@@ -137,8 +137,8 @@ def main():
     if level_art:
         with open(CONFIG, encoding="utf-8") as f:
             text = f.read()
-        art = json.dumps(dict(sorted(level_art.items(), key=lambda e: int(e[0]))))
-        text = re.sub(r'"levelArt": \{[^}]*\}', f'"levelArt": {art}', text)
+        art = json.dumps(level_art)
+        text = re.sub(r'"levelArt": (null|"[^"]*")', f'"levelArt": {art}', text)
         with open(CONFIG, "w", encoding="utf-8") as f:
             f.write(text)
         print("levelArt ->", art)

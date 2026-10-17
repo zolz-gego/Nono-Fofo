@@ -133,7 +133,7 @@ class _MonasteryLevelPageState extends State<MonasteryLevelPage> {
                       for (final (i, n) in levels.indexed)
                         _LevelTile(
                               count: n,
-                              art: config.levelArt[n],
+                              art: config.levelArt,
                               best: _progress.bestTime(MonasteryCubit.id, '$n'),
                               onTap: () => _play(n),
                             )
