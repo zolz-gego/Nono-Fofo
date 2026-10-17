@@ -25,8 +25,7 @@ Type your name and pick the brother you'll play with.
 ## Level road
 
 A level's games on a winding road; your buddy runs to the game you tap.
-Grandpa's Cards is the 4th stop and Search the Monastery the 5th, before
-the challenge.
+Grandpa's Cards is the 4th stop, before the challenge.
 
 ![Road](04-road.jpg)
 
@@ -78,33 +77,11 @@ Time, moves, the best time (or "New record!"), and sharing the result.
 
 ![Cards solved](20-cards-solved.jpg)
 
-## Search the Monastery: how many letters
-
-Pick 5 to 10 hidden letters, on phones too. Every tile is the same card;
-a played level shows a green tick and its best time with that run's wrong
-taps.
-
-![Letter count](21-monastery-levels.jpg)
-
 ## Search the Monastery
 
 Letters hide behind things in a monastery room, only part of each showing;
 the ones to find are listed at the bottom with their names. Your buddy runs
-to every letter you find and the other brother says its name (or "Not
-here!" on a wrong tap); found letters turn gold and are crossed out. Timer,
-letters found and a hint button on top.
+to every letter you find and the other brother says its name; found letters
+turn gold and are crossed out.
 
 ![Monastery](22-monastery.jpg)
-![Monastery in English](23-monastery-english.jpg)
-
-Phones get a tall room of their own (no scrolling) and no brothers; the
-name pops up in a bubble instead.
-
-![Monastery on a phone](25-monastery-phone.jpg)
-
-## Search the Monastery: all found
-
-Time, wrong taps, hints, the best time (or "New record!"), and sharing the
-result.
-
-![Monastery solved](24-monastery-solved.jpg)
