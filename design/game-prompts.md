@@ -280,16 +280,14 @@ run, from the repo root:
    hiding spots from the outlines (letters about half hidden) and writes a
    preview with every spot circled to `design/reference/monastery/preview_*.png`.
 
-Still to make: the road card (prompt 6 above) and the level tile picture
-(below).
+Road card (`icon.webp`, the chair) and level card (`level_card.webp`) are
+done too (2026-10-17); `process_monastery.py` handles both.
 
 ### Level tile (one picture for every level)
 
 Every tile in the "how many letters?" picker shows this same picture, with
 the number written under it ("5 حروف", "6 حروف"…). Paste the **style block**
-first, then this. Save as `design/reference/monastery/level.webp` and run
-`process_monastery.py` (it cuts it out and points `levelArt` in the JSON at
-it). Until it's there the tiles draw a magnifying glass over a few letters.
+first, then this. Not used: the level card (`level_card.webp`) was chosen instead. Until it's there the tiles draw a magnifying glass over a few letters.
 
 ```
 A single small wooden chair with a round spindle back, in warm cocoa-brown wood, slightly turned, centered. Two Coptic letters in cocoa brown #5B4B3A hide behind it, each only partly showing: a capital Ⲁ peeking out above the chair's back and a small ⲅ peeking out between the chair's legs. A big magnifying glass with a chunky sunny-yellow #FFC845 handle and a mist-blue #A8DADC lens leans in from one side, its lens over the peeking Ⲁ. A couple of small sunny-yellow star sparkles. No numbers. Very simple, bold and readable at small size, because it is shown only about 100 pixels wide on a button.

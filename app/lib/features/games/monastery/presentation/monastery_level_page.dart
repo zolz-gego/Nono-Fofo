@@ -133,7 +133,7 @@ class _MonasteryLevelPageState extends State<MonasteryLevelPage> {
                       for (final (i, n) in levels.indexed)
                         _LevelTile(
                               count: n,
-                              art: config.levelArt,
+                              card: config.levelCard,
                               best: _progress.bestTime(MonasteryCubit.id, '$n'),
                               onTap: () => _play(n),
                             )
@@ -177,76 +177,114 @@ class _LevelTile extends StatelessWidget {
     required this.count,
     required this.best,
     required this.onTap,
-    this.art,
+    this.card,
   });
 
   final int count;
   final TimedRecord? best;
   final VoidCallback onTap;
 
-  /// The tile's picture (drawn in code without it).
-  final String? art;
+  /// The card picture behind the tile; its top half is a picture and the
+  /// lower half is empty for the text. A plain tile without it.
+  final String? card;
 
   static const double _width = 140;
 
+  /// The card picture's width / height.
+  static const double _cardAspect = 0.5625;
+
+  /// Where the card's empty part starts (share of its height).
+  static const double _cardTextTop = 0.5;
+
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final best = this.best;
+    final card = this.card;
+    final radius = BorderRadius.circular(AppDimens.radiusMd);
+    if (card == null) {
+      return SizedBox(
+        width: _width,
+        child: Material(
+          color: AppColors.surface,
+          borderRadius: radius,
+          elevation: 2,
+          shadowColor: AppColors.shadow,
+          child: InkWell(
+            borderRadius: radius,
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.all(AppDimens.spaceMd),
+              child: Column(
+                children: [
+                  SizedBox(height: 76, child: _LetterPeek(count: count)),
+                  const SizedBox(height: AppDimens.spaceSm),
+                  _texts(context),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    const height = _width / _cardAspect;
     return SizedBox(
       width: _width,
+      height: height,
       child: Material(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(AppDimens.radiusMd),
+        borderRadius: radius,
         elevation: 2,
         shadowColor: AppColors.shadow,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(AppDimens.radiusMd),
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.all(AppDimens.spaceMd),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 76,
-                  child: art == null
-                      ? _LetterPeek(count: count)
-                      : Image.asset(
-                          art!,
-                          fit: BoxFit.contain,
-                          errorBuilder: (_, _, _) => _LetterPeek(count: count),
-                        ),
-                ),
-                const SizedBox(height: AppDimens.spaceSm),
-                AppText.h3(l10n.monasteryCount(count)),
-                const SizedBox(height: AppDimens.spaceXs),
-                ConstrainedBox(
-                  // Same height with or without a record, so tiles line up.
-                  constraints: const BoxConstraints(minHeight: 56),
-                  child: best == null
-                      ? null
-                      : Column(
-                          children: [
-                            const FaIcon(
-                              AppIcons.passed,
-                              size: 18,
-                              color: AppColors.correct,
-                            ),
-                            const SizedBox(height: 2),
-                            AppText(
-                              l10n.monasteryBest(best.clock, best.moves),
-                              variant: AppTextVariant.caption,
-                              color: AppColors.textMuted,
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                ),
-              ],
+        clipBehavior: Clip.antiAlias,
+        child: Ink.image(
+          image: AssetImage(card),
+          fit: BoxFit.fill,
+          child: InkWell(
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppDimens.spaceMd,
+                height * _cardTextTop + AppDimens.spaceSm,
+                AppDimens.spaceMd,
+                AppDimens.spaceMd,
+              ),
+              child: _texts(context),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  /// How many letters, and the tick with the best time once played.
+  Widget _texts(BuildContext context) {
+    final l10n = context.l10n;
+    final best = this.best;
+    return Column(
+      children: [
+        AppText.h3(l10n.monasteryCount(count)),
+        const SizedBox(height: AppDimens.spaceXs),
+        ConstrainedBox(
+          // Same height with or without a record, so tiles line up.
+          constraints: const BoxConstraints(minHeight: 56),
+          child: best == null
+              ? null
+              : Column(
+                  children: [
+                    const FaIcon(
+                      AppIcons.passed,
+                      size: 18,
+                      color: AppColors.correct,
+                    ),
+                    const SizedBox(height: 2),
+                    AppText(
+                      l10n.monasteryBest(best.clock, best.moves),
+                      variant: AppTextVariant.caption,
+                      color: AppColors.textMuted,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+        ),
+      ],
     );
   }
 }

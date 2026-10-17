@@ -8,8 +8,9 @@ app assets.
   AND the white holes inside it, like between chair slats or under the
   bench), trimmed to the object, at most 900 px on the long side.
 - icon.webp, if there, -> the road card (cut out, on the beige square).
-- level.webp, if there, -> the picture on every level tile (cut out,
-  trimmed); "levelArt" in the JSON is pointed at it.
+- level_card.webp, if there, -> the card behind every level tile (the
+  number of letters is written in its empty lower part); "levelCard" in
+  the JSON is pointed at it.
 
 The scene's "rect" for each object in app/assets/content/games/monastery.json
 should keep the trimmed picture's shape; the script prints each one's
@@ -35,7 +36,7 @@ SRC = os.path.join(ROOT, "design", "reference", "monastery")
 OUT = os.path.join(ROOT, "app", "assets", "games", "monastery")
 ICON_OUT = os.path.join(ROOT, "app", "assets", "games", "monastery.png")
 CONFIG = os.path.join(ROOT, "app", "assets", "content", "games", "monastery.json")
-LEVEL_MAX = 360
+LEVEL_CARD_WIDTH = 480
 ROOMS = {"room": "room.webp", "room_tall": "room_tall.webp"}
 ROOM_MAX = 1920
 OBJECT_MAX = 900
@@ -101,7 +102,7 @@ def fit(img, longest):
 
 def main():
     os.makedirs(OUT, exist_ok=True)
-    level_art = None
+    level_card = None
     for name in sorted(os.listdir(SRC)):
         stem, ext = os.path.splitext(name)
         # preview_*.png are monastery_spots.py's previews, not art.
@@ -112,11 +113,13 @@ def main():
             room = fit(img.convert("RGB"), ROOM_MAX)
             room.save(os.path.join(OUT, ROOMS[stem]), quality=88)
             print(f"{ROOMS[stem]:16} {room.size}  aspect {room.width / room.height:.4f}")
-        elif stem == "level":
-            tile = fit(cut_out(img), LEVEL_MAX)
-            tile.save(os.path.join(OUT, "level.png"), optimize=True)
-            level_art = "assets/games/monastery/level.png"
-            print(f"{'level.png':16} {tile.size}")
+        elif stem == "level_card":
+            card = img.convert("RGB")
+            k = LEVEL_CARD_WIDTH / card.width
+            card = card.resize((LEVEL_CARD_WIDTH, round(card.height * k)), Image.LANCZOS)
+            card.save(os.path.join(OUT, "level_card.webp"), quality=90)
+            level_card = "assets/games/monastery/level_card.webp"
+            print(f"{'level_card.webp':16} {card.size}  w/h {card.width / card.height:.4f}")
         elif stem == "icon":
             subject = cut_out(img)
             k = FILL * ICON_SIZE / max(subject.size)
@@ -134,14 +137,15 @@ def main():
             obj = fit(cut_out(img), OBJECT_MAX)
             obj.save(os.path.join(OUT, f"{stem}.png"), optimize=True)
             print(f"{stem + '.png':16} {obj.size}  w/h {obj.width / obj.height:.4f}")
-    if level_art:
+    if level_card:
         with open(CONFIG, encoding="utf-8") as f:
             text = f.read()
-        art = json.dumps(level_art)
-        text = re.sub(r'"levelArt": (null|"[^"]*")', f'"levelArt": {art}', text)
+        text = re.sub(
+            r'"levelCard": (null|"[^"]*")', f'"levelCard": {json.dumps(level_card)}', text
+        )
         with open(CONFIG, "w", encoding="utf-8") as f:
             f.write(text)
-        print("levelArt ->", art)
+        print("levelCard ->", level_card)
 
 
 if __name__ == "__main__":
