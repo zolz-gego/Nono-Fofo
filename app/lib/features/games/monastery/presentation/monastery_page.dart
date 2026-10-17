@@ -535,6 +535,10 @@ class _MonasteryPageState extends State<MonasteryPage> {
             child: _ZoomableScene(
               sceneSize: layout.scene.size,
               viewport: layout.sceneArea.size,
+              focus: _hint == null || _hint!.index >= state.letters.length
+                  ? null
+                  : state.letters[_hint!.index].center + _hint!.offset,
+              focusId: _hint?.id ?? 0,
               child: scene,
             ),
           )
@@ -602,30 +606,95 @@ class _MonasteryPageState extends State<MonasteryPage> {
 }
 
 /// Phones: the room as tall as the space allows, dragged sideways and
-/// pinch-zoomed when it's wider than the screen.
-class _ZoomableScene extends StatelessWidget {
+/// pinch-zoomed when it's wider than the screen. A new [focus] (a hint)
+/// glides the room so that point is in view.
+class _ZoomableScene extends StatefulWidget {
   const _ZoomableScene({
     required this.sceneSize,
     required this.viewport,
     required this.child,
+    this.focus,
+    this.focusId = 0,
   });
 
   final Size sceneSize;
   final Size viewport;
   final Widget child;
 
+  /// A point to bring into view, in scene fractions.
+  final Offset? focus;
+
+  /// Changes for every new [focus].
+  final int focusId;
+
+  @override
+  State<_ZoomableScene> createState() => _ZoomableSceneState();
+}
+
+class _ZoomableSceneState extends State<_ZoomableScene>
+    with SingleTickerProviderStateMixin {
+  final TransformationController _view = TransformationController();
+  late final AnimationController _glide = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 450),
+  )..addListener(() => _view.value = _tween?.evaluate(_curve) ?? _view.value);
+  late final CurvedAnimation _curve = CurvedAnimation(
+    parent: _glide,
+    curve: Curves.easeInOut,
+  );
+  Matrix4Tween? _tween;
+
+  double get _contentWidth =>
+      max(widget.sceneSize.width, widget.viewport.width);
+
+  @override
+  void didUpdateWidget(_ZoomableScene old) {
+    super.didUpdateWidget(old);
+    final focus = widget.focus;
+    if (focus != null && widget.focusId != old.focusId) _glideTo(focus);
+  }
+
+  void _glideTo(Offset focus) {
+    final scene = widget.sceneSize, view = widget.viewport;
+    final scale = _view.value.getMaxScaleOnAxis();
+    final left = (_contentWidth - scene.width) / 2;
+    final px = (left + focus.dx * scene.width) * scale;
+    final py = focus.dy * scene.height * scale;
+    final tx = (view.width / 2 - px)
+        .clamp(min(0.0, view.width - _contentWidth * scale), 0.0)
+        .toDouble();
+    final ty = (view.height / 2 - py)
+        .clamp(min(0.0, view.height - view.height * scale), 0.0)
+        .toDouble();
+    _tween = Matrix4Tween(
+      begin: _view.value.clone(),
+      end: Matrix4.identity()
+        ..translateByDouble(tx, ty, 0, 1)
+        ..scaleByDouble(scale, scale, 1, 1),
+    );
+    _glide.forward(from: 0);
+  }
+
+  @override
+  void dispose() {
+    _glide.dispose();
+    _curve.dispose();
+    _view.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final w = max(sceneSize.width, viewport.width);
     return InteractiveViewer(
+      transformationController: _view,
       constrained: false,
-      minScale: min(1, viewport.width / sceneSize.width),
+      minScale: min(1, widget.viewport.width / widget.sceneSize.width),
       maxScale: 3,
       child: SizedBox(
-        width: w,
-        height: viewport.height,
+        width: _contentWidth,
+        height: widget.viewport.height,
         child: Center(
-          child: SizedBox.fromSize(size: sceneSize, child: child),
+          child: SizedBox.fromSize(size: widget.sceneSize, child: widget.child),
         ),
       ),
     );
