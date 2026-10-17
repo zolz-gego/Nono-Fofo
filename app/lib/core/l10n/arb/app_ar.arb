@@ -391,5 +391,159 @@
         "type": "String"
       }
     }
+  },
+  "gameSnakes": "السلم والتعبان",
+  "snakesPickMode": "عايز تلعب إزاي؟",
+  "snakesVsComputer": "العب ضد {opponent}",
+  "@snakesVsComputer": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "snakesVsComputerBody": "{opponent} بيرمي الزهر لوحده",
+  "@snakesVsComputerBody": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "snakesWithFriend": "العب مع صاحبك",
+  "snakesWithFriendBody": "اتبادلوا الأدوار على نفس الجهاز",
+  "snakesFriendName": "اسم صاحبك",
+  "snakesFriendPlaysAs": "صاحبك هيلعب بقطعة {hero}",
+  "@snakesFriendPlaysAs": {
+    "placeholders": {
+      "hero": {
+        "type": "String"
+      }
+    }
+  },
+  "snakesStart": "يلا يا {name}! جاوب صح عشان ترمي الزهر",
+  "@snakesStart": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "snakesTurn": "دور {name}",
+  "@snakesTurn": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "snakesWhatName": "اسم الحرف ده إيه؟",
+  "snakesWhichLetter": "فين حرف {name}؟",
+  "@snakesWhichLetter": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "snakesTapDice": "دوس على الزهر!",
+  "snakesCorrect": "صح! ارمي الزهر",
+  "snakesWrong": "أوبس! الدور راح",
+  "snakesOvershoot": "كتير! محتاج {count} بالظبط",
+  "@snakesOvershoot": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "snakesLadder": "اطلع السلم!",
+  "snakesSnake": "يا خبر، تعبان!",
+  "snakesComputerThinks": "دوري أنا!",
+  "snakesWinner": "{name} كسب!",
+  "@snakesWinner": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "snakesYouWon": "كسبت!",
+  "snakesYouWonBody": "وصلت للمربع {count} قبل {opponent}",
+  "@snakesYouWonBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "snakesYouLost": "{name} كسب المرة دي!",
+  "@snakesYouLost": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "snakesYouLostBody": "كل ما تجاوب صح أكتر، ترمي الزهر أكتر. جرب تاني!",
+  "snakesFriendWonBody": "{name} وصل للمربع {count} الأول",
+  "@snakesFriendWonBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "snakesChallengeDone": "خلّصت التحدي!",
+  "snakesRight": "إجابات صح",
+  "snakesRolls": "رميات",
+  "snakesChangePlayers": "غيّر اللاعبين",
+  "snakesShare": "شارك",
+  "snakesShareTitle": "{name} كسب السلم والتعبان!",
+  "@snakesShareTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "snakesShareVs": "{winner} غلب {loser}",
+  "@snakesShareVs": {
+    "placeholders": {
+      "winner": {
+        "type": "String"
+      },
+      "loser": {
+        "type": "String"
+      }
+    }
+  },
+  "snakesShareWith": "مع {hero} عند الأهرامات",
+  "@snakesShareWith": {
+    "placeholders": {
+      "hero": {
+        "type": "String"
+      }
+    }
+  },
+  "snakesShareText": "{name} كسب السلم والتعبان في نونو وفوفو، وجاوب {correct} من {asked} حروف صح!",
+  "@snakesShareText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "correct": {
+        "type": "int"
+      },
+      "asked": {
+        "type": "int"
+      }
+    }
   }
 }

@@ -14,6 +14,7 @@ import '../../engines/sound/domain/sound_repository.dart';
 import '../../features/games/balloons/data/balloons_config_repository.dart';
 import '../../features/games/cards/data/cards_config_repository.dart';
 import '../../features/games/monastery/data/monastery_config_repository.dart';
+import '../../features/games/snakes_ladders/data/snakes_config_repository.dart';
 import '../../features/games/fishing/data/fishing_config_repository.dart';
 import '../../features/games/progress/data/game_progress_repository_impl.dart';
 import '../../features/games/writing/data/writing_config_repository.dart';
@@ -22,6 +23,7 @@ import '../../features/letters/data/letter_repository_impl.dart';
 import '../../features/letters/domain/letter_repository.dart';
 import '../../features/questions/data/question_parser_registry.dart';
 import '../../features/questions/data/question_repository_impl.dart';
+import '../../features/questions/domain/letter_question.dart';
 import '../../features/questions/domain/load_questions.dart';
 import '../../features/questions/domain/question_repository.dart';
 import '../../features/settings/data/settings_repository_impl.dart';
@@ -57,7 +59,13 @@ Future<void> configureDependencies() async {
   sl.registerFactory(() => SettingsCubit(sl(), sl()));
 
   // Questions — register a parser per question type here.
-  sl.registerLazySingleton(QuestionParserRegistry.new);
+  sl.registerLazySingleton(
+    () => QuestionParserRegistry()
+      ..register(
+        LetterQuestionTemplate.typeId,
+        LetterQuestionTemplate.fromJson,
+      ),
+  );
   sl.registerLazySingleton<QuestionRepository>(
     () => QuestionRepositoryImpl(sl(), sl()),
   );
@@ -73,6 +81,7 @@ Future<void> configureDependencies() async {
   sl.registerLazySingleton(() => WritingConfigRepository(sl()));
   sl.registerLazySingleton(() => CardsConfigRepository(sl()));
   sl.registerLazySingleton(() => MonasteryConfigRepository(sl()));
+  sl.registerLazySingleton(() => SnakesConfigRepository(sl()));
 
   // Warm up engines before the first frame.
   await sl<SoundService>().init();

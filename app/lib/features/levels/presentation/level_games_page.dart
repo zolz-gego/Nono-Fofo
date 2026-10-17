@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/di/injection.dart';
 import '../../../app/router.dart';
 import '../../../core/domain/character_id.dart';
 import '../../../core/l10n/l10n.dart';
@@ -16,6 +17,8 @@ import '../../../engines/characters/presentation/animated_character.dart';
 import '../../../engines/characters/presentation/character_controller.dart';
 import '../../../engines/sound/application/sound_service.dart';
 import '../../../engines/sound/domain/sound_event.dart';
+import '../../games/progress/domain/game_progress_repository.dart';
+import '../../games/snakes_ladders/presentation/snakes_cubit.dart';
 import '../../settings/presentation/language_button.dart';
 import '../../settings/presentation/mute_button.dart';
 import '../domain/game_level.dart';
@@ -82,16 +85,13 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
       LevelGame.writeLetter => AppRoutes.writing,
       LevelGame.cards => AppRoutes.cards,
       LevelGame.monastery => AppRoutes.monastery,
-      _ => null,
+      LevelGame.challenge => AppRoutes.challenge,
     };
-    if (route != null) {
-      _buddy.play(CharacterAction.cheer, hold: const Duration(seconds: 1));
-      context.push(route, extra: widget.setup);
-      return;
-    }
-    _buddy
-      ..play(CharacterAction.hint, hold: const Duration(seconds: 2))
-      ..say(context.l10n.gameComingSoon(widget.setup.name));
+    _buddy.play(CharacterAction.cheer, hold: const Duration(seconds: 1));
+    // Back from a game: refresh ticks (e.g. the challenge just won).
+    context.push(route, extra: widget.setup).then((_) {
+      if (mounted) setState(() {});
+    });
   }
 
   RoadStop _stop(int index, LevelGame game, AppLocalizations l10n) {
@@ -140,6 +140,10 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
         title: l10n.gameChallenge(opponent),
         accent: AppColors.leafGreen,
         onTap: () => _openGame(index),
+        done: sl<GameProgressRepository>().hasPassed(
+          SnakesCubit.id,
+          SnakesCubit.levelKey(widget.setup.level),
+        ),
       ),
     };
   }
