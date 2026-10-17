@@ -1,0 +1,9 @@
+{
+  "_readme": "Multiple-choice letter questions (asked before every roll in the challenge game). Each entry is a recipe, not one question: the game picks a recipe, then a random letter from that level's letters (letters.json 'levels'), and wrong answers from the same letters. level: which level's letters. show: 'letter' (show the letter, pick its name) or 'name' (show the name, pick the letter). form: 'capital', 'small' or 'mixed' (a random one each time). choices: how many answers to pick from, the right one included.",
+  "type": "letter_mcq",
+  "version": 1,
+  "questions": [
+    { "id": "l1-letter-to-name", "level": 1, "show": "letter", "form": "mixed", "choices": 3 },
+    { "id": "l1-name-to-letter", "level": 1, "show": "name", "form": "mixed", "choices": 3 }
+  ]
+}
