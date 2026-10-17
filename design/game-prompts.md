@@ -211,9 +211,10 @@ plays without them.
 | Alexandria seaside background | `app/assets/games/cards_seaside.webp` | Set `"background": "assets/games/cards_seaside.webp"` under `"art"` in `app/assets/content/games/cards.json` |
 | Card back | `app/assets/games/cards_back.png` | Set `"cardBack": "assets/games/cards_back.png"` under `"art"` in the same file |
 
-Resize the background to about 1920 px wide before saving it (it's the
-whole screen behind the table). If you'd rather I process them, drop the
-originals in `design/reference/cards/` and ask.
+Road card and background are done (2026-10-17): the originals are in
+`design/reference/cards/` (`icon.webp`, `seaside.webp`); to swap one, replace
+it there and run `tools/.venv/bin/python tools/games/process_cards.py` (it
+puts the icon on the beige square and sizes the background).
 
 ### Alexandria by the sea (wide, landscape 16:9)
 

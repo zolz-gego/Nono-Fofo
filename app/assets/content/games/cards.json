@@ -16,7 +16,7 @@
     "#7F5539", "#EF476F"
   ],
   "art": {
-    "background": null,
+    "background": "assets/games/cards_seaside.webp",
     "cardBack": null
   }
 }
