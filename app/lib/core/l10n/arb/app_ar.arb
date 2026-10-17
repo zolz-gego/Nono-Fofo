@@ -313,5 +313,83 @@
         "type": "int"
       }
     }
+  },
+  "gameMonastery": "دوّر في الدير",
+  "monasteryPickLevel": "هتدوّر على كام حرف؟",
+  "monasteryCount": "{count, plural, few{{count} حروف} other{{count} حرف}}",
+  "@monasteryCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "monasteryBest": "أحسن وقت {time} · غلط {wrong}",
+  "@monasteryBest": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      },
+      "wrong": {
+        "type": "int"
+      }
+    }
+  },
+  "monasteryStart": "يلا يا {name}! الحروف مستخبية في الدير، دوّر عليها",
+  "@monasteryStart": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "monasteryFound": "لقيت",
+  "monasteryWrong": "مش هنا!",
+  "monasteryHint": "مساعدة",
+  "monasteryHintSay": "بص هنا كده!",
+  "monasteryMisses": "غلط",
+  "monasteryHints": "مساعدات",
+  "monasterySolved": "لقيت كل الحروف!",
+  "monasterySolvedBody": "{count, plural, few{لقيت {count} حروف مستخبية في الدير} other{لقيت {count} حرف مستخبي في الدير}}",
+  "@monasterySolvedBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "monasteryOtherLevel": "عدد حروف تاني",
+  "monasteryShareTitle": "{count, plural, few{برافو يا {name}! لقيت {count} حروف} other{برافو يا {name}! لقيت {count} حرف}}",
+  "@monasteryShareTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "monasteryShareWith": "مع {hero} في دير الصحرا",
+  "@monasteryShareWith": {
+    "placeholders": {
+      "hero": {
+        "type": "String"
+      }
+    }
+  },
+  "monasteryShareText": "{count, plural, few{برافو يا {name}! لقيت {count} حروف مستخبية في دوّر في الدير في {time}، في نونو وفوفو} other{برافو يا {name}! لقيت {count} حرف مستخبي في دوّر في الدير في {time}، في نونو وفوفو}}",
+  "@monasteryShareText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
   }
 }

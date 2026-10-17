@@ -1,0 +1,61 @@
+{
+  "_readme": "Settings for 'Search the Monastery' (دوّر في الدير), the hidden-letters game at the desert monastery. Change numbers here; no code change needed. letterCounts: the levels (how many letters hide). phoneLetters: phones (shortest screen side under smallScreenWidth) skip the picker and always hide this many, with no brothers. heroRunMs: how long the brother takes to reach a found letter. nameBubbleMs: how long the letter's name stays in the bubble. hintGlowMs: how long a hint's glow pulses. tapRadius: how forgiving a tap is (1 = about the letter's size). minSpotGap: two letters never hide closer than this (in scene heights). maxRotation: letters lean up to this many degrees either way. letterColors: muted colours that blend with the scene; each letter gets one at random. letterOpacity: 1 = solid. showSpots: true draws every hiding spot as a dashed circle, to line spots up with new art (keep false for kids). scene: everything in it is in fractions of the scene picture (x of its width, y of its height, 0 = top left). scene.aspect: the picture's width / height. scene.background: the room picture without the objects (drawn in code when null). scene.objects: things standing in front of the letters, each a cut-out picture (image, transparent PNG) placed at rect [x, y, width, height]; without an image the 'shape' is drawn in code. scene.spots: where a letter can hide (its centre x, y and size as a fraction of the scene height). Letters are drawn behind every object, so put a spot on an object's edge to show only part of the letter. Every game picks random spots and random letters.",
+  "version": 1,
+  "letterCounts": [5, 6, 7, 8, 9, 10],
+  "phoneLetters": 5,
+  "smallScreenWidth": 600,
+  "heroRunMs": 650,
+  "nameBubbleMs": 1500,
+  "hintGlowMs": 2600,
+  "tapRadius": 1.0,
+  "minSpotGap": 0.1,
+  "maxRotation": 25,
+  "letterColors": [
+    "#9C8466", "#8A7A68", "#7E8C84", "#A08C74", "#8C7562",
+    "#6F7F7A", "#A39177", "#857463"
+  ],
+  "letterOpacity": 0.92,
+  "showSpots": false,
+  "scene": {
+    "aspect": 1.7778,
+    "background": null,
+    "objects": [
+      { "id": "shelf", "shape": "bookshelf", "rect": [0.03, 0.2, 0.16, 0.56], "image": null },
+      { "id": "lamp", "shape": "lamp", "rect": [0.285, 0.0, 0.06, 0.2], "image": null },
+      { "id": "chair", "shape": "chair", "rect": [0.25, 0.47, 0.11, 0.3], "image": null },
+      { "id": "door", "shape": "door", "rect": [0.41, 0.24, 0.14, 0.48], "image": null },
+      { "id": "candle", "shape": "candleStand", "rect": [0.57, 0.33, 0.04, 0.41], "image": null },
+      { "id": "lectern", "shape": "lectern", "rect": [0.63, 0.42, 0.09, 0.33], "image": null },
+      { "id": "curtain", "shape": "curtain", "rect": [0.7, 0.08, 0.11, 0.24], "image": null },
+      { "id": "plant", "shape": "plant", "rect": [0.75, 0.33, 0.1, 0.44], "image": null },
+      { "id": "jar", "shape": "jar", "rect": [0.87, 0.48, 0.1, 0.29], "image": null },
+      { "id": "basket", "shape": "basket", "rect": [0.12, 0.79, 0.12, 0.14], "image": null },
+      { "id": "bench", "shape": "bench", "rect": [0.4, 0.82, 0.22, 0.13], "image": null },
+      { "id": "books", "shape": "books", "rect": [0.72, 0.83, 0.09, 0.12], "image": null }
+    ],
+    "spots": [
+      { "x": 0.19, "y": 0.4, "size": 0.085 },
+      { "x": 0.11, "y": 0.2, "size": 0.08 },
+      { "x": 0.343, "y": 0.735, "size": 0.075 },
+      { "x": 0.345, "y": 0.47, "size": 0.08 },
+      { "x": 0.415, "y": 0.56, "size": 0.085 },
+      { "x": 0.547, "y": 0.4, "size": 0.085 },
+      { "x": 0.59, "y": 0.705, "size": 0.075 },
+      { "x": 0.682, "y": 0.64, "size": 0.08 },
+      { "x": 0.66, "y": 0.49, "size": 0.075 },
+      { "x": 0.8, "y": 0.43, "size": 0.08 },
+      { "x": 0.767, "y": 0.7, "size": 0.075 },
+      { "x": 0.873, "y": 0.62, "size": 0.085 },
+      { "x": 0.93, "y": 0.48, "size": 0.08 },
+      { "x": 0.315, "y": 0.195, "size": 0.07 },
+      { "x": 0.703, "y": 0.2, "size": 0.08 },
+      { "x": 0.18, "y": 0.79, "size": 0.08 },
+      { "x": 0.228, "y": 0.875, "size": 0.075 },
+      { "x": 0.6, "y": 0.905, "size": 0.075 },
+      { "x": 0.399, "y": 0.845, "size": 0.08 },
+      { "x": 0.765, "y": 0.83, "size": 0.08 },
+      { "x": 0.808, "y": 0.9, "size": 0.07 },
+      { "x": 0.027, "y": 0.55, "size": 0.08 }
+    ]
+  }
+}

@@ -16,6 +16,7 @@ One illustration per game card on the level road. Same tool and workflow as
 | اكتب الحرف / Write the letter | `writeLetter.png` |
 | امسك البالونة / Catch the balloon | `balloons.png` |
 | كروت جدو / Grandpa's Cards | `cards.png` |
+| دوّر في الدير / Search the Monastery | `monastery.png` |
 | تحدّى أخوك / Challenge your brother | `challenge.png` |
 
 ---
@@ -50,6 +51,12 @@ Four shiny round helium balloons floating up at different heights, in coral #FF7
 
 ```
 Four chunky rounded playing cards, centered, arranged in a loose playful fan as if just dealt, slightly overlapping and tilted at different angles. The two cards in the back are face down, with deep-teal #0F4C5C backs, a thin mist-blue #A8DADC border and a simple mist-blue diamond pattern. The two cards in front are flipped face up, cream #FFFBF4 with a thick coral #FF7A5C border, one showing a big capital Coptic letter Ⲁ and the other the small letter ⲁ, both in coral #FF7A5C, so they clearly look like a matching pair. One front card is caught mid-flip, lifted and turning, with two small curved motion lines beside it. Small sunny-yellow #FFC845 star sparkles burst between the two matching cards. A tiny cocoa-brown seashell rests near the bottom corner. Same size and weight as a single object illustration: bold, simple and readable at small size.
+```
+
+### 6. Search the Monastery: `monastery.png`
+
+```
+A cozy corner inside an old Egyptian desert monastery: a warm sand-coloured plastered wall with a small arched window showing blue sky, and a cocoa-brown wooden chair and a round clay water jar standing in front of it. Two big Coptic letters are hiding: the letter Ⲃ peeks out from behind the chair, only its top half showing, and the small letter ⲁ peeks out from behind the jar, only its left side showing, both in cocoa brown #5B4B3A. A big magnifying glass with a sunny-yellow #FFC845 handle and a mist-blue lens floats in front, its lens over the peeking Ⲃ, with small sunny-yellow star sparkles around it. Playful, like a hide-and-seek picture. Same size and weight as a single object illustration: bold, simple and readable at small size.
 ```
 
 ### 4. Challenge your brother: `challenge.png`
@@ -233,3 +240,60 @@ so it has to stay clear and simple when small.
 ```
 The back of a single playing card for a children's memory game, flat 2D vector style, front view, filling the whole picture edge to edge, portrait 3:4. Deep teal #0F4C5C background with a thin mist-blue #A8DADC rounded border inset a little from the edge, and a soft, subtle diamond lattice pattern in a slightly lighter teal. In the centre, a simple round medallion in cream #FFFBF4 with a small cocoa-brown #5B4B3A seashell inside it and a tiny sunny-yellow #FFC845 star above the shell. Symmetrical, clean, no shadows outside the card, square corners (the game rounds them). No text, no letters, no numbers, no logos, no watermark.
 ```
+
+---
+
+## Search the Monastery art (دوّر في الدير)
+
+The room is built in layers: an **empty room** picture, then **cut-out
+objects** placed on top of it. The letters hide between the two, so only
+the bit that sticks out from behind an object shows. Until a file is there
+the game draws that part in code, so it plays without them. Attach
+`design/reference/nono-fofo-approved.webp` when the model accepts a
+reference, so the style matches.
+
+| What | Save as | Then |
+|---|---|---|
+| Road card illustration | `design/reference/monastery/icon.png` | Claude puts it on the beige square as `app/assets/games/monastery.png` (prompt 6 above) |
+| Empty room (16:9) | `design/reference/monastery/room.png` | Claude sizes it and sets `scene.background` in `app/assets/content/games/monastery.json` |
+| The 12 objects (white background) | `design/reference/monastery/<id>.png`, e.g. `chair.png` | Claude cuts them out, sets each object's `image`, and moves the hiding spots to fit the new shapes |
+
+The hiding spots are set by hand for each object's outline, so after new
+art arrives they get lined up again (`"showSpots": true` in the JSON draws
+them as circles while doing that).
+
+### Empty room (wide, landscape 16:9)
+
+Only the room itself: every object (shelf, chair, door, plants…) comes as a
+separate cut-out, so the room must stay empty.
+
+```
+Wide landscape (16:9) background for a children's hide-and-seek game, flat 2D vector cartoon style: thin warm-brown outlines, flat colors with soft shading, rounded friendly shapes, cheerful and simple. The inside of a quiet old hall in an Egyptian desert monastery, seen from the front like a stage. The back wall fills the top 72% of the picture: thick, softly uneven plaster in warm sand and cream, a little darker near the ceiling. Along the top edge, dark wooden ceiling beams. High on the wall: one small arched window at about 20% across and a bigger arched window at about 72-80% across, both showing soft light-blue sky and a hint of golden desert dunes; at the far right a small empty arched niche in the wall. The bottom 28% is a floor of big warm-beige stone tiles, with a long coral and sunny-yellow patterned rug running from the middle toward the front. The whole room is EMPTY: no furniture, no doors, no plants, no lamps, no objects at all, because they will be placed on top later. Soft warm afternoon light. Use this palette: deep teal #0F4C5C, mist blue #A8DADC, warm sand #EFE6D8, slate teal #4F7C82, cocoa brown #5B4B3A, sunny yellow #FFC845, coral #FF7A5C, leaf green #6CC24A, cream #FFFBF4. No people, no text, no letters, no logos, no watermark, no religious symbols.
+```
+
+### Objects (one picture each, plain white background)
+
+Paste the **object block**, then one object line under it. Each object is
+drawn at a fixed shape in the room, so keep the proportions given.
+
+Object block:
+
+```
+A single object for a children's hide-and-seek game, in the same flat 2D vector cartoon style as the attached reference: thin warm-brown #5B4B3A outlines, flat colors with soft shading, rounded friendly shapes. Front view, standing straight, the whole object visible and filling the picture, solid (not see-through) so things can hide behind it. Plain flat pure white background, no shadow on the ground, nothing else in the picture. Colors from this palette: deep teal #0F4C5C, mist blue #A8DADC, warm sand #EFE6D8, slate teal #4F7C82, cocoa brown #5B4B3A, sunny yellow #FFC845, coral #FF7A5C, leaf green #6CC24A, cream #FFFBF4, plus warm wood browns and clay orange. No text, no letters, no logos, no watermark, no religious symbols. The object:
+```
+
+| Save as | Object line (paste after the block) |
+|---|---|
+| `shelf.png` | A tall old wooden bookshelf, about twice as tall as wide, four shelves full of old leather books in teal, coral, yellow and cocoa, some leaning, a rolled scroll on one shelf. |
+| `lamp.png` | A small brass oil lamp hanging from a short chain, about twice as tall as wide, a round bowl with a tiny warm flame on top. |
+| `chair.png` | An old wooden chair with a tall rounded back, a little taller than wide, four legs with clear gaps between them under the seat. |
+| `door.png` | A heavy arched wooden door in a stone frame, about twice as tall as wide, planks with round iron studs and a brass ring handle, closed. |
+| `candle.png` | A very tall thin brass candle stand, about six times as tall as wide, a wide three-footed base, a thin pole, a small dish with one cream candle and a flame on top. |
+| `lectern.png` | A wooden book stand (lectern), about twice as tall as wide, one central column on a small base, a slanted top holding a big open old book with cream pages. |
+| `curtain.png` | A slate-teal cloth curtain hanging from a short wooden rod, a little taller than wide, gathered and tied to one side with a sunny-yellow cord, soft folds. |
+| `plant.png` | A small palm plant in a clay pot, about two and a half times as tall as wide, several long leaves fanning up and out with gaps between them. |
+| `jar.png` | A big round clay water jar (Egyptian zeer) with a narrow neck, on a low wooden stand, a little taller than wide. |
+| `basket.png` | A woven palm-leaf basket with three round golden Egyptian loaves of bread on top, about one and a half times as wide as tall. |
+| `bench.png` | A long low wooden bench, about three times as wide as tall, a thick plank seat on two sturdy legs with a crossbar, space under the seat. |
+| `books.png` | A small stack of three old closed books lying flat, coral, deep teal and sunny yellow covers, slightly uneven, about one and a third times as wide as tall. |
+
