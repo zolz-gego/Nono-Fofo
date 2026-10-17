@@ -62,8 +62,8 @@ void main() {
     test('the agreed fixed board: 64 squares, 5 ladders, 5 snakes', () {
       expect(board.squares, 64);
       expect(board.columns, 8);
-      expect(board.ladders, {4: 18, 9: 31, 21: 42, 28: 44, 46: 58});
-      expect(board.snakes, {17: 7, 30: 15, 51: 12, 55: 33, 61: 43});
+      expect(board.ladders, {4: 18, 9: 31, 25: 42, 28: 44, 46: 58});
+      expect(board.snakes, {19: 7, 30: 15, 47: 33, 51: 29, 61: 43});
     });
 
     test('squares wind up row by row from the bottom left', () {
@@ -81,8 +81,8 @@ void main() {
       expect(up.end, 18);
       expect(up.climbed, isTrue);
 
-      final down = board.move(14, 3);
-      expect(down.landed, 17);
+      final down = board.move(16, 3);
+      expect(down.landed, 19);
       expect(down.end, 7);
       expect(down.slid, isTrue);
 
