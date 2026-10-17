@@ -233,5 +233,86 @@
   "writingEraser": "أستيكة",
   "writingShareSaved": "اتحفظت الصورة في التنزيلات",
   "writingFullScreen": "كبّر السبورة",
-  "writingExitFullScreen": "رجّع السبورة زي ما كانت"
+  "writingExitFullScreen": "رجّع السبورة زي ما كانت",
+  "gameCards": "كروت جدو",
+  "cardsPickLevel": "هتلعب بكام كارت؟",
+  "cardsCount": "{count} كارت",
+  "@cardsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardsBest": "أحسن وقت {time} · {moves} حركة",
+  "@cardsBest": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      },
+      "moves": {
+        "type": "int"
+      }
+    }
+  },
+  "cardsStart": "يلا يا {name}! دوّر على كل حرف كبير وصغيره",
+  "@cardsStart": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "cardsTime": "الوقت",
+  "cardsMoves": "الحركات",
+  "cardsPairs": "الأزواج",
+  "cardsSolved": "خلّصت الكروت!",
+  "cardsSolvedBody": "لقيت كل الأزواج في {count} كارت",
+  "@cardsSolvedBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardsNewRecord": "رقم قياسي جديد!",
+  "cardsBestTime": "أحسن وقت",
+  "cardsOtherLevel": "عدد كروت تاني",
+  "cardsShare": "شارك وقتك",
+  "cardsShareTitle": "برافو يا {name}! خلّصت {count} كارت",
+  "@cardsShareTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardsShareWith": "مع {hero} على بحر إسكندرية",
+  "@cardsShareWith": {
+    "placeholders": {
+      "hero": {
+        "type": "String"
+      }
+    }
+  },
+  "cardsShareText": "برافو يا {name}! خلّصت {count} كارت في كروت جدو في {time} و{moves} حركة، في نونو وفوفو",
+  "@cardsShareText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      },
+      "moves": {
+        "type": "int"
+      }
+    }
+  }
 }

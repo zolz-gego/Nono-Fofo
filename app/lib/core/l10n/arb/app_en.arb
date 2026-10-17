@@ -119,5 +119,22 @@
   "writingEraser": "Eraser",
   "writingShareSaved": "Picture saved to your downloads",
   "writingFullScreen": "Full screen",
-  "writingExitFullScreen": "Exit full screen"
+  "writingExitFullScreen": "Exit full screen",
+  "gameCards": "Grandpa's Cards",
+  "cardsPickLevel": "How many cards will you play?",
+  "cardsCount": "{count} cards",
+  "cardsBest": "Best {time} · {moves} moves",
+  "cardsStart": "Come on, {name}! Find each capital letter with its small one",
+  "cardsTime": "Time",
+  "cardsMoves": "Moves",
+  "cardsPairs": "Pairs",
+  "cardsSolved": "All cards matched!",
+  "cardsSolvedBody": "You found every pair in {count} cards",
+  "cardsNewRecord": "New record!",
+  "cardsBestTime": "Best time",
+  "cardsOtherLevel": "Other card count",
+  "cardsShare": "Share your time",
+  "cardsShareTitle": "Bravo {name}! You matched {count} cards",
+  "cardsShareWith": "With {hero} by the sea in Alexandria",
+  "cardsShareText": "Bravo {name}! Matched {count} cards in Grandpa's Cards in {time} with {moves} moves, in Nono & Fofo"
 }

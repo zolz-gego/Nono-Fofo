@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../domain/game_progress_repository.dart';
+import '../domain/timed_record.dart';
 
 class GameProgressRepositoryImpl implements GameProgressRepository {
   const GameProgressRepositoryImpl(this._prefs);
@@ -31,4 +32,33 @@ class GameProgressRepositoryImpl implements GameProgressRepository {
   @override
   Future<void> savePassed(String game, String letterId) =>
       _prefs.setBool(_passedKey(game, letterId), true);
+
+  static String _timeKey(String game, String levelKey) =>
+      'progress.$game.$levelKey.timeMs';
+
+  static String _movesKey(String game, String levelKey) =>
+      'progress.$game.$levelKey.moves';
+
+  @override
+  TimedRecord? bestTime(String game, String levelKey) {
+    final ms = _prefs.getInt(_timeKey(game, levelKey));
+    if (ms == null) return null;
+    return TimedRecord(
+      time: Duration(milliseconds: ms),
+      moves: _prefs.getInt(_movesKey(game, levelKey)) ?? 0,
+    );
+  }
+
+  @override
+  Future<bool> saveTime(
+    String game,
+    String levelKey,
+    TimedRecord record,
+  ) async {
+    final best = bestTime(game, levelKey);
+    if (best != null && !record.beats(best)) return false;
+    await _prefs.setInt(_timeKey(game, levelKey), record.time.inMilliseconds);
+    await _prefs.setInt(_movesKey(game, levelKey), record.moves);
+    return true;
+  }
 }

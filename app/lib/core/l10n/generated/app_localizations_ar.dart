@@ -365,4 +365,69 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get writingExitFullScreen => 'رجّع السبورة زي ما كانت';
+
+  @override
+  String get gameCards => 'كروت جدو';
+
+  @override
+  String get cardsPickLevel => 'هتلعب بكام كارت؟';
+
+  @override
+  String cardsCount(int count) {
+    return '$count كارت';
+  }
+
+  @override
+  String cardsBest(String time, int moves) {
+    return 'أحسن وقت $time · $moves حركة';
+  }
+
+  @override
+  String cardsStart(String name) {
+    return 'يلا يا $name! دوّر على كل حرف كبير وصغيره';
+  }
+
+  @override
+  String get cardsTime => 'الوقت';
+
+  @override
+  String get cardsMoves => 'الحركات';
+
+  @override
+  String get cardsPairs => 'الأزواج';
+
+  @override
+  String get cardsSolved => 'خلّصت الكروت!';
+
+  @override
+  String cardsSolvedBody(int count) {
+    return 'لقيت كل الأزواج في $count كارت';
+  }
+
+  @override
+  String get cardsNewRecord => 'رقم قياسي جديد!';
+
+  @override
+  String get cardsBestTime => 'أحسن وقت';
+
+  @override
+  String get cardsOtherLevel => 'عدد كروت تاني';
+
+  @override
+  String get cardsShare => 'شارك وقتك';
+
+  @override
+  String cardsShareTitle(String name, int count) {
+    return 'برافو يا $name! خلّصت $count كارت';
+  }
+
+  @override
+  String cardsShareWith(String hero) {
+    return 'مع $hero على بحر إسكندرية';
+  }
+
+  @override
+  String cardsShareText(String name, int count, String time, int moves) {
+    return 'برافو يا $name! خلّصت $count كارت في كروت جدو في $time و$moves حركة، في نونو وفوفو';
+  }
 }
