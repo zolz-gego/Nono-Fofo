@@ -453,4 +453,95 @@ class AppLocalizationsAr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get gameMonastery => 'دوّر في الدير';
+
+  @override
+  String get monasteryPickLevel => 'هتدوّر على كام حرف؟';
+
+  @override
+  String monasteryCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count حرف',
+      few: '$count حروف',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String monasteryBest(String time, int wrong) {
+    return 'أحسن وقت $time · غلط $wrong';
+  }
+
+  @override
+  String monasteryStart(String name) {
+    return 'يلا يا $name! الحروف مستخبية في الدير، دوّر عليها';
+  }
+
+  @override
+  String get monasteryFound => 'لقيت';
+
+  @override
+  String get monasteryWrong => 'مش هنا!';
+
+  @override
+  String get monasteryHint => 'مساعدة';
+
+  @override
+  String get monasteryHintSay => 'بص هنا كده!';
+
+  @override
+  String get monasteryMisses => 'غلط';
+
+  @override
+  String get monasteryHints => 'مساعدات';
+
+  @override
+  String get monasterySolved => 'لقيت كل الحروف!';
+
+  @override
+  String monasterySolvedBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'لقيت $count حرف مستخبي في الدير',
+      few: 'لقيت $count حروف مستخبية في الدير',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get monasteryOtherLevel => 'عدد حروف تاني';
+
+  @override
+  String monasteryShareTitle(String name, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'برافو يا $name! لقيت $count حرف',
+      few: 'برافو يا $name! لقيت $count حروف',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String monasteryShareWith(String hero) {
+    return 'مع $hero في دير الصحرا';
+  }
+
+  @override
+  String monasteryShareText(String name, int count, String time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'برافو يا $name! لقيت $count حرف مستخبي في دوّر في الدير في $time، في نونو وفوفو',
+      few:
+          'برافو يا $name! لقيت $count حروف مستخبية في دوّر في الدير في $time، في نونو وفوفو',
+    );
+    return '$_temp0';
+  }
 }

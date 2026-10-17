@@ -829,6 +829,108 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'{count, plural, few{برافو يا {name}! خلّصت {count} كروت في كروت جدو في {time} و{moves} حركة، في نونو وفوفو} other{برافو يا {name}! خلّصت {count} كارت في كروت جدو في {time} و{moves} حركة، في نونو وفوفو}}'**
   String cardsShareText(String name, int count, String time, int moves);
+
+  /// No description provided for @gameMonastery.
+  ///
+  /// In ar, this message translates to:
+  /// **'دوّر في الدير'**
+  String get gameMonastery;
+
+  /// No description provided for @monasteryPickLevel.
+  ///
+  /// In ar, this message translates to:
+  /// **'هتدوّر على كام حرف؟'**
+  String get monasteryPickLevel;
+
+  /// No description provided for @monasteryCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, few{{count} حروف} other{{count} حرف}}'**
+  String monasteryCount(int count);
+
+  /// No description provided for @monasteryBest.
+  ///
+  /// In ar, this message translates to:
+  /// **'أحسن وقت {time} · غلط {wrong}'**
+  String monasteryBest(String time, int wrong);
+
+  /// No description provided for @monasteryStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'يلا يا {name}! الحروف مستخبية في الدير، دوّر عليها'**
+  String monasteryStart(String name);
+
+  /// No description provided for @monasteryFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'لقيت'**
+  String get monasteryFound;
+
+  /// No description provided for @monasteryWrong.
+  ///
+  /// In ar, this message translates to:
+  /// **'مش هنا!'**
+  String get monasteryWrong;
+
+  /// No description provided for @monasteryHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مساعدة'**
+  String get monasteryHint;
+
+  /// No description provided for @monasteryHintSay.
+  ///
+  /// In ar, this message translates to:
+  /// **'بص هنا كده!'**
+  String get monasteryHintSay;
+
+  /// No description provided for @monasteryMisses.
+  ///
+  /// In ar, this message translates to:
+  /// **'غلط'**
+  String get monasteryMisses;
+
+  /// No description provided for @monasteryHints.
+  ///
+  /// In ar, this message translates to:
+  /// **'مساعدات'**
+  String get monasteryHints;
+
+  /// No description provided for @monasterySolved.
+  ///
+  /// In ar, this message translates to:
+  /// **'لقيت كل الحروف!'**
+  String get monasterySolved;
+
+  /// No description provided for @monasterySolvedBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, few{لقيت {count} حروف مستخبية في الدير} other{لقيت {count} حرف مستخبي في الدير}}'**
+  String monasterySolvedBody(int count);
+
+  /// No description provided for @monasteryOtherLevel.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد حروف تاني'**
+  String get monasteryOtherLevel;
+
+  /// No description provided for @monasteryShareTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, few{برافو يا {name}! لقيت {count} حروف} other{برافو يا {name}! لقيت {count} حرف}}'**
+  String monasteryShareTitle(String name, int count);
+
+  /// No description provided for @monasteryShareWith.
+  ///
+  /// In ar, this message translates to:
+  /// **'مع {hero} في دير الصحرا'**
+  String monasteryShareWith(String hero);
+
+  /// No description provided for @monasteryShareText.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, few{برافو يا {name}! لقيت {count} حروف مستخبية في دوّر في الدير في {time}، في نونو وفوفو} other{برافو يا {name}! لقيت {count} حرف مستخبي في دوّر في الدير في {time}، في نونو وفوفو}}'**
+  String monasteryShareText(String name, int count, String time);
 }
 
 class _AppLocalizationsDelegate

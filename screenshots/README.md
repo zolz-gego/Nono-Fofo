@@ -76,3 +76,12 @@ letter's name; the timer, moves and pairs are on top.
 Time, moves, the best time (or "New record!"), and sharing the result.
 
 ![Cards solved](20-cards-solved.jpg)
+
+## Search the Monastery
+
+Letters hide behind things in a monastery room, only part of each showing;
+the ones to find are listed at the bottom with their names. Your buddy runs
+to every letter you find and the other brother says its name; found letters
+turn gold and are crossed out.
+
+![Monastery](22-monastery.jpg)

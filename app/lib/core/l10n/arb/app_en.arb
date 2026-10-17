@@ -135,5 +135,22 @@
   "cardsShare": "Share your time",
   "cardsShareTitle": "Bravo {name}! You matched {count} cards",
   "cardsShareWith": "With {hero} by the sea in Alexandria",
-  "cardsShareText": "Bravo {name}! Matched {count} cards in Grandpa's Cards in {time} with {moves} moves, in Nono & Fofo"
+  "cardsShareText": "Bravo {name}! Matched {count} cards in Grandpa's Cards in {time} with {moves} moves, in Nono & Fofo",
+  "gameMonastery": "Search the Monastery",
+  "monasteryPickLevel": "How many letters will you look for?",
+  "monasteryCount": "{count} letters",
+  "monasteryBest": "Best {time} · {wrong} misses",
+  "monasteryStart": "Come on, {name}! Letters are hiding in the monastery. Find them!",
+  "monasteryFound": "Found",
+  "monasteryWrong": "Not here!",
+  "monasteryHint": "Hint",
+  "monasteryHintSay": "Look around here!",
+  "monasteryMisses": "Misses",
+  "monasteryHints": "Hints",
+  "monasterySolved": "You found every letter!",
+  "monasterySolvedBody": "You found {count} hidden letters in the monastery",
+  "monasteryOtherLevel": "Other letter count",
+  "monasteryShareTitle": "Bravo {name}! You found {count} letters",
+  "monasteryShareWith": "With {hero} at the desert monastery",
+  "monasteryShareText": "Bravo {name}! Found {count} hidden letters in Search the Monastery in {time}, in Nono & Fofo"
 }

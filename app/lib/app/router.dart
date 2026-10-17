@@ -10,6 +10,8 @@ import '../features/games/cards/presentation/cards_page.dart';
 import '../features/games/fishing/presentation/fishing_cubit.dart';
 import '../features/games/fishing/presentation/fishing_page.dart';
 import '../features/games/letter_hunt/presentation/letter_pick_page.dart';
+import '../features/games/monastery/presentation/monastery_level_page.dart';
+import '../features/games/monastery/presentation/monastery_page.dart';
 import '../features/games/writing/presentation/writing_cubit.dart';
 import '../features/games/writing/presentation/writing_page.dart';
 import '../features/levels/domain/game_level.dart';
@@ -42,6 +44,11 @@ abstract final class AppRoutes {
   /// [PlayerSetup]), then play (extra: [CardsArgs]).
   static const cards = '/level/cards';
   static const cardsPlay = '/level/cards/play';
+
+  /// Search the Monastery: pick how many letters hide (extra:
+  /// [PlayerSetup]; phones skip this), then play (extra: [MonasteryArgs]).
+  static const monastery = '/level/monastery';
+  static const monasteryPlay = '/level/monastery/play';
 }
 
 final GoRouter appRouter = GoRouter(
@@ -133,6 +140,20 @@ final GoRouter appRouter = GoRouter(
       redirect: (context, state) =>
           state.extra is CardsArgs ? null : AppRoutes.home,
       builder: (context, state) => CardsPage(args: state.extra! as CardsArgs),
+    ),
+    GoRoute(
+      path: AppRoutes.monastery,
+      redirect: (context, state) =>
+          state.extra is PlayerSetup ? null : AppRoutes.home,
+      builder: (context, state) =>
+          MonasteryLevelPage(setup: state.extra! as PlayerSetup),
+    ),
+    GoRoute(
+      path: AppRoutes.monasteryPlay,
+      redirect: (context, state) =>
+          state.extra is MonasteryArgs ? null : AppRoutes.home,
+      builder: (context, state) =>
+          MonasteryPage(args: state.extra! as MonasteryArgs),
     ),
   ],
 );

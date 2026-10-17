@@ -81,6 +81,7 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
       LevelGame.balloons => AppRoutes.balloons,
       LevelGame.writeLetter => AppRoutes.writing,
       LevelGame.cards => AppRoutes.cards,
+      LevelGame.monastery => AppRoutes.monastery,
       _ => null,
     };
     if (route != null) {
@@ -124,6 +125,13 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
         placeholder: AppIcons.cards,
         title: l10n.gameCards,
         accent: AppColors.mistBlue,
+        onTap: () => _openGame(index),
+      ),
+      LevelGame.monastery => RoadStop(
+        image: game.name,
+        placeholder: AppIcons.monastery,
+        title: l10n.gameMonastery,
+        accent: AppColors.sunYellow,
         onTap: () => _openGame(index),
       ),
       LevelGame.challenge => RoadStop(
