@@ -131,7 +131,6 @@
   "cardsSolved": "All cards matched!",
   "cardsSolvedBody": "You found every pair in {count} cards",
   "cardsNewRecord": "New record!",
-  "cardsBestTime": "Best time",
   "cardsOtherLevel": "Other card count",
   "cardsShare": "Share your time",
   "cardsShareTitle": "Bravo {name}! You matched {count} cards",

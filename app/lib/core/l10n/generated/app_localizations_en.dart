@@ -409,9 +409,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cardsNewRecord => 'New record!';
 
   @override
-  String get cardsBestTime => 'Best time';
-
-  @override
   String get cardsOtherLevel => 'Other card count';
 
   @override

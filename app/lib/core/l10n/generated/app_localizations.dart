@@ -749,7 +749,7 @@ abstract class AppLocalizations {
   /// No description provided for @cardsCount.
   ///
   /// In ar, this message translates to:
-  /// **'{count} كارت'**
+  /// **'{count, plural, few{{count} كروت} other{{count} كارت}}'**
   String cardsCount(int count);
 
   /// No description provided for @cardsBest.
@@ -791,7 +791,7 @@ abstract class AppLocalizations {
   /// No description provided for @cardsSolvedBody.
   ///
   /// In ar, this message translates to:
-  /// **'لقيت كل الأزواج في {count} كارت'**
+  /// **'{count, plural, few{لقيت كل الأزواج في {count} كروت} other{لقيت كل الأزواج في {count} كارت}}'**
   String cardsSolvedBody(int count);
 
   /// No description provided for @cardsNewRecord.
@@ -799,12 +799,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'رقم قياسي جديد!'**
   String get cardsNewRecord;
-
-  /// No description provided for @cardsBestTime.
-  ///
-  /// In ar, this message translates to:
-  /// **'أحسن وقت'**
-  String get cardsBestTime;
 
   /// No description provided for @cardsOtherLevel.
   ///
@@ -821,7 +815,7 @@ abstract class AppLocalizations {
   /// No description provided for @cardsShareTitle.
   ///
   /// In ar, this message translates to:
-  /// **'برافو يا {name}! خلّصت {count} كارت'**
+  /// **'{count, plural, few{برافو يا {name}! خلّصت {count} كروت} other{برافو يا {name}! خلّصت {count} كارت}}'**
   String cardsShareTitle(String name, int count);
 
   /// No description provided for @cardsShareWith.
@@ -833,7 +827,7 @@ abstract class AppLocalizations {
   /// No description provided for @cardsShareText.
   ///
   /// In ar, this message translates to:
-  /// **'برافو يا {name}! خلّصت {count} كارت في كروت جدو في {time} و{moves} حركة، في نونو وفوفو'**
+  /// **'{count, plural, few{برافو يا {name}! خلّصت {count} كروت في كروت جدو في {time} و{moves} حركة، في نونو وفوفو} other{برافو يا {name}! خلّصت {count} كارت في كروت جدو في {time} و{moves} حركة، في نونو وفوفو}}'**
   String cardsShareText(String name, int count, String time, int moves);
 }
 

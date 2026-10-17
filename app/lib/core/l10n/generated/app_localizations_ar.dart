@@ -374,7 +374,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String cardsCount(int count) {
-    return '$count كارت';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count كارت',
+      few: '$count كروت',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -401,14 +407,17 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String cardsSolvedBody(int count) {
-    return 'لقيت كل الأزواج في $count كارت';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'لقيت كل الأزواج في $count كارت',
+      few: 'لقيت كل الأزواج في $count كروت',
+    );
+    return '$_temp0';
   }
 
   @override
   String get cardsNewRecord => 'رقم قياسي جديد!';
-
-  @override
-  String get cardsBestTime => 'أحسن وقت';
 
   @override
   String get cardsOtherLevel => 'عدد كروت تاني';
@@ -418,7 +427,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String cardsShareTitle(String name, int count) {
-    return 'برافو يا $name! خلّصت $count كارت';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'برافو يا $name! خلّصت $count كارت',
+      few: 'برافو يا $name! خلّصت $count كروت',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -428,6 +443,14 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String cardsShareText(String name, int count, String time, int moves) {
-    return 'برافو يا $name! خلّصت $count كارت في كروت جدو في $time و$moves حركة، في نونو وفوفو';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'برافو يا $name! خلّصت $count كارت في كروت جدو في $time و$moves حركة، في نونو وفوفو',
+      few:
+          'برافو يا $name! خلّصت $count كروت في كروت جدو في $time و$moves حركة، في نونو وفوفو',
+    );
+    return '$_temp0';
   }
 }

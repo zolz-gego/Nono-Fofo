@@ -128,8 +128,8 @@ class _CardsLevelPageState extends State<CardsLevelPage> {
                   _header(),
                   Wrap(
                     alignment: WrapAlignment.center,
-                    spacing: AppDimens.spaceMd,
-                    runSpacing: AppDimens.spaceMd,
+                    spacing: AppDimens.spaceSm,
+                    runSpacing: AppDimens.spaceSm,
                     children: [
                       for (final (i, n) in levels.indexed)
                         _LevelTile(
@@ -182,7 +182,7 @@ class _LevelTile extends StatelessWidget {
   final TimedRecord? best;
   final VoidCallback onTap;
 
-  static const double _width = 170;
+  static const double _width = 150;
 
   @override
   Widget build(BuildContext context) {
@@ -206,8 +206,9 @@ class _LevelTile extends StatelessWidget {
                 const SizedBox(height: AppDimens.spaceSm),
                 AppText.h3(l10n.cardsCount(count)),
                 const SizedBox(height: AppDimens.spaceXs),
-                SizedBox(
-                  height: 44,
+                ConstrainedBox(
+                  // Same height with or without a record, so tiles line up.
+                  constraints: const BoxConstraints(minHeight: 56),
                   child: best == null
                       ? null
                       : Column(
@@ -222,6 +223,7 @@ class _LevelTile extends StatelessWidget {
                               l10n.cardsBest(best.clock, best.moves),
                               variant: AppTextVariant.caption,
                               color: AppColors.textMuted,
+                              textAlign: TextAlign.center,
                             ),
                           ],
                         ),

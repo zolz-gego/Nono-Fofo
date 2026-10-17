@@ -236,7 +236,7 @@
   "writingExitFullScreen": "رجّع السبورة زي ما كانت",
   "gameCards": "كروت جدو",
   "cardsPickLevel": "هتلعب بكام كارت؟",
-  "cardsCount": "{count} كارت",
+  "cardsCount": "{count, plural, few{{count} كروت} other{{count} كارت}}",
   "@cardsCount": {
     "placeholders": {
       "count": {
@@ -267,7 +267,7 @@
   "cardsMoves": "الحركات",
   "cardsPairs": "الأزواج",
   "cardsSolved": "خلّصت الكروت!",
-  "cardsSolvedBody": "لقيت كل الأزواج في {count} كارت",
+  "cardsSolvedBody": "{count, plural, few{لقيت كل الأزواج في {count} كروت} other{لقيت كل الأزواج في {count} كارت}}",
   "@cardsSolvedBody": {
     "placeholders": {
       "count": {
@@ -276,10 +276,9 @@
     }
   },
   "cardsNewRecord": "رقم قياسي جديد!",
-  "cardsBestTime": "أحسن وقت",
   "cardsOtherLevel": "عدد كروت تاني",
   "cardsShare": "شارك وقتك",
-  "cardsShareTitle": "برافو يا {name}! خلّصت {count} كارت",
+  "cardsShareTitle": "{count, plural, few{برافو يا {name}! خلّصت {count} كروت} other{برافو يا {name}! خلّصت {count} كارت}}",
   "@cardsShareTitle": {
     "placeholders": {
       "name": {
@@ -298,7 +297,7 @@
       }
     }
   },
-  "cardsShareText": "برافو يا {name}! خلّصت {count} كارت في كروت جدو في {time} و{moves} حركة، في نونو وفوفو",
+  "cardsShareText": "{count, plural, few{برافو يا {name}! خلّصت {count} كروت في كروت جدو في {time} و{moves} حركة، في نونو وفوفو} other{برافو يا {name}! خلّصت {count} كارت في كروت جدو في {time} و{moves} حركة، في نونو وفوفو}}",
   "@cardsShareText": {
     "placeholders": {
       "name": {

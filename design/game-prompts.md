@@ -15,6 +15,7 @@ One illustration per game card on the level road. Same tool and workflow as
 | صيد السمك / Fish catch | `fishing.png` |
 | اكتب الحرف / Write the letter | `writeLetter.png` |
 | امسك البالونة / Catch the balloon | `balloons.png` |
+| كروت جدو / Grandpa's Cards | `cards.png` |
 | تحدّى أخوك / Challenge your brother | `challenge.png` |
 
 ---
@@ -43,6 +44,12 @@ A small deep-teal #0F4C5C chalkboard with a cocoa-brown #5B4B3A wooden frame, sl
 
 ```
 Four shiny round helium balloons floating up at different heights, in coral #FF7A5C, sunny yellow #FFC845, leaf green #6CC24A and mist blue #A8DADC, each with a thin curly cocoa-brown string and a big Coptic letter on it (Ⲁ, Ⲃ, Ⲅ, Ⲇ). A child's hand reaches up from the bottom edge and holds the string of the coral balloon. A few small star sparkles around. Joyful and full of energy.
+```
+
+### 5. Grandpa's Cards: `cards.png`
+
+```
+A small game of memory cards laid on a striped beach towel on the sand by the sea in Alexandria. Six rounded playing cards in a neat little grid: four lie face down, deep teal #0F4C5C backs with a thin mist-blue #A8DADC diamond pattern; two are flipped face up, cream #FFFBF4, one showing a big capital Coptic letter Ⲁ and the other the small letter ⲁ, both in the same coral #FF7A5C colour, with a few small sparkles between them because they match. In the background, a strip of mist-blue sea with a tiny sandy-coloured Qaitbay fort far away and a sunny-yellow #FFC845 sun. Cheerful and calm.
 ```
 
 ### 4. Challenge your brother: `challenge.png`
@@ -187,4 +194,41 @@ Not needed to play. One sheet per brother, two poses side by side, full body:
 
 ```
 Using the attached reference for the exact look, clothes and colors: [NONO / FOFO], full body, two poses side by side on one sheet. Pose 1 "chalk" (left), facing RIGHT: standing sideways, one arm raised forward at shoulder height holding a short white stick of chalk as if writing on a wall, focused happy face, tongue slightly out in concentration. Pose 2 "sponge" (right), facing LEFT: standing, one arm raised forward holding a yellow rectangular cleaning sponge as if wiping a wall, cheeky friendly smile. No chalkboard and no wall (the game draws them). Same flat 2D style, thin warm-brown outlines. Plain solid white background, no shadow, no text.
+```
+
+---
+
+## Grandpa's Cards art (كروت جدو)
+
+Same workflow as the writing art (Gemini or ElevenLabs; attach
+`design/reference/nono-fofo-approved.webp` when the model accepts a
+reference). Until a file is there the game draws that part in code, so it
+plays without them.
+
+| What | Save as | Then |
+|---|---|---|
+| Road card illustration | `app/assets/games/cards.png` | Nothing: the road shows it as soon as it's there (prompt 5 above) |
+| Alexandria seaside background | `app/assets/games/cards_seaside.webp` | Set `"background": "assets/games/cards_seaside.webp"` under `"art"` in `app/assets/content/games/cards.json` |
+| Card back | `app/assets/games/cards_back.png` | Set `"cardBack": "assets/games/cards_back.png"` under `"art"` in the same file |
+
+Resize the background to about 1920 px wide before saving it (it's the
+whole screen behind the table). If you'd rather I process them, drop the
+originals in `design/reference/cards/` and ask.
+
+### Alexandria by the sea (wide, landscape 16:9)
+
+The cards cover most of the middle and the brothers stand on the sand at
+the left and right, so the middle must stay calm and plain.
+
+```
+Wide landscape (16:9) background for a children's game, flat 2D vector cartoon style: thin warm-brown outlines, flat colors with soft shading, rounded friendly shapes, cheerful and simple. A sunny day on the Alexandria seafront in Egypt, seen from the beach like a stage. Top 35%: soft light-blue sky with two or three puffy clouds and a few white seagulls, a sunny-yellow sun in the upper right. Far away on the left, on the horizon, the small sandy-coloured Qaitbay citadel on its rocks; far away on the right, a few soft pastel buildings of the Corniche and a small blue-and-white fishing boat. Middle band: calm turquoise and mist-blue sea with gentle white foam lines. Bottom half: smooth warm golden sand with a soft wavy foam edge. In the bottom left corner a striped beach umbrella in coral and cream; in the bottom right corner a small bucket and spade and a starfish. Keep the whole CENTER of the picture (about 65% of the width, from 12% to 95% of the height) plain and calm (just sea and sand, no objects), because a grid of cards will be placed there. Keep the sand in front of the left and right edges empty, because two children will stand there. Use this palette: deep teal #0F4C5C, mist blue #A8DADC, warm sand #EFE6D8, slate teal #4F7C82, cocoa brown #5B4B3A, sunny yellow #FFC845, coral #FF7A5C, leaf green #6CC24A, cream #FFFBF4. No people, no cards, no text, no letters, no logos, no watermark, no religious symbols.
+```
+
+### Card back (portrait 3:4, generate once)
+
+Every face-down card shows this picture, from about 40 px to 170 px wide,
+so it has to stay clear and simple when small.
+
+```
+The back of a single playing card for a children's memory game, flat 2D vector style, front view, filling the whole picture edge to edge, portrait 3:4. Deep teal #0F4C5C background with a thin mist-blue #A8DADC rounded border inset a little from the edge, and a soft, subtle diamond lattice pattern in a slightly lighter teal. In the centre, a simple round medallion in cream #FFFBF4 with a small cocoa-brown #5B4B3A seashell inside it and a tiny sunny-yellow #FFC845 star above the shell. Symmetrical, clean, no shadows outside the card, square corners (the game rounds them). No text, no letters, no numbers, no logos, no watermark.
 ```

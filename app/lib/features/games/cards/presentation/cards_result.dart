@@ -141,8 +141,7 @@ class _CardsResultState extends State<CardsResult> {
                               _RecordBadge(text: l10n.cardsNewRecord)
                             else if (best != null)
                               AppText.body(
-                                '${l10n.cardsBestTime}: ${best.clock} · '
-                                '${best.moves} ${l10n.cardsMoves}',
+                                l10n.cardsBest(best.clock, best.moves),
                                 color: AppColors.textMuted,
                                 textAlign: TextAlign.center,
                               ),
