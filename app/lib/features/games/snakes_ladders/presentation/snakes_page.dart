@@ -591,7 +591,9 @@ class _SnakesPageState extends State<SnakesPage> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(child: player(0)),
-              dice,
+              // Narrow, so the names beside it keep their room (the "Tap
+              // the dice!" pill shrinks to fit).
+              SizedBox(width: diceSize * 1.25, child: dice),
               Expanded(child: player(1)),
             ],
           );
