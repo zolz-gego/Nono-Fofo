@@ -80,6 +80,7 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
       LevelGame.fishing => AppRoutes.fishing,
       LevelGame.balloons => AppRoutes.balloons,
       LevelGame.writeLetter => AppRoutes.writing,
+      LevelGame.cards => AppRoutes.cards,
       _ => null,
     };
     if (route != null) {
@@ -116,6 +117,13 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
         placeholder: AppIcons.balloons,
         title: l10n.gameBalloons,
         accent: AppColors.coral,
+        onTap: () => _openGame(index),
+      ),
+      LevelGame.cards => RoadStop(
+        image: game.name,
+        placeholder: AppIcons.cards,
+        title: l10n.gameCards,
+        accent: AppColors.mistBlue,
         onTap: () => _openGame(index),
       ),
       LevelGame.challenge => RoadStop(

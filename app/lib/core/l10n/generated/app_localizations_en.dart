@@ -366,4 +366,66 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get writingExitFullScreen => 'Exit full screen';
+
+  @override
+  String get gameCards => 'Grandpa\'s Cards';
+
+  @override
+  String get cardsPickLevel => 'How many cards will you play?';
+
+  @override
+  String cardsCount(int count) {
+    return '$count cards';
+  }
+
+  @override
+  String cardsBest(String time, int moves) {
+    return 'Best $time · $moves moves';
+  }
+
+  @override
+  String cardsStart(String name) {
+    return 'Come on, $name! Find each capital letter with its small one';
+  }
+
+  @override
+  String get cardsTime => 'Time';
+
+  @override
+  String get cardsMoves => 'Moves';
+
+  @override
+  String get cardsPairs => 'Pairs';
+
+  @override
+  String get cardsSolved => 'All cards matched!';
+
+  @override
+  String cardsSolvedBody(int count) {
+    return 'You found every pair in $count cards';
+  }
+
+  @override
+  String get cardsNewRecord => 'New record!';
+
+  @override
+  String get cardsOtherLevel => 'Other card count';
+
+  @override
+  String get cardsShare => 'Share your time';
+
+  @override
+  String cardsShareTitle(String name, int count) {
+    return 'Bravo $name! You matched $count cards';
+  }
+
+  @override
+  String cardsShareWith(String hero) {
+    return 'With $hero by the sea in Alexandria';
+  }
+
+  @override
+  String cardsShareText(String name, int count, String time, int moves) {
+    return 'Bravo $name! Matched $count cards in Grandpa\'s Cards in $time with $moves moves, in Nono & Fofo';
+  }
 }

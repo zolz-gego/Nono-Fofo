@@ -733,6 +733,102 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'رجّع السبورة زي ما كانت'**
   String get writingExitFullScreen;
+
+  /// No description provided for @gameCards.
+  ///
+  /// In ar, this message translates to:
+  /// **'كروت جدو'**
+  String get gameCards;
+
+  /// No description provided for @cardsPickLevel.
+  ///
+  /// In ar, this message translates to:
+  /// **'هتلعب بكام كارت؟'**
+  String get cardsPickLevel;
+
+  /// No description provided for @cardsCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, few{{count} كروت} other{{count} كارت}}'**
+  String cardsCount(int count);
+
+  /// No description provided for @cardsBest.
+  ///
+  /// In ar, this message translates to:
+  /// **'أحسن وقت {time} · {moves} حركة'**
+  String cardsBest(String time, int moves);
+
+  /// No description provided for @cardsStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'يلا يا {name}! دوّر على كل حرف كبير وصغيره'**
+  String cardsStart(String name);
+
+  /// No description provided for @cardsTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوقت'**
+  String get cardsTime;
+
+  /// No description provided for @cardsMoves.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحركات'**
+  String get cardsMoves;
+
+  /// No description provided for @cardsPairs.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأزواج'**
+  String get cardsPairs;
+
+  /// No description provided for @cardsSolved.
+  ///
+  /// In ar, this message translates to:
+  /// **'خلّصت الكروت!'**
+  String get cardsSolved;
+
+  /// No description provided for @cardsSolvedBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, few{لقيت كل الأزواج في {count} كروت} other{لقيت كل الأزواج في {count} كارت}}'**
+  String cardsSolvedBody(int count);
+
+  /// No description provided for @cardsNewRecord.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم قياسي جديد!'**
+  String get cardsNewRecord;
+
+  /// No description provided for @cardsOtherLevel.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد كروت تاني'**
+  String get cardsOtherLevel;
+
+  /// No description provided for @cardsShare.
+  ///
+  /// In ar, this message translates to:
+  /// **'شارك وقتك'**
+  String get cardsShare;
+
+  /// No description provided for @cardsShareTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, few{برافو يا {name}! خلّصت {count} كروت} other{برافو يا {name}! خلّصت {count} كارت}}'**
+  String cardsShareTitle(String name, int count);
+
+  /// No description provided for @cardsShareWith.
+  ///
+  /// In ar, this message translates to:
+  /// **'مع {hero} على بحر إسكندرية'**
+  String cardsShareWith(String hero);
+
+  /// No description provided for @cardsShareText.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, few{برافو يا {name}! خلّصت {count} كروت في كروت جدو في {time} و{moves} حركة، في نونو وفوفو} other{برافو يا {name}! خلّصت {count} كارت في كروت جدو في {time} و{moves} حركة، في نونو وفوفو}}'**
+  String cardsShareText(String name, int count, String time, int moves);
 }
 
 class _AppLocalizationsDelegate
