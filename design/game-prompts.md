@@ -16,6 +16,7 @@ One illustration per game card on the level road. Same tool and workflow as
 | اكتب الحرف / Write the letter | `writeLetter.png` |
 | امسك البالونة / Catch the balloon | `balloons.png` |
 | كروت جدو / Grandpa's Cards | `cards.png` |
+| دوّر في الدير / Search the Monastery | `monastery.png` |
 | تحدّى أخوك / Challenge your brother | `challenge.png` |
 
 ---
@@ -50,6 +51,17 @@ Four shiny round helium balloons floating up at different heights, in coral #FF7
 
 ```
 Four chunky rounded playing cards, centered, arranged in a loose playful fan as if just dealt, slightly overlapping and tilted at different angles. The two cards in the back are face down, with deep-teal #0F4C5C backs, a thin mist-blue #A8DADC border and a simple mist-blue diamond pattern. The two cards in front are flipped face up, cream #FFFBF4 with a thick coral #FF7A5C border, one showing a big capital Coptic letter Ⲁ and the other the small letter ⲁ, both in coral #FF7A5C, so they clearly look like a matching pair. One front card is caught mid-flip, lifted and turning, with two small curved motion lines beside it. Small sunny-yellow #FFC845 star sparkles burst between the two matching cards. A tiny cocoa-brown seashell rests near the bottom corner. Same size and weight as a single object illustration: bold, simple and readable at small size.
+```
+
+### 6. Search the Monastery: `monastery.png`
+
+Paste the style block first, like the other cards. Save the result as
+`design/reference/monastery/icon.webp`; `tools/games/process_monastery.py`
+cuts it out and puts it on the same beige square as the other cards
+(`app/assets/games/monastery.png`).
+
+```
+A round terracotta clay water jar (an Egyptian zeer) with a narrow neck and a deep-teal #0F4C5C zigzag band, standing on a small cocoa-brown wooden stand, centered. A big Coptic letter Ⲃ in cocoa brown #5B4B3A peeks out from behind the jar on one side, only half of it showing, as if it is hiding. A big magnifying glass with a chunky sunny-yellow #FFC845 handle and a mist-blue #A8DADC lens floats in front at an angle, its lens over the peeking Ⲃ so that part of the letter looks bigger through the glass. A few small sunny-yellow star sparkles around the lens. Playful hide-and-seek feeling. Same size and weight as a single object illustration: bold, simple and readable at small size.
 ```
 
 ### 4. Challenge your brother: `challenge.png`
@@ -232,4 +244,51 @@ so it has to stay clear and simple when small.
 
 ```
 The back of a single playing card for a children's memory game, flat 2D vector style, front view, filling the whole picture edge to edge, portrait 3:4. Deep teal #0F4C5C background with a thin mist-blue #A8DADC rounded border inset a little from the edge, and a soft, subtle diamond lattice pattern in a slightly lighter teal. In the centre, a simple round medallion in cream #FFFBF4 with a small cocoa-brown #5B4B3A seashell inside it and a tiny sunny-yellow #FFC845 star above the shell. Symmetrical, clean, no shadows outside the card, square corners (the game rounds them). No text, no letters, no numbers, no logos, no watermark.
+```
+
+---
+
+## Search the Monastery art (دوّر في الدير)
+
+The room is built in layers: an **empty room** picture, then **cut-out
+objects** placed on top of it. The letters hide between the two, so only
+the bit that sticks out from behind an object shows. Until a file is there
+the game draws that part in code, so it plays without them. Attach
+`design/reference/nono-fofo-approved.webp` when the model accepts a
+reference, so the style matches.
+
+| What | Save as | Then |
+|---|---|---|
+| Road card illustration | `design/reference/monastery/icon.png` | Claude puts it on the beige square as `app/assets/games/monastery.png` (prompt 6 above) |
+| Empty room, wide (16:9), for tablets and computers | `design/reference/monastery/room.png` | Claude sizes it and sets the wide scene's `background` in `app/assets/content/games/monastery.json` |
+| Empty room, tall (3:5), for phones | `design/reference/monastery/room_tall.png` | Claude sizes it and sets the tall scene's `background` in the same file |
+| The 12 objects (white background) | `design/reference/monastery/<id>.png`, e.g. `chair.png` | Claude cuts them out, sets each object's `image`, and moves the hiding spots to fit the new shapes |
+
+Phones never scroll: they get their own **tall room**, with the same objects
+arranged differently. So the objects are made once and used in both rooms;
+only the empty room is needed twice.
+
+Room and object art is done (2026-10-17): the originals are in
+`design/reference/monastery/`. To swap one, replace it there (same name) and
+run, from the repo root:
+
+1. `tools/.venv/bin/python tools/games/process_monastery.py`: cuts the
+   objects out of their white background (holes too) and sizes everything
+   into `app/assets/games/monastery/`. It prints each object's width/height;
+   keep the object's `rect` in the JSON the same shape.
+2. `tools/.venv/bin/python tools/games/monastery_spots.py`: works out the
+   hiding spots from the outlines (letters about half hidden) and writes a
+   preview with every spot circled to `design/reference/monastery/preview_*.png`.
+
+Road card (`icon.webp`, the chair) and level card (`level_card.webp`) are
+done too (2026-10-17); `process_monastery.py` handles both.
+
+### Level tile (one picture for every level)
+
+Every tile in the "how many letters?" picker shows this same picture, with
+the number written under it ("5 حروف", "6 حروف"…). Paste the **style block**
+first, then this. Not used: the level card (`level_card.webp`) was chosen instead. Until it's there the tiles draw a magnifying glass over a few letters.
+
+```
+A single small wooden chair with a round spindle back, in warm cocoa-brown wood, slightly turned, centered. Two Coptic letters in cocoa brown #5B4B3A hide behind it, each only partly showing: a capital Ⲁ peeking out above the chair's back and a small ⲅ peeking out between the chair's legs. A big magnifying glass with a chunky sunny-yellow #FFC845 handle and a mist-blue #A8DADC lens leans in from one side, its lens over the peeking Ⲁ. A couple of small sunny-yellow star sparkles. No numbers. Very simple, bold and readable at small size, because it is shown only about 100 pixels wide on a button.
 ```

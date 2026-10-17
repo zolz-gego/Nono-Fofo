@@ -34,10 +34,16 @@ abstract final class AppIcons {
   static const FaIconData pairs = FontAwesomeIcons.clone;
   static const FaIconData record = FontAwesomeIcons.trophy;
 
+  // Search the Monastery.
+  static const FaIconData found = FontAwesomeIcons.magnifyingGlass;
+  static const FaIconData hintBulb = FontAwesomeIcons.solidLightbulb;
+  static const FaIconData miss = FontAwesomeIcons.xmark;
+
   // Game placeholders, shown until a game's illustration is added.
   static const FaIconData fishing = FontAwesomeIcons.fish;
   static const FaIconData writeLetter = FontAwesomeIcons.pencil;
   static const FaIconData balloons = FontAwesomeIcons.burst;
   static const FaIconData cards = FontAwesomeIcons.clone;
+  static const FaIconData monastery = FontAwesomeIcons.magnifyingGlass;
   static const FaIconData challenge = FontAwesomeIcons.trophy;
 }

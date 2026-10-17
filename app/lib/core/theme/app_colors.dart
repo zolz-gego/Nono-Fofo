@@ -201,6 +201,37 @@ abstract final class AppColors {
   static const Color cardBackBorder = mistBlue;
   static const Color cardFace = cream;
 
+  // ---------------------------------------------------------------------------
+  // Search the Monastery (desert monastery, placeholder art)
+  // ---------------------------------------------------------------------------
+  static const Color monasteryDesert = Color(0xFFE8CFA0);
+  static const Color monasteryDesertDark = Color(0xFFD5B27A);
+  static const Color monasteryWall = Color(0xFFF0E0C2);
+  static const Color monasteryWallShade = Color(0xFFDDC59C);
+  static const Color monasteryNiche = Color(0xFFCDAE7F);
+  static const Color monasteryBeam = Color(0xFF8A5F3E);
+  static const Color monasteryFloor = Color(0xFFDCC7A2);
+  static const Color monasteryFloorLine = Color(0xFFC4AA82);
+  static const Color monasteryRug = Color(0xFFB4533C);
+  static const Color monasteryRugBorder = Color(0xFFE9A13B);
+  static const Color monasterySky = Color(0xFFBFE3EE);
+  static const Color monasteryWood = Color(0xFFA0704A);
+  static const Color monasteryWoodDark = Color(0xFF6E4A2F);
+  static const Color monasteryClay = Color(0xFFC27C50);
+  static const Color monasteryClayDark = Color(0xFF9C5D38);
+  static const Color monasteryBrass = Color(0xFFD9A441);
+  static const Color monasteryLeaf = Color(0xFF6B9E4E);
+  static const Color monasteryLeafDark = Color(0xFF4E7D39);
+  static const Color monasteryCurtain = Color(0xFF4F7C82);
+  static const Color monasteryWicker = Color(0xFFCFA466);
+  static const Color monasteryBread = Color(0xFFE2A85E);
+
+  /// A found letter shines gold again, like in Grandpa's book.
+  static const Color letterGold = Color(0xFFE9A800);
+  static const Color foundGlow = Color(0xCCFFF4C2);
+  static const Color hintGlow = Color(0xDDFFD54F);
+  static const Color hintRing = Color(0xFFFFB300);
+
   /// Confetti / celebration colors.
   static const List<Color> celebration = [
     sunYellow,

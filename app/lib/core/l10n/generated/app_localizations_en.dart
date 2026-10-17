@@ -428,4 +428,69 @@ class AppLocalizationsEn extends AppLocalizations {
   String cardsShareText(String name, int count, String time, int moves) {
     return 'Bravo $name! Matched $count cards in Grandpa\'s Cards in $time with $moves moves, in Nono & Fofo';
   }
+
+  @override
+  String get gameMonastery => 'Search the Monastery';
+
+  @override
+  String get monasteryPickLevel => 'How many letters will you look for?';
+
+  @override
+  String monasteryCount(int count) {
+    return '$count letters';
+  }
+
+  @override
+  String monasteryBest(String time, int wrong) {
+    return 'Best $time · $wrong misses';
+  }
+
+  @override
+  String monasteryStart(String name) {
+    return 'Come on, $name! Letters are hiding in the monastery. Find them!';
+  }
+
+  @override
+  String get monasteryFound => 'Found';
+
+  @override
+  String get monasteryWrong => 'Not here!';
+
+  @override
+  String get monasteryHint => 'Hint';
+
+  @override
+  String get monasteryHintSay => 'Look around here!';
+
+  @override
+  String get monasteryMisses => 'Misses';
+
+  @override
+  String get monasteryHints => 'Hints';
+
+  @override
+  String get monasterySolved => 'You found every letter!';
+
+  @override
+  String monasterySolvedBody(int count) {
+    return 'You found $count hidden letters in the monastery';
+  }
+
+  @override
+  String get monasteryOtherLevel => 'Other letter count';
+
+  @override
+  String monasteryShareTitle(String name, int count) {
+    return 'Bravo $name! You found $count letters';
+  }
+
+  @override
+  String monasteryShareWith(String hero) {
+    return 'With $hero at the desert monastery';
+  }
+
+  @override
+  String monasteryShareText(String name, int count, String time) {
+    return 'Bravo $name! Found $count hidden letters in Search the Monastery in $time, in Nono & Fofo';
+  }
 }
