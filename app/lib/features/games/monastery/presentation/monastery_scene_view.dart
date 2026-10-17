@@ -47,6 +47,7 @@ class MonasterySceneView extends StatelessWidget {
   const MonasterySceneView({
     super.key,
     required this.config,
+    required this.scene,
     required this.letters,
     required this.onTap,
     this.hint,
@@ -55,6 +56,7 @@ class MonasterySceneView extends StatelessWidget {
   });
 
   final MonasteryConfig config;
+  final MonasteryScene scene;
   final List<HiddenLetter> letters;
   final void Function(Offset scenePoint) onTap;
   final HintGlow? hint;
@@ -63,7 +65,6 @@ class MonasterySceneView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scene = config.scene;
     return LayoutBuilder(
       builder: (context, constraints) {
         final size = constraints.biggest;
@@ -90,6 +91,7 @@ class MonasterySceneView extends StatelessWidget {
               children: [
                 Positioned.fill(
                   child: MonasteryBackground(
+                    room: scene.id,
                     image: scene.background == null
                         ? null
                         : AssetImage(scene.background!),

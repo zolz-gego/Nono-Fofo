@@ -5,15 +5,20 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 
 /// The empty room: [image] if there is one, otherwise plaster walls with
-/// arched windows, wooden beams and a stone floor, drawn in code.
+/// arched windows, wooden beams and a stone floor, drawn in code for the
+/// [room] shape ('wide' or 'tall').
 class MonasteryBackground extends StatelessWidget {
-  const MonasteryBackground({super.key, this.image});
+  const MonasteryBackground({super.key, this.room = 'wide', this.image});
 
+  final String room;
   final ImageProvider? image;
 
   @override
   Widget build(BuildContext context) {
-    const painted = CustomPaint(painter: _RoomPainter(), size: Size.infinite);
+    final painted = CustomPaint(
+      painter: _RoomPainter(tall: room == 'tall'),
+      size: Size.infinite,
+    );
     final image = this.image;
     if (image == null) return painted;
     return Image(
@@ -97,18 +102,19 @@ Path _arch(Rect r) {
 }
 
 class _RoomPainter extends CustomPainter {
-  const _RoomPainter();
+  const _RoomPainter({required this.tall});
 
-  static const double floorY = 0.72;
+  /// The phone room: taller than wide, windows high up, a narrower rug.
+  final bool tall;
 
   @override
   void paint(Canvas canvas, Size size) {
     final w = size.width, h = size.height;
-    final floor = h * floorY;
+    final floor = h * (tall ? 0.7 : 0.72);
     final outline = Paint()
       ..color = AppColors.cocoa.withValues(alpha: 0.5)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = max(1.0, h * 0.004);
+      ..strokeWidth = max(1.0, min(w, h) * 0.006);
 
     // Plastered back wall.
     canvas.drawRect(
@@ -121,29 +127,41 @@ class _RoomPainter extends CustomPainter {
         ).createShader(Rect.fromLTWH(0, 0, w, floor)),
     );
 
-    // Arched windows with sky, and a dark niche.
-    for (final r in [
-      Rect.fromLTWH(w * 0.715, h * 0.1, w * 0.085, h * 0.24),
-      Rect.fromLTWH(w * 0.2, h * 0.14, w * 0.05, h * 0.18),
-    ]) {
+    // Arched windows with sky, and (wide room) a dark niche.
+    final windows = tall
+        ? [
+            Rect.fromLTWH(w * 0.66, h * 0.11, w * 0.2, h * 0.19),
+            Rect.fromLTWH(w * 0.13, h * 0.08, w * 0.12, h * 0.12),
+          ]
+        : [
+            Rect.fromLTWH(w * 0.715, h * 0.1, w * 0.085, h * 0.24),
+            Rect.fromLTWH(w * 0.2, h * 0.14, w * 0.05, h * 0.18),
+          ];
+    for (final r in windows) {
       final p = _arch(r);
       canvas
         ..drawPath(p, _fill(AppColors.monasterySky))
         ..drawPath(p, outline);
     }
-    final niche = _arch(Rect.fromLTWH(w * 0.885, h * 0.14, w * 0.07, h * 0.22));
-    canvas
-      ..drawPath(niche, _fill(AppColors.monasteryNiche))
-      ..drawPath(niche, outline);
+    if (!tall) {
+      final niche = _arch(
+        Rect.fromLTWH(w * 0.885, h * 0.14, w * 0.07, h * 0.22),
+      );
+      canvas
+        ..drawPath(niche, _fill(AppColors.monasteryNiche))
+        ..drawPath(niche, outline);
+    }
 
     // Ceiling beams.
+    final beamH = tall ? h * 0.03 : h * 0.045;
+    final beamStep = tall ? w * 0.22 : w * 0.12;
     canvas.drawRect(
-      Rect.fromLTWH(0, 0, w, h * 0.045),
+      Rect.fromLTWH(0, 0, w, beamH),
       _fill(AppColors.monasteryBeam),
     );
-    for (var x = w * 0.04; x < w; x += w * 0.12) {
+    for (var x = w * 0.04; x < w; x += beamStep) {
       canvas.drawRect(
-        Rect.fromLTWH(x, 0, w * 0.025, h * 0.075),
+        Rect.fromLTWH(x, 0, beamStep * 0.2, beamH * 1.7),
         _fill(AppColors.monasteryWoodDark),
       );
     }
@@ -155,7 +173,7 @@ class _RoomPainter extends CustomPainter {
     );
     final tile = Paint()
       ..color = AppColors.monasteryFloorLine
-      ..strokeWidth = max(1.0, h * 0.004);
+      ..strokeWidth = max(1.0, min(w, h) * 0.006);
     var y = floor;
     var step = h * 0.04;
     while (y < h) {
@@ -163,19 +181,21 @@ class _RoomPainter extends CustomPainter {
       y += step;
       step *= 1.35;
     }
-    for (var i = -8; i <= 8; i++) {
-      final top = w / 2 + i * w * 0.07;
-      final bottom = w / 2 + i * w * 0.13;
+    final (fan, spread) = tall ? (4, 0.16) : (8, 0.07);
+    for (var i = -fan; i <= fan; i++) {
+      final top = w / 2 + i * w * spread;
+      final bottom = w / 2 + i * w * spread * 1.85;
       canvas.drawLine(Offset(top, floor), Offset(bottom, h), tile);
     }
     canvas.drawLine(Offset(0, floor), Offset(w, floor), outline);
 
     // A long rug down the middle of the floor.
+    final (near, far) = tall ? (0.3, 0.18) : (0.19, 0.13);
     final rug = Path()
-      ..moveTo(w * 0.36, floor + h * 0.02)
-      ..lineTo(w * 0.62, floor + h * 0.02)
-      ..lineTo(w * 0.68, h)
-      ..lineTo(w * 0.3, h)
+      ..moveTo(w * (0.5 - far), floor + h * 0.02)
+      ..lineTo(w * (0.5 + far), floor + h * 0.02)
+      ..lineTo(w * (0.5 + near), h)
+      ..lineTo(w * (0.5 - near), h)
       ..close();
     canvas
       ..drawPath(rug, _fill(AppColors.monasteryRug))
@@ -184,12 +204,13 @@ class _RoomPainter extends CustomPainter {
         Paint()
           ..color = AppColors.monasteryRugBorder
           ..style = PaintingStyle.stroke
-          ..strokeWidth = h * 0.01,
+          ..strokeWidth = min(w, h) * 0.015,
       );
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _RoomPainter oldDelegate) =>
+      oldDelegate.tall != tall;
 }
 
 class _ObjectPainter extends CustomPainter {

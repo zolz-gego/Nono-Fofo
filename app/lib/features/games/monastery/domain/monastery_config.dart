@@ -1,4 +1,4 @@
-import 'dart:ui' show Color, Rect;
+import 'dart:ui' show Color, Rect, Size;
 
 /// Settings from `assets/content/games/monastery.json`. Defaults here are
 /// only used for keys missing from the file.
@@ -16,7 +16,7 @@ class MonasteryConfig {
     this.letterColors = const [],
     this.letterOpacity = 0.92,
     this.showSpots = false,
-    this.scene = const MonasteryScene(),
+    this.scenes = const [MonasteryScene()],
   });
 
   factory MonasteryConfig.fromJson(Map<String, dynamic> json) {
@@ -27,7 +27,7 @@ class MonasteryConfig {
     }
 
     double? num_(String key) => (json[key] as num?)?.toDouble();
-    final scene = json['scene'] as Map<String, dynamic>?;
+    final scenes = json['scenes'] as List?;
 
     return MonasteryConfig(
       letterCounts:
@@ -50,7 +50,12 @@ class MonasteryConfig {
           d.letterColors,
       letterOpacity: num_('letterOpacity') ?? d.letterOpacity,
       showSpots: json['showSpots'] as bool? ?? d.showSpots,
-      scene: scene == null ? d.scene : MonasteryScene.fromJson(scene),
+      scenes: scenes == null || scenes.isEmpty
+          ? d.scenes
+          : [
+              for (final s in scenes)
+                MonasteryScene.fromJson(s as Map<String, dynamic>),
+            ],
     );
   }
 
@@ -88,7 +93,20 @@ class MonasteryConfig {
 
   /// Draws every hiding spot, to line spots up with new art.
   final bool showSpots;
-  final MonasteryScene scene;
+
+  /// The rooms, each drawn for a different screen shape (e.g. a wide one
+  /// for tablets, a tall one for phones).
+  final List<MonasteryScene> scenes;
+
+  /// The room whose shape fits [area] best, so it fills the most of it.
+  MonasteryScene sceneFor(Size area) {
+    double filled(MonasteryScene s) {
+      final a = area.width / area.height;
+      return a > s.aspect ? s.aspect / a : a / s.aspect;
+    }
+
+    return scenes.reduce((a, b) => filled(b) > filled(a) ? b : a);
+  }
 
   bool isSmallScreen(double shortestSide) => shortestSide < smallScreenWidth;
 
@@ -101,6 +119,7 @@ class MonasteryConfig {
 /// (x of its width, y of its height).
 class MonasteryScene {
   const MonasteryScene({
+    this.id = 'wide',
     this.aspect = 16 / 9,
     this.background,
     this.objects = const [],
@@ -108,6 +127,7 @@ class MonasteryScene {
   });
 
   factory MonasteryScene.fromJson(Map<String, dynamic> json) => MonasteryScene(
+    id: json['id'] as String? ?? 'wide',
     aspect: (json['aspect'] as num?)?.toDouble() ?? 16 / 9,
     background: json['background'] as String?,
     objects: [
@@ -119,6 +139,10 @@ class MonasteryScene {
         HidingSpot.fromJson(s as Map<String, dynamic>),
     ],
   );
+
+  /// Which room this is ('wide' or 'tall'); also picks the room drawn in
+  /// code until there is a [background].
+  final String id;
 
   /// Width / height of the scene picture.
   final double aspect;

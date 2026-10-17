@@ -37,33 +37,46 @@ void main() {
   );
 
   group('config', () {
-    test('the real file has room for the biggest level', () {
+    test('every room has space for the biggest level', () {
       final config = _realConfig();
       final most = config.letterCounts.reduce(max);
-      for (var seed = 0; seed < 50; seed++) {
-        final letters = hideLetters(
-          alphabet: _alphabet,
-          config: config,
-          count: most,
-          random: Random(seed),
-        );
-        expect(letters, hasLength(most), reason: 'seed $seed');
+      expect(config.scenes.map((s) => s.id), containsAll(['wide', 'tall']));
+      for (final scene in config.scenes) {
+        for (var seed = 0; seed < 50; seed++) {
+          final letters = hideLetters(
+            alphabet: _alphabet,
+            config: config,
+            scene: scene,
+            count: most,
+            random: Random(seed),
+          );
+          expect(letters, hasLength(most), reason: '${scene.id} seed $seed');
+        }
+        expect(scene.objects, isNotEmpty);
+        for (final s in scene.spots) {
+          expect(s.x, inInclusiveRange(0, 1));
+          expect(s.y, inInclusiveRange(0, 1));
+        }
       }
-      expect(config.scene.objects, isNotEmpty);
-      for (final s in config.scene.spots) {
-        expect(s.x, inInclusiveRange(0, 1));
-        expect(s.y, inInclusiveRange(0, 1));
-      }
+    });
+
+    test('wide screens get the wide room, phones the tall one', () {
+      final config = _realConfig();
+      expect(config.sceneFor(const Size(1264, 590)).id, 'wide');
+      expect(config.sceneFor(const Size(359, 620)).id, 'tall');
+      expect(config.sceneFor(const Size(828, 210)).id, 'wide');
     });
   });
 
   group('hideLetters', () {
     final config = _realConfig();
+    final scene = config.scenes.first;
 
     test('different letters, spots kept apart', () {
       final letters = hideLetters(
         alphabet: _alphabet,
         config: config,
+        scene: scene,
         count: 10,
         random: Random(4),
       );
@@ -71,11 +84,7 @@ void main() {
       for (var i = 0; i < letters.length; i++) {
         for (var j = i + 1; j < letters.length; j++) {
           expect(
-            sceneDistance(
-              letters[i].center,
-              letters[j].center,
-              config.scene.aspect,
-            ),
+            sceneDistance(letters[i].center, letters[j].center, scene.aspect),
             greaterThanOrEqualTo(config.minSpotGap),
           );
         }
@@ -87,6 +96,7 @@ void main() {
         for (final l in hideLetters(
           alphabet: _alphabet,
           config: config,
+          scene: scene,
           count: 5,
           random: Random(seed),
         ))
@@ -118,9 +128,8 @@ void main() {
     setUp(() {
       progress = _Progress();
       when(() => progress.bestTime(any(), any())).thenReturn(null);
-      when(
-        () => progress.saveTime(any(), any(), any()),
-      ).thenAnswer((_) async => true);
+      when(() => progress.saveTime(any(), any(), any()))
+          .thenAnswer((_) async => true);
     });
 
     MonasteryCubit make() =>
@@ -155,9 +164,9 @@ void main() {
       expect(cubit.state.event, MonasteryEvent.solved);
       expect(cubit.state.newRecord, isTrue);
       final saved =
-          verify(
-                () => progress.saveTime(MonasteryCubit.id, '2', captureAny()),
-              ).captured.single
+          verify(() => progress.saveTime(MonasteryCubit.id, '2', captureAny()))
+                  .captured
+                  .single
               as TimedRecord;
       expect(saved.moves, 2);
     });

@@ -255,8 +255,13 @@ reference, so the style matches.
 | What | Save as | Then |
 |---|---|---|
 | Road card illustration | `design/reference/monastery/icon.png` | Claude puts it on the beige square as `app/assets/games/monastery.png` (prompt 6 above) |
-| Empty room (16:9) | `design/reference/monastery/room.png` | Claude sizes it and sets `scene.background` in `app/assets/content/games/monastery.json` |
+| Empty room, wide (16:9), for tablets and computers | `design/reference/monastery/room.png` | Claude sizes it and sets the wide scene's `background` in `app/assets/content/games/monastery.json` |
+| Empty room, tall (3:5), for phones | `design/reference/monastery/room_tall.png` | Claude sizes it and sets the tall scene's `background` in the same file |
 | The 12 objects (white background) | `design/reference/monastery/<id>.png`, e.g. `chair.png` | Claude cuts them out, sets each object's `image`, and moves the hiding spots to fit the new shapes |
+
+Phones never scroll: they get their own **tall room**, with the same objects
+arranged differently. So the objects are made once and used in both rooms;
+only the empty room is needed twice.
 
 The hiding spots are set by hand for each object's outline, so after new
 art arrives they get lined up again (`"showSpots": true` in the JSON draws
@@ -269,6 +274,12 @@ separate cut-out, so the room must stay empty.
 
 ```
 Wide landscape (16:9) background for a children's hide-and-seek game, flat 2D vector cartoon style: thin warm-brown outlines, flat colors with soft shading, rounded friendly shapes, cheerful and simple. The inside of a quiet old hall in an Egyptian desert monastery, seen from the front like a stage. The back wall fills the top 72% of the picture: thick, softly uneven plaster in warm sand and cream, a little darker near the ceiling. Along the top edge, dark wooden ceiling beams. High on the wall: one small arched window at about 20% across and a bigger arched window at about 72-80% across, both showing soft light-blue sky and a hint of golden desert dunes; at the far right a small empty arched niche in the wall. The bottom 28% is a floor of big warm-beige stone tiles, with a long coral and sunny-yellow patterned rug running from the middle toward the front. The whole room is EMPTY: no furniture, no doors, no plants, no lamps, no objects at all, because they will be placed on top later. Soft warm afternoon light. Use this palette: deep teal #0F4C5C, mist blue #A8DADC, warm sand #EFE6D8, slate teal #4F7C82, cocoa brown #5B4B3A, sunny yellow #FFC845, coral #FF7A5C, leaf green #6CC24A, cream #FFFBF4. No people, no text, no letters, no logos, no watermark, no religious symbols.
+```
+
+### Empty room, tall (portrait 3:5, for phones)
+
+```
+Tall portrait (3:5) background for a children's hide-and-seek game on a phone, flat 2D vector cartoon style: thin warm-brown outlines, flat colors with soft shading, rounded friendly shapes, cheerful and simple. The inside of a quiet old hall in an Egyptian desert monastery, seen from the front. The back wall fills the top 70% of the picture: thick, softly uneven plaster in warm sand and cream, a little darker near the ceiling. Along the top edge, dark wooden ceiling beams. High on the wall: a small arched window at the upper left (about 13-25% across) and a bigger arched window at the upper right (about 66-86% across), both showing soft light-blue sky and a hint of golden desert dunes. The bottom 30% is a floor of big warm-beige stone tiles, with a coral and sunny-yellow patterned rug running from the middle toward the front, wider at the bottom. The whole room is EMPTY: no furniture, no doors, no plants, no lamps, no objects at all, because they will be placed on top later. Soft warm afternoon light. Use this palette: deep teal #0F4C5C, mist blue #A8DADC, warm sand #EFE6D8, slate teal #4F7C82, cocoa brown #5B4B3A, sunny yellow #FFC845, coral #FF7A5C, leaf green #6CC24A, cream #FFFBF4. No people, no text, no letters, no logos, no watermark, no religious symbols.
 ```
 
 ### Objects (one picture each, plain white background)

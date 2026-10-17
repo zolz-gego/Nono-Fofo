@@ -56,7 +56,8 @@ class MonasteryArgs {
 /// bottom. On big screens both brothers stand small in the bottom corners:
 /// the child's buddy runs to every letter found and the other brother says
 /// its name (or "Not here!" on a miss). Phones show no brothers; bubbles
-/// pop up in the room instead, and the room can be dragged and zoomed.
+/// pop up in the room instead. The room never scrolls: each screen shape
+/// gets the room drawn for it (wide or tall).
 class MonasteryPage extends StatefulWidget {
   const MonasteryPage({super.key, required this.args});
 
@@ -84,6 +85,12 @@ class _MonasteryPageState extends State<MonasteryPage> {
 
   MonasteryConfig? _config;
   List<CopticLetter> _alphabet = const [];
+
+  /// The room being played: the one whose shape fits the screen best.
+  MonasteryScene? _scene;
+
+  /// A start (in a new room) is waiting for the next frame.
+  bool _starting = false;
   MonasteryCubit? _cubit;
 
   /// The letter the buddy is going to or standing at (null: at home).
@@ -124,16 +131,34 @@ class _MonasteryPageState extends State<MonasteryPage> {
       if (!mounted) return;
       final (config, alphabet) = c;
       await Future.wait([
-        for (final path in [
-          config.scene.background,
-          for (final o in config.scene.objects) o.image,
-        ])
+        for (final path in {
+          for (final scene in config.scenes) ...[
+            scene.background,
+            for (final o in scene.objects) o.image,
+          ],
+        })
           if (path != null)
             precacheImage(AssetImage(path), context, onError: (_, _) {}),
       ]);
       if (!mounted) return;
-      _config = config;
-      _alphabet = alphabet;
+      // The room is picked (and the game started) once the space for it
+      // is known, in build.
+      setState(() {
+        _config = config;
+        _alphabet = alphabet;
+      });
+    });
+  }
+
+  /// Starts a game in [scene] after this frame (first build, or the screen
+  /// turned and another room fits better).
+  void _startIn(MonasteryScene scene) {
+    if (_starting) return;
+    _starting = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _starting = false;
+      if (!mounted) return;
+      _scene = scene;
       _start();
     });
   }
@@ -146,10 +171,12 @@ class _MonasteryPageState extends State<MonasteryPage> {
     _bubbleTimer?.cancel();
     _cubit?.close();
     final config = _config!;
+    final scene = _scene!;
     final progress = sl<GameProgressRepository>();
     final letters = hideLetters(
       alphabet: _alphabet,
       config: config,
+      scene: scene,
       count: _count,
       random: _random,
     );
@@ -157,7 +184,7 @@ class _MonasteryPageState extends State<MonasteryPage> {
     final cubit = MonasteryCubit(
       progress,
       letters: letters,
-      aspect: config.scene.aspect,
+      aspect: scene.aspect,
       tapRadius: config.tapRadius,
     );
     setState(() {
@@ -490,25 +517,35 @@ class _MonasteryPageState extends State<MonasteryPage> {
           const SizedBox(width: AppDimens.spaceSm),
         ],
       ),
-      body: cubit == null || config == null
+      body: config == null
           ? const Center(child: CircularProgressIndicator())
-          : BlocConsumer<MonasteryCubit, MonasteryState>(
-              bloc: cubit,
-              listenWhen: (a, b) => a.eventId != b.eventId,
-              listener: _onEvent,
-              builder: (context, state) => LayoutBuilder(
-                builder: (context, constraints) =>
-                    _screen(constraints.biggest, state, config),
-              ),
+          : LayoutBuilder(
+              builder: (context, constraints) {
+                final size = constraints.biggest;
+                final best = config.sceneFor(
+                  _Layout.areaFor(size, small: _small).size,
+                );
+                if (cubit == null || best.id != _scene?.id) {
+                  _startIn(best);
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return BlocConsumer<MonasteryCubit, MonasteryState>(
+                  bloc: cubit,
+                  listenWhen: (a, b) => a.eventId != b.eventId,
+                  listener: _onEvent,
+                  builder: (context, state) => _screen(size, state, config),
+                );
+              },
             ),
     );
   }
 
   Widget _screen(Size size, MonasteryState state, MonasteryConfig config) {
     final rtl = Directionality.of(context) == TextDirection.rtl;
+    final scene = _scene!;
     final layout = _Layout.of(
       size: size,
-      aspect: config.scene.aspect,
+      aspect: scene.aspect,
       small: _small,
       rtl: rtl,
       roster: context.read<CharacterRoster>(),
@@ -516,8 +553,9 @@ class _MonasteryPageState extends State<MonasteryPage> {
       letters: state.letters,
     );
     _layout = layout;
-    final scene = MonasterySceneView(
+    final view = MonasterySceneView(
       config: config,
+      scene: scene,
       letters: state.letters,
       onTap: _onSceneTap,
       hint: _hint,
@@ -529,21 +567,7 @@ class _MonasteryPageState extends State<MonasteryPage> {
       clipBehavior: Clip.hardEdge,
       children: [
         const Positioned.fill(child: DesertSurround()),
-        if (layout.small)
-          Positioned.fromRect(
-            rect: layout.sceneArea,
-            child: _ZoomableScene(
-              sceneSize: layout.scene.size,
-              viewport: layout.sceneArea.size,
-              focus: _hint == null || _hint!.index >= state.letters.length
-                  ? null
-                  : state.letters[_hint!.index].center + _hint!.offset,
-              focusId: _hint?.id ?? 0,
-              child: scene,
-            ),
-          )
-        else
-          Positioned.fromRect(rect: layout.scene, child: scene),
+        Positioned.fromRect(rect: layout.scene, child: view),
         Positioned(
           top: AppDimens.spaceSm,
           left: 0,
@@ -605,102 +629,6 @@ class _MonasteryPageState extends State<MonasteryPage> {
   }
 }
 
-/// Phones: the room as tall as the space allows, dragged sideways and
-/// pinch-zoomed when it's wider than the screen. A new [focus] (a hint)
-/// glides the room so that point is in view.
-class _ZoomableScene extends StatefulWidget {
-  const _ZoomableScene({
-    required this.sceneSize,
-    required this.viewport,
-    required this.child,
-    this.focus,
-    this.focusId = 0,
-  });
-
-  final Size sceneSize;
-  final Size viewport;
-  final Widget child;
-
-  /// A point to bring into view, in scene fractions.
-  final Offset? focus;
-
-  /// Changes for every new [focus].
-  final int focusId;
-
-  @override
-  State<_ZoomableScene> createState() => _ZoomableSceneState();
-}
-
-class _ZoomableSceneState extends State<_ZoomableScene>
-    with SingleTickerProviderStateMixin {
-  final TransformationController _view = TransformationController();
-  late final AnimationController _glide = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 450),
-  )..addListener(() => _view.value = _tween?.evaluate(_curve) ?? _view.value);
-  late final CurvedAnimation _curve = CurvedAnimation(
-    parent: _glide,
-    curve: Curves.easeInOut,
-  );
-  Matrix4Tween? _tween;
-
-  double get _contentWidth =>
-      max(widget.sceneSize.width, widget.viewport.width);
-
-  @override
-  void didUpdateWidget(_ZoomableScene old) {
-    super.didUpdateWidget(old);
-    final focus = widget.focus;
-    if (focus != null && widget.focusId != old.focusId) _glideTo(focus);
-  }
-
-  void _glideTo(Offset focus) {
-    final scene = widget.sceneSize, view = widget.viewport;
-    final scale = _view.value.getMaxScaleOnAxis();
-    final left = (_contentWidth - scene.width) / 2;
-    final px = (left + focus.dx * scene.width) * scale;
-    final py = focus.dy * scene.height * scale;
-    final tx = (view.width / 2 - px)
-        .clamp(min(0.0, view.width - _contentWidth * scale), 0.0)
-        .toDouble();
-    final ty = (view.height / 2 - py)
-        .clamp(min(0.0, view.height - view.height * scale), 0.0)
-        .toDouble();
-    _tween = Matrix4Tween(
-      begin: _view.value.clone(),
-      end: Matrix4.identity()
-        ..translateByDouble(tx, ty, 0, 1)
-        ..scaleByDouble(scale, scale, 1, 1),
-    );
-    _glide.forward(from: 0);
-  }
-
-  @override
-  void dispose() {
-    _glide.dispose();
-    _curve.dispose();
-    _view.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return InteractiveViewer(
-      transformationController: _view,
-      constrained: false,
-      minScale: min(1, widget.viewport.width / widget.sceneSize.width),
-      maxScale: 3,
-      child: SizedBox(
-        width: _contentWidth,
-        height: widget.viewport.height,
-        child: Center(
-          child: SizedBox.fromSize(size: widget.sceneSize, child: widget.child),
-        ),
-      ),
-    );
-  }
-}
-
 /// Where everything goes: the HUD, the room, the letters bar, the
 /// brothers' corners, and the spot beside a letter where the buddy stands.
 class _Layout {
@@ -730,33 +658,27 @@ class _Layout {
     required List<HiddenLetter> letters,
   }) {
     const gap = AppDimens.spaceSm;
-    final hudH = small ? 52.0 : 60.0;
-    final barH = small ? 64.0 : 84.0;
+    final hudH = _hudH(small);
+    final barH = _barH(small);
     final ref = roster.referenceHeight;
     double idleW(CharacterId id) =>
         roster.pose(id, CharacterAction.idle)?.width ?? ref * 0.4;
     double idleH(CharacterId id) =>
         roster.pose(id, CharacterAction.idle)?.height ?? ref;
 
-    final sceneArea = Rect.fromLTRB(
-      small ? 0 : gap,
-      hudH,
-      size.width - (small ? 0 : gap),
-      size.height - barH - gap,
-    );
-    final Rect scene;
-    if (small) {
-      // As tall as the space; wider than the screen is fine (it drags).
-      final h = sceneArea.height;
-      scene = Rect.fromLTWH(0, 0, h * aspect, h);
-    } else {
-      var w = sceneArea.width, h = w / aspect;
-      if (h > sceneArea.height) {
-        h = sceneArea.height;
-        w = h * aspect;
-      }
-      scene = Rect.fromCenter(center: sceneArea.center, width: w, height: h);
+    final sceneArea = areaFor(size, small: small);
+    // As big as fits, never scrolled: the room is picked to match this
+    // space's shape.
+    var w = sceneArea.width, h = w / aspect;
+    if (h > sceneArea.height) {
+      h = sceneArea.height;
+      w = h * aspect;
     }
+    final scene = Rect.fromCenter(
+      center: sceneArea.center,
+      width: w,
+      height: h,
+    );
 
     // Brothers small in the bottom corners, the bar between them.
     final charSize = small ? 0.0 : min(size.height * 0.3, 220.0);
@@ -799,6 +721,21 @@ class _Layout {
     );
   }
 
+  static double _hudH(bool small) => small ? 52 : 60;
+  static double _barH(bool small) => small ? 64 : 84;
+
+  /// The space for the room on a [size] screen: between the HUD and the
+  /// letters bar.
+  static Rect areaFor(Size size, {required bool small}) {
+    const gap = AppDimens.spaceSm;
+    return Rect.fromLTRB(
+      gap,
+      _hudH(small),
+      size.width - gap,
+      size.height - _barH(small) - gap,
+    );
+  }
+
   final Size size;
   final bool small;
   final bool rtl;
@@ -807,7 +744,7 @@ class _Layout {
   /// The space for the room.
   final Rect sceneArea;
 
-  /// The room itself (on phones, its size inside the draggable area).
+  /// The room itself.
   final Rect scene;
   final Rect bar;
   final Rect heroHome;

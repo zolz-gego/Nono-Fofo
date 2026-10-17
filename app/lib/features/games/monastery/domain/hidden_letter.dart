@@ -56,16 +56,16 @@ double sceneDistance(Offset a, Offset b, double aspect) {
 }
 
 /// Hides [count] different letters from [alphabet] at random spots of
-/// [config]'s scene, each randomly capital or small, never two closer than
+/// [scene], each randomly capital or small, never two closer than
 /// `minSpotGap`. Fewer come back if the spots run out.
 List<HiddenLetter> hideLetters({
   required List<CopticLetter> alphabet,
   required MonasteryConfig config,
+  required MonasteryScene scene,
   required int count,
   Random? random,
 }) {
   final rnd = random ?? Random();
-  final scene = config.scene;
   final spots = [...scene.spots]..shuffle(rnd);
   final picked = <HidingSpot>[];
   for (final s in spots) {
