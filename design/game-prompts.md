@@ -49,7 +49,7 @@ Four shiny round helium balloons floating up at different heights, in coral #FF7
 ### 5. Grandpa's Cards: `cards.png`
 
 ```
-A small game of memory cards laid on a striped beach towel on the sand by the sea in Alexandria. Six rounded playing cards in a neat little grid: four lie face down, deep teal #0F4C5C backs with a thin mist-blue #A8DADC diamond pattern; two are flipped face up, cream #FFFBF4, one showing a big capital Coptic letter Ⲁ and the other the small letter ⲁ, both in the same coral #FF7A5C colour, with a few small sparkles between them because they match. In the background, a strip of mist-blue sea with a tiny sandy-coloured Qaitbay fort far away and a sunny-yellow #FFC845 sun. Cheerful and calm.
+Four chunky rounded playing cards, centered, arranged in a loose playful fan as if just dealt, slightly overlapping and tilted at different angles. The two cards in the back are face down, with deep-teal #0F4C5C backs, a thin mist-blue #A8DADC border and a simple mist-blue diamond pattern. The two cards in front are flipped face up, cream #FFFBF4 with a thick coral #FF7A5C border, one showing a big capital Coptic letter Ⲁ and the other the small letter ⲁ, both in coral #FF7A5C, so they clearly look like a matching pair. One front card is caught mid-flip, lifted and turning, with two small curved motion lines beside it. Small sunny-yellow #FFC845 star sparkles burst between the two matching cards. A tiny cocoa-brown seashell rests near the bottom corner. Same size and weight as a single object illustration: bold, simple and readable at small size.
 ```
 
 ### 4. Challenge your brother: `challenge.png`
