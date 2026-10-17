@@ -13,22 +13,10 @@ abstract final class AssetPaths {
   /// Card illustration of one game, e.g. `gameImage('fishing')`.
   static String gameImage(String game) => 'assets/games/$game.png';
 
-  /// Snakes & Ladders art, from tools/games/process_snakes.py.
+  /// Snakes & Ladders background, from tools/games/process_snakes.py.
   static const String snakesGame = 'assets/games/snakes';
   static const String snakesBackground = '$snakesGame/pyramids.webp';
   static const String snakesBackgroundTall = '$snakesGame/pyramids_tall.webp';
-  static const String snakesLadder = '$snakesGame/ladder.webp';
-
-  /// The snake pictures, one per colour, used in turn.
-  static const List<String> _snakeColours = [
-    'green',
-    'coral',
-    'lilac',
-    'mint',
-    'orange',
-  ];
-  static String snake(int i) =>
-      '$snakesGame/snake_${_snakeColours[i % _snakeColours.length]}.webp';
 
   static const String audio = 'assets/audio';
   static const String audioManifest = '$audio/manifest.json';

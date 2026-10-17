@@ -314,10 +314,11 @@ reference, so the style matches.
 | One wooden ladder (white background) | `design/reference/snakes/ladder.png` | Claude cuts it out and stretches it between each ladder's squares |
 | Five snakes (white background), one per colour | `design/reference/snakes/snake_<colour>.png` | Claude cuts them out and lays each along a snake's head and tail squares |
 
-Done (2026-10-17): the wide background, the ladder and the green snake are in
-`design/reference/snakes/`; the other four snake colours are made from the
-green one. To swap a picture (or add `pyramids_tall.webp` or your own
-`snake_<colour>.webp`), put it there and run, from the repo root:
+Done (2026-10-17): the wide background is in `design/reference/snakes/`
+and used behind the board. A ladder and a green snake were tried as pictures
+too, but the drawn snakes and ladders were kept (the originals are still in
+that folder). To swap the background (or add `pyramids_tall.webp`), put it
+there and run, from the repo root:
 `tools/.venv/bin/python tools/games/process_snakes.py`.
 
 Paste the style block first for each one.
