@@ -18,7 +18,7 @@ import '../../../engines/characters/presentation/character_controller.dart';
 import '../../../engines/sound/application/sound_service.dart';
 import '../../../engines/sound/domain/sound_event.dart';
 import '../../games/progress/domain/game_progress_repository.dart';
-import '../../games/snakes_ladders/presentation/snakes_cubit.dart';
+import '../../games/challenge/presentation/challenge_picker_page.dart';
 import '../../settings/presentation/language_button.dart';
 import '../../settings/presentation/mute_button.dart';
 import '../domain/game_level.dart';
@@ -140,9 +140,9 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
         title: l10n.gameChallenge(opponent),
         accent: AppColors.leafGreen,
         onTap: () => _openGame(index),
-        done: sl<GameProgressRepository>().hasPassed(
-          SnakesCubit.id,
-          SnakesCubit.levelKey(widget.setup.level),
+        done: ChallengePickerPage.done(
+          sl<GameProgressRepository>(),
+          widget.setup.level,
         ),
       ),
     };

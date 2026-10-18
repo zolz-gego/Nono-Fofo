@@ -347,3 +347,65 @@ mint #3FBFA0 and orange #FF9F43.
 ```
 One friendly cartoon snake for a children's board game, lying in a long gentle S-curve from the top of the picture to the bottom, seen from above, on a plain white background. The head is at the top: round, with big friendly eyes, a small smile and a little red forked tongue. The body is <colour>, with a lighter round-spot pattern down its back, and it gets thinner towards the tail at the bottom. Cute, not scary. Thin warm-brown outline, flat colours with soft shading. Nothing else in the picture.
 ```
+
+## Nono & Fofo Adventure art (مغامرة نونو وفوفو)
+
+The Adventure is a side-scroller in three levels (the Nile bank, the desert
+and Pyramids, Alexandria at night). The backgrounds, ground, blocks and
+enemies are in (originals in `design/reference/adventure/`; to swap one,
+replace it there and run `tools/.venv/bin/python tools/games/process_adventure.py`).
+The page, book, gate and flags are still drawn in code
+(`app/lib/features/games/adventure/game/adventure_art.dart`). The level
+maps stay in `app/assets/content/games/adventure.json`, so the art never
+changes where things are.
+
+Paste the style block first for each one.
+
+### Backgrounds (one per level, very wide 3:1, made to repeat sideways)
+
+```
+A very wide side-view background for a children's 2D platform game, made so the left and right edges join up when repeated. <PLACE>. Seen from the side like a stage set, with the far scenery in the upper two thirds and a plain, quiet strip at the bottom (the ground tiles sit on top of it). No people, animals, text or letters. Flat colours with soft shading, thin warm-brown outlines.
+```
+
+Places:
+- *Nile bank*: light-blue sky, a soft sun, green fields and palm trees on the far bank, the Nile in the middle.
+- *Desert and Pyramids*: warm orange-to-cream sky, the three Pyramids of Giza far away, rolling sand dunes.
+- *Alexandria at night*: deep navy sky with stars and a crescent moon, the sea, the Qaitbay citadel with a lighthouse glow, city buildings with warm lit windows.
+
+### Ground and blocks (square tiles, 1:1, one picture each)
+
+```
+One square game tile for a children's 2D platform game, seen straight from the side, filling the whole picture edge to edge so it repeats seamlessly sideways: <TILE>. Flat colours with soft shading, thin warm-brown outline. Nothing else in the picture.
+```
+
+Tiles: *grass-topped earth* (Nile), *sand-topped earth* (desert), *paved stone* (Alexandria),
+*stone block*, *red brick block*, *golden "?" block*, *used plain brown block*.
+
+### Enemies (side view, facing left, plain white background)
+
+```
+One friendly-but-grumpy cartoon <ENEMY> walking to the left, seen from the side, for a children's platform game. Cute, not scary, with a cheeky frown. Plain white background, thin warm-brown outline, flat colours with soft shading. Nothing else in the picture.
+```
+
+Enemies: *white duck with an orange beak* (Nile), *brown desert scorpion* (desert),
+*red crab* (Alexandria), *white seagull with grey wings, flying* (Alexandria).
+
+Alexandria's seagulls now fly over the path and drop shells, so a flying
+pose would look better than the walking one (save it as `seagull.webp`):
+
+```
+One friendly-but-grumpy cartoon white seagull with grey wings, flying to the left with its wings spread wide, seen from the side, for a children's platform game. Cute, not scary. Plain white background, thin warm-brown outline, flat colours with soft shading. Nothing else in the picture.
+```
+
+### Items
+
+- *Grandpa's glowing page*: an old cream paper page with golden lines of writing, glowing softly.
+- *Grandpa's book*: Grandpa's very old book, open, on a small wooden stand, its pages shining like gold.
+- *The letters gate*: a tall sandstone gate with a rounded wooden door and five round empty slots above it.
+- *Checkpoint flag*: a wooden pole with a green triangular flag.
+
+### Side-view poses for Nono and Fofo (later)
+
+The game uses the existing *run*, *idle*, *cheer* (jumping), *surprised*
+(hurt) and *celebrate* poses for now. Proper side-view *run* (3–4 frames)
+and *jump* poses would make the running look smoother.

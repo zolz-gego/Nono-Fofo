@@ -11,6 +11,7 @@ import '../../engines/sound/data/audioplayers_audio_engine.dart';
 import '../../engines/sound/data/sound_repository_impl.dart';
 import '../../engines/sound/domain/audio_engine.dart';
 import '../../engines/sound/domain/sound_repository.dart';
+import '../../features/games/adventure/data/adventure_config_repository.dart';
 import '../../features/games/balloons/data/balloons_config_repository.dart';
 import '../../features/games/cards/data/cards_config_repository.dart';
 import '../../features/games/monastery/data/monastery_config_repository.dart';
@@ -82,6 +83,7 @@ Future<void> configureDependencies() async {
   sl.registerLazySingleton(() => CardsConfigRepository(sl()));
   sl.registerLazySingleton(() => MonasteryConfigRepository(sl()));
   sl.registerLazySingleton(() => SnakesConfigRepository(sl()));
+  sl.registerLazySingleton(() => AdventureConfigRepository(sl()));
 
   // Warm up engines before the first frame.
   await sl<SoundService>().init();

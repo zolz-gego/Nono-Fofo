@@ -92,6 +92,7 @@ flutter:
     - assets/games/balloons/
     - assets/games/monastery/
     - assets/games/snakes/
+    - assets/games/adventure/
 
   fonts:
     - family: BalooBhaijaan2

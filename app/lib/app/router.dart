@@ -3,10 +3,12 @@ import 'package:go_router/go_router.dart';
 import '../features/about/presentation/about_page.dart';
 import '../features/home/presentation/home_page.dart';
 import '../core/l10n/l10n.dart';
+import '../features/games/adventure/presentation/adventure_page.dart';
 import '../features/games/balloons/presentation/balloons_cubit.dart';
 import '../features/games/balloons/presentation/balloons_page.dart';
 import '../features/games/cards/presentation/cards_level_page.dart';
 import '../features/games/cards/presentation/cards_page.dart';
+import '../features/games/challenge/presentation/challenge_picker_page.dart';
 import '../features/games/fishing/presentation/fishing_cubit.dart';
 import '../features/games/fishing/presentation/fishing_page.dart';
 import '../features/games/letter_hunt/presentation/letter_pick_page.dart';
@@ -51,8 +53,14 @@ abstract final class AppRoutes {
   static const monastery = '/level/monastery';
   static const monasteryPlay = '/level/monastery/play';
 
-  /// The level's challenge, Snakes & Ladders (extra: [PlayerSetup]).
+  /// The level's challenge: pick a challenge game (extra: [PlayerSetup]).
   static const challenge = '/level/challenge';
+
+  /// Snakes & Ladders by the Pyramids (extra: [PlayerSetup]).
+  static const challengeSnakes = '/level/challenge/snakes';
+
+  /// Nono & Fofo Adventure, the side-scroller (extra: [PlayerSetup]).
+  static const challengeAdventure = '/level/challenge/adventure';
 }
 
 final GoRouter appRouter = GoRouter(
@@ -164,7 +172,21 @@ final GoRouter appRouter = GoRouter(
       redirect: (context, state) =>
           state.extra is PlayerSetup ? null : AppRoutes.home,
       builder: (context, state) =>
+          ChallengePickerPage(setup: state.extra! as PlayerSetup),
+    ),
+    GoRoute(
+      path: AppRoutes.challengeSnakes,
+      redirect: (context, state) =>
+          state.extra is PlayerSetup ? null : AppRoutes.home,
+      builder: (context, state) =>
           SnakesPage(setup: state.extra! as PlayerSetup),
+    ),
+    GoRoute(
+      path: AppRoutes.challengeAdventure,
+      redirect: (context, state) =>
+          state.extra is PlayerSetup ? null : AppRoutes.home,
+      builder: (context, state) =>
+          AdventurePage(setup: state.extra! as PlayerSetup),
     ),
   ],
 );
