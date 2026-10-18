@@ -646,6 +646,36 @@
       "sfx": [
         "sponge_wipe"
       ]
+    },
+    "adventure.stomp": {
+      "sfx": [
+        "whack_hit"
+      ]
+    },
+    "adventure.bump": {
+      "sfx": [
+        "c4_land"
+      ]
+    },
+    "adventure.brick": {
+      "sfx": [
+        "ice_crack"
+      ]
+    },
+    "adventure.grow": {
+      "sfx": [
+        "race_boost"
+      ]
+    },
+    "adventure.shrink": {
+      "sfx": [
+        "fish_escape"
+      ]
+    },
+    "adventure.die": {
+      "sfx": [
+        "level_failed"
+      ]
     }
   },
   "music": {

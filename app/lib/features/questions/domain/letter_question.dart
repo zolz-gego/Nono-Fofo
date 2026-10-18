@@ -60,18 +60,20 @@ class LetterQuestion extends Equatable {
 
   /// A random question from [templates] about one of [pool], with wrong
   /// answers from the rest of [pool]. Avoids the letters in [avoid] (the
-  /// last ones asked) while there are others to ask.
+  /// last ones asked) while there are others to ask. Pass [about] to ask
+  /// about that letter instead of a random one.
   factory LetterQuestion.make({
     required List<LetterQuestionTemplate> templates,
     required List<CopticLetter> pool,
     Random? random,
     Iterable<String> avoid = const [],
+    CopticLetter? about,
   }) {
     final r = random ?? Random();
     final t = templates[r.nextInt(templates.length)];
     final fresh = pool.where((l) => !avoid.contains(l.id)).toList();
     final from = fresh.isEmpty ? pool : fresh;
-    final answer = from[r.nextInt(from.length)];
+    final answer = about ?? from[r.nextInt(from.length)];
     final others = [...pool.where((l) => l.id != answer.id)]..shuffle(r);
     final choices = [
       answer,

@@ -46,6 +46,20 @@ abstract final class AppIcons {
   static const FaIconData changePlayers = FontAwesomeIcons.users;
   static const FaIconData rightAnswer = FontAwesomeIcons.solidCircleCheck;
 
+  // Nono & Fofo Adventure.
+  static const FaIconData adventure = FontAwesomeIcons.personRunning;
+  static const FaIconData life = FontAwesomeIcons.solidHeart;
+  static const FaIconData lifeLost = FontAwesomeIcons.heart;
+  static const FaIconData coin = FontAwesomeIcons.coins;
+  static const FaIconData locked = FontAwesomeIcons.lock;
+  static const FaIconData pause = FontAwesomeIcons.pause;
+  static const FaIconData walkLeft = FontAwesomeIcons.caretLeft;
+  static const FaIconData walkRight = FontAwesomeIcons.caretRight;
+  static const FaIconData goBack = FontAwesomeIcons.arrowLeftLong;
+  static const FaIconData rotate = FontAwesomeIcons.mobileScreenButton;
+  static const FaIconData levels = FontAwesomeIcons.layerGroup;
+  static const FaIconData next = FontAwesomeIcons.forward;
+
   // Game placeholders, shown until a game's illustration is added.
   static const FaIconData fishing = FontAwesomeIcons.fish;
   static const FaIconData writeLetter = FontAwesomeIcons.pencil;

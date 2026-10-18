@@ -545,5 +545,75 @@
         "type": "int"
       }
     }
-  }
+  },
+  "challengePick": "اختار التحدي!",
+  "challengeSnakesBody": "جاوب على الحروف واسبق {opponent} لمربع ٦٤",
+  "@challengeSnakesBody": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "challengeAdventureBody": "اجري ونط ودوّر على الحروف الضايعة في ٣ مراحل",
+  "gameAdventure": "مغامرة نونو وفوفو",
+  "adventurePickLevel": "اختار المرحلة",
+  "adventureLevelNile": "شط النيل",
+  "adventureLevelDesert": "الصحرا والأهرامات",
+  "adventureLevelAlexandria": "إسكندرية بالليل",
+  "adventureLocked": "خلّص المرحلة اللي قبلها الأول",
+  "adventureHowTo": "الأسهم للمشي والمسافة للنط",
+  "adventureHowToTouch": "◀ ▶ للمشي واضغط على اليمين للنط",
+  "adventureStart": "يلا بينا يا {name}! دوّر على الـ {count} حروف الضايعة",
+  "@adventureStart": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adventureLetterAsk": "لقيت حرف! جاوب صح عشان تاخده",
+  "adventurePageAsk": "صفحة جدو! جاوب صح وفوفو يكبر ويبقى نونو",
+  "adventureLetterWon": "برافو! ده حرف {letter}",
+  "@adventureLetterWon": {
+    "placeholders": {
+      "letter": {
+        "type": "String"
+      }
+    }
+  },
+  "adventureWrongLetter": "أوبس! خسرت روح. اضرب الصندوق تاني",
+  "adventureGrew": "نونو وصل! يقدر يكسر الطوب",
+  "adventurePageWrong": "الصفحة طارت!",
+  "adventureShrank": "آه! رجعنا لفوفو",
+  "adventureCheckpoint": "نقطة حفظ!",
+  "adventureLifeUp": "روح زيادة!",
+  "adventureGateLocked": "لسه ناقص {count} حروف! ارجع دوّر عليهم",
+  "@adventureGateLocked": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adventureGateOpen": "كل الحروف معانا! البوابة بتفتح",
+  "adventureGameOver": "الأرواح خلصت!",
+  "adventureGameOverBody": "كل محاولة بتخليك أشطر. جرّب تاني!",
+  "adventureTryAgain": "جرّب تاني",
+  "adventureComplete": "خلصت المرحلة!",
+  "adventureCompleteBody": "الحروف رجعت لكتاب جدو",
+  "adventureAllDone": "خلصت المغامرة كلها!",
+  "adventureNextLevel": "المرحلة الجاية",
+  "adventureLevels": "المراحل",
+  "adventureCoins": "العملات",
+  "adventureTime": "الوقت",
+  "adventureLetters": "الحروف",
+  "adventurePaused": "وقفة",
+  "adventureResume": "كمّل",
+  "adventureRestart": "ابدأ المرحلة من الأول",
+  "adventurePause": "وقفة",
+  "adventureRotate": "لف الجهاز بالعرض عشان تلعب"
 }
