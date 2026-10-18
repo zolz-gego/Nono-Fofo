@@ -103,11 +103,13 @@ void main() {
           if (level.tiles[r][c] == Tile.pageBlock) block = Cell(c, r);
         }
       }
-      game.debugPlaceHero(Cell(block.col, 11));
+      game
+        ..debugRemoveEnemies()
+        ..debugPlaceHero(Cell(block.col, 11));
       game.input.pressJump();
       _run(game, 0.6);
       game.input.releaseJump();
-      _run(game, 1.4);
+      _run(game, 2);
       final page = game.debugPage;
       expect(page, isNotNull, reason: level.id);
       expect(

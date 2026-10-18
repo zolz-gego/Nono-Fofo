@@ -79,6 +79,9 @@ class _AdventurePageState extends State<AdventurePage> {
   AdventureCubit? _cubit;
   AdventureGame? _game;
 
+  /// Built once per game, so HUD updates never rebuild the game view.
+  Widget? _gameView;
+
   /// Null on the level picker.
   int? _level;
 
@@ -142,15 +145,21 @@ class _AdventurePageState extends State<AdventurePage> {
         AdventurePlace.desert => MusicTrack.pyramids,
         AdventurePlace.alexandria => MusicTrack.alexandria,
       });
+    final game = AdventureGame(
+      cubit: cubit,
+      level: level,
+      config: cubit.config,
+      roster: context.read<CharacterRoster>(),
+      sound: _sound,
+    );
     setState(() {
       _level = i;
       _message = null;
-      _game = AdventureGame(
-        cubit: cubit,
-        level: level,
-        config: cubit.config,
-        roster: context.read<CharacterRoster>(),
-        sound: _sound,
+      _game = game;
+      // No autofocus: GameWidget swallows keys for games without
+      // KeyboardEvents; the page's Focus handles them instead.
+      _gameView = RepaintBoundary(
+        child: GameWidget(key: ObjectKey(game), game: game, autofocus: false),
       );
     });
     _focus.requestFocus();
@@ -164,6 +173,7 @@ class _AdventurePageState extends State<AdventurePage> {
     setState(() {
       _level = null;
       _game = null;
+      _gameView = null;
       _message = null;
     });
   }
@@ -232,8 +242,13 @@ class _AdventurePageState extends State<AdventurePage> {
     });
   }
 
+  bool _wasRunning = false;
+
   void _onState(BuildContext context, AdventureState state) {
     final l10n = context.l10n;
+    // Back to playing after a pop-up: keys go to the game again.
+    if (state.running && !_wasRunning) _focus.requestFocus();
+    _wasRunning = state.running;
     switch (state.event) {
       case AdventureEvent.start:
         _say(
@@ -324,8 +339,6 @@ class _AdventurePageState extends State<AdventurePage> {
                 listenWhen: (a, b) =>
                     a.eventId != b.eventId || a.running != b.running,
                 listener: (context, state) {
-                  // Back to playing after a pop-up: keys go to the game.
-                  if (state.running) _focus.requestFocus();
                   _onState(context, state);
                 },
                 builder: (context, state) =>
@@ -378,11 +391,7 @@ class _AdventurePageState extends State<AdventurePage> {
     final heroName = hero.name;
     return Stack(
       children: [
-        Positioned.fill(
-          // No autofocus: GameWidget swallows keys for games without
-          // KeyboardEvents; the page's Focus handles them instead.
-          child: GameWidget(key: ObjectKey(game), game: game, autofocus: false),
-        ),
+        Positioned.fill(child: _gameView!),
         // Tap the right half to jump (touch screens).
         if (_touch && state.running)
           Positioned(

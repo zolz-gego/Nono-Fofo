@@ -804,13 +804,13 @@ class AdventureArt {
     canvas.restore();
   }
 
-  /// A lost letter popping from its block; [y] is its center.
+  /// A lost letter popping from its block; a "?" while [glyph] is null.
   void letter(
     Canvas canvas,
     double x,
     double y,
     double t,
-    String glyph,
+    String? glyph,
     double scale,
     double clock,
   ) {
@@ -827,7 +827,11 @@ class AdventureArt {
     );
     canvas.drawCircle(Offset.zero, r, _fill(const Color(0xFFFFF6E0)));
     canvas.drawCircle(Offset.zero, r, _line(t * 0.06, _goldDark));
-    _text(canvas, glyph, Offset.zero, r * 1.25, AppColors.cocoa);
+    if (glyph == null) {
+      _text(canvas, '?', Offset.zero, r * 1.2, _goldDark, latin: true);
+    } else {
+      _text(canvas, glyph, Offset.zero, r * 1.25, AppColors.cocoa);
+    }
     canvas.restore();
   }
 

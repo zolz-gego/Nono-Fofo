@@ -20,7 +20,8 @@ abstract final class AssetPaths {
 
   /// Adventure art (backgrounds, ground, blocks, enemies), from
   /// tools/games/process_adventure.py, e.g. `adventureArt('bg_nile')`.
-  static String adventureArt(String name) => 'assets/games/adventure/$name.webp';
+  static String adventureArt(String name) =>
+      'assets/games/adventure/$name.webp';
 
   static const String audio = 'assets/audio';
   static const String audioManifest = '$audio/manifest.json';

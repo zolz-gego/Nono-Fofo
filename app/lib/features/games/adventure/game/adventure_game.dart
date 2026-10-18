@@ -79,6 +79,8 @@ class AdventureGame extends FlameGame {
   static const double _smallW = 0.7, _smallH = 1.35;
   static const double _bigW = 0.8, _bigH = 1.85;
 
+  Vector2? _lastSize;
+
   /// Set by the page while the device is upright (the game waits).
   bool blocked = false;
 
@@ -201,6 +203,9 @@ class AdventureGame extends FlameGame {
   @visibleForTesting
   void debugPlaceHero(Cell cell) => _placeHero(cell);
 
+  @visibleForTesting
+  void debugRemoveEnemies() => _enemies.clear();
+
   /// Grandpa's page, if out: where it is and whether it has landed.
   @visibleForTesting
   ({double x, double y, bool settled})? get debugPage {
@@ -242,6 +247,10 @@ class AdventureGame extends FlameGame {
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
+    // GameWidget calls this on every rebuild of the page (each coin, each
+    // HUD change); only a real size change may move the camera.
+    if (size == _lastSize) return;
+    _lastSize = size.clone();
     _viewH = min(level.height.toDouble(), size.y >= 460 ? 14.0 : 11.0);
     final zoom = size.y / (_viewH * tile);
     camera.viewfinder.zoom = zoom;
@@ -505,14 +514,15 @@ class AdventureGame extends FlameGame {
   Future<void> _askLetter(Cell cell, int i) async {
     _frozen = true;
     input.clear();
-    _letterPop = _LetterPop(cell, cubit.state.letters[i].capital);
+    // A mystery "?" until the answer is right; only then the letter shows.
+    _letterPop = _LetterPop(cell);
     sound.play(SoundEvent.letterFound);
     await Future<void>.delayed(const Duration(milliseconds: 500));
     if (cubit.isClosed) return;
     final right = await cubit.ask(AskKind.letter, letterIndex: i);
     if (right) {
       _changed[cell] = Tile.usedBlock;
-      _letterPop?.fly();
+      _letterPop?.reveal(cubit.state.letters[i].capital);
     } else {
       _letterPop?.sink();
       _hurt = 1.2;
@@ -1128,12 +1138,20 @@ class _PageItem {
 
 /// A letter popping out of its block while its question is asked.
 class _LetterPop {
-  _LetterPop(Cell cell, this.glyph)
+  _LetterPop(Cell cell)
     : x = cell.col + 0.5,
       _baseY = cell.row.toDouble(),
       y = cell.row.toDouble();
 
-  final String glyph;
+  /// The letter once won; null (a "?") while its question is open.
+  String? glyph;
+
+  /// Right answer: the letter shows and flies away.
+  void reveal(String letter) {
+    glyph = letter;
+    fly();
+  }
+
   final double _baseY;
   double x, y;
   double scale = 0.4;
