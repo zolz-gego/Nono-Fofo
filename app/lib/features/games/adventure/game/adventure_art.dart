@@ -78,6 +78,31 @@ class AdventureArt {
 
   Color get skyBottom => _p.skyBottom;
 
+  /// Pictures from `assets/games/adventure/`, by name (see [artNames]);
+  /// anything missing is drawn in code.
+  final Map<String, Image> images = {};
+
+  /// The pictures this place uses.
+  static List<String> artNames(AdventurePlace place) => [
+    'bg_${place.name}',
+    'ground_${place.name}',
+    'block_stone',
+    'block_brick',
+    'block_question',
+    'block_used',
+    for (final e in EnemyKind.values) e.name,
+  ];
+
+  static final Paint _imagePaint = Paint()
+    ..filterQuality = FilterQuality.medium
+    ..isAntiAlias = true;
+
+  void _image(Canvas canvas, Image image, Rect src, Rect dst) =>
+      canvas.drawImageRect(image, src, dst, _imagePaint);
+
+  static Rect _all(Image image) =>
+      Rect.fromLTWH(0, 0, image.width.toDouble(), image.height.toDouble());
+
   static const Color _outline = Color(0xFF3E3227);
   static const Color _gold = Color(0xFFFFC845);
   static const Color _goldDark = Color(0xFFD99A1E);
@@ -117,6 +142,17 @@ class AdventureArt {
           _p.skyBottom,
         ]),
     );
+    final bg = images['bg_${place.name}'];
+    if (bg != null) {
+      // The picture's own ground line (74% down) sits on the level's
+      // ground (12 of 14 rows down); it repeats sideways, slowly.
+      final ih = h * (12 / 14) / 0.74;
+      final iw = ih * bg.width / bg.height;
+      _repeat(w, scroll, 0.3, iw, (x, _) {
+        _image(canvas, bg, _all(bg), Rect.fromLTWH(x, 0, iw + 1, ih));
+      });
+      return;
+    }
     switch (place) {
       case AdventurePlace.nile:
         _nileBackdrop(canvas, w, h, scroll, clock);
@@ -382,6 +418,41 @@ class AdventureArt {
     required double clock,
   }) {
     final r = Rect.fromLTWH(col * t, row * t, t, t);
+    final picture = switch (tile) {
+      Tile.air => null,
+      Tile.ground => images['ground_${place.name}'],
+      Tile.stone => images['block_stone'],
+      Tile.brick => images['block_brick'],
+      Tile.coinBlock ||
+      Tile.letterBlock ||
+      Tile.pageBlock => images['block_question'],
+      Tile.usedBlock => images['block_used'],
+    };
+    if (picture != null) {
+      if (tile == Tile.ground) {
+        // The ground picture is 4 tiles wide and 2 tall: the top row has
+        // the grass / sand edge, the row under it is plain earth.
+        final size = picture.height / 2;
+        final src = Rect.fromLTWH(
+          (col.round() % 4) * size,
+          topOpen ? 0 : size,
+          size,
+          size,
+        );
+        _image(canvas, picture, src, r.inflate(0.5));
+      } else {
+        final rr = RRect.fromRectAndRadius(
+          r.deflate(t * 0.02),
+          Radius.circular(t * 0.1),
+        );
+        canvas.save();
+        canvas.clipRRect(rr);
+        _image(canvas, picture, _all(picture), r);
+        canvas.restore();
+        canvas.drawRRect(rr, _line(t * 0.05));
+      }
+      return;
+    }
     switch (tile) {
       case Tile.air:
         return;
@@ -781,6 +852,18 @@ class AdventureArt {
     if (squashed) canvas.scale(1.1, 0.35);
     if (upsideDown) canvas.scale(1, -1);
     if (!facingLeft) canvas.scale(-1, 1);
+    final picture = images[kind.name];
+    if (picture != null) {
+      // Pictures face left with their feet at the bottom; a little waddle.
+      final h = t * enemyHeight(kind);
+      final w = h * picture.width / picture.height;
+      final step = sin(clock * 10);
+      canvas.translate(0, -step.abs() * t * 0.05);
+      canvas.rotate(step * 0.06);
+      _image(canvas, picture, _all(picture), Rect.fromLTWH(-w / 2, -h, w, h));
+      canvas.restore();
+      return;
+    }
     switch (kind) {
       case EnemyKind.duck:
         _duck(canvas, t, clock);
@@ -793,6 +876,14 @@ class AdventureArt {
     }
     canvas.restore();
   }
+
+  /// How tall each enemy's picture is drawn, in tiles.
+  static double enemyHeight(EnemyKind kind) => switch (kind) {
+    EnemyKind.duck => 1.25,
+    EnemyKind.scorpion => 0.95,
+    EnemyKind.crab => 0.9,
+    EnemyKind.seagull => 1.35,
+  };
 
   // Drawn facing left, feet at (0, 0).
   void _duck(Canvas canvas, double t, double clock) {

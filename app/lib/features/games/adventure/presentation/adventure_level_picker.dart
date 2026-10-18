@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../../core/assets/asset_paths.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_icons.dart';
 import '../../../../core/widgets/text/app_texts.dart';
 import '../domain/adventure_level.dart';
-import '../game/adventure_art.dart';
 
 /// One level on the picker.
 class AdventureLevelCard {
@@ -155,7 +155,10 @@ class _LevelCardState extends State<_LevelCard> {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                CustomPaint(painter: _PlacePainter(widget.card.place)),
+                Image.asset(
+                  AssetPaths.adventureArt('bg_${widget.card.place.name}'),
+                  fit: BoxFit.cover,
+                ),
                 PositionedDirectional(
                   top: AppDimens.spaceSm,
                   start: AppDimens.spaceSm,
@@ -233,18 +236,4 @@ class _LevelCardState extends State<_LevelCard> {
       ),
     );
   }
-}
-
-/// The level's own backdrop as the card picture.
-class _PlacePainter extends CustomPainter {
-  _PlacePainter(AdventurePlace place) : _art = AdventureArt(place);
-
-  final AdventureArt _art;
-
-  @override
-  void paint(Canvas canvas, Size size) =>
-      _art.backdrop(canvas, size.width, size.height, 0, 1);
-
-  @override
-  bool shouldRepaint(_PlacePainter old) => old._art.place != _art.place;
 }

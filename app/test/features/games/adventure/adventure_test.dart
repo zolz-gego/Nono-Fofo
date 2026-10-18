@@ -90,9 +90,8 @@ void main() {
       progress = _Progress();
       when(() => progress.bestStars(any(), any())).thenReturn(0);
       when(() => progress.hasPassed(any(), any())).thenReturn(false);
-      when(
-        () => progress.saveStars(any(), any(), any()),
-      ).thenAnswer((_) async => true);
+      when(() => progress.saveStars(any(), any(), any()))
+          .thenAnswer((_) async => true);
       when(() => progress.savePassed(any(), any())).thenAnswer((_) async {});
     });
 
@@ -141,26 +140,28 @@ void main() {
       expect(cubit.state.found, isEmpty);
     });
 
-    test('Grandpa\'s page: right grows into Nono, wrong costs nothing',
-        () async {
-      final cubit = _cubit(progress)..startLevel(0);
-      var asked = cubit.ask(AskKind.page);
-      var q = cubit.state.question!;
-      await cubit.answer((q.answerIndex + 1) % q.choices.length);
-      expect(await asked, isFalse);
-      expect(cubit.state.big, isFalse);
-      expect(cubit.state.lives, 3);
+    test(
+      'Grandpa\'s page: right grows into Nono, wrong costs nothing',
+      () async {
+        final cubit = _cubit(progress)..startLevel(0);
+        var asked = cubit.ask(AskKind.page);
+        var q = cubit.state.question!;
+        await cubit.answer((q.answerIndex + 1) % q.choices.length);
+        expect(await asked, isFalse);
+        expect(cubit.state.big, isFalse);
+        expect(cubit.state.lives, 3);
 
-      asked = cubit.ask(AskKind.page);
-      q = cubit.state.question!;
-      await cubit.answer(q.answerIndex);
-      expect(await asked, isTrue);
-      expect(cubit.state.big, isTrue);
+        asked = cubit.ask(AskKind.page);
+        q = cubit.state.question!;
+        await cubit.answer(q.answerIndex);
+        expect(await asked, isTrue);
+        expect(cubit.state.big, isTrue);
 
-      cubit.shrink();
-      expect(cubit.state.big, isFalse);
-      expect(cubit.state.lives, 3);
-    });
+        cubit.shrink();
+        expect(cubit.state.big, isFalse);
+        expect(cubit.state.lives, 3);
+      },
+    );
 
     test('losing the last life is game over', () {
       final cubit = _cubit(progress)..startLevel(0);
@@ -171,25 +172,24 @@ void main() {
       expect(cubit.state.phase, AdventurePhase.gameOver);
     });
 
-    test('finishing saves stars; all levels done saves the challenge',
-        () async {
-      when(() => progress.bestStars(any(), any())).thenReturn(2);
-      final cubit = _cubit(progress)..startLevel(2);
-      cubit.addCoins(10);
-      await cubit.complete(const Duration(seconds: 90), 100);
-      expect(cubit.state.phase, AdventurePhase.complete);
-      expect(cubit.state.stars, 1);
-      expect(cubit.state.allDone, isTrue);
-      verify(
-        () => progress.saveStars('adventure', 'level1.alexandria', 1),
-      ).called(1);
-      verify(() => progress.savePassed('adventure', 'level1')).called(1);
-    });
+    test(
+      'finishing saves stars; all levels done saves the challenge',
+      () async {
+        when(() => progress.bestStars(any(), any())).thenReturn(2);
+        final cubit = _cubit(progress)..startLevel(2);
+        cubit.addCoins(10);
+        await cubit.complete(const Duration(seconds: 90), 100);
+        expect(cubit.state.phase, AdventurePhase.complete);
+        expect(cubit.state.stars, 1);
+        expect(cubit.state.allDone, isTrue);
+        verify(() => progress.saveStars('adventure', 'level1.alexandria', 1))
+            .called(1);
+        verify(() => progress.savePassed('adventure', 'level1')).called(1);
+      },
+    );
 
     test('a level opens once the one before is finished', () {
-      when(
-        () => progress.bestStars('adventure', 'level1.nile'),
-      ).thenReturn(1);
+      when(() => progress.bestStars('adventure', 'level1.nile')).thenReturn(1);
       final cubit = _cubit(progress);
       expect(cubit.unlocked(0), isTrue);
       expect(cubit.unlocked(1), isTrue);

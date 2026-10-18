@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/di/injection.dart';
 import '../../../../app/router.dart';
+import '../../../../core/assets/asset_paths.dart';
 import '../../../../core/domain/character_id.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -32,7 +33,6 @@ import '../../snakes_ladders/presentation/question_card.dart';
 import '../data/adventure_config_repository.dart';
 import '../domain/adventure_config.dart';
 import '../domain/adventure_level.dart';
-import '../game/adventure_art.dart';
 import '../game/adventure_game.dart';
 import 'adventure_cubit.dart';
 import 'adventure_hud.dart';
@@ -132,6 +132,8 @@ class _AdventurePageState extends State<AdventurePage> {
   void _startLevel(int i) {
     final cubit = _cubit!;
     final level = cubit.config.levels[i];
+    // The old game must not touch the fresh level's lives.
+    _game?.retire();
     cubit.startLevel(i);
     _sound
       ..play(SoundEvent.levelStart)
@@ -156,6 +158,7 @@ class _AdventurePageState extends State<AdventurePage> {
 
   void _toLevels() {
     _sound.play(SoundEvent.back);
+    _game?.retire();
     _cubit?.setPaused(false);
     _sound.playMusic(MusicTrack.actionGame);
     setState(() {
@@ -187,13 +190,12 @@ class _AdventurePageState extends State<AdventurePage> {
   KeyEventResult _onKey(FocusNode node, KeyEvent event) {
     final game = _game;
     if (game == null) return KeyEventResult.ignored;
-    final down = event is KeyDownEvent;
+    // A repeat also means "held": Flutter sends one instead of a down when
+    // it missed the last key up (e.g. focus moved away meanwhile).
+    final repeat = event is KeyRepeatEvent;
+    final down = event is KeyDownEvent || repeat;
     final up = event is KeyUpEvent;
-    if (!down && !up) {
-      return event is KeyRepeatEvent
-          ? KeyEventResult.handled
-          : KeyEventResult.ignored;
-    }
+    if (!down && !up) return KeyEventResult.ignored;
     final key = event.logicalKey;
     final input = game.input;
     if (key == LogicalKeyboardKey.arrowLeft || key == LogicalKeyboardKey.keyA) {
@@ -204,8 +206,9 @@ class _AdventurePageState extends State<AdventurePage> {
     } else if (key == LogicalKeyboardKey.space ||
         key == LogicalKeyboardKey.arrowUp ||
         key == LogicalKeyboardKey.keyW) {
-      down ? input.pressJump() : input.releaseJump();
+      if (!repeat) down ? input.pressJump() : input.releaseJump();
     } else if (down &&
+        !repeat &&
         (key == LogicalKeyboardKey.escape || key == LogicalKeyboardKey.keyP)) {
       _pause(!(_cubit?.state.paused ?? false));
     } else {
@@ -338,7 +341,13 @@ class _AdventurePageState extends State<AdventurePage> {
   Widget _picker(AdventureCubit cubit) {
     return Stack(
       children: [
-        Positioned.fill(child: CustomPaint(painter: _Sky(AdventurePlace.nile))),
+        Positioned.fill(
+          child: Image.asset(
+            AssetPaths.adventureArt('bg_nile'),
+            fit: BoxFit.cover,
+            alignment: Alignment.topCenter,
+          ),
+        ),
         Positioned.fill(
           child: AdventureLevelPicker(
             touch: _touch,
@@ -484,18 +493,4 @@ class _AdventurePageState extends State<AdventurePage> {
       ],
     );
   }
-}
-
-/// The level picker's background: the Nile sky and scenery.
-class _Sky extends CustomPainter {
-  _Sky(AdventurePlace place) : _art = AdventureArt(place);
-
-  final AdventureArt _art;
-
-  @override
-  void paint(Canvas canvas, Size size) =>
-      _art.backdrop(canvas, size.width, size.height, 0, 0);
-
-  @override
-  bool shouldRepaint(_Sky old) => false;
 }

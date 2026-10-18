@@ -5,7 +5,9 @@ import 'dart:ui' as ui;
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 
+import '../../../../core/assets/asset_paths.dart';
 import '../../../../core/domain/character_id.dart';
 import '../../../../engines/characters/domain/character_action.dart';
 import '../../../../engines/characters/domain/character_pose.dart';
@@ -39,7 +41,15 @@ class AdventureInput {
   }
 }
 
-enum _HeroState { alive, dying, finishing, done }
+enum _HeroState {
+  alive,
+  dying,
+  finishing,
+  done,
+
+  /// Out of lives: nothing moves any more.
+  gone,
+}
 
 /// The side-scrolling level: Fofo (or big Nono) runs, jumps, hits blocks,
 /// stomps enemies and brings the letters to Grandpa's book. Everything is
@@ -139,7 +149,14 @@ class AdventureGame extends FlameGame {
       _enemies.add(_Enemy(e.kind, e.cell));
     }
     for (final p in level.platforms) {
-      _platforms.add(_Platform(p.kind, p.cell));
+      _platforms.add(_platform(p));
+    }
+    for (final name in AdventureArt.artNames(level.place)) {
+      try {
+        _art.images[name] = await _images.load(AssetPaths.adventureArt(name));
+      } catch (_) {
+        // No picture yet: the art draws it in code.
+      }
     }
     _respawn = level.start;
     _placeHero(level.start);
@@ -148,6 +165,63 @@ class AdventureGame extends FlameGame {
     world.add(_Stage(this));
     _snapCamera();
   }
+
+  /// A sideways platform moves across its whole hole: from the hole's left
+  /// edge to its right edge (or to whatever blocks its row).
+  _Platform _platform(PlatformSpawn p) {
+    final row = p.cell.row;
+    bool open(int c) =>
+        c >= 0 &&
+        c < level.width &&
+        level.tiles[row][c] == Tile.air &&
+        !level.tiles[level.height - 1][c].solid;
+    var left = p.cell.col, right = p.cell.col + 1;
+    if (p.kind == PlatformKind.sideways) {
+      while (open(left - 1)) {
+        left--;
+      }
+      while (open(right)) {
+        right++;
+      }
+    }
+    final platform = _Platform(p.kind, p.cell);
+    if (p.kind == PlatformKind.sideways) {
+      platform
+        ..startCol = left.toDouble()
+        ..range = max(0.0, right - left - platform.w)
+        ..reset();
+    }
+    return platform;
+  }
+
+  @visibleForTesting
+  ({double x, double y, bool onGround}) get debugHero =>
+      (x: _x, y: _y, onGround: _onGround);
+
+  @visibleForTesting
+  void debugPlaceHero(Cell cell) => _placeHero(cell);
+
+  /// Grandpa's page, if out: where it is and whether it has landed.
+  @visibleForTesting
+  ({double x, double y, bool settled})? get debugPage {
+    final p = _page;
+    return p == null ? null : (x: p.x, y: p.y, settled: p.settled);
+  }
+
+  @visibleForTesting
+  List<({double startCol, double range})> get debugSidewaysPlatforms => [
+    for (final p in _platforms)
+      if (p.kind == PlatformKind.sideways)
+        (startCol: p.startCol, range: p.range),
+  ];
+
+  /// Stop for good: the page swaps this game for a fresh one.
+  void retire() {
+    _retired = true;
+    input.clear();
+  }
+
+  bool _retired = false;
 
   static const List<CharacterAction> _actions = [
     CharacterAction.idle,
@@ -202,6 +276,7 @@ class AdventureGame extends FlameGame {
   @override
   void update(double dt) {
     super.update(dt);
+    if (_retired || _state == _HeroState.gone) return;
     final step = min(dt, 1 / 20);
     _clock += step;
     _updateFx(step);
@@ -456,28 +531,21 @@ class AdventureGame extends FlameGame {
       page.rise = min(1, page.rise + dt / 0.6);
       page.y = page.cell.row - page.rise * 0.9;
     } else if (!page.settled) {
-      // Slides off its blocks, floats down like paper and stays where it
-      // lands, so it can't run away into a hole.
-      page.vy = min(page.vy + config.physics.gravity * 0.3 * dt, 5);
-      final nx = page.x + page.vx * dt;
-      final row = (page.y - 0.4).floor();
-      if (_solid((nx + 0.4 * page.vx.sign).floor(), row)) {
-        page.vx = -page.vx;
+      // Floats like paper to a spot on the ground beside its block (worked
+      // out once), where Fofo can just walk into it.
+      final target = page.target ??= _pageLanding(page.cell);
+      final dx = target.dx - page.x, dy = target.dy - page.y;
+      final dist = sqrt(dx * dx + dy * dy);
+      final move = 4 * dt;
+      if (dist > move) {
+        page.x += dx / dist * move;
+        page.y += dy / dist * move;
       } else {
-        page.x = nx;
+        page
+          ..x = target.dx
+          ..y = target.dy
+          ..settled = true;
       }
-      final ny = page.y + page.vy * dt;
-      final c = page.x.floor();
-      if (page.vy > 0 && _solid(c, ny.floor()) && page.y <= ny.floor() + 0.05) {
-        page.y = ny.floor().toDouble();
-        page.vy = 0;
-        if (page.air > 0.2) page.settled = true;
-        page.air = 0;
-      } else {
-        page.y = ny;
-        page.air += dt;
-      }
-      if (page.y > level.height + 1) _page = null;
     }
     // Touching the hero.
     if (_page != null &&
@@ -493,6 +561,34 @@ class AdventureGame extends FlameGame {
         _askPage();
       }
     }
+  }
+
+  /// Where Grandpa's page comes to rest: standing on the first solid tile
+  /// under its block's neighbours, preferring a column with nothing in the
+  /// way (never over a hole).
+  ui.Offset _pageLanding(Cell block) {
+    ui.Offset? landing(int c, {required bool clear}) {
+      if (c < 0 || c >= level.width) return null;
+      if (clear && _solid(c, block.row)) return null;
+      for (var r = block.row + 1; r < level.height; r++) {
+        if (_solid(c, r)) {
+          if (_solid(c, r - 1) || (r - 2 > block.row && _solid(c, r - 2))) {
+            return null;
+          }
+          return ui.Offset(c + 0.5, r.toDouble());
+        }
+      }
+      return null;
+    }
+
+    const offsets = [1, -1, 2, -2, 3, -3, 4, -4];
+    for (final clear in [true, false]) {
+      for (final d in offsets) {
+        final spot = landing(block.col + d, clear: clear);
+        if (spot != null) return spot;
+      }
+    }
+    return ui.Offset(block.col + 0.5, block.row.toDouble());
   }
 
   Future<void> _askPage() async {
@@ -519,7 +615,7 @@ class AdventureGame extends FlameGame {
         continue;
       }
       if (!e.active) {
-        if (e.x < _camX + _viewW + 2) {
+        if (e.x < _camX + _viewW - 1) {
           e.active = true;
           e.vx = -config.speedOf(e.kind);
         } else {
@@ -527,38 +623,31 @@ class AdventureGame extends FlameGame {
         }
       }
       e.t += dt;
-      if (e.kind == EnemyKind.seagull) {
-        e.x += e.vx * dt;
-        if ((e.x - e.originX).abs() > 4.5) {
-          e.x = e.originX + 4.5 * (e.x - e.originX).sign;
-          e.vx = -e.vx;
-        }
-        e.y = e.originY + sin(e.t * 2.2) * 0.9;
+      // Every enemy walks (seagulls too, they drop to the ground first)
+      // and turns at walls and edges.
+      e.vy = min(e.vy + g * dt, 20);
+      final nx = e.x + e.vx * dt;
+      final lead = (nx + e.vx.sign * e.w / 2).floor();
+      final bodyRow = (e.y - 0.3).floor();
+      final ground = e.y.floor();
+      final wall = _solid(lead, bodyRow);
+      final edge = e.onGround && !_solid(lead, ground);
+      if (wall || edge) {
+        e.vx = -e.vx;
       } else {
-        e.vy = min(e.vy + g * dt, 20);
-        final nx = e.x + e.vx * dt;
-        final lead = (nx + e.vx.sign * e.w / 2).floor();
-        final bodyRow = (e.y - 0.3).floor();
-        final ground = e.y.floor();
-        final wall = _solid(lead, bodyRow);
-        final edge = e.onGround && !_solid(lead, ground);
-        if (wall || edge) {
-          e.vx = -e.vx;
-        } else {
-          e.x = nx;
-        }
-        final ny = e.y + e.vy * dt;
-        final c = e.x.floor();
-        e.onGround = false;
-        if (_solid(c, ny.floor()) && e.y <= ny.floor() + 0.05) {
-          e.y = ny.floor().toDouble();
-          e.vy = 0;
-          e.onGround = true;
-        } else {
-          e.y = ny;
-        }
-        if (e.y > level.height + 2) e.dead = true;
+        e.x = nx;
       }
+      final ny = e.y + e.vy * dt;
+      final c = e.x.floor();
+      e.onGround = false;
+      if (_solid(c, ny.floor()) && e.y <= ny.floor() + 0.05) {
+        e.y = ny.floor().toDouble();
+        e.vy = 0;
+        e.onGround = true;
+      } else {
+        e.y = ny;
+      }
+      if (e.y > level.height + 2) e.dead = true;
       _touchEnemy(e);
       if (_state != _HeroState.alive) return;
     }
@@ -601,7 +690,7 @@ class AdventureGame extends FlameGame {
       p.t += dt;
       switch (p.kind) {
         case PlatformKind.sideways:
-          p.x = p.originX + (1 - cos(p.t * pi / 2.2)) / 2 * 3;
+          p.x = p.originX + (1 - cos(p.t * pi / 2.2)) / 2 * p.range;
         case PlatformKind.upDown:
           p.y = p.originY - (1 - cos(p.t * pi / 2.2)) / 2 * 3;
         case PlatformKind.falling:
@@ -724,8 +813,12 @@ class AdventureGame extends FlameGame {
       _y += _vy * dt;
     }
     if (_stateTime < 1.6) return;
-    if (cubit.afterDeath()) _respawnHero();
-    _state = _HeroState.alive;
+    if (cubit.afterDeath()) {
+      _respawnHero();
+      _state = _HeroState.alive;
+    } else {
+      _state = _HeroState.gone;
+    }
   }
 
   void _respawnHero() {
@@ -899,7 +992,7 @@ class AdventureGame extends FlameGame {
     if (_morph > 0) big = (_morph * 10).floor().isEven ? big : !big;
     final who = big ? CharacterId.nono : CharacterId.fofo;
     final action = switch (_state) {
-      _HeroState.dying => CharacterAction.surprised,
+      _HeroState.dying || _HeroState.gone => CharacterAction.surprised,
       _HeroState.done => CharacterAction.celebrate,
       _HeroState.finishing => CharacterAction.run,
       _HeroState.alive when !_onGround => CharacterAction.cheer,
@@ -973,17 +1066,17 @@ class _Enemy {
   bool active = false, dead = false, squashed = false, onGround = false;
 
   double get w => switch (kind) {
-    EnemyKind.duck => 0.9,
-    EnemyKind.scorpion => 1.0,
-    EnemyKind.crab => 1.0,
-    EnemyKind.seagull => 1.0,
+    EnemyKind.duck => 0.8,
+    EnemyKind.scorpion => 1.1,
+    EnemyKind.crab => 1.1,
+    EnemyKind.seagull => 0.9,
   };
 
   double get h => switch (kind) {
-    EnemyKind.duck => 0.9,
-    EnemyKind.scorpion => 0.6,
-    EnemyKind.crab => 0.7,
-    EnemyKind.seagull => 0.6,
+    EnemyKind.duck => 1.0,
+    EnemyKind.scorpion => 0.7,
+    EnemyKind.crab => 0.75,
+    EnemyKind.seagull => 1.1,
   };
 
   void reset() {
@@ -1005,10 +1098,14 @@ class _Platform {
   double t = 0, dx = 0, dy = 0, vy = 0, shake = 0;
   bool stoodOn = false, falling = false, gone = false;
 
+  /// Sideways platforms: where they start and how far they travel.
+  late double startCol = spawn.col.toDouble();
+  double range = 3;
+
   double get w => kind == PlatformKind.falling ? 1 : 3;
 
   void reset() {
-    x = originX = spawn.col.toDouble();
+    x = originX = startCol;
     y = originY = spawn.row.toDouble();
     t = dx = dy = vy = shake = 0;
     stoodOn = falling = gone = false;
@@ -1020,9 +1117,12 @@ class _PageItem {
 
   final Cell cell;
   double x, y;
-  double vx = 2.2, vy = 0, rise = 0, air = 0;
+  double rise = 0;
 
-  /// Landed after floating down; it stays put.
+  /// Where it floats down to (its bottom), worked out once.
+  ui.Offset? target;
+
+  /// Landed; it stays put.
   bool settled = false;
 }
 

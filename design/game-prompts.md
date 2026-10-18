@@ -351,9 +351,11 @@ One friendly cartoon snake for a children's board game, lying in a long gentle S
 ## Nono & Fofo Adventure art (مغامرة نونو وفوفو)
 
 The Adventure is a side-scroller in three levels (the Nile bank, the desert
-and Pyramids, Alexandria at night). For now everything is drawn in code
-(`app/lib/features/games/adventure/game/adventure_art.dart`). These prompts
-are for the real art; send the pictures and they get swapped in. The level
+and Pyramids, Alexandria at night). The backgrounds, ground, blocks and
+enemies are in (originals in `design/reference/adventure/`; to swap one,
+replace it there and run `tools/.venv/bin/python tools/games/process_adventure.py`).
+The page, book, gate and flags are still drawn in code
+(`app/lib/features/games/adventure/game/adventure_art.dart`). The level
 maps stay in `app/assets/content/games/adventure.json`, so the art never
 changes where things are.
 
