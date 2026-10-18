@@ -81,6 +81,16 @@ class AdventureGame extends FlameGame {
 
   Vector2? _lastSize;
 
+  final Random _random = Random();
+
+  /// Where the bonus letter hides this time (null once found), and which
+  /// letter it is.
+  Cell? _bonusCell;
+  String _bonusGlyph = 'A';
+
+  /// Shells dropped by flying seagulls.
+  final List<_Shell> _shells = [];
+
   /// Set by the page while the device is upright (the game waits).
   bool blocked = false;
 
@@ -158,6 +168,17 @@ class AdventureGame extends FlameGame {
         _art.images[name] = await _images.load(AssetPaths.adventureArt(name));
       } catch (_) {
         // No picture yet: the art draws it in code.
+      }
+    }
+    if (level.bonusSpots.isNotEmpty) {
+      _bonusCell = level.bonusSpots[_random.nextInt(level.bonusSpots.length)];
+      final others = [
+        for (final l in cubit.pool)
+          if (!cubit.state.letters.contains(l)) l,
+      ];
+      final from = others.isEmpty ? cubit.pool : others;
+      if (from.isNotEmpty) {
+        _bonusGlyph = from[_random.nextInt(from.length)].capital;
       }
     }
     _respawn = level.start;
@@ -442,6 +463,21 @@ class AdventureGame extends FlameGame {
           }
         }
       }
+      if (hit == null && _y - d - _h >= r + 1 - 0.02) {
+        // Nothing solid: maybe a hidden block, found only from below.
+        for (var c = c0; c <= c1 && hit == null; c++) {
+          final cell = Cell(c, r);
+          if (_tileAt(c, r) == Tile.hiddenCoins || cell == _bonusCell) {
+            hit = cell;
+          }
+        }
+        if (hit != null) {
+          _y = r + 1 + _h + 0.001;
+          _vy = 0;
+          _revealHidden(hit);
+          return;
+        }
+      }
       if (hit != null) {
         _y = r + 1 + _h + 0.001;
         _vy = 0;
@@ -449,6 +485,31 @@ class AdventureGame extends FlameGame {
       }
     }
   }
+
+  /// A hidden block was bumped: it turns solid and gives a coin shower, or
+  /// the bonus letter (no question).
+  void _revealHidden(Cell cell) {
+    _changed[cell] = Tile.usedBlock;
+    _bumps[cell] = 0.2;
+    if (cell == _bonusCell) {
+      _bonusCell = null;
+      _letterPop = _LetterPop(cell)..reveal(_bonusGlyph);
+      _fx.add(_Fx.sparkle(cell.col + 0.5, cell.row - 0.5));
+      sound.play(SoundEvent.letterFound);
+      cubit.bonusFound();
+      return;
+    }
+    for (var i = 0; i < _showerCoins; i++) {
+      _fx.add(
+        _Fx.coin(cell.col + 0.5, cell.row.toDouble(), vx: (i - 2.5) * 1.1),
+      );
+    }
+    sound.playKey('adventure.coins');
+    cubit.addCoins(_showerCoins, true);
+  }
+
+  /// Coins in one hidden coin block.
+  static const int _showerCoins = 6;
 
   void _landOnPlatforms(double prevBottom) {
     if (_vy < 0) return;
@@ -633,8 +694,13 @@ class AdventureGame extends FlameGame {
         }
       }
       e.t += dt;
-      // Every enemy walks (seagulls too, they drop to the ground first)
-      // and turns at walls and edges.
+      if (e.kind == EnemyKind.seagull) {
+        _flySeagull(e, dt);
+        _touchEnemy(e);
+        if (_state != _HeroState.alive) return;
+        continue;
+      }
+      // Walkers turn at walls and edges.
       e.vy = min(e.vy + g * dt, 20);
       final nx = e.x + e.vx * dt;
       final lead = (nx + e.vx.sign * e.w / 2).floor();
@@ -662,6 +728,52 @@ class AdventureGame extends FlameGame {
       if (_state != _HeroState.alive) return;
     }
     _enemies.removeWhere((e) => e.dead && e.deadTime > 0.6);
+    _updateShells(dt);
+  }
+
+  /// Seagulls fly back and forth above the path and drop a shell when
+  /// Fofo walks under them.
+  void _flySeagull(_Enemy e, double dt) {
+    const patrol = 4.5;
+    e.x += e.vx * dt;
+    if ((e.x - e.originX).abs() > patrol) {
+      e.x = e.originX + patrol * (e.x - e.originX).sign;
+      e.vx = -e.vx;
+    }
+    e.y = e.originY + sin(e.t * 2.2) * 0.5;
+    e.cooldown -= dt;
+    if (e.cooldown <= 0 && (e.x - _x).abs() < 1.2 && _y > e.y) {
+      e.cooldown = 2.2;
+      _shells.add(_Shell(e.x, e.y));
+      sound.playKey('adventure.drop');
+    }
+  }
+
+  void _updateShells(double dt) {
+    for (final s in _shells) {
+      s.vy = min(s.vy + config.physics.gravity * 0.45 * dt, 12);
+      s.y += s.vy * dt;
+      s.spin += dt * 8;
+      if (_solid(s.x.floor(), s.y.floor()) || s.y > level.height + 1) {
+        s.gone = true;
+        _fx.add(_Fx.puff(s.x, s.y - 0.1));
+        continue;
+      }
+      final hit =
+          (s.x - _x).abs() < _w / 2 + 0.2 && s.y > _y - _h && s.y - 0.4 < _y;
+      if (hit) {
+        s.gone = true;
+        _hurtHero();
+        if (_state != _HeroState.alive) break;
+      }
+    }
+    _shells.removeWhere((s) => s.gone);
+  }
+
+  /// Hit by an enemy or a shell: Nono shrinks back to Fofo, Fofo loses a
+  /// life.
+  void _hurtHero() {
+    _hurtHero();
   }
 
   void _touchEnemy(_Enemy e) {
@@ -833,6 +945,7 @@ class AdventureGame extends FlameGame {
 
   void _respawnHero() {
     _placeHero(_respawn);
+    _shells.clear();
     _hurt = 1.5;
     _wasBig = false;
     for (final p in _platforms) {
@@ -986,6 +1099,9 @@ class AdventureGame extends FlameGame {
         upsideDown: e.dead && !e.squashed,
       );
     }
+    for (final shell in _shells) {
+      _art.shell(canvas, shell.x, shell.y, t, shell.spin);
+    }
     _renderHero(canvas);
     for (final f in _fx) {
       _art.fx(canvas, f, t);
@@ -1072,7 +1188,7 @@ class _Enemy {
   final EnemyKind kind;
   final Cell spawn;
   late double x, y, originX, originY;
-  double vx = 0, vy = 0, t = 0, deadTime = 0;
+  double vx = 0, vy = 0, t = 0, deadTime = 0, cooldown = 1;
   bool active = false, dead = false, squashed = false, onGround = false;
 
   double get w => switch (kind) {
@@ -1193,8 +1309,8 @@ class _LetterPop {
 class _Fx implements AdventureFx {
   _Fx(this.kind, this.x, this.y, {this.vx = 0, this.vy = 0, this.life = 0.5});
 
-  factory _Fx.coin(double x, double y) =>
-      _Fx(FxKind.coin, x, y - 0.5, vy: -9, life: 0.55);
+  factory _Fx.coin(double x, double y, {double vx = 0}) =>
+      _Fx(FxKind.coin, x, y - 0.5, vx: vx, vy: -9, life: 0.55);
 
   factory _Fx.debris(double x, double y, int i) => _Fx(
     FxKind.debris,
@@ -1230,4 +1346,14 @@ class _Fx implements AdventureFx {
       y += vy * dt;
     }
   }
+}
+
+/// A shell a seagull dropped; it hurts on touch and breaks on the ground.
+class _Shell {
+  _Shell(this.x, this.y);
+
+  final double x;
+  double y;
+  double vy = 0, spin = 0;
+  bool gone = false;
 }

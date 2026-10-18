@@ -144,4 +144,75 @@ void main() {
     _run(game, 3);
     expect(cubit.state.lives, config.lives);
   });
+
+  /// Cells of [level] whose map character is [ch].
+  List<Cell> cellsOf(int level, String ch) {
+    final json = jsonDecode(
+      File('assets/content/games/adventure.json').readAsStringSync(),
+    ) as Map<String, dynamic>;
+    final rows = [
+      for (final r in (json['levels'] as List)[level]['rows'] as List)
+        r as String,
+    ];
+    return [
+      for (var r = 0; r < rows.length; r++)
+        for (var c = 0; c < rows[r].length; c++)
+          if (rows[r][c] == ch) Cell(c, r),
+    ];
+  }
+
+  /// Puts Fofo under [cell] and jumps into it.
+  void bump(AdventureGame game, Cell cell) {
+    game.debugPlaceHero(Cell(cell.col, 11));
+    game.input.pressJump();
+    _run(game, 0.5);
+    game.input.releaseJump();
+    _run(game, 0.8);
+  }
+
+  testWidgets('A hidden block in the desert gives a shower of coins', (
+    tester,
+  ) async {
+    final (game, cubit) = await start(tester, 1);
+    game.debugRemoveEnemies();
+    final hidden = cellsOf(1, 'h');
+    expect(hidden, hasLength(4));
+    bump(game, hidden.first);
+    expect(cubit.state.coins, 6);
+  });
+
+  testWidgets('Exactly one bonus spot hides the bonus letter', (tester) async {
+    final (game, cubit) = await start(tester, 0);
+    game.debugRemoveEnemies();
+    final spots = cellsOf(0, 'X');
+    expect(spots, hasLength(3));
+    var found = 0;
+    for (final spot in spots) {
+      final before = cubit.state.bonus;
+      bump(game, spot);
+      if (!before && cubit.state.bonus) found++;
+    }
+    expect(found, 1);
+    expect(cubit.state.bonusStars, 2);
+  });
+
+  testWidgets('Alexandria seagulls drop shells that hurt Fofo', (tester) async {
+    final (game, cubit) = await start(tester, 2);
+    // A seagull with open sky and ground under it (no blocks in the way).
+    final level = config.levels[2];
+    final gull = cellsOf(2, 'g').firstWhere(
+      (g) =>
+          level.tiles[12][g.col] == Tile.ground &&
+          [for (var r = g.row + 1; r < 12; r++) level.tiles[r][g.col]]
+              .every((t) => t == Tile.air),
+    );
+    game.debugPlaceHero(Cell(gull.col, 11));
+    var lost = false;
+    for (var t = 0.0; t < 8 && !lost; t += 1 / 60) {
+      game.debugPlaceHero(Cell(gull.col, 11));
+      game.update(1 / 60);
+      lost = cubit.state.lives < config.lives;
+    }
+    expect(lost, isTrue);
+  });
 }

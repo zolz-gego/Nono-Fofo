@@ -12,9 +12,14 @@ enum Tile {
   pageBlock,
 
   /// A block already hit (or a letter block whose letter was won).
-  usedBlock;
+  usedBlock,
 
-  bool get solid => this != air;
+  /// Invisible until hit from below; then a shower of coins.
+  hiddenCoins;
+
+  /// Hidden tiles can be walked and jumped through; only a head bump from
+  /// below finds them.
+  bool get solid => this != air && this != hiddenCoins;
 
   /// Blocks that react when hit from below.
   bool get bumpable =>
@@ -71,6 +76,7 @@ class AdventureLevel {
     required this.enemies,
     required this.platforms,
     required this.letterBlocks,
+    this.bonusSpots = const [],
   });
 
   factory AdventureLevel.fromJson(Map<String, dynamic> json) {
@@ -83,6 +89,7 @@ class AdventureLevel {
     final enemies = <EnemySpawn>[];
     final platforms = <PlatformSpawn>[];
     final letterBlocks = <Cell>[];
+    final bonusSpots = <Cell>[];
     for (final (r, row) in rows.indexed) {
       if (row.length != width) {
         throw FormatException(
@@ -101,6 +108,7 @@ class AdventureLevel {
           '?' => Tile.coinBlock,
           'L' => Tile.letterBlock,
           'P' => Tile.pageBlock,
+          'h' => Tile.hiddenCoins,
           _ => Tile.air,
         });
         switch (ch) {
@@ -114,6 +122,8 @@ class AdventureLevel {
             gate = cell;
           case 'K':
             checkpoints.add(cell);
+          case 'X':
+            bonusSpots.add(cell);
           case 'd':
             enemies.add(EnemySpawn(EnemyKind.duck, cell));
           case 's':
@@ -148,6 +158,7 @@ class AdventureLevel {
       checkpoints: checkpoints,
       enemies: enemies,
       platforms: platforms,
+      bonusSpots: bonusSpots,
       letterBlocks: letterBlocks..sort((a, b) => a.col.compareTo(b.col)),
     );
   }
@@ -166,6 +177,9 @@ class AdventureLevel {
   final List<Cell> checkpoints;
   final List<EnemySpawn> enemies;
   final List<PlatformSpawn> platforms;
+
+  /// Places the bonus letter may hide (one is picked at random each play).
+  final List<Cell> bonusSpots;
 
   /// Letter blocks from left to right; the i-th hides the i-th letter.
   final List<Cell> letterBlocks;

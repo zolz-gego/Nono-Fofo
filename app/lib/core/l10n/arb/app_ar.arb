@@ -615,5 +615,34 @@
   "adventureResume": "كمّل",
   "adventureRestart": "ابدأ المرحلة من الأول",
   "adventurePause": "وقفة",
-  "adventureRotate": "لف الجهاز بالعرض عشان تلعب"
+  "adventureRotate": "لف الجهاز بالعرض عشان تلعب",
+  "adventureBonus": "حرف بونص! نجمتين زيادة في الآخر",
+  "adventureCoinShower": "عملات مستخبية!",
+  "adventureBonusStars": "نجوم البونص",
+  "adventureShare": "شارك",
+  "adventureShareTitle": "{name} خلّص المرحلة {number}!",
+  "@adventureShareTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "adventureShareText": "{name} خلّص {place} في مغامرة نونو وفوفو وجاب {stars} نجوم!",
+  "@adventureShareText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      },
+      "stars": {
+        "type": "int"
+      }
+    }
+  }
 }

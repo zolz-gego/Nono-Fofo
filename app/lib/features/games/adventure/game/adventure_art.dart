@@ -419,7 +419,7 @@ class AdventureArt {
   }) {
     final r = Rect.fromLTWH(col * t, row * t, t, t);
     final picture = switch (tile) {
-      Tile.air => null,
+      Tile.air || Tile.hiddenCoins => null,
       Tile.ground => images['ground_${place.name}'],
       Tile.stone => images['block_stone'],
       Tile.brick => images['block_brick'],
@@ -454,7 +454,7 @@ class AdventureArt {
       return;
     }
     switch (tile) {
-      case Tile.air:
+      case Tile.air || Tile.hiddenCoins:
         return;
       case Tile.ground:
         canvas.drawRect(r.inflate(0.5), _fill(_p.earth));
@@ -878,6 +878,29 @@ class AdventureArt {
       case EnemyKind.seagull:
         _seagull(canvas, t, clock);
     }
+    canvas.restore();
+  }
+
+  /// A seashell falling from a seagull; [y] is its bottom.
+  void shell(Canvas canvas, double x, double y, double t, double spin) {
+    canvas.save();
+    canvas.translate(x * t, (y - 0.25) * t);
+    canvas.rotate(sin(spin) * 0.4);
+    final r = t * 0.25;
+    final fan = Path()
+      ..moveTo(0, r)
+      ..lineTo(-r * 1.1, -r * 0.2)
+      ..quadraticBezierTo(0, -r * 1.5, r * 1.1, -r * 0.2)
+      ..close();
+    canvas.drawPath(fan, _fill(const Color(0xFFFFD6C2)));
+    for (final dx in [-0.5, 0.0, 0.5]) {
+      canvas.drawLine(
+        Offset(0, r),
+        Offset(dx * r * 1.6, -r * 0.8),
+        _line(t * 0.025, const Color(0xFFE59A7C)),
+      );
+    }
+    canvas.drawPath(fan, _line(t * 0.04));
     canvas.restore();
   }
 

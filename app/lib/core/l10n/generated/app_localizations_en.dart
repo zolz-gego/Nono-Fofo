@@ -755,4 +755,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adventureRotate => 'Turn your device sideways to play';
+
+  @override
+  String get adventureBonus => 'Bonus letter! +2 stars at the finish';
+
+  @override
+  String get adventureCoinShower => 'Hidden coins!';
+
+  @override
+  String get adventureBonusStars => 'Bonus stars';
+
+  @override
+  String get adventureShare => 'Share';
+
+  @override
+  String adventureShareTitle(String name, int number) {
+    return '$name finished level $number!';
+  }
+
+  @override
+  String adventureShareText(String name, String place, int stars) {
+    return '$name finished $place in Nono & Fofo Adventure with $stars stars!';
+  }
 }

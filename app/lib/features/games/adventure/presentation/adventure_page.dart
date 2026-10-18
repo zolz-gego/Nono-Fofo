@@ -8,16 +8,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../../app/di/injection.dart';
 import '../../../../app/router.dart';
 import '../../../../core/assets/asset_paths.dart';
 import '../../../../core/domain/character_id.dart';
 import '../../../../core/l10n/l10n.dart';
+import '../../../../core/share/web_files.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_icons.dart';
+import '../../../../core/typography/app_text_styles.dart';
 import '../../../../core/widgets/app_top_bar.dart';
+import '../../../../engines/characters/domain/character_action.dart';
 import '../../../../engines/characters/domain/character_pose.dart';
 import '../../../../engines/sound/application/sound_service.dart';
 import '../../../../engines/sound/domain/sound_event.dart';
@@ -38,6 +42,7 @@ import 'adventure_cubit.dart';
 import 'adventure_hud.dart';
 import 'adventure_level_picker.dart';
 import 'adventure_overlays.dart';
+import 'adventure_share_card.dart';
 
 /// Nono & Fofo Adventure: a side-scroller in three levels. Small Fofo runs
 /// and jumps, hits ? blocks for coins and the lost letters (each won with a
@@ -277,7 +282,18 @@ class _AdventurePageState extends State<AdventurePage> {
         _say(l10n.adventureGateLocked(state.missing), back: true);
       case AdventureEvent.gateOpen:
         _say(l10n.adventureGateOpen);
-      case AdventureEvent.gameOver || AdventureEvent.complete:
+      case AdventureEvent.bonusFound:
+        _sound.play(SoundEvent.star3);
+        _say(l10n.adventureBonus);
+      case AdventureEvent.coinShower:
+        _say(l10n.adventureCoinShower);
+      case AdventureEvent.complete:
+        _messageTimer?.cancel();
+        setState(() => _message = null);
+        // Draw the share picture now: browsers only allow sharing right
+        // after the tap, so it can't be drawn then.
+        _card = _buildShareCard(state);
+      case AdventureEvent.gameOver:
         _messageTimer?.cancel();
         setState(() => _message = null);
       case AdventureEvent.none ||
@@ -285,6 +301,88 @@ class _AdventurePageState extends State<AdventurePage> {
           AdventureEvent.pageCoins ||
           AdventureEvent.died:
         break;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Sharing
+  // ---------------------------------------------------------------------------
+
+  /// The picture to share, drawn as soon as a level is finished.
+  Future<Uint8List>? _card;
+
+  String _placeName(AdventurePlace place) =>
+      AdventureLevelPicker.placeName(context.l10n, place);
+
+  Future<Uint8List> _buildShareCard(AdventureState s) {
+    final l10n = context.l10n;
+    final level = _cubit!.config.levels[s.level];
+    final roster = context.read<CharacterRoster>();
+    final lang = Localizations.localeOf(context).languageCode;
+    return AdventureShareCard(
+      title: l10n.adventureShareTitle(widget.setup.name, s.level + 1),
+      place: _placeName(level.place),
+      background: AssetPaths.adventureArt('bg_${level.place.name}'),
+      stars: s.stars,
+      bonusStars: s.bonusStars,
+      letters: [for (final l in s.letters) l.capital],
+      stats: [
+        ('${s.coins}/${level.totalCoins}', l10n.adventureCoins),
+        (AdventureComplete.clock(s.time), l10n.adventureTime),
+      ],
+      badge: s.allDone ? l10n.adventureAllDone : null,
+      appTitle: l10n.appTitle,
+      script: lang == 'ar' ? AppScript.arabic : AppScript.english,
+      direction: Directionality.of(context),
+      heroAssets: [
+        ?roster.pose(CharacterId.fofo, CharacterAction.celebrate)?.asset,
+        ?roster.pose(CharacterId.nono, CharacterAction.celebrate)?.asset,
+      ],
+    ).render();
+  }
+
+  Future<void> _share(Rect origin) async {
+    _sound.play(SoundEvent.tap);
+    final l10n = context.l10n;
+    final s = _cubit!.state;
+    final level = _cubit!.config.levels[s.level];
+    final text = l10n.adventureShareText(
+      widget.setup.name,
+      _placeName(level.place),
+      s.stars + s.bonusStars,
+    );
+    const fileName = 'nono-fofo-adventure.png';
+    const type = 'image/png';
+    final messenger = ScaffoldMessenger.of(context);
+    final saved = l10n.writingShareSaved;
+    Future<void> download(Uint8List card) async {
+      await webDownloadFile(card, fileName, type);
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(saved)));
+    }
+
+    final Uint8List card;
+    try {
+      card = await (_card ??= _buildShareCard(s));
+    } catch (_) {
+      return; // The picture couldn't be drawn; nothing to share.
+    }
+    // Browsers without a share sheet save the picture instead, and say so.
+    if (kIsWeb && !webCanShareFile(card, fileName, type)) {
+      return download(card);
+    }
+    try {
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile.fromData(card, mimeType: type, name: fileName)],
+          fileNameOverrides: [fileName],
+          text: text,
+          sharePositionOrigin: origin == Rect.zero ? null : origin,
+        ),
+      );
+    } catch (_) {
+      if (kIsWeb) await download(card);
     }
   }
 
@@ -497,6 +595,7 @@ class _AdventurePageState extends State<AdventurePage> {
               onNext: () => _startLevel(state.level + 1),
               onPlayAgain: () => _startLevel(state.level),
               onLevels: _toLevels,
+              onShare: _share,
             ),
           ),
       ],

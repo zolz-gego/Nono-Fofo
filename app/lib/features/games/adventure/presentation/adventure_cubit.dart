@@ -40,6 +40,8 @@ enum AdventureEvent {
   lifeUp,
   letterWon,
   wrongLetter,
+  bonusFound,
+  coinShower,
   grew,
   pageWrong,
   pageCoins,
@@ -72,6 +74,7 @@ class AdventureState extends Equatable {
     this.stars = 0,
     this.time = Duration.zero,
     this.allDone = false,
+    this.bonus = false,
   });
 
   /// Index into the config's levels.
@@ -112,6 +115,12 @@ class AdventureState extends Equatable {
   /// This finish completed all levels for the first time.
   final bool allDone;
 
+  /// The hidden bonus letter was found: 2 extra stars at the finish.
+  final bool bonus;
+
+  /// Extra stars from the bonus letter.
+  int get bonusStars => bonus ? AdventureCubit.bonusStarCount : 0;
+
   int get missing => letters.length - found.length;
 
   /// The game world moves only while this is true.
@@ -135,6 +144,7 @@ class AdventureState extends Equatable {
     int? stars,
     Duration? time,
     bool? allDone,
+    bool? bonus,
   }) => AdventureState(
     level: level ?? this.level,
     lives: lives ?? this.lives,
@@ -154,6 +164,7 @@ class AdventureState extends Equatable {
     stars: stars ?? this.stars,
     time: time ?? this.time,
     allDone: allDone ?? this.allDone,
+    bonus: bonus ?? this.bonus,
   );
 
   @override
@@ -176,6 +187,7 @@ class AdventureState extends Equatable {
     stars,
     time,
     allDone,
+    bonus,
   ];
 }
 
@@ -206,6 +218,9 @@ class AdventureCubit extends Cubit<AdventureState> {
 
   /// Key for "every level finished" on a road level.
   static String doneKey(GameLevel road) => 'level${road.number}';
+
+  /// Extra stars for finding the hidden bonus letter.
+  static const int bonusStarCount = 2;
 
   static const Duration reveal = Duration(milliseconds: 1500);
   static const Duration letterShow = Duration(milliseconds: 1700);
@@ -249,10 +264,15 @@ class AdventureCubit extends Cubit<AdventureState> {
     );
   }
 
-  void addCoins([int n = 1]) {
+  /// [shower]: from a hidden coin block.
+  void addCoins([int n = 1, bool shower = false]) {
     var lives = state.lives;
     var toward = state.lifeCoins + n;
-    var event = n > 1 ? AdventureEvent.pageCoins : AdventureEvent.coin;
+    var event = shower
+        ? AdventureEvent.coinShower
+        : n > 1
+        ? AdventureEvent.pageCoins
+        : AdventureEvent.coin;
     while (toward >= config.coinsPerLife) {
       toward -= config.coinsPerLife;
       if (lives < config.maxLives) {
@@ -399,6 +419,12 @@ class AdventureCubit extends Cubit<AdventureState> {
     ),
   );
 
+  /// The hidden bonus letter popped out.
+  void bonusFound() {
+    if (state.bonus) return;
+    _emit(state.copyWith(bonus: true, event: AdventureEvent.bonusFound));
+  }
+
   void checkpoint() => _emit(state.copyWith(event: AdventureEvent.checkpoint));
 
   /// The hero reached the gate with letters still missing.
@@ -414,7 +440,11 @@ class AdventureCubit extends Cubit<AdventureState> {
     final stars = config.starsFor(state.coins, totalCoins);
     final level = config.levels[state.level];
     final wasDone = _progress.hasPassed(id, doneKey(gameLevel));
-    await _progress.saveStars(id, starsKey(gameLevel, level.id), stars);
+    await _progress.saveStars(
+      id,
+      starsKey(gameLevel, level.id),
+      stars + state.bonusStars,
+    );
     final allFinished = [
       for (var i = 0; i < config.levels.length; i++) bestStars(i) > 0,
     ].every((f) => f);

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -192,15 +194,16 @@ class _LevelCardState extends State<_LevelCard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      for (var i = 0; i < 3; i++)
+                      // 3 coin stars, then any bonus stars in coral.
+                      for (var i = 0; i < max(3, widget.card.stars); i++)
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 2),
                           child: FaIcon(
                             i < widget.card.stars
                                 ? AppIcons.star
                                 : AppIcons.starEmpty,
-                            size: 20,
-                            color: AppColors.star,
+                            size: i >= 3 ? 16 : 20,
+                            color: i >= 3 ? AppColors.coral : AppColors.star,
                           ),
                         ),
                     ],

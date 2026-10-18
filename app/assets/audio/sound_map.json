@@ -676,6 +676,16 @@
       "sfx": [
         "level_failed"
       ]
+    },
+    "adventure.coins": {
+      "sfx": [
+        "coins_shower"
+      ]
+    },
+    "adventure.drop": {
+      "sfx": [
+        "ui_swipe"
+      ]
     }
   },
   "music": {

@@ -225,5 +225,11 @@
   "adventureResume": "Resume",
   "adventureRestart": "Restart level",
   "adventurePause": "Pause",
-  "adventureRotate": "Turn your device sideways to play"
+  "adventureRotate": "Turn your device sideways to play",
+  "adventureBonus": "Bonus letter! +2 stars at the finish",
+  "adventureCoinShower": "Hidden coins!",
+  "adventureBonusStars": "Bonus stars",
+  "adventureShare": "Share",
+  "adventureShareTitle": "{name} finished level {number}!",
+  "adventureShareText": "{name} finished {place} in Nono & Fofo Adventure with {stars} stars!"
 }

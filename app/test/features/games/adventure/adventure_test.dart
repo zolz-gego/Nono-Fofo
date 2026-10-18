@@ -188,6 +188,17 @@ void main() {
       },
     );
 
+    test('the bonus letter adds 2 stars at the finish', () async {
+      final cubit = _cubit(progress)..startLevel(0);
+      cubit
+        ..addCoins(90)
+        ..bonusFound();
+      await cubit.complete(const Duration(seconds: 60), 100);
+      expect(cubit.state.stars, 3);
+      expect(cubit.state.bonusStars, 2);
+      verify(() => progress.saveStars('adventure', 'level1.nile', 5)).called(1);
+    });
+
     test('a level opens once the one before is finished', () {
       when(() => progress.bestStars('adventure', 'level1.nile')).thenReturn(1);
       final cubit = _cubit(progress);

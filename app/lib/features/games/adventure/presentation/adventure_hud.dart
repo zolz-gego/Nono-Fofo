@@ -51,6 +51,21 @@ class AdventureHud extends StatelessWidget {
                         size: slot,
                       ),
                     ],
+                    if (state.bonus) ...[
+                      const SizedBox(width: AppDimens.spaceXs),
+                      Tooltip(
+                        message: l10n.adventureBonusStars,
+                        child:
+                            FaIcon(
+                              AppIcons.star,
+                              size: slot * 0.7,
+                              color: AppColors.coral,
+                            ).animate().scale(
+                              begin: const Offset(2, 2),
+                              curve: Curves.easeOutBack,
+                            ),
+                      ),
+                    ],
                   ],
                 ),
               ),

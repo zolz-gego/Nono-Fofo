@@ -1369,6 +1369,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لف الجهاز بالعرض عشان تلعب'**
   String get adventureRotate;
+
+  /// No description provided for @adventureBonus.
+  ///
+  /// In ar, this message translates to:
+  /// **'حرف بونص! نجمتين زيادة في الآخر'**
+  String get adventureBonus;
+
+  /// No description provided for @adventureCoinShower.
+  ///
+  /// In ar, this message translates to:
+  /// **'عملات مستخبية!'**
+  String get adventureCoinShower;
+
+  /// No description provided for @adventureBonusStars.
+  ///
+  /// In ar, this message translates to:
+  /// **'نجوم البونص'**
+  String get adventureBonusStars;
+
+  /// No description provided for @adventureShare.
+  ///
+  /// In ar, this message translates to:
+  /// **'شارك'**
+  String get adventureShare;
+
+  /// No description provided for @adventureShareTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} خلّص المرحلة {number}!'**
+  String adventureShareTitle(String name, int number);
+
+  /// No description provided for @adventureShareText.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} خلّص {place} في مغامرة نونو وفوفو وجاب {stars} نجوم!'**
+  String adventureShareText(String name, String place, int stars);
 }
 
 class _AppLocalizationsDelegate

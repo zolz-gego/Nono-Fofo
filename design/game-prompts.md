@@ -390,6 +390,13 @@ One friendly-but-grumpy cartoon <ENEMY> walking to the left, seen from the side,
 Enemies: *white duck with an orange beak* (Nile), *brown desert scorpion* (desert),
 *red crab* (Alexandria), *white seagull with grey wings, flying* (Alexandria).
 
+Alexandria's seagulls now fly over the path and drop shells, so a flying
+pose would look better than the walking one (save it as `seagull.webp`):
+
+```
+One friendly-but-grumpy cartoon white seagull with grey wings, flying to the left with its wings spread wide, seen from the side, for a children's platform game. Cute, not scary. Plain white background, thin warm-brown outline, flat colours with soft shading. Nothing else in the picture.
+```
+
 ### Items
 
 - *Grandpa's glowing page*: an old cream paper page with golden lines of writing, glowing softly.

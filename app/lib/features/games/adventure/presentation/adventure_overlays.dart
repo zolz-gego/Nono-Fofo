@@ -252,9 +252,18 @@ class AdventureComplete extends StatefulWidget {
     required this.onNext,
     required this.onPlayAgain,
     required this.onLevels,
+    required this.onShare,
   });
 
   final AdventureState state;
+
+  /// Gets where the button is, for the share sheet's arrow on tablets.
+  final void Function(Rect origin) onShare;
+
+  /// Playing time as m:ss.
+  static String clock(Duration d) =>
+      '${d.inMinutes}:${(d.inSeconds % 60).toString().padLeft(2, '0')}';
+
   final int totalCoins;
   final bool hasNext;
   final VoidCallback onNext;
@@ -293,9 +302,6 @@ class _AdventureCompleteState extends State<AdventureComplete> {
     super.dispose();
   }
 
-  static String _clock(Duration d) =>
-      '${d.inMinutes}:${(d.inSeconds % 60).toString().padLeft(2, '0')}';
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -311,16 +317,19 @@ class _AdventureCompleteState extends State<AdventureComplete> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  for (var i = 0; i < 3; i++)
+                  // The coin stars, then the bonus letter's stars in coral.
+                  for (var i = 0; i < 3 + s.bonusStars; i++)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                       child:
                           FaIcon(
-                                i < s.stars
+                                i >= 3 || i < s.stars
                                     ? AppIcons.star
                                     : AppIcons.starEmpty,
-                                size: i == 1 ? 52 : 40,
-                                color: AppColors.star,
+                                size: i >= 3 ? 34 : (i == 1 ? 52 : 40),
+                                color: i >= 3
+                                    ? AppColors.coral
+                                    : AppColors.star,
                               )
                               .animate(delay: (300 + i * 200).ms)
                               .scale(
@@ -368,7 +377,7 @@ class _AdventureCompleteState extends State<AdventureComplete> {
                   const SizedBox(width: AppDimens.spaceLg),
                   _Stat(
                     icon: AppIcons.timer,
-                    value: _clock(s.time),
+                    value: AdventureComplete.clock(s.time),
                     label: l10n.adventureTime,
                   ),
                 ],
@@ -394,7 +403,22 @@ class _AdventureCompleteState extends State<AdventureComplete> {
                   ),
                 ),
               ],
-              const SizedBox(height: AppDimens.spaceLg),
+              const SizedBox(height: AppDimens.spaceMd),
+              Builder(
+                builder: (context) => FilledButton.tonalIcon(
+                  onPressed: () {
+                    final box = context.findRenderObject() as RenderBox?;
+                    widget.onShare(
+                      box == null
+                          ? Rect.zero
+                          : box.localToGlobal(Offset.zero) & box.size,
+                    );
+                  },
+                  icon: const FaIcon(AppIcons.share, size: 18),
+                  label: Text(l10n.adventureShare),
+                ),
+              ),
+              const SizedBox(height: AppDimens.spaceMd),
               Wrap(
                 alignment: WrapAlignment.center,
                 spacing: AppDimens.spaceSm,

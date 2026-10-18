@@ -803,4 +803,26 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get adventureRotate => 'لف الجهاز بالعرض عشان تلعب';
+
+  @override
+  String get adventureBonus => 'حرف بونص! نجمتين زيادة في الآخر';
+
+  @override
+  String get adventureCoinShower => 'عملات مستخبية!';
+
+  @override
+  String get adventureBonusStars => 'نجوم البونص';
+
+  @override
+  String get adventureShare => 'شارك';
+
+  @override
+  String adventureShareTitle(String name, int number) {
+    return '$name خلّص المرحلة $number!';
+  }
+
+  @override
+  String adventureShareText(String name, String place, int stars) {
+    return '$name خلّص $place في مغامرة نونو وفوفو وجاب $stars نجوم!';
+  }
 }
