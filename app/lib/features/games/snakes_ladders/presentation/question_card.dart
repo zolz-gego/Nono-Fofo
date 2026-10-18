@@ -24,9 +24,13 @@ class QuestionCard extends StatelessWidget {
     required this.color,
     required this.picked,
     required this.onPick,
+    this.title,
   });
 
   final LetterQuestion question;
+
+  /// The line at the top; whose turn it is when null.
+  final String? title;
   final String playerName;
   final CharacterId character;
   final Color color;
@@ -75,7 +79,9 @@ class QuestionCard extends StatelessWidget {
                               ),
                               const SizedBox(width: AppDimens.spaceSm),
                               Flexible(
-                                child: AppText.h3(l10n.snakesTurn(playerName)),
+                                child: AppText.h3(
+                                  title ?? l10n.snakesTurn(playerName),
+                                ),
                               ),
                             ],
                           ),

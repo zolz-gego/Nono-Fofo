@@ -677,4 +677,152 @@ class AppLocalizationsAr extends AppLocalizations {
   String snakesShareText(String name, int correct, int asked) {
     return '$name كسب السلم والتعبان في نونو وفوفو، وجاوب $correct من $asked حروف صح!';
   }
+
+  @override
+  String get challengePick => 'اختار التحدي!';
+
+  @override
+  String challengeSnakesBody(String opponent) {
+    return 'جاوب على الحروف واسبق $opponent لمربع ٦٤';
+  }
+
+  @override
+  String get challengeAdventureBody =>
+      'اجري ونط ودوّر على الحروف الضايعة في ٣ مراحل';
+
+  @override
+  String get gameAdventure => 'مغامرة نونو وفوفو';
+
+  @override
+  String get adventurePickLevel => 'اختار المرحلة';
+
+  @override
+  String get adventureLevelNile => 'شط النيل';
+
+  @override
+  String get adventureLevelDesert => 'الصحرا والأهرامات';
+
+  @override
+  String get adventureLevelAlexandria => 'إسكندرية بالليل';
+
+  @override
+  String get adventureLocked => 'خلّص المرحلة اللي قبلها الأول';
+
+  @override
+  String get adventureHowTo => 'الأسهم للمشي والمسافة للنط';
+
+  @override
+  String get adventureHowToTouch => '◀ ▶ للمشي واضغط على اليمين للنط';
+
+  @override
+  String adventureStart(String name, int count) {
+    return 'يلا بينا يا $name! دوّر على الـ $count حروف الضايعة';
+  }
+
+  @override
+  String get adventureLetterAsk => 'لقيت حرف! جاوب صح عشان تاخده';
+
+  @override
+  String get adventurePageAsk => 'صفحة جدو! جاوب صح وفوفو يكبر ويبقى نونو';
+
+  @override
+  String adventureLetterWon(String letter) {
+    return 'برافو! ده حرف $letter';
+  }
+
+  @override
+  String get adventureWrongLetter => 'أوبس! خسرت روح. اضرب الصندوق تاني';
+
+  @override
+  String get adventureGrew => 'نونو وصل! يقدر يكسر الطوب';
+
+  @override
+  String get adventurePageWrong => 'الصفحة طارت!';
+
+  @override
+  String get adventureShrank => 'آه! رجعنا لفوفو';
+
+  @override
+  String get adventureCheckpoint => 'نقطة حفظ!';
+
+  @override
+  String get adventureLifeUp => 'روح زيادة!';
+
+  @override
+  String adventureGateLocked(int count) {
+    return 'لسه ناقص $count حروف! ارجع دوّر عليهم';
+  }
+
+  @override
+  String get adventureGateOpen => 'كل الحروف معانا! البوابة بتفتح';
+
+  @override
+  String get adventureGameOver => 'الأرواح خلصت!';
+
+  @override
+  String get adventureGameOverBody => 'كل محاولة بتخليك أشطر. جرّب تاني!';
+
+  @override
+  String get adventureTryAgain => 'جرّب تاني';
+
+  @override
+  String get adventureComplete => 'خلصت المرحلة!';
+
+  @override
+  String get adventureCompleteBody => 'الحروف رجعت لكتاب جدو';
+
+  @override
+  String get adventureAllDone => 'خلصت المغامرة كلها!';
+
+  @override
+  String get adventureNextLevel => 'المرحلة الجاية';
+
+  @override
+  String get adventureLevels => 'المراحل';
+
+  @override
+  String get adventureCoins => 'العملات';
+
+  @override
+  String get adventureTime => 'الوقت';
+
+  @override
+  String get adventureLetters => 'الحروف';
+
+  @override
+  String get adventurePaused => 'وقفة';
+
+  @override
+  String get adventureResume => 'كمّل';
+
+  @override
+  String get adventureRestart => 'ابدأ المرحلة من الأول';
+
+  @override
+  String get adventurePause => 'وقفة';
+
+  @override
+  String get adventureRotate => 'لف الجهاز بالعرض عشان تلعب';
+
+  @override
+  String get adventureBonus => 'حرف بونص! نجمتين زيادة في الآخر';
+
+  @override
+  String get adventureCoinShower => 'عملات مستخبية!';
+
+  @override
+  String get adventureBonusStars => 'نجوم البونص';
+
+  @override
+  String get adventureShare => 'شارك';
+
+  @override
+  String adventureShareTitle(String name, int number) {
+    return '$name خلّص المرحلة $number!';
+  }
+
+  @override
+  String adventureShareText(String name, String place, int stars) {
+    return '$name خلّص $place في مغامرة نونو وفوفو وجاب $stars نجوم!';
+  }
 }

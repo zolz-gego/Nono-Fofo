@@ -1135,6 +1135,276 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'{name} كسب السلم والتعبان في نونو وفوفو، وجاوب {correct} من {asked} حروف صح!'**
   String snakesShareText(String name, int correct, int asked);
+
+  /// No description provided for @challengePick.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار التحدي!'**
+  String get challengePick;
+
+  /// No description provided for @challengeSnakesBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاوب على الحروف واسبق {opponent} لمربع ٦٤'**
+  String challengeSnakesBody(String opponent);
+
+  /// No description provided for @challengeAdventureBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'اجري ونط ودوّر على الحروف الضايعة في ٣ مراحل'**
+  String get challengeAdventureBody;
+
+  /// No description provided for @gameAdventure.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغامرة نونو وفوفو'**
+  String get gameAdventure;
+
+  /// No description provided for @adventurePickLevel.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار المرحلة'**
+  String get adventurePickLevel;
+
+  /// No description provided for @adventureLevelNile.
+  ///
+  /// In ar, this message translates to:
+  /// **'شط النيل'**
+  String get adventureLevelNile;
+
+  /// No description provided for @adventureLevelDesert.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصحرا والأهرامات'**
+  String get adventureLevelDesert;
+
+  /// No description provided for @adventureLevelAlexandria.
+  ///
+  /// In ar, this message translates to:
+  /// **'إسكندرية بالليل'**
+  String get adventureLevelAlexandria;
+
+  /// No description provided for @adventureLocked.
+  ///
+  /// In ar, this message translates to:
+  /// **'خلّص المرحلة اللي قبلها الأول'**
+  String get adventureLocked;
+
+  /// No description provided for @adventureHowTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسهم للمشي والمسافة للنط'**
+  String get adventureHowTo;
+
+  /// No description provided for @adventureHowToTouch.
+  ///
+  /// In ar, this message translates to:
+  /// **'◀ ▶ للمشي واضغط على اليمين للنط'**
+  String get adventureHowToTouch;
+
+  /// No description provided for @adventureStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'يلا بينا يا {name}! دوّر على الـ {count} حروف الضايعة'**
+  String adventureStart(String name, int count);
+
+  /// No description provided for @adventureLetterAsk.
+  ///
+  /// In ar, this message translates to:
+  /// **'لقيت حرف! جاوب صح عشان تاخده'**
+  String get adventureLetterAsk;
+
+  /// No description provided for @adventurePageAsk.
+  ///
+  /// In ar, this message translates to:
+  /// **'صفحة جدو! جاوب صح وفوفو يكبر ويبقى نونو'**
+  String get adventurePageAsk;
+
+  /// No description provided for @adventureLetterWon.
+  ///
+  /// In ar, this message translates to:
+  /// **'برافو! ده حرف {letter}'**
+  String adventureLetterWon(String letter);
+
+  /// No description provided for @adventureWrongLetter.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوبس! خسرت روح. اضرب الصندوق تاني'**
+  String get adventureWrongLetter;
+
+  /// No description provided for @adventureGrew.
+  ///
+  /// In ar, this message translates to:
+  /// **'نونو وصل! يقدر يكسر الطوب'**
+  String get adventureGrew;
+
+  /// No description provided for @adventurePageWrong.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصفحة طارت!'**
+  String get adventurePageWrong;
+
+  /// No description provided for @adventureShrank.
+  ///
+  /// In ar, this message translates to:
+  /// **'آه! رجعنا لفوفو'**
+  String get adventureShrank;
+
+  /// No description provided for @adventureCheckpoint.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقطة حفظ!'**
+  String get adventureCheckpoint;
+
+  /// No description provided for @adventureLifeUp.
+  ///
+  /// In ar, this message translates to:
+  /// **'روح زيادة!'**
+  String get adventureLifeUp;
+
+  /// No description provided for @adventureGateLocked.
+  ///
+  /// In ar, this message translates to:
+  /// **'لسه ناقص {count} حروف! ارجع دوّر عليهم'**
+  String adventureGateLocked(int count);
+
+  /// No description provided for @adventureGateOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل الحروف معانا! البوابة بتفتح'**
+  String get adventureGateOpen;
+
+  /// No description provided for @adventureGameOver.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأرواح خلصت!'**
+  String get adventureGameOver;
+
+  /// No description provided for @adventureGameOverBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل محاولة بتخليك أشطر. جرّب تاني!'**
+  String get adventureGameOverBody;
+
+  /// No description provided for @adventureTryAgain.
+  ///
+  /// In ar, this message translates to:
+  /// **'جرّب تاني'**
+  String get adventureTryAgain;
+
+  /// No description provided for @adventureComplete.
+  ///
+  /// In ar, this message translates to:
+  /// **'خلصت المرحلة!'**
+  String get adventureComplete;
+
+  /// No description provided for @adventureCompleteBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحروف رجعت لكتاب جدو'**
+  String get adventureCompleteBody;
+
+  /// No description provided for @adventureAllDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'خلصت المغامرة كلها!'**
+  String get adventureAllDone;
+
+  /// No description provided for @adventureNextLevel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المرحلة الجاية'**
+  String get adventureNextLevel;
+
+  /// No description provided for @adventureLevels.
+  ///
+  /// In ar, this message translates to:
+  /// **'المراحل'**
+  String get adventureLevels;
+
+  /// No description provided for @adventureCoins.
+  ///
+  /// In ar, this message translates to:
+  /// **'العملات'**
+  String get adventureCoins;
+
+  /// No description provided for @adventureTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوقت'**
+  String get adventureTime;
+
+  /// No description provided for @adventureLetters.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحروف'**
+  String get adventureLetters;
+
+  /// No description provided for @adventurePaused.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقفة'**
+  String get adventurePaused;
+
+  /// No description provided for @adventureResume.
+  ///
+  /// In ar, this message translates to:
+  /// **'كمّل'**
+  String get adventureResume;
+
+  /// No description provided for @adventureRestart.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ المرحلة من الأول'**
+  String get adventureRestart;
+
+  /// No description provided for @adventurePause.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقفة'**
+  String get adventurePause;
+
+  /// No description provided for @adventureRotate.
+  ///
+  /// In ar, this message translates to:
+  /// **'لف الجهاز بالعرض عشان تلعب'**
+  String get adventureRotate;
+
+  /// No description provided for @adventureBonus.
+  ///
+  /// In ar, this message translates to:
+  /// **'حرف بونص! نجمتين زيادة في الآخر'**
+  String get adventureBonus;
+
+  /// No description provided for @adventureCoinShower.
+  ///
+  /// In ar, this message translates to:
+  /// **'عملات مستخبية!'**
+  String get adventureCoinShower;
+
+  /// No description provided for @adventureBonusStars.
+  ///
+  /// In ar, this message translates to:
+  /// **'نجوم البونص'**
+  String get adventureBonusStars;
+
+  /// No description provided for @adventureShare.
+  ///
+  /// In ar, this message translates to:
+  /// **'شارك'**
+  String get adventureShare;
+
+  /// No description provided for @adventureShareTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} خلّص المرحلة {number}!'**
+  String adventureShareTitle(String name, int number);
+
+  /// No description provided for @adventureShareText.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} خلّص {place} في مغامرة نونو وفوفو وجاب {stars} نجوم!'**
+  String adventureShareText(String name, String place, int stars);
 }
 
 class _AppLocalizationsDelegate

@@ -626,4 +626,155 @@ class AppLocalizationsEn extends AppLocalizations {
   String snakesShareText(String name, int correct, int asked) {
     return '$name won Snakes & Ladders in Nono & Fofo, with $correct of $asked letters right!';
   }
+
+  @override
+  String get challengePick => 'Pick a challenge!';
+
+  @override
+  String challengeSnakesBody(String opponent) {
+    return 'Answer letters and race $opponent to square 64';
+  }
+
+  @override
+  String get challengeAdventureBody =>
+      'Run, jump and find the lost letters in 3 levels';
+
+  @override
+  String get gameAdventure => 'Nono & Fofo Adventure';
+
+  @override
+  String get adventurePickLevel => 'Pick a level';
+
+  @override
+  String get adventureLevelNile => 'The Nile bank';
+
+  @override
+  String get adventureLevelDesert => 'The desert & the Pyramids';
+
+  @override
+  String get adventureLevelAlexandria => 'Alexandria at night';
+
+  @override
+  String get adventureLocked => 'Finish the level before it first';
+
+  @override
+  String get adventureHowTo => 'Arrows to walk, space to jump';
+
+  @override
+  String get adventureHowToTouch => '◀ ▶ to walk, tap the right side to jump';
+
+  @override
+  String adventureStart(String name, int count) {
+    return 'Let\'s go, $name! Find the $count lost letters';
+  }
+
+  @override
+  String get adventureLetterAsk =>
+      'You found a letter! Answer right to keep it';
+
+  @override
+  String get adventurePageAsk =>
+      'Grandpa\'s page! Answer right and Fofo grows into Nono';
+
+  @override
+  String adventureLetterWon(String letter) {
+    return 'Bravo! It\'s $letter';
+  }
+
+  @override
+  String get adventureWrongLetter =>
+      'Oops! You lost a life. Hit the block again';
+
+  @override
+  String get adventureGrew => 'Nono\'s here! He can break bricks';
+
+  @override
+  String get adventurePageWrong => 'The page flew away!';
+
+  @override
+  String get adventureShrank => 'Ouch! Back to Fofo';
+
+  @override
+  String get adventureCheckpoint => 'Checkpoint!';
+
+  @override
+  String get adventureLifeUp => '+1 life!';
+
+  @override
+  String adventureGateLocked(int count) {
+    return '$count letters still missing! Go back and find them';
+  }
+
+  @override
+  String get adventureGateOpen => 'All the letters! The gate opens';
+
+  @override
+  String get adventureGameOver => 'No lives left!';
+
+  @override
+  String get adventureGameOverBody => 'Every try makes you better. Try again!';
+
+  @override
+  String get adventureTryAgain => 'Try again';
+
+  @override
+  String get adventureComplete => 'Level complete!';
+
+  @override
+  String get adventureCompleteBody => 'The letters are back in Grandpa\'s book';
+
+  @override
+  String get adventureAllDone => 'You finished the whole adventure!';
+
+  @override
+  String get adventureNextLevel => 'Next level';
+
+  @override
+  String get adventureLevels => 'Levels';
+
+  @override
+  String get adventureCoins => 'Coins';
+
+  @override
+  String get adventureTime => 'Time';
+
+  @override
+  String get adventureLetters => 'Letters';
+
+  @override
+  String get adventurePaused => 'Paused';
+
+  @override
+  String get adventureResume => 'Resume';
+
+  @override
+  String get adventureRestart => 'Restart level';
+
+  @override
+  String get adventurePause => 'Pause';
+
+  @override
+  String get adventureRotate => 'Turn your device sideways to play';
+
+  @override
+  String get adventureBonus => 'Bonus letter! +2 stars at the finish';
+
+  @override
+  String get adventureCoinShower => 'Hidden coins!';
+
+  @override
+  String get adventureBonusStars => 'Bonus stars';
+
+  @override
+  String get adventureShare => 'Share';
+
+  @override
+  String adventureShareTitle(String name, int number) {
+    return '$name finished level $number!';
+  }
+
+  @override
+  String adventureShareText(String name, String place, int stars) {
+    return '$name finished $place in Nono & Fofo Adventure with $stars stars!';
+  }
 }
