@@ -8,30 +8,37 @@ switch to **Natural** if a take sounds off). Language: Arabic.
 
 ---
 
-## Nono (نونو), 9 years old
+ElevenLabs blocks Voice Design prompts that describe a child's voice (policy
+on minors). Cartoon kids are normally voiced by adult actors, so the prompts
+below describe an **adult voice actor** with a bright, playful animated style,
+with no age or "child" words. Keep it that way.
+
+## Nono (نونو)
 
 Save the voice as **`Nono`**.
 
-**Voice Design prompt** (ElevenLabs → Voices → Create → Voice Design):
+**Option A: Voice Library (try first).** Voices → Explore, search
+`cartoon`, `animated character`, `playful`, `energetic`, filter language
+**Arabic**. Pick a bright, high, energetic voice, then check it reads the
+preview text below with a natural Egyptian sound. Add it and rename it `Nono`.
+
+**Option B: Voice Design** (Voices → Create → Voice Design):
 ```
-Cartoon voice for an animated kids' show: a cheerful 9-year-old Egyptian boy speaking Egyptian Arabic with a natural Cairo accent. Bright, slightly high-pitched, energetic and fast-talking, always smiling, a little breathless as if he just ran in. Playful and confident, giggles easily. Clean close-mic studio recording, no background noise, no music.
+Adult voice actor performing an energetic animated-cartoon hero voice, speaking Egyptian Arabic with a natural Cairo accent. Bright, light and high-pitched, fast-talking and bubbly, always smiling, a little breathless and full of excitement, playful, laughs easily. Clean close-mic studio recording, no background noise, no music.
 ```
-Preview text to paste in the designer:
+Preview text:
 ```
 [excited] أهلاً أهلاً! أنا نونو! [giggles] أنا بحب أجري وبحب الكورة أوي... يلا بينا!
 ```
 
-If Voice Design won't make a child-like voice, pick a "young cartoon boy" voice
-from the Voice Library and check it says the preview text with an Egyptian
-accent.
+## Fofo (فوفو)
 
-## Fofo (فوفو), 6 years old
-
-Save the voice as **`Fofo`**.
+Save the voice as **`Fofo`**. Same two options; it must sound clearly
+softer and slower than Nono.
 
 **Voice Design prompt:**
 ```
-Cartoon voice for an animated kids' show: a sweet, curious 6-year-old Egyptian boy speaking Egyptian Arabic with a natural Cairo accent. Soft, higher-pitched and a bit slower than his big brother, thoughtful, says "hmm" while thinking, tiny lisp from a missing front tooth, giggly and warm. Clean close-mic studio recording, no background noise, no music.
+Adult voice actor performing a sweet, gentle animated-cartoon sidekick voice, speaking Egyptian Arabic with a natural Cairo accent. Soft, light and very high-pitched, slower and more thoughtful, curious, says "hmm" while thinking, a tiny playful lisp, warm and giggly. Clean close-mic studio recording, no background noise, no music.
 ```
 Preview text:
 ```
