@@ -17,7 +17,7 @@ from ElevenLabs (Eleven v3). The workflow lives in the `social-media` skill
 | `assets/` | **Social-only** resources (catalogued below and in `assets/manifest.json`) |
 | `tools/split_voice.py` | Splits one ElevenLabs take into the per-line voice files |
 | `tools/synth_social_sfx.py` | Synthesizes the social sound effects into `assets/sfx/` |
-| `tools/synth_intro.py` | Logo intro: cuts the logo into blocks (`remotion/src/intro/layout.json`) and composes its score |
+| `tools/synth_intro.py` | Composes the logo intro's score from `remotion/src/intro/cues.json` |
 | `remotion/` | The Remotion project (components, timing, render scripts) |
 | `previews/` | One still per video for the README and PRs |
 | `out/` | Rendered MP4s and stills (git-ignored) |
@@ -43,7 +43,7 @@ npm run still -- 001-nono-hello 2.5     # one frame -> out/001-nono-hello@2.5s.j
 npm run render -- 001-nono-hello        # full video -> out/001-nono-hello.mp4
 npm run intro                           # logo intro -> out/intro-landscape.mp4 + out/intro-portrait.mp4
 npm run still -- intro-portrait 12.5    # one intro frame
-tools/.venv/bin/python social/tools/synth_intro.py        # (from repo root) rebuild intro layout + score
+tools/.venv/bin/python social/tools/synth_intro.py        # (from repo root) rebuild the intro score
 tools/.venv/bin/python social/tools/synth_social_sfx.py   # (from repo root) rebuild social SFX
 ```
 
@@ -70,7 +70,7 @@ tools/.venv/bin/python social/tools/synth_social_sfx.py   # (from repo root) reb
 
 | id | Track | Used for |
 |---|---|---|
-| `intro_logo_blocks` | 25.5 s score, 120 BPM, D hijaz: darbuka maqsum, bass, qanun plucks, block landings as a marimba melody, risers, final sting. Made by `tools/synth_intro.py`, cued from `remotion/src/intro/cues.json` | Logo intro |
+| `intro_logo_swarm` | 24 s score, 120 BPM, D hijaz: granular swarm shimmer, darbuka maqsum, bass, qanun, a sound for each shape, auto-panned ring spin, final drop. Made by `tools/synth_intro.py`, cued from `remotion/src/intro/cues.json` | Logo intro |
 
 All 107 app SFX (`correct_1`, `confetti`, `fish_splash_1`, …) can be used by id
 too; see `app/assets/audio/manifest.json`.
@@ -85,26 +85,26 @@ Font Awesome, registered in `remotion/src/icons.ts`: `book`, `clap`, `fish`,
 `football`, `heart`, `house`, `idea`, `paint`, `puzzle`, `question`, `rocket`,
 `run`, `star`, `trophy`.
 
-## Logo intro
+## Logo intro ("Golden Letter Swarm")
 
-A 25.5 s motion-graphics intro built only from the app logo, in two shapes:
-`intro-landscape` (1920×1080) and `intro-portrait` (1080×1920), 60 fps. Code in
+A 24 s particle intro built from the app logo, in two shapes: `intro-portrait`
+(1080×1920) and `intro-landscape` (1920×1080), 60 fps. Code in
 `remotion/src/intro/`. Picture and sound share one clock, `cues.json`: change a
 time there, rerun `synth_intro.py`, and re-render.
 
-1. **Close-ups (0–5 s):** tiny parts of the logo, rebuilt as sharp vectors
-   (a gold Coptic letter, the pyramid, a palm, the Nile, the book's letters),
-   cut on each beat.
-2. **Pull-back (5–6 s):** each close-up turns out to be the face of a floating
-   alphabet block. The blocks shoot away into the dark, then a hit.
-3. **Blocks (6–16 s):** the logo, cut into 60 wooden Coptic-letter blocks, drops
-   onto a board row by row (each landing is a marimba note). The camera swings to
-   the front, a wave flips every block to show the picture, Nono's and Fofo's faces
-   pop out, then the light cracks through.
-4. **Alive (16–22 s):** a dive into the book (letters rise out), a whip to the
-   pyramid (pyramid, palms and sun fold up like a pop-up book), then down the
-   Nile and out. The ring draws itself and a shine sweeps across.
-5. **Sting (22–25.5 s):** shockwave, a burst of letters and confetti, the logo holds.
+7,000 gold particles drawn on a canvas each frame. Their positions are a pure
+function of time, so any frame renders the same. Every shape is sampled from
+pixels (`shapes.ts`): text in the Coptic font, drawn shapes, the brothers' wave
+poses and the logo itself.
+
+1. **ⲁ ⲱ (0–2.5 s):** gold dust gathers into alpha and omega, then shatters.
+2. **The flock (2.5–16 s):** on every bar the swarm flies to a new shape: pyramid
+   and sun → swaying palm → flowing Nile → open book → Nono and Fofo waving
+   (in their real colours) → ⲛⲟⲛⲟ / ⲫⲟⲫⲟ → a spinning 3D ring.
+3. **Spiral in (16–20 s):** the ring spins faster and tilts flat, then every
+   particle spirals to its pixel of the logo (centre first) and the real logo
+   resolves on the drop.
+4. **Hold (20–24 s):** a shine sweep, then the logo stays perfectly still.
 
 ## Videos
 

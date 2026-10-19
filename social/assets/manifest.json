@@ -69,10 +69,10 @@
     }
   },
   "music": {
-    "intro_logo_blocks": {
-      "file": "music/intro_logo_blocks.wav",
-      "desc": "Logo intro score (25.5 s, 120 BPM, D hijaz): darbuka, qanun, marimba block landings, risers and the final sting. Synced to remotion/src/intro/cues.json.",
-      "duration": 25.5,
+    "intro_logo_swarm": {
+      "file": "music/intro_logo_swarm.wav",
+      "desc": "Golden Letter Swarm intro score (24 s, 120 BPM, D hijaz): granular swarm shimmer, darbuka, qanun, a signature per shape, ring spin, final drop. Synced to remotion/src/intro/cues.json.",
+      "duration": 24,
       "source": "social/tools/synth_intro.py"
     }
   }
