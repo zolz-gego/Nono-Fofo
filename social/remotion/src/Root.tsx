@@ -1,11 +1,14 @@
 import React from 'react';
 import {Composition} from 'remotion';
 import {videos} from './generated/data';
+import {cues} from './intro/anim';
+import {INTRO_FRAMES, LogoIntro} from './intro/LogoIntro';
 import {FPS, H, W} from './theme';
 import {computeTiming} from './timing';
 import {Video, type VideoProps} from './Video';
 
-// One composition per folder in social/videos, id "v<folder>".
+// One composition per folder in social/videos, id "v<folder>",
+// plus the logo intro in both shapes.
 export const RemotionRoot: React.FC = () => (
   <>
     {videos.map((spec) => (
@@ -24,5 +27,7 @@ export const RemotionRoot: React.FC = () => (
         }}
       />
     ))}
+    <Composition id="intro-landscape" component={LogoIntro} width={1920} height={1080} fps={cues.fps} durationInFrames={INTRO_FRAMES} />
+    <Composition id="intro-portrait" component={LogoIntro} width={1080} height={1920} fps={cues.fps} durationInFrames={INTRO_FRAMES} />
   </>
 );
