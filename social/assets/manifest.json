@@ -69,10 +69,10 @@
     }
   },
   "music": {
-    "intro_logo_book": {
-      "file": "music/intro_logo_book.wav",
-      "desc": "Grandpa's Pop-up Book intro score (25 s, 120 BPM, D hijaz): clock, lamp, qanun motif, creaking cover, paper pops, Nile water, desert wind, pigeons, page turns, rising alphabet, final drop. Synced to remotion/src/intro/cues.json.",
-      "duration": 25,
+    "intro_logo_blocks": {
+      "file": "music/intro_logo_blocks.wav",
+      "desc": "Logo intro score (25.5 s, 120 BPM, D hijaz): darbuka, qanun, marimba block landings, risers and the final sting. Synced to remotion/src/intro/cues.json.",
+      "duration": 25.5,
       "source": "social/tools/synth_intro.py"
     }
   }

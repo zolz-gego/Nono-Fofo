@@ -1,50 +1,40 @@
 {
-  "_": "Grandpa's Pop-up Book intro timeline in seconds (120 BPM, a bar = 2 s). Read by intro/*.tsx and social/tools/synth_intro.py so picture and sound share one clock. Pop-up piece times live with each piece here so the score can give every fold its paper sound.",
+  "_": "Logo intro timeline in seconds (120 BPM, a bar = 2 s). Read by intro/*.tsx and social/tools/synth_intro.py so picture and sound share one clock.",
   "fps": 60,
-  "duration": 25,
+  "duration": 25.5,
   "bpm": 120,
-  "lampOn": 0.6,
-  "cover": [2.5, 3.5],
-  "turns": [[7.0, 7.75], [11.25, 12.0], [15.5, 16.25]],
-  "spreads": [
-    {
-      "id": "nile",
-      "pieces": [
-        {"kind": "palm", "x": -72, "y": -42, "h": 52, "at": 3.75},
-        {"kind": "palm", "x": 74, "y": -46, "h": 46, "at": 3.875},
-        {"kind": "papyrus", "x": -60, "y": 38, "h": 30, "at": 4.0},
-        {"kind": "papyrus", "x": 62, "y": 42, "h": 27, "at": 4.125},
-        {"kind": "felucca", "x": -58, "y": 2, "h": 58, "at": 4.5, "sail": [4.5, 6.8, 52]}
-      ]
-    },
-    {
-      "id": "pyramids",
-      "pieces": [
-        {"kind": "sun", "x": 46, "y": -58, "h": 30, "at": 9.5},
-        {"kind": "pyramid", "x": 2, "y": -34, "h": 64, "at": 8.0},
-        {"kind": "pyramid", "x": -60, "y": -22, "h": 44, "at": 8.25},
-        {"kind": "pyramid", "x": 62, "y": -12, "h": 36, "at": 8.5},
-        {"kind": "palm", "x": -34, "y": 38, "h": 40, "at": 8.75},
-        {"kind": "palm", "x": 44, "y": 44, "h": 34, "at": 8.875}
-      ]
-    },
-    {
-      "id": "village",
-      "pieces": [
-        {"kind": "palm", "x": -14, "y": -48, "h": 52, "at": 12.25},
-        {"kind": "tower", "x": 66, "y": -42, "h": 56, "at": 12.375},
-        {"kind": "house", "x": -62, "y": -34, "h": 38, "at": 12.5},
-        {"kind": "house", "x": 36, "y": -18, "h": 32, "at": 12.625},
-        {"kind": "nono", "x": -24, "y": 34, "h": 64, "at": 13.0},
-        {"kind": "fofo", "x": 24, "y": 38, "h": 52, "at": 13.25}
-      ]
-    },
-    {"id": "letters", "pieces": []}
+  "grid": 8,
+  "macros": [
+    {"id": "letter", "start": 0.0, "end": 1.5},
+    {"id": "pyramid", "start": 1.5, "end": 2.5},
+    {"id": "palm", "start": 2.5, "end": 3.5},
+    {"id": "river", "start": 3.5, "end": 4.5},
+    {"id": "book", "start": 4.5, "end": 5.0}
   ],
-  "lettersLift": [17.5, 19.25],
-  "card": [19.25, 20.0],
-  "eyeLevel": [19.25, 20.5],
-  "drop": 20.5,
-  "shine": [21.0, 21.7],
-  "fadeOut": [24.0, 25.0]
+  "pullback": [5.0, 5.6],
+  "scatter": [5.6, 6.0],
+  "impact": 6.0,
+  "board": [6.0, 6.5],
+  "dropStart": 6.5,
+  "rowStep": 0.5,
+  "tileStep": 0.0625,
+  "fall": 0.4,
+  "swing": [10.75, 12.0],
+  "flip": [12.0, 13.25],
+  "flipDur": 0.35,
+  "flatten": [13.25, 13.75],
+  "nonoPop": 14.0,
+  "fofoPop": 14.5,
+  "roll": [15.0, 16.0],
+  "drop": 16.0,
+  "zoomBook": [16.5, 17.0],
+  "letters": [17.0, 17.125, 17.25, 17.375, 17.75, 17.875, 18.0, 18.125],
+  "whip": [18.5, 18.75],
+  "popups": [18.75, 19.0, 19.125, 19.25],
+  "sunrise": 19.5,
+  "river": [20.0, 21.0],
+  "ring": [21.0, 21.6],
+  "shine": [21.5, 22.0],
+  "final": 22.0,
+  "fadeOut": [24.6, 25.5]
 }
