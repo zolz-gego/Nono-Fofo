@@ -791,16 +791,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get adventureLetters => 'الحروف';
 
   @override
-  String get adventurePaused => 'وقفة';
-
-  @override
-  String get adventureResume => 'كمّل';
-
-  @override
   String get adventureRestart => 'ابدأ المرحلة من الأول';
-
-  @override
-  String get adventurePause => 'وقفة';
 
   @override
   String get adventureBonus => 'حرف بونص! نجمتين زيادة في الآخر';
@@ -823,4 +814,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String adventureShareText(String name, String place, int stars) {
     return '$name خلّص $place في مغامرة نونو وفوفو وجاب $stars نجوم!';
   }
+
+  @override
+  String get gameSettings => 'الإعدادات';
+
+  @override
+  String get gamePaused => 'وقفة';
+
+  @override
+  String get gameResume => 'كمّل';
+
+  @override
+  String get gameHome => 'الرئيسية';
 }

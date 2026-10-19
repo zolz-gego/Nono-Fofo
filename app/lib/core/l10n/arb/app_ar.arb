@@ -611,10 +611,7 @@
   "adventureCoins": "العملات",
   "adventureTime": "الوقت",
   "adventureLetters": "الحروف",
-  "adventurePaused": "وقفة",
-  "adventureResume": "كمّل",
   "adventureRestart": "ابدأ المرحلة من الأول",
-  "adventurePause": "وقفة",
   "adventureBonus": "حرف بونص! نجمتين زيادة في الآخر",
   "adventureCoinShower": "عملات مستخبية!",
   "adventureBonusStars": "نجوم البونص",
@@ -643,5 +640,9 @@
         "type": "int"
       }
     }
-  }
+  },
+  "gameSettings": "الإعدادات",
+  "gamePaused": "وقفة",
+  "gameResume": "كمّل",
+  "gameHome": "الرئيسية"
 }

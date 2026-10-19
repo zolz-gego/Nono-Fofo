@@ -119,6 +119,20 @@ class MonasteryCubit extends Cubit<MonasteryState> {
   /// Time on the clock now.
   Duration get elapsed => state.solvedIn ?? _clock.elapsed;
 
+  bool _clockWasRunning = false;
+
+  /// Stops the clock while the game is paused.
+  void pauseClock() {
+    _clockWasRunning = _clock.isRunning;
+    _clock.stop();
+  }
+
+  /// Starts the clock again after a pause, if it was running.
+  void resumeClock() {
+    if (_clockWasRunning) _clock.start();
+    _clockWasRunning = false;
+  }
+
   void start() {
     if (!state.solved) _clock.start();
   }

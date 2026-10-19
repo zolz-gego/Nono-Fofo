@@ -18,10 +18,9 @@ import 'adventure_cubit.dart';
 
 /// A cream card in the middle of a dimmed level.
 class _Card extends StatelessWidget {
-  const _Card({required this.child, this.maxWidth = 520, this.border});
+  const _Card({required this.child, this.border});
 
   final Widget child;
-  final double maxWidth;
   final Color? border;
 
   @override
@@ -33,7 +32,7 @@ class _Card extends StatelessWidget {
           padding: const EdgeInsets.all(AppDimens.spaceMd),
           child:
               Container(
-                    constraints: BoxConstraints(maxWidth: maxWidth),
+                    constraints: const BoxConstraints(maxWidth: 520),
                     padding: const EdgeInsets.all(AppDimens.spaceLg),
                     decoration: BoxDecoration(
                       color: AppColors.surface,
@@ -114,53 +113,6 @@ class AdventureLetterShow extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-/// The game is paused: resume, restart the level, or pick another level.
-class AdventurePauseCard extends StatelessWidget {
-  const AdventurePauseCard({
-    super.key,
-    required this.onResume,
-    required this.onRestart,
-    required this.onLevels,
-  });
-
-  final VoidCallback onResume;
-  final VoidCallback onRestart;
-  final VoidCallback onLevels;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return _Card(
-      maxWidth: 380,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          AppText.h1(l10n.adventurePaused, textAlign: TextAlign.center),
-          const SizedBox(height: AppDimens.spaceLg),
-          FilledButton.icon(
-            onPressed: onResume,
-            icon: const FaIcon(AppIcons.play),
-            label: Text(l10n.adventureResume),
-          ),
-          const SizedBox(height: AppDimens.spaceSm),
-          OutlinedButton.icon(
-            onPressed: onRestart,
-            icon: const FaIcon(AppIcons.replay),
-            label: Text(l10n.adventureRestart),
-          ),
-          const SizedBox(height: AppDimens.spaceSm),
-          OutlinedButton.icon(
-            onPressed: onLevels,
-            icon: const FaIcon(AppIcons.levels),
-            label: Text(l10n.adventureLevels),
-          ),
-        ],
-      ),
     );
   }
 }
