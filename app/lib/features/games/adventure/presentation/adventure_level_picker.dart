@@ -153,7 +153,10 @@ class _LevelCardState extends State<_LevelCard> {
         mainAxisSize: MainAxisSize.min,
         children: [
           AspectRatio(
-            aspectRatio: 16 / 10,
+            // Wider (shorter) pictures on short screens, so all fits.
+            aspectRatio: MediaQuery.sizeOf(context).shortestSide < 500
+                ? 2.2
+                : 16 / 10,
             child: Stack(
               fit: StackFit.expand,
               children: [

@@ -4,7 +4,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show SystemChrome, SystemUiMode;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
@@ -19,7 +18,6 @@ import '../../../../core/share/web_files.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_icons.dart';
-import '../../../../core/widgets/app_top_bar.dart';
 import '../../../../engines/characters/domain/character_action.dart';
 import '../../../../engines/characters/domain/character_pose.dart';
 import '../../../../engines/characters/domain/character_reaction.dart';
@@ -28,10 +26,10 @@ import '../../../../engines/characters/presentation/character_controller.dart';
 import '../../../../engines/sound/application/sound_service.dart';
 import '../../../../engines/sound/domain/sound_event.dart';
 import '../../../letters/domain/coptic_letter.dart';
-import '../../../settings/presentation/language_button.dart';
-import '../../../settings/presentation/mute_button.dart';
 import '../../letter_hunt/presentation/letter_pick_page.dart';
 import '../../progress/domain/game_progress_repository.dart';
+import '../../shell/domain/game_timers.dart';
+import '../../shell/presentation/game_scaffold.dart';
 import '../data/letter_mask_builder.dart';
 import '../data/writing_config_repository.dart';
 import '../domain/letter_mask.dart';
@@ -112,7 +110,7 @@ class _WritingPageState extends State<WritingPage> {
 
   /// The picture to share after a pass (drawings, names, the hero).
   Future<Uint8List>? _card;
-  final List<Timer> _timers = [];
+  final GameTimers _timers = GameTimers();
   final Random _random = Random();
 
   CopticLetter get _letter => widget.args.target;
@@ -140,10 +138,7 @@ class _WritingPageState extends State<WritingPage> {
   }
 
   void _start() {
-    for (final t in _timers) {
-      t.cancel();
-    }
-    _timers.clear();
+    _timers.cancelAll();
     _cubit?.close();
     _board.clear();
     _shots.clear();
@@ -214,23 +209,18 @@ class _WritingPageState extends State<WritingPage> {
 
   @override
   void dispose() {
-    for (final t in _timers) {
-      t.cancel();
-    }
+    _timers.cancelAll();
     _hero.dispose();
     _other.dispose();
     _board.dispose();
     _cubit?.close();
-    if (_fullScreen) _setSystemBars(visible: true);
     _sound.playMusic(MusicTrack.map);
     super.dispose();
   }
 
-  void _later(Duration d, VoidCallback f) => _timers.add(
-    Timer(d, () {
-      if (mounted) f();
-    }),
-  );
+  void _later(Duration d, VoidCallback f) => _timers.later(d, () {
+    if (mounted) f();
+  });
 
   // ---------------------------------------------------------------------------
   // Events
@@ -358,15 +348,6 @@ class _WritingPageState extends State<WritingPage> {
   void _toggleFullScreen() {
     _sound.play(SoundEvent.tap);
     setState(() => _fullScreen = !_fullScreen);
-    _setSystemBars(visible: !_fullScreen);
-  }
-
-  /// Hides the phone's status and navigation bars too (no effect on the
-  /// web).
-  void _setSystemBars({required bool visible}) {
-    SystemChrome.setEnabledSystemUIMode(
-      visible ? SystemUiMode.edgeToEdge : SystemUiMode.immersiveSticky,
-    );
   }
 
   // ---------------------------------------------------------------------------
@@ -463,28 +444,24 @@ class _WritingPageState extends State<WritingPage> {
     final l10n = context.l10n;
     final cubit = _cubit;
     final config = _config;
-    return Scaffold(
-      appBar: _fullScreen
-          ? null
-          : AppTopBar(
-              title: l10n.gameWriteLetter,
-              onLogoTap: () => context.go(AppRoutes.home),
-              actions: [
-                IconButton(
-                  tooltip: l10n.writingFullScreen,
-                  onPressed: cubit == null ? null : _toggleFullScreen,
-                  icon: const FaIcon(AppIcons.fullScreen),
-                ),
-                IconButton(
-                  tooltip: l10n.otherLetter,
-                  onPressed: _otherLetter,
-                  icon: const FaIcon(AppIcons.letters),
-                ),
-                const LanguageButton(),
-                const MuteButton(),
-                const SizedBox(width: AppDimens.spaceSm),
-              ],
-            ),
+    return GameScaffold(
+      title: l10n.gameWriteLetter,
+      onPause: _timers.pause,
+      onResume: _timers.resume,
+      actions: [
+        if (cubit != null)
+          GameAction(
+            icon: _fullScreen ? AppIcons.exitFullScreen : AppIcons.fullScreen,
+            label: (l) =>
+                _fullScreen ? l.writingExitFullScreen : l.writingFullScreen,
+            onPressed: _toggleFullScreen,
+          ),
+        GameAction(
+          icon: AppIcons.letters,
+          label: (l) => l.otherLetter,
+          onPressed: _otherLetter,
+        ),
+      ],
       body: cubit == null || config == null
           ? const Center(child: CircularProgressIndicator())
           : BlocConsumer<WritingCubit, WritingState>(
@@ -713,9 +690,10 @@ class _WritingPageState extends State<WritingPage> {
           ),
         Positioned(
           top: AppDimens.spaceSm,
-          // Room for the exit button in full screen.
-          left: full ? exitW : 0,
-          right: full ? exitW : 0,
+          // Room for the settings button at the end and, in full screen,
+          // the exit button at the start.
+          left: exitW,
+          right: exitW,
           height: hudH - AppDimens.spaceSm,
           child: Center(
             child: FittedBox(
@@ -768,7 +746,7 @@ class _WritingPageState extends State<WritingPage> {
         if (full)
           Positioned(
             top: AppDimens.spaceSm,
-            left: fromStart(size.width - exitW, exitW - gap),
+            left: fromStart(gap, exitW - gap),
             width: exitW - gap,
             height: hudH - AppDimens.spaceSm,
             child: Center(

@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -17,7 +16,6 @@ import '../../../../core/share/web_files.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_icons.dart';
 import '../../../../core/typography/app_text_styles.dart';
-import '../../../../core/widgets/app_top_bar.dart';
 import '../../../../engines/characters/domain/character_action.dart';
 import '../../../../engines/characters/domain/character_pose.dart';
 import '../../../../engines/characters/domain/character_reaction.dart';
@@ -28,10 +26,10 @@ import '../../../../engines/sound/domain/sound_event.dart';
 import '../../../letters/domain/coptic_letter.dart';
 import '../../../letters/domain/letter_repository.dart';
 import '../../../levels/domain/game_level.dart';
-import '../../../settings/presentation/language_button.dart';
-import '../../../settings/presentation/mute_button.dart';
 import '../../progress/domain/game_progress_repository.dart';
 import '../../progress/domain/timed_record.dart';
+import '../../shell/domain/game_timers.dart';
+import '../../shell/presentation/game_scaffold.dart';
 import '../data/monastery_config_repository.dart';
 import '../domain/hidden_letter.dart';
 import '../domain/monastery_config.dart';
@@ -118,7 +116,7 @@ class _MonasteryPageState extends State<MonasteryPage> {
 
   /// The picture to share, drawn as soon as every letter is found.
   Future<Uint8List>? _card;
-  final List<Timer> _timers = [];
+  final GameTimers _timers = GameTimers();
   final Random _random = Random();
 
   int get _count => widget.args.count;
@@ -164,10 +162,7 @@ class _MonasteryPageState extends State<MonasteryPage> {
   }
 
   void _start() {
-    for (final t in _timers) {
-      t.cancel();
-    }
-    _timers.clear();
+    _timers.cancelAll();
     _bubbleTimer?.cancel();
     _cubit?.close();
     final config = _config!;
@@ -210,9 +205,7 @@ class _MonasteryPageState extends State<MonasteryPage> {
 
   @override
   void dispose() {
-    for (final t in _timers) {
-      t.cancel();
-    }
+    _timers.cancelAll();
     _bubbleTimer?.cancel();
     _hero.dispose();
     _other.dispose();
@@ -221,11 +214,9 @@ class _MonasteryPageState extends State<MonasteryPage> {
     super.dispose();
   }
 
-  void _later(Duration d, VoidCallback f) => _timers.add(
-    Timer(d, () {
-      if (mounted) f();
-    }),
-  );
+  void _later(Duration d, VoidCallback f) => _timers.later(d, () {
+    if (mounted) f();
+  });
 
   bool get _small =>
       _config?.isSmallScreen(MediaQuery.sizeOf(context).shortestSide) ?? false;
@@ -501,21 +492,23 @@ class _MonasteryPageState extends State<MonasteryPage> {
     final l10n = context.l10n;
     final cubit = _cubit;
     final config = _config;
-    return Scaffold(
-      appBar: AppTopBar(
-        title: l10n.gameMonastery,
-        onLogoTap: () => context.go(AppRoutes.home),
-        actions: [
-          IconButton(
-            tooltip: l10n.monasteryOtherLevel,
-            onPressed: _otherLevel,
-            icon: const FaIcon(AppIcons.found),
-          ),
-          const LanguageButton(),
-          const MuteButton(),
-          const SizedBox(width: AppDimens.spaceSm),
-        ],
-      ),
+    return GameScaffold(
+      title: l10n.gameMonastery,
+      onPause: () {
+        _timers.pause();
+        cubit?.pauseClock();
+      },
+      onResume: () {
+        _timers.resume();
+        cubit?.resumeClock();
+      },
+      actions: [
+        GameAction(
+          icon: AppIcons.found,
+          label: (l) => l.monasteryOtherLevel,
+          onPressed: _otherLevel,
+        ),
+      ],
       body: config == null
           ? const Center(child: CircularProgressIndicator())
           : LayoutBuilder(

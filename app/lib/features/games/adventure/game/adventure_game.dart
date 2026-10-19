@@ -91,9 +91,6 @@ class AdventureGame extends FlameGame {
   /// Shells dropped by flying seagulls.
   final List<_Shell> _shells = [];
 
-  /// Set by the page while the device is upright (the game waits).
-  bool blocked = false;
-
   // Camera, in tiles.
   double _camX = 0, _camY = 0;
   double _viewW = 24, _viewH = 14;
@@ -324,7 +321,7 @@ class AdventureGame extends FlameGame {
       _updateCamera(step);
       return;
     }
-    if (!cubit.state.running || _frozen || blocked) return;
+    if (!cubit.state.running || _frozen) return;
 
     _time += step;
     if (_big != _wasBig) {

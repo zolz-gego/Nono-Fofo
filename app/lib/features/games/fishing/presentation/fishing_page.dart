@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/di/injection.dart';
@@ -13,7 +12,6 @@ import '../../../../core/domain/character_id.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_icons.dart';
-import '../../../../core/widgets/app_top_bar.dart';
 import '../../../../engines/characters/domain/character_action.dart';
 import '../../../../engines/characters/domain/character_pose.dart';
 import '../../../../engines/characters/domain/character_reaction.dart';
@@ -22,9 +20,8 @@ import '../../../../engines/characters/presentation/character_controller.dart';
 import '../../../../engines/characters/presentation/speech_bubble.dart';
 import '../../../../engines/sound/application/sound_service.dart';
 import '../../../../engines/sound/domain/sound_event.dart';
-import '../../../settings/presentation/language_button.dart';
-import '../../../settings/presentation/mute_button.dart';
 import '../../progress/domain/game_progress_repository.dart';
+import '../../shell/presentation/game_scaffold.dart';
 import '../data/fishing_config_repository.dart';
 import '../domain/fishing_config.dart';
 import '../domain/fishing_round.dart';
@@ -224,21 +221,17 @@ class _FishingPageState extends State<FishingPage> {
     final l10n = context.l10n;
     final cubit = _cubit;
     final game = _game;
-    return Scaffold(
-      appBar: AppTopBar(
-        title: l10n.gameFishing,
-        onLogoTap: () => context.go(AppRoutes.home),
-        actions: [
-          IconButton(
-            tooltip: l10n.otherLetter,
-            onPressed: _otherLetter,
-            icon: const FaIcon(AppIcons.letters),
-          ),
-          const LanguageButton(),
-          const MuteButton(),
-          const SizedBox(width: AppDimens.spaceSm),
-        ],
-      ),
+    return GameScaffold(
+      title: l10n.gameFishing,
+      onPause: () => game?.pauseEngine(),
+      onResume: () => game?.resumeEngine(),
+      actions: [
+        GameAction(
+          icon: AppIcons.letters,
+          label: (l) => l.otherLetter,
+          onPressed: _otherLetter,
+        ),
+      ],
       body: cubit == null || game == null
           ? const Center(child: CircularProgressIndicator())
           : BlocProvider.value(

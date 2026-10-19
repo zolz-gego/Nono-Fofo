@@ -6,7 +6,6 @@ import 'package:flutter/gestures.dart' show PointerDeviceKind;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -20,7 +19,6 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_icons.dart';
 import '../../../../core/typography/app_text_styles.dart';
-import '../../../../core/widgets/app_top_bar.dart';
 import '../../../../engines/characters/domain/character_action.dart';
 import '../../../../engines/characters/domain/character_pose.dart';
 import '../../../../engines/sound/application/sound_service.dart';
@@ -30,9 +28,8 @@ import '../../../letters/domain/letter_repository.dart';
 import '../../../levels/domain/game_level.dart';
 import '../../../questions/domain/letter_question.dart';
 import '../../../questions/domain/load_questions.dart';
-import '../../../settings/presentation/language_button.dart';
-import '../../../settings/presentation/mute_button.dart';
 import '../../progress/domain/game_progress_repository.dart';
+import '../../shell/presentation/game_scaffold.dart';
 import '../../snakes_ladders/presentation/question_card.dart';
 import '../data/adventure_config_repository.dart';
 import '../domain/adventure_config.dart';
@@ -99,6 +96,7 @@ class _AdventurePageState extends State<AdventurePage> {
   bool _messageBack = false;
   Timer? _messageTimer;
   final FocusNode _focus = FocusNode(debugLabel: 'adventure');
+  final GlobalKey<GameScaffoldState> _shell = GlobalKey();
 
   @override
   void initState() {
@@ -192,7 +190,6 @@ class _AdventurePageState extends State<AdventurePage> {
     final cubit = _cubit;
     if (cubit == null || _game == null) return;
     if (paused && !cubit.state.running) return;
-    _sound.play(paused ? SoundEvent.popupOpen : SoundEvent.popupClose);
     _game!.input.clear();
     cubit.setPaused(paused);
     if (!paused) _focus.requestFocus();
@@ -225,7 +222,7 @@ class _AdventurePageState extends State<AdventurePage> {
     } else if (down &&
         !repeat &&
         (key == LogicalKeyboardKey.escape || key == LogicalKeyboardKey.keyP)) {
-      _pause(!(_cubit?.state.paused ?? false));
+      _shell.currentState?.openSettings();
     } else {
       return KeyEventResult.ignored;
     }
@@ -395,24 +392,53 @@ class _AdventurePageState extends State<AdventurePage> {
 
   @override
   Widget build(BuildContext context) {
+    // The game is landscape only. Apps lock the screen sideways; where that
+    // can't happen (a phone browser held upright) the whole game is drawn
+    // turned a quarter, so it plays sideways until the phone is turned.
+    final media = MediaQuery.of(context);
+    if (_touch && media.size.width < media.size.height) {
+      EdgeInsets turn(EdgeInsets p) =>
+          EdgeInsets.fromLTRB(p.top, p.right, p.bottom, p.left);
+      return RotatedBox(
+        quarterTurns: 1,
+        child: MediaQuery(
+          data: media.copyWith(
+            size: media.size.flipped,
+            padding: turn(media.padding),
+            viewPadding: turn(media.viewPadding),
+            viewInsets: turn(media.viewInsets),
+          ),
+          child: _page(context),
+        ),
+      );
+    }
+    return _page(context);
+  }
+
+  Widget _page(BuildContext context) {
     final l10n = context.l10n;
     final cubit = _cubit;
-    return Scaffold(
-      appBar: AppTopBar(
-        title: l10n.gameAdventure,
-        onLogoTap: () => context.go(AppRoutes.home),
-        actions: [
-          if (_level != null)
-            IconButton(
-              tooltip: l10n.adventureLevels,
-              onPressed: _toLevels,
-              icon: const FaIcon(AppIcons.levels),
-            ),
-          const LanguageButton(),
-          const MuteButton(),
-          const SizedBox(width: AppDimens.spaceSm),
+    final playing = _level != null;
+    return GameScaffold(
+      key: _shell,
+      title: l10n.gameAdventure,
+      playing: playing,
+      onPause: () => _pause(true),
+      onResume: () => _pause(false),
+      actions: [
+        if (playing && cubit != null) ...[
+          GameAction(
+            icon: AppIcons.replay,
+            label: (l) => l.adventureRestart,
+            onPressed: () => _startLevel(cubit.state.level),
+          ),
+          GameAction(
+            icon: AppIcons.levels,
+            label: (l) => l.adventureLevels,
+            onPressed: _toLevels,
+          ),
         ],
-      ),
+      ],
       body: Listener(
         onPointerDown: (e) {
           if (_level != null) _focus.requestFocus();
@@ -426,12 +452,9 @@ class _AdventurePageState extends State<AdventurePage> {
           onKeyEvent: _onKey,
           child: LayoutBuilder(
             builder: (context, c) {
-              final portrait = c.maxWidth < c.maxHeight;
-              _game?.blocked = portrait;
               if (cubit == null) {
                 return const Center(child: CircularProgressIndicator());
               }
-              if (portrait && _touch) return const AdventureRotateHint();
               return BlocConsumer<AdventureCubit, AdventureState>(
                 bloc: cubit,
                 listenWhen: (a, b) =>
@@ -485,18 +508,18 @@ class _AdventurePageState extends State<AdventurePage> {
         (state.phase == AdventurePhase.question ||
             state.phase == AdventurePhase.answered) &&
         state.question != null;
+    // Smaller arrows, closer to the edges, on short (phone) screens.
+    final short = c.maxHeight < 450;
+    final buttonSize = short ? 64.0 : 84.0;
+    final buttonGap = short ? AppDimens.spaceSm : AppDimens.spaceLg;
     final hero = _hero(state);
     final heroName = hero.name;
     return Stack(
       children: [
         Positioned.fill(child: _gameView!),
-        // Tap the right half to jump (touch screens).
+        // Touch screens: tap anywhere (but the arrows) to jump.
         if (_touch && state.running)
-          Positioned(
-            top: 0,
-            bottom: 0,
-            right: 0,
-            width: c.maxWidth / 2,
+          Positioned.fill(
             child: Listener(
               behavior: HitTestBehavior.opaque,
               onPointerDown: (_) => game.input.pressJump(),
@@ -504,15 +527,27 @@ class _AdventurePageState extends State<AdventurePage> {
               onPointerCancel: (_) => game.input.releaseJump(),
             ),
           ),
-        if (_touch && state.running)
+        // ◀ at the left edge, ▶ at the right edge (also in Arabic).
+        if (_touch && state.running) ...[
           Positioned(
-            left: AppDimens.spaceLg,
-            bottom: AppDimens.spaceLg,
-            child: AdventureWalkButtons(
-              onLeft: (down) => game.input.left = down,
-              onRight: (down) => game.input.right = down,
+            left: buttonGap,
+            bottom: buttonGap,
+            child: AdventureHoldButton(
+              size: buttonSize,
+              icon: AppIcons.walkLeft,
+              onHold: (down) => game.input.left = down,
             ),
           ),
+          Positioned(
+            right: buttonGap,
+            bottom: buttonGap,
+            child: AdventureHoldButton(
+              size: buttonSize,
+              icon: AppIcons.walkRight,
+              onHold: (down) => game.input.right = down,
+            ),
+          ),
+        ],
         Positioned(
           top: 0,
           left: 0,
@@ -521,7 +556,6 @@ class _AdventurePageState extends State<AdventurePage> {
             state: state,
             coinsPerLife: config.coinsPerLife,
             maxLives: config.maxLives,
-            onPause: () => _pause(true),
           ),
         ),
         if (_message != null)
@@ -569,14 +603,6 @@ class _AdventurePageState extends State<AdventurePage> {
             child: AdventureLetterShow(
               letter: state.shownLetter!,
               hero: heroName,
-            ),
-          ),
-        if (state.paused)
-          Positioned.fill(
-            child: AdventurePauseCard(
-              onResume: () => _pause(false),
-              onRestart: () => _startLevel(state.level),
-              onLevels: _toLevels,
             ),
           ),
         if (state.phase == AdventurePhase.gameOver)

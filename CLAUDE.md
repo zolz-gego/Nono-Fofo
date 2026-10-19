@@ -18,6 +18,7 @@
 ## UI conventions
 
 - Every screen's `Scaffold` uses `AppTopBar` (`app/lib/core/widgets/app_top_bar.dart`) as its `appBar`, so the logo shows on every screen. Inner pages pass `onLogoTap` to go home.
+- **Games are the exception:** a game page uses `GameScaffold` (`app/lib/features/games/shell/presentation/game_scaffold.dart`) instead. While playing it is full screen with no top bar, and a see-through settings button (top left in Arabic, top right in English) pauses the game and opens a pop-up with resume, the game's own `GameAction`s, home, language and sound. Pass `onPause`/`onResume` to stop the game's engine, clock and `GameTimers`; set `playing: false` for a picker inside the page (it gets the normal top bar). Game HUDs leave `GameScaffold.cornerSize` free at the top end.
 - Small icons (buttons, labels, list items) use Font Awesome through `font_awesome_flutter`: add the icon to `AppIcons` (`app/lib/core/theme/app_icons.dart`) and show it with `FaIcon(AppIcons.xxx)`. Don't add image files for small icons. Image assets are only for the logo, characters, and illustrations.
 
 ## Screenshots

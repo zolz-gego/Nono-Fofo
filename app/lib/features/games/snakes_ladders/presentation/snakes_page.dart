@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -18,7 +17,6 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_icons.dart';
 import '../../../../core/typography/app_text_styles.dart';
-import '../../../../core/widgets/app_top_bar.dart';
 import '../../../../core/widgets/text/app_texts.dart';
 import '../../../../engines/characters/domain/character_action.dart';
 import '../../../../engines/characters/domain/character_pose.dart';
@@ -32,9 +30,9 @@ import '../../../letters/domain/letter_repository.dart';
 import '../../../levels/domain/game_level.dart';
 import '../../../questions/domain/letter_question.dart';
 import '../../../questions/domain/load_questions.dart';
-import '../../../settings/presentation/language_button.dart';
-import '../../../settings/presentation/mute_button.dart';
 import '../../progress/domain/game_progress_repository.dart';
+import '../../shell/domain/game_timers.dart';
+import '../../shell/presentation/game_scaffold.dart';
 import '../data/snakes_config_repository.dart';
 import '../domain/snakes_config.dart';
 import 'pyramids_background.dart';
@@ -103,7 +101,7 @@ class _SnakesPageState extends State<SnakesPage> {
 
   /// The picture to share, drawn as soon as someone wins.
   Future<Uint8List>? _card;
-  final List<Timer> _timers = [];
+  final GameTimers _timers = GameTimers();
 
   List<Color> get _colors => [_accent(_buddy), _accent(_buddy.other)];
 
@@ -140,17 +138,12 @@ class _SnakesPageState extends State<SnakesPage> {
   }
 
   void _cancelTimers() {
-    for (final t in _timers) {
-      t.cancel();
-    }
-    _timers.clear();
+    _timers.cancelAll();
   }
 
-  void _later(Duration d, VoidCallback f) => _timers.add(
-    Timer(d, () {
-      if (mounted) f();
-    }),
-  );
+  void _later(Duration d, VoidCallback f) => _timers.later(d, () {
+    if (mounted) f();
+  });
 
   // ---------------------------------------------------------------------------
   // Starting
@@ -387,22 +380,20 @@ class _SnakesPageState extends State<SnakesPage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final cubit = _cubit;
-    return Scaffold(
-      appBar: AppTopBar(
-        title: l10n.gameSnakes,
-        onLogoTap: () => context.go(AppRoutes.home),
-        actions: [
-          if (cubit != null)
-            IconButton(
-              tooltip: l10n.snakesChangePlayers,
-              onPressed: _changePlayers,
-              icon: const FaIcon(AppIcons.changePlayers),
-            ),
-          const LanguageButton(),
-          const MuteButton(),
-          const SizedBox(width: AppDimens.spaceSm),
-        ],
-      ),
+    final playing = cubit != null && _mode != null;
+    return GameScaffold(
+      title: l10n.gameSnakes,
+      playing: playing,
+      onPause: _timers.pause,
+      onResume: _timers.resume,
+      actions: [
+        if (playing)
+          GameAction(
+            icon: AppIcons.changePlayers,
+            label: (l) => l.snakesChangePlayers,
+            onPressed: _changePlayers,
+          ),
+      ],
       body: Stack(
         children: [
           const Positioned.fill(child: PyramidsBackground()),
