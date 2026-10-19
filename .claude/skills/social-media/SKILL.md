@@ -31,6 +31,16 @@ ElevenLabs from the script Claude writes.
 - **Story world:** stay in character (see the app's story: Nono 9, always
   running, "يلا بينا!"; Fofo 6, curious, "استنى نفكر شوية"; Grandpa's Coptic book,
   letters scattered across Egypt). Say "Coptic", never "Bohairic".
+- **The brothers' dynamic (use it in every script with both of them):** Nono is
+  impulsive (مندفع): he jumps in first, answers too fast and often gets it
+  wrong (wrong letter, wrong word, silly guess). Fofo catches the mistake and
+  gives him the right answer in a funny, loving way: a cheeky "لأ يا نونو!",
+  a silly comparison, a giggle, a playful tease, then the correct answer said
+  clearly so kids learn it. Nono laughs at himself, repeats it right and cheers
+  ("يلا بينا!"). Never mean, never makes Nono look stupid. Mistakes are fun
+  and fixed. Typical beat: Nono's wrong answer (`wrong` / `surprised` pose,
+  gentle `wrong_1` or `mg_slide_down`) → Fofo corrects (`hint` pose, keyword
+  pop with the right answer) → Nono gets it (`cheer`, `correct_1`).
 - **Safe areas:** keep text inside x 70–930 and y 150–1560 (TikTok/Reels UI).
 
 ## Workflow for a new video
