@@ -19,6 +19,10 @@ abstract final class AppIcons {
   static const FaIconData road = FontAwesomeIcons.route;
   static const FaIconData starEmpty = FontAwesomeIcons.star;
 
+  // Every game: the settings button and its pop-up.
+  static const FaIconData settings = FontAwesomeIcons.gear;
+  static const FaIconData home = FontAwesomeIcons.house;
+
   // Writing game.
   static const FaIconData chalkFilled = FontAwesomeIcons.paintbrush;
   static const FaIconData sponge = FontAwesomeIcons.soap;

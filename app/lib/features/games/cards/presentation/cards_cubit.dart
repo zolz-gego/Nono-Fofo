@@ -124,6 +124,20 @@ class CardsCubit extends Cubit<CardsState> {
   /// Time on the clock now.
   Duration get elapsed => state.solvedIn ?? _clock.elapsed;
 
+  bool _clockWasRunning = false;
+
+  /// Stops the clock while the game is paused.
+  void pauseClock() {
+    _clockWasRunning = _clock.isRunning;
+    _clock.stop();
+  }
+
+  /// Starts the clock again after a pause, if it was running.
+  void resumeClock() {
+    if (_clockWasRunning) _clock.start();
+    _clockWasRunning = false;
+  }
+
   Future<void> flip(int i) async {
     if (!state.canFlip(i)) return;
     if (!state.started) _clock.start();

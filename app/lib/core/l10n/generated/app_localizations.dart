@@ -1340,29 +1340,11 @@ abstract class AppLocalizations {
   /// **'الحروف'**
   String get adventureLetters;
 
-  /// No description provided for @adventurePaused.
-  ///
-  /// In ar, this message translates to:
-  /// **'وقفة'**
-  String get adventurePaused;
-
-  /// No description provided for @adventureResume.
-  ///
-  /// In ar, this message translates to:
-  /// **'كمّل'**
-  String get adventureResume;
-
   /// No description provided for @adventureRestart.
   ///
   /// In ar, this message translates to:
   /// **'ابدأ المرحلة من الأول'**
   String get adventureRestart;
-
-  /// No description provided for @adventurePause.
-  ///
-  /// In ar, this message translates to:
-  /// **'وقفة'**
-  String get adventurePause;
 
   /// No description provided for @adventureBonus.
   ///
@@ -1399,6 +1381,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'{name} خلّص {place} في مغامرة نونو وفوفو وجاب {stars} نجوم!'**
   String adventureShareText(String name, String place, int stars);
+
+  /// No description provided for @gameSettings.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإعدادات'**
+  String get gameSettings;
+
+  /// No description provided for @gamePaused.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقفة'**
+  String get gamePaused;
+
+  /// No description provided for @gameResume.
+  ///
+  /// In ar, this message translates to:
+  /// **'كمّل'**
+  String get gameResume;
+
+  /// No description provided for @gameHome.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرئيسية'**
+  String get gameHome;
 }
 
 class _AppLocalizationsDelegate

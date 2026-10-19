@@ -362,10 +362,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get writingShareSaved => 'Picture saved to your downloads';
 
   @override
-  String get writingFullScreen => 'Full screen';
+  String get writingFullScreen => 'Bigger board';
 
   @override
-  String get writingExitFullScreen => 'Exit full screen';
+  String get writingExitFullScreen => 'Normal board';
 
   @override
   String get gameCards => 'Grandpa\'s Cards';
@@ -743,16 +743,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adventureLetters => 'Letters';
 
   @override
-  String get adventurePaused => 'Paused';
-
-  @override
-  String get adventureResume => 'Resume';
-
-  @override
   String get adventureRestart => 'Restart level';
-
-  @override
-  String get adventurePause => 'Pause';
 
   @override
   String get adventureBonus => 'Bonus letter! +2 stars at the finish';
@@ -775,4 +766,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String adventureShareText(String name, String place, int stars) {
     return '$name finished $place in Nono & Fofo Adventure with $stars stars!';
   }
+
+  @override
+  String get gameSettings => 'Settings';
+
+  @override
+  String get gamePaused => 'Paused';
+
+  @override
+  String get gameResume => 'Resume';
+
+  @override
+  String get gameHome => 'Home';
 }

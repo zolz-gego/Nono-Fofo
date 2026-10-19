@@ -9,23 +9,23 @@ import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_icons.dart';
 import '../../../../core/typography/app_text_styles.dart';
 import '../../../../core/widgets/text/app_texts.dart';
+import '../../shell/presentation/game_scaffold.dart';
 import 'adventure_cubit.dart';
 
 /// The counters over the level: letters found (in their slots), coins
-/// (filling toward an extra life) and lives, plus the pause button.
+/// (filling toward an extra life) and lives, with room for the
+/// settings button at the end.
 class AdventureHud extends StatelessWidget {
   const AdventureHud({
     super.key,
     required this.state,
     required this.coinsPerLife,
     required this.maxLives,
-    required this.onPause,
   });
 
   final AdventureState state;
   final int coinsPerLife;
   final int maxLives;
-  final VoidCallback onPause;
 
   @override
   Widget build(BuildContext context) {
@@ -112,14 +112,8 @@ class AdventureHud extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: AppDimens.spaceSm),
-              _Panel(
-                padding: EdgeInsets.zero,
-                child: IconButton(
-                  tooltip: l10n.adventurePause,
-                  onPressed: onPause,
-                  icon: const FaIcon(AppIcons.pause, size: 18),
-                ),
+              const SizedBox(
+                width: AppDimens.spaceSm + GameScaffold.buttonSize,
               ),
             ],
           ),
@@ -130,21 +124,17 @@ class AdventureHud extends StatelessWidget {
 }
 
 class _Panel extends StatelessWidget {
-  const _Panel({
-    required this.child,
-    this.padding = const EdgeInsets.symmetric(
-      horizontal: AppDimens.spaceSm,
-      vertical: AppDimens.spaceXs,
-    ),
-  });
+  const _Panel({required this.child});
 
   final Widget child;
-  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: padding,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppDimens.spaceSm,
+        vertical: AppDimens.spaceXs,
+      ),
       decoration: BoxDecoration(
         color: AppColors.surface.withValues(alpha: 0.88),
         borderRadius: BorderRadius.circular(AppDimens.radiusLg),
