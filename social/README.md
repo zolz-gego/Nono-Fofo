@@ -15,6 +15,7 @@ from ElevenLabs (Eleven v3). The workflow lives in the `social-media` skill
 | `videos/<NNN-slug>/voice/` | The voice MP3s from ElevenLabs, named after each line id |
 | `voices.md` | Nono's and Fofo's ElevenLabs voice prompts + v3 writing rules |
 | `assets/` | **Social-only** resources (catalogued below and in `assets/manifest.json`) |
+| `tools/split_voice.py` | Splits one ElevenLabs take into the per-line voice files |
 | `tools/synth_social_sfx.py` | Synthesizes the social sound effects into `assets/sfx/` |
 | `remotion/` | The Remotion project (components, timing, render scripts) |
 | `out/` | Rendered MP4s and stills (git-ignored) |

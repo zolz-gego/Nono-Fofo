@@ -51,7 +51,11 @@ ElevenLabs from the script Claude writes.
    warns about missing voices, unknown poses or sfx; fix all but "no voice yet".
 4. **Hand the script over:** point the user to `script.md` and ask them to drop the
    MP3s in `voice/`.
-5. **When voices arrive:** re-render. Timing follows the real audio automatically.
+5. **When voices arrive:** if the user sends one take with all lines, split it:
+   `tools/.venv/bin/python social/tools/split_voice.py <NNN-slug> <take.mp3>`
+   (keeps it as `voice/full_take.mp3`, writes `voice/<line id>.wav`). Then set
+   `words` for long lines and move keyword `at` onto the spoken word using the
+   loudness envelope, and re-render. Timing follows the real audio automatically.
    Listen-check by reading durations from the sync/render output; if a line runs
    over ~4.5 s, split it into two scenes or ask for a faster take. If a caption's
    word highlight drifts, add `words` (start second of each Arabic word).
