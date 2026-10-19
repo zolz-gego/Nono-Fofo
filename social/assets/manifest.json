@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "images": {},
+  "sfx": {
+    "mg_whoosh_in": {
+      "file": "sfx/mg_whoosh_in.wav",
+      "desc": "Character / big element flies in: airy whoosh up",
+      "duration": 1.2
+    },
+    "mg_whoosh_out": {
+      "file": "sfx/mg_whoosh_out.wav",
+      "desc": "Element flies out: whoosh down",
+      "duration": 0.27
+    },
+    "mg_scene_swipe": {
+      "file": "sfx/mg_scene_swipe.wav",
+      "desc": "Scene change wipe: fast swish + soft tick",
+      "duration": 0.23
+    },
+    "mg_keyword_pop": {
+      "file": "sfx/mg_keyword_pop.wav",
+      "desc": "Keyword card pops in: bubbly pop + bright ding",
+      "duration": 1.01
+    },
+    "mg_keyword_pop_2": {
+      "file": "sfx/mg_keyword_pop_2.wav",
+      "desc": "Keyword pop (variant 2): higher pop + chime",
+      "duration": 1.22
+    },
+    "mg_word_tick": {
+      "file": "sfx/mg_word_tick.wav",
+      "desc": "Caption word lights up: tiny soft tick",
+      "duration": 0.05
+    },
+    "mg_boing": {
+      "file": "sfx/mg_boing.wav",
+      "desc": "Character bounces / lands: cartoon boing",
+      "duration": 0.4
+    },
+    "mg_pose_swap": {
+      "file": "sfx/mg_pose_swap.wav",
+      "desc": "Character changes pose: quick 'fwip'",
+      "duration": 0.07
+    },
+    "mg_slide_up": {
+      "file": "sfx/mg_slide_up.wav",
+      "desc": "Something rises up: slide whistle up",
+      "duration": 0.35
+    },
+    "mg_slide_down": {
+      "file": "sfx/mg_slide_down.wav",
+      "desc": "Something drops: slide whistle down",
+      "duration": 0.35
+    },
+    "mg_logo_sting": {
+      "file": "sfx/mg_logo_sting.wav",
+      "desc": "End card: logo pops in with darbuka hit, qanun run and sparkles",
+      "duration": 2.68
+    },
+    "mg_sparkle": {
+      "file": "sfx/mg_sparkle.wav",
+      "desc": "Magic sparkle shimmer (stars, shining letters)",
+      "duration": 1.51
+    },
+    "mg_ta_da": {
+      "file": "sfx/mg_ta_da.wav",
+      "desc": "Ta-da! short reveal (brass-free: marimba + bell)",
+      "duration": 1.5
+    }
+  }
+}

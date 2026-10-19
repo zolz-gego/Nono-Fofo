@@ -27,3 +27,8 @@
 - Save as JPG in `screenshots/`, named `NN-screen-name.jpg` (e.g. `08-settings.jpg`): continue the numbering for a new screen, and overwrite the existing file for a changed one.
 - Add or update the screen's section in `screenshots/README.md` (a heading, one line on what the screen does, and the image).
 - If a screen also looks different in English, add an `-english` shot too (e.g. `07-home-english.jpg`).
+
+## Social media videos
+
+- TikTok / Instagram videos live in `social/` and follow the `social-media` skill (`.claude/skills/social-media/SKILL.md`).
+- Any new resource made for the videos (sound, image, icon) goes in `social/assets/` and is registered in `social/assets/manifest.json` and the asset catalog in `social/README.md`. App assets (characters, colors, fonts, music, SFX) stay in the app; the videos pick them up automatically.

@@ -1,0 +1,27 @@
+{
+  "name": "nono-fofo-social",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync": "node scripts/sync-assets.mjs",
+    "studio": "node scripts/sync-assets.mjs && remotion studio src/index.ts",
+    "still": "node scripts/sync-assets.mjs && node scripts/render.mjs still",
+    "render": "node scripts/sync-assets.mjs && node scripts/render.mjs video",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "7.1.0",
+    "@fortawesome/free-solid-svg-icons": "7.1.0",
+    "@fortawesome/react-fontawesome": "3.1.1",
+    "@remotion/cli": "4.0.532",
+    "@remotion/fonts": "4.0.532",
+    "@remotion/media-utils": "4.0.532",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "remotion": "4.0.532"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.2",
+    "typescript": "5.8.3"
+  }
+}
