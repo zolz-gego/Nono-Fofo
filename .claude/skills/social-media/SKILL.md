@@ -21,6 +21,9 @@ ElevenLabs from the script Claude writes.
 - **Look:** motion graphics on AppColors only (`sunYellow`, `coral`, `mistBlue`,
   `leafGreen`, `deepTeal`, `cream`, `cocoa`…), app fonts (Baloo Bhaijaan 2 /
   Baloo 2 / Avva Shenouda for Coptic). Backgrounds: `rays`, `dots`, `letters`.
+- **Voice prompts:** ElevenLabs blocks voices described as children. Voice
+  Design prompts describe an adult voice actor doing a bright cartoon voice,
+  never an age or "boy/child" (see `social/voices.md`).
 - **Talking:** no mouth animation. Characters bob/squash with the voice
   loudness and switch poses on key words.
 - **Branding:** start straight in the action; small logo watermark; end card
