@@ -18,6 +18,7 @@ from ElevenLabs (Eleven v3). The workflow lives in the `social-media` skill
 | `tools/split_voice.py` | Splits one ElevenLabs take into the per-line voice files |
 | `tools/synth_social_sfx.py` | Synthesizes the social sound effects into `assets/sfx/` |
 | `remotion/` | The Remotion project (components, timing, render scripts) |
+| `previews/` | One still per video for the README and PRs |
 | `out/` | Rendered MP4s and stills (git-ignored) |
 
 ## Where resources come from
@@ -80,3 +81,8 @@ Font Awesome, registered in `remotion/src/icons.ts`: `book`, `clap`, `fish`,
 |---|---|---|
 | `001-nono-hello` | Nono says hi (demo) | Voiced (one take split into 4 lines) · rendered |
 | `002-fofo-hello` | Fofo says hi (demo) | Voiced (one take split by hand with `--lines`) · rendered |
+
+<p>
+  <img src="previews/001-nono-hello.jpg" width="240" alt="Nono demo: run keyword card">
+  <img src="previews/002-fofo-hello.jpg" width="240" alt="Fofo demo: puzzles and drawing keyword cards">
+</p>
