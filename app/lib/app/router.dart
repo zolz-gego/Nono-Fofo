@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/about/presentation/about_page.dart';
@@ -74,57 +75,42 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.about,
       builder: (context, state) => const AboutPage(),
     ),
-    GoRoute(
-      path: AppRoutes.level,
-      redirect: (context, state) =>
-          state.extra is PlayerSetup ? null : AppRoutes.home,
-      builder: (context, state) =>
-          LevelGamesPage(setup: state.extra! as PlayerSetup),
+    _withExtra<PlayerSetup>(
+      AppRoutes.level,
+      (context, extra) => LevelGamesPage(setup: extra),
     ),
-    GoRoute(
-      path: AppRoutes.fishing,
-      redirect: (context, state) =>
-          state.extra is PlayerSetup ? null : AppRoutes.home,
-      builder: (context, state) => LetterPickPage(
-        setup: state.extra! as PlayerSetup,
+    _withExtra<PlayerSetup>(
+      AppRoutes.fishing,
+      (context, extra) => LetterPickPage(
+        setup: extra,
         gameId: FishingCubit.id,
         title: context.l10n.gameFishing,
         prompt: context.l10n.pickLetter,
         playRoute: AppRoutes.fishingPlay,
       ),
     ),
-    GoRoute(
-      path: AppRoutes.fishingPlay,
-      redirect: (context, state) =>
-          state.extra is LetterHuntArgs ? null : AppRoutes.home,
-      builder: (context, state) =>
-          FishingPage(args: state.extra! as LetterHuntArgs),
+    _withExtra<LetterHuntArgs>(
+      AppRoutes.fishingPlay,
+      (context, extra) => FishingPage(args: extra),
     ),
-    GoRoute(
-      path: AppRoutes.balloons,
-      redirect: (context, state) =>
-          state.extra is PlayerSetup ? null : AppRoutes.home,
-      builder: (context, state) => LetterPickPage(
-        setup: state.extra! as PlayerSetup,
+    _withExtra<PlayerSetup>(
+      AppRoutes.balloons,
+      (context, extra) => LetterPickPage(
+        setup: extra,
         gameId: BalloonsCubit.id,
         title: context.l10n.gameBalloons,
         prompt: context.l10n.balloonsPickLetter,
         playRoute: AppRoutes.balloonsPlay,
       ),
     ),
-    GoRoute(
-      path: AppRoutes.balloonsPlay,
-      redirect: (context, state) =>
-          state.extra is LetterHuntArgs ? null : AppRoutes.home,
-      builder: (context, state) =>
-          BalloonsPage(args: state.extra! as LetterHuntArgs),
+    _withExtra<LetterHuntArgs>(
+      AppRoutes.balloonsPlay,
+      (context, extra) => BalloonsPage(args: extra),
     ),
-    GoRoute(
-      path: AppRoutes.writing,
-      redirect: (context, state) =>
-          state.extra is PlayerSetup ? null : AppRoutes.home,
-      builder: (context, state) => LetterPickPage(
-        setup: state.extra! as PlayerSetup,
+    _withExtra<PlayerSetup>(
+      AppRoutes.writing,
+      (context, extra) => LetterPickPage(
+        setup: extra,
         gameId: WritingCubit.id,
         title: context.l10n.gameWriteLetter,
         prompt: context.l10n.writingPickLetter,
@@ -133,60 +119,74 @@ final GoRouter appRouter = GoRouter(
         allLetters: true,
       ),
     ),
-    GoRoute(
-      path: AppRoutes.writingPlay,
-      redirect: (context, state) =>
-          state.extra is LetterHuntArgs ? null : AppRoutes.home,
-      builder: (context, state) =>
-          WritingPage(args: state.extra! as LetterHuntArgs),
+    _withExtra<LetterHuntArgs>(
+      AppRoutes.writingPlay,
+      (context, extra) => WritingPage(args: extra),
     ),
-    GoRoute(
-      path: AppRoutes.cards,
-      redirect: (context, state) =>
-          state.extra is PlayerSetup ? null : AppRoutes.home,
-      builder: (context, state) =>
-          CardsLevelPage(setup: state.extra! as PlayerSetup),
+    _withExtra<PlayerSetup>(
+      AppRoutes.cards,
+      (context, extra) => CardsLevelPage(setup: extra),
     ),
-    GoRoute(
-      path: AppRoutes.cardsPlay,
-      redirect: (context, state) =>
-          state.extra is CardsArgs ? null : AppRoutes.home,
-      builder: (context, state) => CardsPage(args: state.extra! as CardsArgs),
+    _withExtra<CardsArgs>(
+      AppRoutes.cardsPlay,
+      (context, extra) => CardsPage(args: extra),
     ),
-    GoRoute(
-      path: AppRoutes.monastery,
-      redirect: (context, state) =>
-          state.extra is PlayerSetup ? null : AppRoutes.home,
-      builder: (context, state) =>
-          MonasteryLevelPage(setup: state.extra! as PlayerSetup),
+    _withExtra<PlayerSetup>(
+      AppRoutes.monastery,
+      (context, extra) => MonasteryLevelPage(setup: extra),
     ),
-    GoRoute(
-      path: AppRoutes.monasteryPlay,
-      redirect: (context, state) =>
-          state.extra is MonasteryArgs ? null : AppRoutes.home,
-      builder: (context, state) =>
-          MonasteryPage(args: state.extra! as MonasteryArgs),
+    _withExtra<MonasteryArgs>(
+      AppRoutes.monasteryPlay,
+      (context, extra) => MonasteryPage(args: extra),
     ),
-    GoRoute(
-      path: AppRoutes.challenge,
-      redirect: (context, state) =>
-          state.extra is PlayerSetup ? null : AppRoutes.home,
-      builder: (context, state) =>
-          ChallengePickerPage(setup: state.extra! as PlayerSetup),
+    _withExtra<PlayerSetup>(
+      AppRoutes.challenge,
+      (context, extra) => ChallengePickerPage(setup: extra),
     ),
-    GoRoute(
-      path: AppRoutes.challengeSnakes,
-      redirect: (context, state) =>
-          state.extra is PlayerSetup ? null : AppRoutes.home,
-      builder: (context, state) =>
-          SnakesPage(setup: state.extra! as PlayerSetup),
+    _withExtra<PlayerSetup>(
+      AppRoutes.challengeSnakes,
+      (context, extra) => SnakesPage(setup: extra),
     ),
-    GoRoute(
-      path: AppRoutes.challengeAdventure,
-      redirect: (context, state) =>
-          state.extra is PlayerSetup ? null : AppRoutes.home,
-      builder: (context, state) =>
-          AdventurePage(setup: state.extra! as PlayerSetup),
+    _withExtra<PlayerSetup>(
+      AppRoutes.challengeAdventure,
+      (context, extra) => AdventurePage(setup: extra),
     ),
   ],
 );
+
+/// A route whose page needs [T] as `extra`. Without it (a browser refresh,
+/// or browser Back to a page that was pushed) the app goes home instead of
+/// building the page.
+GoRoute _withExtra<T>(
+  String path,
+  Widget Function(BuildContext context, T extra) builder,
+) => GoRoute(
+  path: path,
+  redirect: (context, state) => state.extra is T ? null : AppRoutes.home,
+  builder: (context, state) {
+    final extra = state.extra;
+    return extra is T ? builder(context, extra) : const _GoHome();
+  },
+);
+
+/// Shown for a frame when a page lost its `extra` after the redirect ran:
+/// goes home right away.
+class _GoHome extends StatefulWidget {
+  const _GoHome();
+
+  @override
+  State<_GoHome> createState() => _GoHomeState();
+}
+
+class _GoHomeState extends State<_GoHome> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) context.go(AppRoutes.home);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => const SizedBox.shrink();
+}
