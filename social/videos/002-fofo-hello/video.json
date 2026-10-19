@@ -1,0 +1,76 @@
+{
+  "title": "Fofo says hi (demo)",
+  "music": {"track": "place_grandpa_house", "volume": 0.18},
+  "scenes": [
+    {
+      "id": "hello",
+      "bg": "sunYellow",
+      "pattern": "rays",
+      "characters": [{"who": "fofo", "pose": "wave", "enter": "bottom"}],
+      "line": {
+        "id": "l1_hello",
+        "speaker": "fofo",
+        "say": "[happy] أهلاً! أنا فوفو! [giggles]",
+        "ar": "أهلاً! أنا فوفو!",
+        "en": "Hi! I'm Fofo!",
+        "estimate": 1.8
+      },
+      "keywords": [{"ar": "فوفو", "en": "Fofo", "icon": "star", "at": 0.6}]
+    },
+    {
+      "id": "loves",
+      "bg": "mistBlue",
+      "bg2": "white",
+      "pattern": "dots",
+      "characters": [{"who": "fofo", "pose": "read", "enter": "pop", "swaps": [{"at": 1.9, "pose": "write"}]}],
+      "line": {
+        "id": "l2_loves",
+        "speaker": "fofo",
+        "say": "[excited] أنا بحب الألغاز... والرسم!",
+        "ar": "أنا بحب الألغاز، والرسم!",
+        "en": "I love puzzles, and drawing!",
+        "estimate": 2.3
+      },
+      "keywords": [
+        {"ar": "الألغاز", "en": "Puzzles", "icon": "puzzle", "at": 0.5},
+        {"ar": "الرسم", "en": "Drawing", "icon": "paint", "at": 1.5}
+      ]
+    },
+    {
+      "id": "why",
+      "bg": "coral",
+      "pattern": "rays",
+      "characters": [{"who": "fofo", "pose": "surprised", "enter": "right"}],
+      "line": {
+        "id": "l3_why",
+        "speaker": "fofo",
+        "say": "[curious] وبسأل على كل حاجة... ليه؟",
+        "ar": "وبسأل على كل حاجة… ليه؟",
+        "en": "And I ask about everything... why?",
+        "estimate": 2.4
+      },
+      "keywords": [{"ar": "ليه؟", "en": "Why?", "icon": "question", "at": 1.7}]
+    },
+    {
+      "id": "think",
+      "bg": "leafGreen",
+      "pattern": "letters",
+      "characters": [{"who": "fofo", "pose": "idle", "enter": "pop", "swaps": [{"at": 2.2, "pose": "hint"}]}],
+      "line": {
+        "id": "l4_think",
+        "speaker": "fofo",
+        "say": "[thoughtful] استنى نفكر شوية... [happy] لقيتها!",
+        "ar": "استنى نفكر شوية… لقيتها!",
+        "en": "Wait, let's think a bit... I've got it!",
+        "estimate": 2.6
+      },
+      "keywords": [{"ar": "لقيتها!", "en": "Got it!", "icon": "idea", "at": 1.9}],
+      "sfx": [
+        {"id": "char_think", "at": 0.5, "volume": 0.6},
+        {"id": "mg_sparkle", "at": 2.2, "volume": 0.7}
+      ],
+      "hold": 0.3
+    }
+  ],
+  "endCard": {"ar": "تابعونا!", "en": "Follow us!"}
+}

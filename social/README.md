@@ -71,10 +71,12 @@ None yet.
 ### Icons (keyword cards)
 
 Font Awesome, registered in `remotion/src/icons.ts`: `book`, `clap`, `fish`,
-`football`, `heart`, `house`, `rocket`, `run`, `star`, `trophy`.
+`football`, `heart`, `house`, `idea`, `paint`, `puzzle`, `question`, `rocket`,
+`run`, `star`, `trophy`.
 
 ## Videos
 
 | Folder | Title | Status |
 |---|---|---|
 | `001-nono-hello` | Nono says hi (demo) | Voiced (one take split into 4 lines) · rendered |
+| `002-fofo-hello` | Fofo says hi (demo) | Script ready · waiting for voice |
