@@ -1,0 +1,73 @@
+{
+  "title": "Nono says hi (demo)",
+  "music": {"track": "map_theme", "volume": 0.16},
+  "scenes": [
+    {
+      "id": "hello",
+      "bg": "sunYellow",
+      "pattern": "rays",
+      "characters": [{"who": "nono", "pose": "run", "enter": "left", "swaps": [{"at": 0.45, "pose": "wave"}]}],
+      "line": {
+        "id": "l1_hello",
+        "speaker": "nono",
+        "say": "[excited] أهلاً أهلاً! [giggles]",
+        "ar": "أهلاً أهلاً!",
+        "en": "Hello, hello!",
+        "estimate": 1.3
+      },
+      "sfx": [{"id": "mg_boing", "at": 0.45, "volume": 0.6}]
+    },
+    {
+      "id": "name",
+      "bg": "coral",
+      "pattern": "rays",
+      "characters": [{"who": "nono", "pose": "cheer", "enter": "pop"}],
+      "line": {
+        "id": "l2_name",
+        "speaker": "nono",
+        "say": "[proudly] أنا نونو!",
+        "ar": "أنا نونو!",
+        "en": "I'm Nono!",
+        "estimate": 1.1
+      },
+      "keywords": [{"ar": "نونو", "en": "Nono", "icon": "star", "at": 0.35}]
+    },
+    {
+      "id": "love",
+      "bg": "mistBlue",
+      "bg2": "white",
+      "pattern": "dots",
+      "characters": [{"who": "nono", "pose": "run", "enter": "left", "swaps": [{"at": 1.9, "pose": "celebrate"}]}],
+      "line": {
+        "id": "l3_love",
+        "speaker": "nono",
+        "say": "[happily] أنا بحب أجري... [excited] وبحب الكورة أوي!",
+        "ar": "أنا بحب أجري، وبحب الكورة أوي!",
+        "en": "I love running, and I really love football!",
+        "estimate": 3.0,
+        "words": [0.0, 0.25, 0.45, 0.78, 1.25, 2.3]
+      },
+      "keywords": [
+        {"ar": "أجري", "en": "Run", "icon": "run", "at": 0.5},
+        {"ar": "الكورة", "en": "Football", "icon": "football", "at": 1.25}
+      ]
+    },
+    {
+      "id": "lets-go",
+      "bg": "leafGreen",
+      "pattern": "letters",
+      "characters": [{"who": "nono", "pose": "jump", "enter": "bottom"}],
+      "line": {
+        "id": "l4_lets_go",
+        "speaker": "nono",
+        "say": "[shouting] يلا بينا!",
+        "ar": "يلا بينا!",
+        "en": "Let's go!",
+        "estimate": 1.0
+      },
+      "sfx": [{"id": "mg_ta_da", "at": 0.3, "volume": 0.7}],
+      "hold": 0.3
+    }
+  ],
+  "endCard": {"ar": "تابعونا!", "en": "Follow us!"}
+}

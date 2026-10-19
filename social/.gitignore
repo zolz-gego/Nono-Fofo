@@ -1,0 +1,7 @@
+# Rendered videos and stills (re-render any time)
+out/
+
+# Remotion
+remotion/node_modules/
+remotion/public/
+remotion/src/generated/
