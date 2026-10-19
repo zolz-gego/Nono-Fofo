@@ -44,11 +44,12 @@
         "say": "[happily] أنا بحب أجري... [excited] وبحب الكورة أوي!",
         "ar": "أنا بحب أجري، وبحب الكورة أوي!",
         "en": "I love running, and I really love football!",
-        "estimate": 3.0
+        "estimate": 3.0,
+        "words": [0.0, 0.25, 0.45, 0.78, 1.25, 2.3]
       },
       "keywords": [
         {"ar": "أجري", "en": "Run", "icon": "run", "at": 0.5},
-        {"ar": "الكورة", "en": "Football", "icon": "football", "at": 1.7}
+        {"ar": "الكورة", "en": "Football", "icon": "football", "at": 1.25}
       ]
     },
     {

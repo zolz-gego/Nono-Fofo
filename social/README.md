@@ -76,4 +76,4 @@ Font Awesome, registered in `remotion/src/icons.ts`: `book`, `clap`, `fish`,
 
 | Folder | Title | Status |
 |---|---|---|
-| `001-nono-hello` | Nono says hi (demo) | Script ready · waiting for voice |
+| `001-nono-hello` | Nono says hi (demo) | Voiced (one take split into 4 lines) · rendered |
