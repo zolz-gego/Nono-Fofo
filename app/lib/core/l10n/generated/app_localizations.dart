@@ -1199,7 +1199,7 @@ abstract class AppLocalizations {
   /// No description provided for @adventureHowToTouch.
   ///
   /// In ar, this message translates to:
-  /// **'◀ ▶ للمشي واضغط على اليمين للنط'**
+  /// **'◀ ▶ على الجنبين للمشي، واضغط في أي حتة تانية للنط'**
   String get adventureHowToTouch;
 
   /// No description provided for @adventureStart.
@@ -1363,12 +1363,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'وقفة'**
   String get adventurePause;
-
-  /// No description provided for @adventureRotate.
-  ///
-  /// In ar, this message translates to:
-  /// **'لف الجهاز بالعرض عشان تلعب'**
-  String get adventureRotate;
 
   /// No description provided for @adventureBonus.
   ///

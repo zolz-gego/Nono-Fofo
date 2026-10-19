@@ -563,7 +563,7 @@
   "adventureLevelAlexandria": "إسكندرية بالليل",
   "adventureLocked": "خلّص المرحلة اللي قبلها الأول",
   "adventureHowTo": "الأسهم للمشي والمسافة للنط",
-  "adventureHowToTouch": "◀ ▶ للمشي واضغط على اليمين للنط",
+  "adventureHowToTouch": "◀ ▶ على الجنبين للمشي، واضغط في أي حتة تانية للنط",
   "adventureStart": "يلا بينا يا {name}! دوّر على الـ {count} حروف الضايعة",
   "@adventureStart": {
     "placeholders": {
@@ -615,7 +615,6 @@
   "adventureResume": "كمّل",
   "adventureRestart": "ابدأ المرحلة من الأول",
   "adventurePause": "وقفة",
-  "adventureRotate": "لف الجهاز بالعرض عشان تلعب",
   "adventureBonus": "حرف بونص! نجمتين زيادة في الآخر",
   "adventureCoinShower": "عملات مستخبية!",
   "adventureBonusStars": "نجوم البونص",

@@ -273,45 +273,26 @@ class AdventureMessage extends StatelessWidget {
   }
 }
 
-/// See-through ◀ ▶ buttons for phones and tablets (hold to walk).
-class AdventureWalkButtons extends StatelessWidget {
-  const AdventureWalkButtons({
+/// A see-through ◀ or ▶ button for phones and tablets (hold to walk).
+class AdventureHoldButton extends StatefulWidget {
+  const AdventureHoldButton({
     super.key,
-    required this.onLeft,
-    required this.onRight,
+    required this.icon,
+    required this.onHold,
+    this.size = 84,
   });
 
-  final ValueChanged<bool> onLeft;
-  final ValueChanged<bool> onRight;
-
-  @override
-  Widget build(BuildContext context) {
-    // Always left / right on screen, also in Arabic.
-    return Directionality(
-      textDirection: TextDirection.ltr,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _HoldButton(icon: AppIcons.walkLeft, onHold: onLeft),
-          const SizedBox(width: AppDimens.spaceMd),
-          _HoldButton(icon: AppIcons.walkRight, onHold: onRight),
-        ],
-      ),
-    );
-  }
-}
-
-class _HoldButton extends StatefulWidget {
-  const _HoldButton({required this.icon, required this.onHold});
-
   final FaIconData icon;
+
+  /// Button diameter (smaller on phones held sideways).
+  final double size;
   final ValueChanged<bool> onHold;
 
   @override
-  State<_HoldButton> createState() => _HoldButtonState();
+  State<AdventureHoldButton> createState() => _HoldButtonState();
 }
 
-class _HoldButtonState extends State<_HoldButton> {
+class _HoldButtonState extends State<AdventureHoldButton> {
   bool _down = false;
 
   void _set(bool down) {
@@ -328,8 +309,8 @@ class _HoldButtonState extends State<_HoldButton> {
       onPointerCancel: (_) => _set(false),
       child: AnimatedContainer(
         duration: AppDimens.fast,
-        width: 84,
-        height: 84,
+        width: widget.size,
+        height: widget.size,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
@@ -341,51 +322,8 @@ class _HoldButtonState extends State<_HoldButton> {
         ),
         child: FaIcon(
           widget.icon,
-          size: 44,
+          size: widget.size * 0.52,
           color: AppColors.white.withValues(alpha: 0.9),
-        ),
-      ),
-    );
-  }
-}
-
-/// Shown while a phone or tablet is held upright.
-class AdventureRotateHint extends StatelessWidget {
-  const AdventureRotateHint({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ColoredBox(
-      color: AppColors.deepTeal,
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(AppDimens.spaceLg),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                AssetPaths.characterPose('fofo', 'hint'),
-                height: 160,
-                fit: BoxFit.contain,
-              ),
-              const SizedBox(height: AppDimens.spaceMd),
-              const FaIcon(AppIcons.rotate, size: 48, color: AppColors.white)
-                  .animate(onPlay: (c) => c.repeat())
-                  .rotate(
-                    begin: 0,
-                    end: -0.25,
-                    duration: 900.ms,
-                    curve: Curves.easeInOut,
-                  )
-                  .then(delay: 500.ms),
-              const SizedBox(height: AppDimens.spaceMd),
-              AppText.h2(
-                context.l10n.adventureRotate,
-                color: AppColors.white,
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
         ),
       ),
     );
