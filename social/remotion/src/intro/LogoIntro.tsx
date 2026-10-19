@@ -1,113 +1,94 @@
-// "Golden Letter Swarm" intro (24 s, 60 fps, 16:9 and 9:16).
-// Gold dust gathers into alpha + omega, shatters into a flock that morphs on
-// every bar (pyramid, palm, Nile, book, the brothers, their names, a spinning
-// ring), then spirals into the logo pixel by pixel and the real logo resolves.
+// "Grandpa's Pop-up Book" intro (25 s, 60 fps, 9:16 and 16:9).
+// A lamp clicks on over Grandpa's book; the cover opens; pages turn through
+// paper pop-ups (the Nile, the pyramids, the village with Nono and Fofo); the
+// alphabet lifts off the last page into a ring; the logo card folds up and the
+// camera drops to eye level; on the hit the logo holds, perfectly still.
 // Timeline: ./cues.json. Score: social/tools/synth_intro.py.
 import React from 'react';
 import {AbsoluteFill, Audio, Img, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
-import {color, FONT_COPTIC} from '../theme';
-import {COPTIC, cues, ease, kick, lerp, prog, rnd} from './anim';
-import {Swarm} from './Swarm';
+import {cues, ease, kick, lerp, prog, rnd} from './anim';
+import {Book} from './Book';
 
-const Backdrop: React.FC<{t: number}> = ({t}) => {
+// Warm lamp light: dark room, a pool of light on the book, dust in the beam.
+const Lamp: React.FC<{t: number}> = ({t}) => {
   const {width: W, height: H} = useVideoConfig();
   const m = Math.min(W, H);
-  const warm = prog(t, 3.0, 5.0);
-  const bright = prog(t, cues.drop - 0.1, cues.drop + 0.5);
-  const cx = W / 2;
-  const cy = H / 2;
+  const on0 = cues.lampOn;
+  // click on, one flicker, then steady
+  const on = t < on0 ? 0 : t < on0 + 0.08 ? 0.8 : t < on0 + 0.16 ? 0.25 : Math.min(1, 0.6 + (t - on0 - 0.16) * 3);
+  const room = lerp(0.97, 0.0, on);
   return (
-    <AbsoluteFill style={{background: 'radial-gradient(circle at 50% 50%, #0a2c35 0%, #01080a 78%)'}}>
-      <AbsoluteFill style={{background: `radial-gradient(circle at 50% 50%, #12495a 0%, #031820 80%)`, opacity: warm * (1 - bright)}} />
-      <AbsoluteFill style={{background: `radial-gradient(circle at 50% 50%, #1d7486 0%, ${color('deepTeal')} 55%, #052630 100%)`, opacity: bright}} />
-      {bright > 0 && (
-        <svg width={W} height={H} style={{position: 'absolute', opacity: 0.16 * bright}}>
-          <g transform={`rotate(${t * 4} ${cx} ${cy})`}>
-            {Array.from({length: 20}, (_, i) => {
-              const a0 = (i / 20) * Math.PI * 2;
-              const a1 = a0 + Math.PI / 20;
-              const r = Math.max(W, H) * 1.2;
-              return <path key={i} d={`M${cx} ${cy} L${cx + r * Math.cos(a0)} ${cy + r * Math.sin(a0)} L${cx + r * Math.cos(a1)} ${cy + r * Math.sin(a1)} Z`} fill={color('mistBlue')} />;
-            })}
-          </g>
-        </svg>
-      )}
-      {Array.from({length: 14}, (_, i) => {
-        const size = m * (0.06 + rnd(i + 11) * 0.08);
-        const x = rnd(i + 21) * W;
-        const span = H + size * 2;
-        const y = (((rnd(i + 31) * span - t * m * (0.015 + rnd(i + 41) * 0.025)) % span) + span) % span - size;
+    <>
+      <AbsoluteFill
+        style={{
+          background: `radial-gradient(ellipse ${m * 0.75}px ${m * 0.62}px at 50% ${H > W ? 56 : 54}%, rgba(255,214,140,${0.16 * on}) 0%, rgba(30,15,6,${0.25 + 0.2 * on}) 60%, rgba(8,4,2,0.82) 100%)`,
+        }}
+      />
+      {Array.from({length: 26}, (_, i) => {
+        const x = W * (0.25 + rnd(i + 3) * 0.5) + Math.sin(t * 0.5 + i) * m * 0.02;
+        const y = (((H * (0.2 + rnd(i + 9) * 0.6) - t * m * (0.006 + rnd(i + 5) * 0.01)) % H) + H) % H;
+        const s = m * (0.002 + rnd(i + 7) * 0.003);
         return (
           <div
             key={i}
-            style={{
-              position: 'absolute',
-              left: x,
-              top: y,
-              fontFamily: FONT_COPTIC,
-              fontSize: size,
-              color: 'white',
-              opacity: 0.025 + 0.025 * warm,
-              transform: `rotate(${(rnd(i + 51) - 0.5) * 50}deg)`,
-            }}
-          >
-            {COPTIC[i % COPTIC.length]}
-          </div>
+            style={{position: 'absolute', left: x, top: y, width: s, height: s, borderRadius: s, background: '#FFE7B0', boxShadow: `0 0 ${s * 3}px #FFE7B0`, opacity: on * (0.25 + 0.3 * Math.abs(Math.sin(t * 0.9 + i)))}}
+          />
         );
       })}
+      <AbsoluteFill style={{background: '#000', opacity: room}} />
+    </>
+  );
+};
+
+// After the hit: the logo alone, still, over the warm study.
+const Finale: React.FC<{t: number}> = ({t}) => {
+  const {width: W, height: H} = useVideoConfig();
+  const S = Math.min(W, H) * 0.84;
+  const [s0, s1] = cues.shine;
+  const shineP = prog(t, s0, s1);
+  return (
+    <AbsoluteFill style={{background: 'radial-gradient(circle at 50% 50%, #5a3a22 0%, #24140a 60%, #0c0603 100%)'}}>
+      <div style={{position: 'absolute', left: (W - S) / 2, top: (H - S) / 2, width: S, height: S}}>
+        <div style={{position: 'absolute', inset: -S * 0.16, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,214,140,0.55) 0%, transparent 62%)'}} />
+        <Img src={staticFile('app/brand/logo.png')} style={{position: 'absolute', inset: 0, width: S, height: S}} />
+        {shineP > 0 && shineP < 1 && (
+          <div style={{position: 'absolute', inset: 0, borderRadius: '50%', overflow: 'hidden', mixBlendMode: 'screen'}}>
+            <div
+              style={{
+                position: 'absolute',
+                top: -S * 0.5,
+                left: lerp(-S * 1.2, S * 1.2, ease.inOutQuad(shineP)),
+                width: S * 0.35,
+                height: S * 2,
+                transform: 'rotate(20deg)',
+                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent)',
+              }}
+            />
+          </div>
+        )}
+      </div>
     </AbsoluteFill>
   );
 };
 
 export const LogoIntro: React.FC = () => {
   const frame = useCurrentFrame();
-  const {fps, width: W, height: H} = useVideoConfig();
+  const {fps} = useVideoConfig();
   const t = frame / fps;
-  const S = Math.min(W, H) * 0.86;
-
-  const [r0, r1] = cues.resolve;
-  const logoIn = ease.inOutCubic(prog(t, r0, r1));
-  const [sh0, sh1] = cues.shine;
-  const shineP = prog(t, sh0, sh1);
-  const flash = Math.max(0.35 * kick(t, cues.shatter, 0.3), 0.8 * kick(t, cues.drop, 0.5), 0.15 * kick(t, cues.spinUp[1], 0.3));
-
+  const flash = Math.max(0.9 * kick(t, cues.drop, 0.55), 0.25 * kick(t, cues.cover[1], 0.3));
   return (
-    <AbsoluteFill style={{backgroundColor: '#01080a', overflow: 'hidden'}}>
-      <Backdrop t={t} />
-      {/* the real logo resolves under the landing particles */}
-      {logoIn > 0 && (
-        <div style={{position: 'absolute', left: (W - S) / 2, top: (H - S) / 2, width: S, height: S}}>
-          <div
-            style={{
-              position: 'absolute',
-              inset: -S * 0.14,
-              borderRadius: '50%',
-              background: `radial-gradient(circle, ${color('sunYellow')} 0%, transparent 62%)`,
-              opacity: 0.25 * logoIn + 0.45 * kick(t, cues.drop, 1.2),
-            }}
-          />
-          <Img src={staticFile('app/brand/logo.png')} style={{position: 'absolute', inset: 0, width: S, height: S, opacity: logoIn}} />
-          {shineP > 0 && shineP < 1 && (
-            <div style={{position: 'absolute', inset: 0, borderRadius: '50%', overflow: 'hidden', mixBlendMode: 'screen'}}>
-              <div
-                style={{
-                  position: 'absolute',
-                  top: -S * 0.5,
-                  left: lerp(-S * 1.2, S * 1.2, ease.inOutQuad(shineP)),
-                  width: S * 0.35,
-                  height: S * 2,
-                  transform: 'rotate(20deg)',
-                  background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent)',
-                }}
-              />
-            </div>
-          )}
-        </div>
+    <AbsoluteFill style={{backgroundColor: '#0c0603', overflow: 'hidden'}}>
+      {t < cues.drop ? (
+        <>
+          <AbsoluteFill style={{background: 'radial-gradient(circle at 50% 40%, #3a2414 0%, #120a06 70%)'}} />
+          <Book t={t} />
+          <Lamp t={t} />
+        </>
+      ) : (
+        <Finale t={t} />
       )}
-      <Swarm t={t} />
-      <AbsoluteFill style={{background: 'radial-gradient(circle at 50% 50%, transparent 55%, rgba(0,0,0,0.5) 100%)'}} />
-      <AbsoluteFill style={{background: '#FFFBF4', opacity: flash}} />
-      <Audio src={staticFile('social/music/intro_logo_swarm.wav')} />
+      <AbsoluteFill style={{background: '#FFF6E0', opacity: flash}} />
+      <Audio src={staticFile('social/music/intro_logo_book.wav')} />
     </AbsoluteFill>
   );
 };

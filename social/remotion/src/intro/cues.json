@@ -1,25 +1,50 @@
 {
-  "_": "Golden Letter Swarm intro timeline in seconds (120 BPM, a bar = 2 s). Read by intro/*.ts(x) and social/tools/synth_intro.py so picture and sound share one clock. Each stage: the swarm lands on `shape` at `land`, flying in over the `lead` seconds before it.",
+  "_": "Grandpa's Pop-up Book intro timeline in seconds (120 BPM, a bar = 2 s). Read by intro/*.tsx and social/tools/synth_intro.py so picture and sound share one clock. Pop-up piece times live with each piece here so the score can give every fold its paper sound.",
   "fps": 60,
-  "duration": 24,
+  "duration": 25,
   "bpm": 120,
-  "particles": 7000,
-  "stages": [
-    {"shape": "alphaOmega", "land": 1.75, "lead": 1.55, "spread": 0.6, "dur": 0.9},
-    {"shape": "swarm", "land": 3.3, "lead": 0.8, "spread": 0.12, "dur": 0.65},
-    {"shape": "pyramid", "land": 4.0, "lead": 0.75, "spread": 0.22, "dur": 0.5},
-    {"shape": "palm", "land": 6.0, "lead": 0.75, "spread": 0.22, "dur": 0.5},
-    {"shape": "nile", "land": 8.0, "lead": 0.75, "spread": 0.22, "dur": 0.5},
-    {"shape": "book", "land": 10.0, "lead": 0.75, "spread": 0.22, "dur": 0.5},
-    {"shape": "brothers", "land": 12.0, "lead": 0.75, "spread": 0.22, "dur": 0.5},
-    {"shape": "names", "land": 14.0, "lead": 0.75, "spread": 0.22, "dur": 0.5},
-    {"shape": "vortex", "land": 16.0, "lead": 0.8, "spread": 0.25, "dur": 0.5},
-    {"shape": "logo", "land": 19.5, "lead": 1.75, "spread": 1.0, "dur": 0.7}
+  "lampOn": 0.6,
+  "cover": [2.5, 3.5],
+  "turns": [[7.0, 7.75], [11.25, 12.0], [15.5, 16.25]],
+  "spreads": [
+    {
+      "id": "nile",
+      "pieces": [
+        {"kind": "palm", "x": -72, "y": -42, "h": 52, "at": 3.75},
+        {"kind": "palm", "x": 74, "y": -46, "h": 46, "at": 3.875},
+        {"kind": "papyrus", "x": -60, "y": 38, "h": 30, "at": 4.0},
+        {"kind": "papyrus", "x": 62, "y": 42, "h": 27, "at": 4.125},
+        {"kind": "felucca", "x": -58, "y": 2, "h": 58, "at": 4.5, "sail": [4.5, 6.8, 52]}
+      ]
+    },
+    {
+      "id": "pyramids",
+      "pieces": [
+        {"kind": "sun", "x": 46, "y": -58, "h": 30, "at": 9.5},
+        {"kind": "pyramid", "x": 2, "y": -34, "h": 64, "at": 8.0},
+        {"kind": "pyramid", "x": -60, "y": -22, "h": 44, "at": 8.25},
+        {"kind": "pyramid", "x": 62, "y": -12, "h": 36, "at": 8.5},
+        {"kind": "palm", "x": -34, "y": 38, "h": 40, "at": 8.75},
+        {"kind": "palm", "x": 44, "y": 44, "h": 34, "at": 8.875}
+      ]
+    },
+    {
+      "id": "village",
+      "pieces": [
+        {"kind": "palm", "x": -14, "y": -48, "h": 52, "at": 12.25},
+        {"kind": "tower", "x": 66, "y": -42, "h": 56, "at": 12.375},
+        {"kind": "house", "x": -62, "y": -34, "h": 38, "at": 12.5},
+        {"kind": "house", "x": 36, "y": -18, "h": 32, "at": 12.625},
+        {"kind": "nono", "x": -24, "y": 34, "h": 64, "at": 13.0},
+        {"kind": "fofo", "x": 24, "y": 38, "h": 52, "at": 13.25}
+      ]
+    },
+    {"id": "letters", "pieces": []}
   ],
-  "shatter": 2.5,
-  "spinUp": [16.0, 17.75],
-  "resolve": [19.4, 20.0],
-  "drop": 20.0,
-  "shine": [20.4, 21.1],
-  "fadeOut": [23.0, 24.0]
+  "lettersLift": [17.5, 19.25],
+  "card": [19.25, 20.0],
+  "eyeLevel": [19.25, 20.5],
+  "drop": 20.5,
+  "shine": [21.0, 21.7],
+  "fadeOut": [24.0, 25.0]
 }

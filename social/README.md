@@ -70,7 +70,7 @@ tools/.venv/bin/python social/tools/synth_social_sfx.py   # (from repo root) reb
 
 | id | Track | Used for |
 |---|---|---|
-| `intro_logo_swarm` | 24 s score, 120 BPM, D hijaz: granular swarm shimmer, darbuka maqsum, bass, qanun, a sound for each shape, auto-panned ring spin, final drop. Made by `tools/synth_intro.py`, cued from `remotion/src/intro/cues.json` | Logo intro |
+| `intro_logo_book` | 25 s score, 120 BPM, D hijaz: Grandpa's clock, lamp click, qanun motif, creaking cover, a paper pop per pop-up, Nile water, desert wind, pigeons, page turns, the alphabet rising, final drop. Made by `tools/synth_intro.py`, cued from `remotion/src/intro/cues.json` | Logo intro |
 
 All 107 app SFX (`correct_1`, `confetti`, `fish_splash_1`, …) can be used by id
 too; see `app/assets/audio/manifest.json`.
@@ -85,26 +85,24 @@ Font Awesome, registered in `remotion/src/icons.ts`: `book`, `clap`, `fish`,
 `football`, `heart`, `house`, `idea`, `paint`, `puzzle`, `question`, `rocket`,
 `run`, `star`, `trophy`.
 
-## Logo intro ("Golden Letter Swarm")
+## Logo intro ("Grandpa's Pop-up Book")
 
-A 24 s particle intro built from the app logo, in two shapes: `intro-portrait`
-(1080×1920) and `intro-landscape` (1920×1080), 60 fps. Code in
-`remotion/src/intro/`. Picture and sound share one clock, `cues.json`: change a
-time there, rerun `synth_intro.py`, and re-render.
+A 25 s intro built in CSS 3D, in two shapes: `intro-portrait` (1080×1920) and
+`intro-landscape` (1920×1080), 60 fps. Code in `remotion/src/intro/`
+(`Book.tsx` is the 3D rig, `PaperArt.tsx` the printed pages and pop-up pieces).
+Picture and sound share one clock, `cues.json`, which also lists every pop-up
+piece (kind, place, height, when it folds up). Change it, rerun
+`synth_intro.py`, and re-render.
 
-7,000 gold particles drawn on a canvas each frame. Their positions are a pure
-function of time, so any frame renders the same. Every shape is sampled from
-pixels (`shapes.ts`): text in the Coptic font, drawn shapes, the brothers' wave
-poses and the logo itself.
-
-1. **ⲁ ⲱ (0–2.5 s):** gold dust gathers into alpha and omega, then shatters.
-2. **The flock (2.5–16 s):** on every bar the swarm flies to a new shape: pyramid
-   and sun → swaying palm → flowing Nile → open book → Nono and Fofo waving
-   (in their real colours) → ⲛⲟⲛⲟ / ⲫⲟⲫⲟ → a spinning 3D ring.
-3. **Spiral in (16–20 s):** the ring spins faster and tilts flat, then every
-   particle spirals to its pixel of the logo (centre first) and the real logo
-   resolves on the drop.
-4. **Hold (20–24 s):** a shine sweep, then the logo stays perfectly still.
+1. **The study (0–2.5 s):** Grandpa's clock ticks, a lamp clicks on over his
+   closed book (gold ⲁ ⲱ on the cover).
+2. **The cover opens (2.5–3.5 s).**
+3. **The Nile:** palms and papyrus fold up, a felucca sails across.
+4. **The pyramids:** three pyramids, palms, the sun rises on a pull-tab.
+5. **The village:** houses, a pigeon tower, then Nono and Fofo pop up and wave.
+6. **The alphabet:** the letters lift off the last page in gold and circle up.
+7. **The logo (19–25 s):** the logo card folds up and floats inside the ring,
+   the camera drops to eye level, and on the hit the logo holds, perfectly still.
 
 ## Videos
 

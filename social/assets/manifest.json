@@ -69,10 +69,10 @@
     }
   },
   "music": {
-    "intro_logo_swarm": {
-      "file": "music/intro_logo_swarm.wav",
-      "desc": "Golden Letter Swarm intro score (24 s, 120 BPM, D hijaz): granular swarm shimmer, darbuka, qanun, a signature per shape, ring spin, final drop. Synced to remotion/src/intro/cues.json.",
-      "duration": 24,
+    "intro_logo_book": {
+      "file": "music/intro_logo_book.wav",
+      "desc": "Grandpa's Pop-up Book intro score (25 s, 120 BPM, D hijaz): clock, lamp, qanun motif, creaking cover, paper pops, Nile water, desert wind, pigeons, page turns, rising alphabet, final drop. Synced to remotion/src/intro/cues.json.",
+      "duration": 25,
       "source": "social/tools/synth_intro.py"
     }
   }

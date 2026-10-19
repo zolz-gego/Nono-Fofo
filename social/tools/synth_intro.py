@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""Logo intro score ("Golden Letter Swarm"), composed entirely in code.
+"""Logo intro score ("Grandpa's Pop-up Book"), composed entirely in code.
 
 Reads social/remotion/src/intro/cues.json, the same timeline the picture uses,
-so every shape the swarm lands on gets its hit on the same sample.
-120 BPM in D hijaz (D Eb F# G A Bb C): darbuka maqsum, bass, pad, qanun
-plucks, a granular "swarm shimmer" whose density follows the particles, an
-auto-panned spin for the ring, risers and the final drop.
+so every pop-up fold, page turn and hit lands on the same sample.
+120 BPM in D hijaz (D Eb F# G A Bb C): Grandpa's clock, the lamp, a qanun
+motif, creaking cover, paper pops, Nile water, desert wind, pigeons, page
+turns, the alphabet rising, and the final drop.
 
 Run:  tools/.venv/bin/python social/tools/synth_intro.py
-Out:  social/assets/music/intro_logo_swarm.wav (44.1 kHz stereo 16-bit)
+Out:  social/assets/music/intro_logo_book.wav (44.1 kHz stereo 16-bit)
       social/assets/manifest.json ("music" section)
 """
 import json
@@ -21,12 +21,12 @@ import numpy as np
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(ROOT, "tools", "audio"))
 
-from dsp import (SR, bell, boing, chime, doum, glass, hz, marimba, n_of, noise, osc, perc,  # noqa: E402
-                 pluck, pop, sparkle, svf, sweep, tek, thud, tt, water, whoosh, wood)
+from dsp import (SR, bell, boing, chime, doum, glass, hz, impulses, marimba, n_of, noise, osc, perc,  # noqa: E402
+                 pluck, pop, slide_whistle, sparkle, svf, sweep, tek, thud, tt, water, whoosh, wood)
 
 INTRO = os.path.join(ROOT, "social", "remotion", "src", "intro")
 CUES = json.load(open(os.path.join(INTRO, "cues.json")))
-OUT_ID = "intro_logo_swarm"
+OUT_ID = "intro_logo_book"
 OUT_WAV = os.path.join(ROOT, "social", "assets", "music", f"{OUT_ID}.wav")
 MANIFEST = os.path.join(ROOT, "social", "assets", "manifest.json")
 
@@ -34,8 +34,6 @@ BEAT = 60 / CUES["bpm"]
 BAR = BEAT * 4
 EIGHTH = BEAT / 2
 SIXTEENTH = BEAT / 4
-LAND = {s["shape"]: s["land"] for s in CUES["stages"]}
-START = {s["shape"]: s["land"] - s["lead"] for s in CUES["stages"]}
 
 
 # ================================================================ stereo bus
@@ -141,9 +139,8 @@ CHORDS = {
 }
 ROOTS = {"D": "D2", "Gm": "G2", "Cm": "C2", "Eb": "Eb2"}
 FIFTHS = {"D": "A2", "Gm": "D3", "Cm": "G2", "Eb": "Bb2"}
-STAB = {"D": ["D4", "F#4", "A4", "D5"], "Gm": ["G4", "Bb4", "D5", "G5"], "Cm": ["C5", "Eb5", "G5", "C6"], "Eb": ["Eb4", "G4", "Bb4", "Eb5"]}
-# bar start (s) -> chord
-PROGRESSION = [(4, "D"), (6, "Gm"), (8, "Cm"), (10, "D"), (12, "Eb"), (14, "D")]
+ARP = {"D": ["D5", "F#5", "A5", "D6"], "Gm": ["G4", "Bb4", "D5", "G5"], "Cm": ["C5", "Eb5", "G5", "C6"], "Eb": ["Eb5", "G5", "Bb5", "Eb6"]}
+PROGRESSION = [(4, "D"), (6, "Gm"), (8, "Cm"), (10, "D"), (12, "Eb"), (14, "D"), (16, "Gm"), (18, "D")]
 MAQSUM = [("D", 0), ("T", 1), ("T", 3), ("D", 4), ("T", 6)]
 
 
@@ -155,71 +152,68 @@ def chord_at(t):
     return name
 
 
-def grains(bus, t0, t1, density, notes=("D7", "F#7", "A7", "D8", "A6", "F#6"), gain=0.12, seed=5, pan=None, verb=0.6):
-    """Granular shimmer: tiny bell grains, `density(t)` grains per second."""
-    rng = np.random.default_rng(seed)
-    t = t0
-    while t < t1:
-        d = max(0.5, density(t))
-        f = hz(notes[rng.integers(len(notes))]) * (1 + rng.uniform(-0.004, 0.004))
-        p = pan(t) if pan else rng.uniform(-0.9, 0.9)
-        bus.add(bell(f, 0.3, tau=0.06, ratio=1.41, index=1.1), t, gain * rng.uniform(0.4, 1.0), p, verb)
-        t += rng.exponential(1 / d)
+def paper_pop(f=520):
+    """A pop-up piece springs open: paper 'fwip' + soft pop."""
+    d = 0.12
+    fwip = svf(noise(d), sweep(1200, 4200, d), q=1.6, mode="bp") * perc(d, 0.01, 0.035) * 1.6
+    p = pop(f, 0.09)
+    fwip[: len(p)] += 0.6 * p
+    return fwip
 
 
-def add_panned(bus, sig, at, pan, gain=1.0, verb=0.0):
-    """Add a mono signal whose pan follows the array `pan` (one value per sample)."""
-    s = int(round(at * SR))
-    sig = sig[: len(bus.L) - s]
-    pan = pan[: len(sig)]
-    th = (pan + 1) * np.pi / 4
-    bus.L[s:s + len(sig)] += gain * np.cos(th) * sig
-    bus.R[s:s + len(sig)] += gain * np.sin(th) * sig
-    if verb:
-        bus.send[s:s + len(sig)] += gain * verb * sig
+def page_turn(d):
+    """Paper swish with flutter, brightest in the middle of the turn."""
+    t = tt(d)
+    flutter = 0.6 + 0.4 * np.abs(np.sin(2 * np.pi * 14 * t))
+    body = svf(noise(d), sweep(900, 3200, d), q=0.9, mode="bp") * np.sin(np.pi * t / d) ** 1.5 * flutter
+    return body * 1.6
 
 
-def morph_whoosh(bus, shape, pan):
-    t0, t1 = START[shape], LAND[shape]
-    bus.add(whoosh(t1 - t0 + 0.05, 500, 3800, q=1.1), t0, 0.32, pan, 0.3)
-    grains(bus, t0, t1, lambda t: 40 * (1 - (t - t0) / (t1 - t0)), gain=0.07, seed=int(t0 * 10))
+def creak(d):
+    clicks = impulses(d, 40, 9, jitter=0.15)
+    return svf(clicks, 850, q=6, mode="bp") * 3 + 0.3 * svf(clicks, 2400, q=4, mode="bp")
 
 
-def stab(bus, at, c, gain=0.28):
-    for n, p in zip(STAB[c], (-0.5, -0.15, 0.15, 0.5)):
-        bus.add(pluck(n, 1.1, bright=0.75), at, gain, p, 0.45)
+def coo(f=340):
+    """Pigeon 'roo-coo': two soft vibrato hoots."""
+    out = np.zeros(n_of(0.62))
+    for at, d, ff in ((0.0, 0.18, f), (0.24, 0.36, f * 0.92)):
+        x = osc(ff * (1 + 0.04 * np.sin(2 * np.pi * 9 * tt(d))), d) * np.sin(np.pi * tt(d) / d) ** 2
+        s = n_of(at)
+        out[s:s + len(x)] += x
+    return svf(out, 900, mode="lp") * 1.4
 
 
 def score():
-    dur = CUES["duration"]
+    q = CUES
+    dur = q["duration"]
     bus = Bus(dur + 0.5)
 
-    # ---------------------------------------------------- dust gathers into alpha + omega
-    ao, sh = LAND["alphaOmega"], CUES["shatter"]
-    drone = saw_pad(["D2", "A2", "D3"], sh + 0.2, cutoff=400, a=1.4, r=0.2)
-    drone = svf(drone, sweep(220, 1600, sh + 0.2, "exp"), q=0.9, mode="lp")
-    bus.add(drone, 0.0, 0.5, 0, 0.3)
-    grains(bus, 0.05, ao, lambda t: 4 + 60 * (t / ao) ** 2, gain=0.09, seed=1)
-    bus.add(swell(0.6), ao - 0.6, 0.18, 0, 0.3)
+    # ---------------------------------------------------- the dark study
+    for t in np.arange(0.0, q["cover"][0], 1.0):            # Grandpa's clock
+        bus.add(wood(2400, 0.06), t + 0.1, 0.12, 0.6, 0.4)
+        bus.add(wood(1800, 0.06), t + 0.6, 0.09, 0.6, 0.4)
+    on = q["lampOn"]
+    bus.add(wood(3000, 0.05), on, 0.45, -0.3)                         # switch click
+    bus.add(thud(120, 0.08), on, 0.3, -0.3)
+    hum = osc(60, dur - on) * 0.4 + osc(120, dur - on) * 0.15
+    hum *= np.minimum(1, tt(dur - on) / 0.3)
+    bus.add(hum * np.exp(-tt(dur - on) / 6.0), on, 0.04)
+    bus.add(saw_pad(["D2", "A2", "D3"], q["cover"][1] + 0.5, cutoff=500, a=1.0, r=0.6), on, 0.28, 0, 0.4)
+    for j, n in enumerate(["D5", "F#5", "A5", "G5", "F#5", "Eb5", "D5"]):  # qanun motif
+        bus.add(pluck(n, 1.2, bright=0.6), 1.0 + j * 0.2, 0.28, -0.3 + j * 0.1, 0.6)
+
+    # ---------------------------------------------------- the cover opens
+    c0, c1 = q["cover"]
+    bus.add(creak(c1 - c0), c0, 0.25, -0.2, 0.3)
+    bus.add(whoosh(c1 - c0, 300, 1800, q=0.8), c0, 0.35, -0.4, 0.3)
+    bus.add(thud(70, 0.4), c1, 0.6, -0.4, 0.2)
+    bus.add(sparkle(1.2, 14, gain=0.3), c1 - 0.2, 0.6, 0, 0.6)
     for n, p in (("D5", -0.3), ("A5", 0.0), ("D6", 0.3)):
-        bus.add(bell(n, 2.2, tau=0.8, ratio=2.0, index=0.9), ao, 0.22, p, 0.8)
-    bus.add(thud(55, 0.5), ao, 0.35)
-    bus.add(glass(hz("A7"), 0.5, tau=0.09), ao + 0.2, 0.2, 0.4, 0.6)
-    grains(bus, ao, sh, lambda t: 10, gain=0.06, seed=2)
-    bus.add(swell(0.5), sh - 0.5, 0.3, 0, 0.3)
+        bus.add(bell(n, 2.0, tau=0.7, ratio=2.0, index=0.9), c1, 0.2, p, 0.8)
 
-    # ---------------------------------------------------- shatter into the flock
-    bus.add(boom(2.0), sh, 0.85, 0, 0.35)
-    bus.add(doum(0.6), sh, 0.8)
-    bus.add(sparkle(1.2, 26, gain=0.3), sh, 0.7, 0, 0.5)
-    for i in range(6):
-        bus.add(whoosh(0.35, 700, 5200, q=1.3), sh + i * 0.04, 0.2, -0.9 + i * 0.36, 0.2)
-    grains(bus, sh, LAND["swarm"] + 0.4, lambda t: 70 * np.exp(-(t - sh) * 1.5), gain=0.07, seed=3,
-           pan=lambda t: np.sin(t * 5))
-    bus.add(riser(0.7, 500, 5000), LAND["pyramid"] - 0.7, 0.2, 0, 0.3)
-
-    # ---------------------------------------------------- the groove under the shapes
-    g0, g1 = LAND["pyramid"], START["logo"] - 0.25
+    # ---------------------------------------------------- the groove under the pages
+    g0, g1 = 4.0, q["card"][0]
     for bar in np.arange(g0, g1, BAR):
         light = bar < 8.0
         c = chord_at(bar)
@@ -228,92 +222,77 @@ def score():
             if at >= g1:
                 continue
             if kind == "D":
-                bus.add(doum(), at, 0.8)
+                bus.add(doum(), at, 0.7)
             elif not light:
-                bus.add(tek(), at, 0.42, 0.25)
+                bus.add(tek(), at, 0.35, 0.25)
         for s in range(16):
             at = bar + s * SIXTEENTH
-            if at < g1:
-                bus.add(shaker(), at, 0.15 if s % 2 else 0.22, 0.45)
-                if not light and s in (5, 13, 15):
-                    bus.add(ka(), at, 0.32, -0.3)
+            if at >= g1:
+                continue
+            bus.add(shaker(), at, 0.12 if s % 2 else 0.18, 0.45)
+            if s % 2 == 0:
+                bus.add(pluck(ARP[c][(s // 2) % 4], 0.6, bright=0.5), at, 0.1, -0.5 if s % 4 else 0.5, 0.4)
         pat = [(0, ROOTS[c], 1.0), (3, FIFTHS[c], 0.7), (4, ROOTS[c], 0.9), (7, note(ROOTS[c], 12), 0.6)]
         for slot, n, g in pat:
             at = bar + slot * EIGHTH
             if at < g1:
-                bus.add(bass(n), at, 0.5 * g)
-        bus.add(saw_pad(CHORDS[c], min(BAR, g1 - bar) + 0.3, cutoff=1200, a=0.25, r=0.4), bar, 0.14, 0, 0.5)
+                bus.add(bass(n), at, 0.45 * g)
+        bus.add(saw_pad(CHORDS[c], min(BAR, g1 - bar) + 0.3, cutoff=1100, a=0.25, r=0.4), bar, 0.13, 0, 0.5)
 
-    # ---------------------------------------------------- one signature per shape
-    pans = {"pyramid": -0.3, "palm": 0.3, "nile": -0.2, "book": 0.2, "brothers": 0.0, "names": 0.0, "vortex": 0.0}
-    for shape, p in pans.items():
-        morph_whoosh(bus, shape, p)
-        if shape != "vortex":
-            stab(bus, LAND[shape], chord_at(LAND[shape]))
+    # ---------------------------------------------------- pop-up pieces and page turns
+    for si, sp in enumerate(q["spreads"]):
+        for k, p in enumerate(sp["pieces"]):
+            pan = max(-0.8, min(0.8, p["x"] / 90))
+            if p["kind"] in ("nono", "fofo"):
+                bus.add(paper_pop(600), p["at"], 0.45, pan)
+                bus.add(boing(150 if p["kind"] == "nono" else 220, 380 if p["kind"] == "nono" else 520, 0.45), p["at"] + 0.05, 0.45, pan, 0.3)
+            else:
+                bus.add(paper_pop(420 + 60 * k), p["at"], 0.5, pan, 0.15)
+                bus.add(marimba(SCALE[4 + si * 2 + k], 0.5), p["at"], 0.22, pan, 0.3)
+            if "sail" in p:
+                s0, s1, _ = p["sail"]
+                for w in np.arange(s0, s1, 0.55):
+                    bus.add(water(0.5, 1800), w, 0.14, -0.3 + 0.6 * (w - s0) / (s1 - s0), 0.4)
+            if p["kind"] == "sun":
+                bus.add(slide_whistle(600, 1300, 0.8, vib=0.004), p["at"] + 0.2, 0.06, 0.4, 0.5)
+                bus.add(chime("A6", 1.4), p["at"] + 1.0, 0.3, 0.4, 0.6)
+                bus.add(sparkle(0.8, 8), p["at"] + 1.0, 0.45, 0.4, 0.6)
+    t0 = q["spreads"][1]["pieces"][1]["at"]                   # desert wind under the pyramids
+    gust = svf(noise(2.4), sweep(300, 900, 2.4), q=1.2, mode="bp") * np.sin(np.pi * tt(2.4) / 2.4) ** 2 * 1.5
+    bus.add(gust, t0 - 0.2, 0.25, 0.2, 0.3)
+    v = q["spreads"][2]["pieces"]                             # pigeons over the village
+    for at, pan in ((v[1]["at"] + 0.3, 0.6), (v[5]["at"] + 0.6, 0.5), (v[5]["at"] + 1.4, 0.7)):
+        bus.add(coo(330 + 20 * pan), at, 0.3, pan, 0.4)
+    kid = v[5]["at"] + 0.3                                    # ta-da when both brothers are up
+    bus.add(marimba("G5", 0.3), kid, 0.3)
+    bus.add(marimba("C6", 0.8), kid + 0.13, 0.3, 0, 0.3)
+    bus.add(bell("C7", 1.0, tau=0.35, ratio=2.0, index=1.2), kid + 0.13, 0.14, 0, 0.5)
+    for a, b in q["turns"]:
+        bus.add(page_turn(b - a), a, 0.55, 0.0, 0.25)
+        bus.add(thud(90, 0.2), b, 0.3, -0.3)
 
-    t = LAND["pyramid"]                                       # pyramid + sun: deep gong, sun chime
-    bus.add(bell("D3", 2.5, tau=0.9, ratio=1.4, index=1.5), t, 0.35, -0.2, 0.5)
-    bus.add(chime("A6", 1.2), t + 0.25, 0.25, 0.5, 0.6)
-    bus.add(sparkle(0.6, 6), t + 0.25, 0.4, 0.5, 0.5)
+    # ---------------------------------------------------- the alphabet rises into a ring
+    l0, l1 = q["lettersLift"]
+    for i in range(28):
+        n = SCALE[(i % 15) + 2]
+        bus.add(pluck(n, 0.7, bright=0.85), l0 + i / 28 * 0.6, 0.16, -0.7 + 1.4 * (i % 7) / 6, 0.6)
+        bus.add(bell(note(n, 12), 0.4, tau=0.1, ratio=1.41, index=1.0), l0 + i / 28 * 0.6 + 0.01, 0.06, 0, 0.6)
+    d = l1 - (l0 + 0.9) + 0.4
+    swirl = svf(noise(d), sweep(600, 3000, d), q=1.8, mode="bp") * 2 * np.sin(np.pi * tt(d) / d)
+    th = (1.4 * (tt(d) + 0.9)) * 2
+    s = int(round((l0 + 0.9) * SR))
+    k = min(len(swirl), len(bus.L) - s)
+    bus.L[s:s + k] += 0.35 * np.cos((np.sin(th[:k]) + 1) * np.pi / 4) * swirl[:k]
+    bus.R[s:s + k] += 0.35 * np.sin((np.sin(th[:k]) + 1) * np.pi / 4) * swirl[:k]
+    bus.add(sparkle(1.6, 18, gain=0.25), l0 + 0.9, 0.5, 0, 0.6)
 
-    t = LAND["palm"]                                          # palm: leaves in the wind
-    for i in range(7):
-        bus.add(svf(noise(0.14), 4200, q=1.4, mode="bp") * perc(0.14, 0.012, 0.045), t + 0.05 + i * 0.16, 0.22, -0.6 + i * 0.2)
-    for j, n in enumerate(["A5", "G5", "F#5", "D5"]):
-        bus.add(marimba(n, 0.5), t + 0.5 + j * SIXTEENTH, 0.28, 0.2, 0.3)
-
-    t = LAND["nile"]                                          # Nile: flowing water and bubbles
-    bus.add(water(1.4, 2200), t, 0.3, -0.2, 0.4)
-    for j in range(10):
-        f = 420 + 70 * (j % 5)
-        d = 0.09
-        bub = osc(sweep(f, f * 2.4, d, "exp"), d) * perc(d, 0.002, d * 0.35)
-        bus.add(bub, t + 0.05 + j * 0.11, 0.22, -0.6 + j * 0.13, 0.4)
-
-    t = LAND["book"]                                          # book: pages flutter, qanun run up
-    for i in range(6):
-        bus.add(svf(noise(0.06), 2500, q=1.2, mode="bp") * perc(0.06, 0.004, 0.02), t + i * 0.07, 0.3, 0.2)
-    for j, n in enumerate(SCALE[7:15]):
-        bus.add(pluck(n, 0.6, bright=0.8), t + 0.35 + j * 0.05, 0.2, -0.5 + j * 0.14, 0.4)
-
-    t = LAND["brothers"]                                      # the brothers: two boings + ta-da
-    bus.add(boing(150, 360, 0.5), t, 0.55, -0.4, 0.3)
-    bus.add(boing(220, 520, 0.45), t + 0.25, 0.5, 0.4, 0.3)
-    bus.add(marimba("G5", 0.3), t + 0.6, 0.3)
-    bus.add(marimba("C6", 0.8), t + 0.73, 0.3, 0, 0.3)
-    bus.add(bell("C7", 1.0, tau=0.35, ratio=2.0, index=1.2), t + 0.73, 0.15, 0, 0.5)
-
-    t = LAND["names"]                                         # names: a little motif for each
-    for j, n in enumerate(["A5", "F#5", "A5", "D6"]):
-        bus.add(pluck(n, 0.8, bright=0.8), t + j * SIXTEENTH, 0.35, -0.5, 0.5)
-    for j, n in enumerate(["D6", "A5", "D6", "F#6"]):
-        bus.add(pluck(n, 0.8, bright=0.8), t + BEAT + j * SIXTEENTH, 0.35, 0.5, 0.5)
-
-    # ---------------------------------------------------- the ring spins up
-    v0 = START["vortex"]
-    s0, s1 = CUES["spinUp"]
-    d = s1 - s0 + 0.2
-    spin = 1.2 * (tt(d) + (s0 - v0)) + 0.9 * (tt(d) + (s0 - v0)) ** 2
-    air = svf(noise(d), sweep(500, 4500, d), q=1.6, mode="bp") * 2 * (tt(d) / d) ** 1.4
-    add_panned(bus, air, s0, np.sin(spin), 0.5, 0.3)
-    tone_ = osc(sweep(note("D3"), note("D5"), d), d, "saw")
-    add_panned(bus, svf(tone_, 1800, mode="lp") * (tt(d) / d) ** 2 * 0.25, s0, np.sin(spin + np.pi), 0.5, 0.3)
-    t, gap = s0, EIGHTH
-    while t < s1:
-        bus.add(tek(), t, 0.2 + 0.4 * (t - s0) / (s1 - s0), 0.3 * np.sin(t * 9))
-        t += gap
-        gap = max(0.04, gap * 0.9)
-
-    # ---------------------------------------------------- spiral into the logo
-    l0, l1 = START["logo"], LAND["logo"]
-    grains(bus, l0, l1, lambda t: 25 + 120 * np.sin(np.pi * (t - l0) / (l1 - l0)), gain=0.08, seed=9,
-           notes=("D6", "F#6", "A6", "D7", "F#7", "A7", "D8"))
-    bus.add(whoosh(l1 - l0, 4000, 500, q=1.0), l0, 0.35, 0, 0.4)
-    bus.add(riser(1.2, 600, 9000), CUES["drop"] - 1.2, 0.3, 0, 0.3)
-    bus.add(swell(0.7), CUES["drop"] - 0.75, 0.35, 0, 0.3)
-
-    # ---------------------------------------------------- the drop: the logo
-    dr = CUES["drop"]
+    # ---------------------------------------------------- the logo card and the drop
+    k0, _ = q["card"]
+    bus.add(paper_pop(380), k0, 0.6, 0, 0.3)
+    bus.add(page_turn(0.5), k0, 0.3)
+    dr = q["drop"]
+    bus.add(riser(dr - k0, 500, 8000), k0, 0.3, 0, 0.3)
+    bus.add(swell(0.7), dr - 0.7, 0.35, 0, 0.3)
     bus.add(boom(3.0), dr, 1.0, 0, 0.5)
     bus.add(doum(0.7), dr, 1.0)
     bus.add(tek(), dr + 0.12, 0.5, 0.3)
@@ -324,8 +303,8 @@ def score():
         bus.add(bell(n, 3.0, tau=1.0, ratio=2.0, index=0.9), dr + 0.05, 0.25, p, 0.8)
     bus.add(saw_pad(CHORDS["D"] + ["F#4", "A4"], dur - dr, cutoff=1800, a=0.05, r=1.4), dr, 0.24, 0, 0.6)
     bus.add(saw_pad(["D2", "A2"], dur - dr, cutoff=400, a=0.05, r=1.4), dr, 0.3)
-    bus.add(sparkle(2.4, 22, gain=0.3), dr + 0.2, 0.6, 0, 0.7)
-    sh0, _ = CUES["shine"]
+    bus.add(sparkle(2.4, 20, gain=0.3), dr + 0.2, 0.6, 0, 0.7)
+    sh0, _ = q["shine"]
     for j, n in enumerate(["D6", "F#6", "A6", "D7", "F#7", "A7"]):
         bus.add(glass(n, 0.5, tau=0.12), sh0 + j * 0.06, 0.2, -0.6 + j * 0.24, 0.6)
     return bus
@@ -398,10 +377,11 @@ def write_stereo(path, L, R):
 def register():
     m = json.load(open(MANIFEST))
     music = m.setdefault("music", {})
-    music.pop("intro_logo_blocks", None)
+    for old in ("intro_logo_blocks", "intro_logo_swarm"):
+        music.pop(old, None)
     music[OUT_ID] = dict(
         file=f"music/{OUT_ID}.wav",
-        desc="Golden Letter Swarm intro score (24 s, 120 BPM, D hijaz): granular swarm shimmer, darbuka, qanun, a signature per shape, ring spin, final drop. Synced to remotion/src/intro/cues.json.",
+        desc="Grandpa's Pop-up Book intro score (25 s, 120 BPM, D hijaz): clock, lamp, qanun motif, creaking cover, paper pops, Nile water, desert wind, pigeons, page turns, rising alphabet, final drop. Synced to remotion/src/intro/cues.json.",
         duration=CUES["duration"],
         source="social/tools/synth_intro.py",
     )
