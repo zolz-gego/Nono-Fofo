@@ -3,9 +3,11 @@
 
 Finds the pauses between lines and writes voice/<line id>.wav for each line in
 video.json order. Prints the pauses it found; if the count doesn't match the
-lines, pass --gap to change the shortest pause it treats as a break.
+lines, pass --gap to change the shortest pause it treats as a break. When a
+line has its own long pause (e.g. "... ليه؟"), give the line times by hand with
+--lines start-end,start-end,... (seconds in the take, one per line).
 
-Run:  tools/.venv/bin/python social/tools/split_voice.py <video-folder> <take.mp3> [--gap 0.15]
+Run:  tools/.venv/bin/python social/tools/split_voice.py <video-folder> <take.mp3> [--gap 0.15] [--lines 0-2.8,2.9-5.1,...]
 """
 import json
 import os
@@ -20,7 +22,7 @@ import numpy as np
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-def main(folder, take, min_gap=0.15):
+def main(folder, take, min_gap=0.15, lines=None):
     vdir = os.path.join(ROOT, "social", "videos", folder)
     ids = [s["line"]["id"] for s in json.load(open(os.path.join(vdir, "video.json")))["scenes"] if s.get("line")]
     os.makedirs(os.path.join(vdir, "voice"), exist_ok=True)
@@ -50,13 +52,21 @@ def main(folder, take, min_gap=0.15):
             i = j
         else:
             i += 1
+    if lines:
+        if len(lines) != len(ids):
+            sys.exit(f"--lines has {len(lines)} parts for {len(ids)} lines")
+        bounds = [round(v * 100) for ab in lines for v in ab]
+        return write(x, sr, vdir, ids, bounds)
     # keep the longest pauses as line breaks
     gaps = sorted(sorted(gaps, key=lambda g: g[0] - g[1])[: len(ids) - 1])
     print("pauses:", ", ".join(f"{a / 100:.2f}-{b / 100:.2f}s" for a, b in gaps))
     if len(gaps) != len(ids) - 1:
         sys.exit(f"found {len(gaps) + 1} parts for {len(ids)} lines; try a smaller --gap")
 
-    bounds = [start] + [v for g in gaps for v in g] + [end]
+    write(x, sr, vdir, ids, [start] + [v for g in gaps for v in g] + [end])
+
+
+def write(x, sr, vdir, ids, bounds):
     for k, lid in enumerate(ids):
         a = max(0, bounds[2 * k] / 100 - 0.04)
         b = min(len(x) / sr, bounds[2 * k + 1] / 100 + 0.12)
@@ -74,9 +84,13 @@ def main(folder, take, min_gap=0.15):
 
 if __name__ == "__main__":
     args = sys.argv[1:]
-    gap = 0.15
+    gap, lines = 0.15, None
+    if "--lines" in args:
+        k = args.index("--lines")
+        lines = [tuple(float(v) for v in part.split("-")) for part in args[k + 1].split(",")]
+        del args[k:k + 2]
     if "--gap" in args:
         k = args.index("--gap")
         gap = float(args[k + 1])
         del args[k:k + 2]
-    main(args[0], args[1], gap)
+    main(args[0], args[1], gap, lines)

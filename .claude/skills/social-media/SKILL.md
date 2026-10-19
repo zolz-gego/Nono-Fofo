@@ -53,7 +53,9 @@ ElevenLabs from the script Claude writes.
    MP3s in `voice/`.
 5. **When voices arrive:** if the user sends one take with all lines, split it:
    `tools/.venv/bin/python social/tools/split_voice.py <NNN-slug> <take.mp3>`
-   (keeps it as `voice/full_take.mp3`, writes `voice/<line id>.wav`). Then set
+   (keeps it as `voice/full_take.mp3`, writes `voice/<line id>.wav`). If a line
+   has its own long pause (e.g. "... ليه؟"), the auto split fails: find the line
+   times from the loudness envelope and pass `--lines 0-2.8,2.9-5.1,...`. Then set
    `words` for long lines and move keyword `at` onto the spoken word using the
    loudness envelope, and re-render. Timing follows the real audio automatically.
    Listen-check by reading durations from the sync/render output; if a line runs
