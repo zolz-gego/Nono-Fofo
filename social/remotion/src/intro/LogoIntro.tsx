@@ -108,7 +108,7 @@ export const LogoIntro: React.FC = () => {
   );
   const roll = prog(t, cues.roll[0], cues.roll[1]);
   const shake =
-    m * (0.014 * kick(t, cues.impact, 0.45) + 0.018 * kick(t, cues.drop, 0.5) + 0.014 * kick(t, cues.final, 0.55) + 0.004 * roll * roll + 0.004 * kick(t, cues.flatten[1], 0.2));
+    m * (0.014 * kick(t, cues.impact, 0.45) + 0.018 * kick(t, cues.drop, 0.5) + 0.004 * roll * roll + 0.004 * kick(t, cues.flatten[1], 0.2));
   const dx = shake * Math.sin(t * 97);
   const dy = shake * Math.cos(t * 83);
 

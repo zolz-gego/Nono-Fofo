@@ -3,7 +3,7 @@
 // the shot started; it keeps running when the shot shrinks onto a block.
 import React from 'react';
 import {color, FONT_COPTIC} from '../theme';
-import {kick, rnd} from './anim';
+import {kick, rnd, springAt} from './anim';
 import {GoldLetter, Palm, Pyramid, Sun} from './Parts';
 
 export type MacroId = 'letter' | 'pyramid' | 'palm' | 'river' | 'book';
@@ -29,8 +29,12 @@ const LetterShot: React.FC<{lt: number; uid: string}> = ({lt, uid}) => {
           <feGaussianBlur stdDeviation={1.6} />
         </filter>
         <mask id={`${uid}-mask`}>
-          <text x={50} y={71} textAnchor="middle" fontFamily={FONT_COPTIC} fontSize={64} fill="white">
+          {/* alpha and omega: the first and last letters */}
+          <text x={38.5} y={60.5} textAnchor="middle" fontFamily={FONT_COPTIC} fontSize={33} fill="white">
             a
+          </text>
+          <text x={61.5} y={60.5} textAnchor="middle" fontFamily={FONT_COPTIC} fontSize={33} fill="white" opacity={Math.min(1, Math.max(0, (lt - 0.55) / 0.15))}>
+            w
           </text>
         </mask>
         <linearGradient id={`${uid}-band`} x1="0" y1="0" x2="1" y2="0">
@@ -53,13 +57,18 @@ const LetterShot: React.FC<{lt: number; uid: string}> = ({lt, uid}) => {
         ))}
       </g>
       <Camera s={1.0 + lt * 0.07} r={-3 + lt * 2}>
-        <g transform="translate(50 50)">
-          <GoldLetter ch="a" size={64} uid={`${uid}-a`} glow={Math.min(1, lt / 0.6)} />
+        <g transform="translate(38.5 50)">
+          <GoldLetter ch="a" size={33} uid={`${uid}-a`} glow={Math.min(1, lt / 0.6)} />
         </g>
+        {lt >= 0.55 && (
+          <g transform={`translate(61.5 50) scale(${Math.min(1.15, springAt(lt, 0.55, 2.2, 6))})`}>
+            <GoldLetter ch="w" size={33} uid={`${uid}-w`} glow={Math.min(1, (lt - 0.55) / 0.4)} />
+          </g>
+        )}
         <g mask={`url(#${uid}-mask)`}>
           <rect x={band} y={0} width={18} height={100} fill={`url(#${uid}-band)`} transform={`skewX(-20)`} />
         </g>
-        <Twinkle x={66} y={34} s={6 * kick(lt, 0.85, 0.5)} o={kick(lt, 0.85, 0.5)} />
+        <Twinkle x={71} y={37} s={6 * kick(lt, 0.85, 0.5)} o={kick(lt, 0.85, 0.5)} />
       </Camera>
       {Array.from({length: 18}, (_, i) => (
         <circle key={i} cx={(rnd(i + 200) * 100 + lt * (3 + rnd(i) * 4)) % 100} cy={(rnd(i + 300) * 100 - lt * 5 + 100) % 100} r={0.25 + rnd(i + 400) * 0.35} fill="#FFE9A8" opacity={0.6} />

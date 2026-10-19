@@ -53,11 +53,7 @@ function camera(t: number): Cam {
     const end = RIVER[RIVER.length - 1];
     return {...c, fx: lerp(end[0], 256, q), fy: lerp(end[1], 256, q), k: lerp(2.4, 1, q)};
   }
-  const x = t - cues.final;
-  const punch = x > 0 ? Math.exp(-x * 5) * Math.sin(x * 16) * 0.07 : 0;
-  const drift = Math.max(0, x) * 0.012;
-  const float = x > 0.4 ? Math.sin((x - 0.4) * 1.7) * 3 : 0;
-  return {...c, fy: 256 + float, k: 1 + punch + drift};
+  return c; // the ending holds perfectly still
 }
 
 // Pop-up piece standing on (x, y) in logo space, folding up from flat.
@@ -70,7 +66,7 @@ const PopUp: React.FC<{x: number; y: number; w: number; h: number; vb: string; u
       width: w,
       height: h,
       transformOrigin: '50% 100%',
-      transform: `rotateX(${(1 - up) * 88}deg)`,
+      transform: `perspective(${h * 6}px) rotateX(${(1 - up) * 88}deg)`,
       opacity: up > 0.02 ? 1 : 0,
     }}
   >
@@ -198,13 +194,14 @@ export const LogoAct: React.FC<{t: number}> = ({t}) => {
           {/* letters rise out of the book */}
           {cues.letters.map((t0, j) => {
             if (t < t0) return null;
-            const sx = [165, 200, 236, 276, 312, 350][j];
-            const tx = [148, 194, 238, 282, 324, 366][j];
-            const tyv = [262, 240, 228, 232, 246, 268][j];
+            // ⲛⲟⲛⲟ floats up toward Nono, ⲫⲟⲫⲟ toward Fofo
+            const tx = [150, 180, 210, 240, 272, 302, 332, 362][j];
+            const sx = tx;
+            const tyv = [252, 246, 244, 248, 286, 282, 282, 286][j];
             const fly = ease.outCubic(prog(t, t0, t0 + 0.7));
             const s = clamp(springAt(t, t0, 1.8, 5), 0, 1.3) * (1 - prog(t, cues.whip[0], cues.whip[0] + 0.2));
-            const x = lerp(sx, tx, fly) + Math.sin(t * 2 + j) * 3 * fly;
-            const y = lerp(345, tyv, fly) + Math.cos(t * 2.4 + j) * 4 * fly;
+            const x = lerp(sx, tx, fly);
+            const y = lerp(345, tyv, fly) + Math.sin(t * 3 + j * 0.8) * 2.5 * fly;
             if (s <= 0.001) return null;
             return (
               <g key={j}>
@@ -212,8 +209,8 @@ export const LogoAct: React.FC<{t: number}> = ({t}) => {
                   const q = ease.outCubic(prog(t - (i + 1) * 0.05, t0, t0 + 0.7));
                   return <circle key={i} cx={lerp(sx, tx, q)} cy={lerp(345, tyv, q)} r={3 - i * 0.5} fill={color('sunYellow')} opacity={(1 - i / 5) * 0.6 * (1 - fly * 0.8) * s} />;
                 })}
-                <g transform={`translate(${x} ${y}) rotate(${Math.sin(t * 3 + j) * 12}) scale(${s})`}>
-                  <GoldLetter ch={COPTIC[(j * 4 + 1) % COPTIC.length]} size={34} uid={`la-l${j}`} />
+                <g transform={`translate(${x} ${y}) rotate(${Math.sin(t * 3 + j) * 4}) scale(${s})`}>
+                  <GoldLetter ch={'nonofofo'[j]} size={36} uid={`la-l${j}`} />
                 </g>
               </g>
             );
@@ -284,11 +281,12 @@ export const LogoAct: React.FC<{t: number}> = ({t}) => {
         </svg>
 
         {/* pop-up book pieces around the pyramid */}
-        <div style={{position: 'absolute', left: 0, top: 0, width: LOGO, height: LOGO, perspective: LOGO * 1.4, transformStyle: 'preserve-3d'}}>
+        {/* flat stacking (no shared 3D space), drawn back to front so the layering never flips */}
+        <div style={{position: 'absolute', left: 0, top: 0, width: LOGO, height: LOGO}}>
           {[
-            {x: 212, y: 262, w: 60, h: 68, at: cues.popups[1], kind: 'palm', seed: 1},
             {x: 238, y: 252, w: 50, h: 56, at: cues.popups[2], kind: 'palm', seed: 2},
             {x: 268, y: 256, w: 115, h: 83, at: cues.popups[0], kind: 'pyramid', seed: 0},
+            {x: 212, y: 262, w: 60, h: 68, at: cues.popups[1], kind: 'palm', seed: 1},
             {x: 310, y: 284, w: 64, h: 72, at: cues.popups[3], kind: 'palm', seed: 3},
           ].map((pc) => {
             const up = clamp(springAt(t, pc.at, 1.8, 6), 0, 1.15) * fold;

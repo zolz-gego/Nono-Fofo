@@ -260,7 +260,8 @@ def score(tiles):
     drone = svf(drone, sweep(260, 2200, 6.2, "exp"), q=0.9, mode="lp")    # filter opens toward the impact
     bus.add(drone, 0.0, 0.55, 0, 0.3)
     bus.add(sparkle(1.2, 7, start=0.0, gain=0.3), 0.15, 0.6, -0.3, 0.6)
-    bus.add(glint(), 0.85, 0.7, 0.4, 0.5)                                 # glint on the gold letter
+    bus.add(chime("A6", 1.2), 0.55, 0.3, 0.35, 0.7)                        # omega arrives next to alpha
+    bus.add(glint(), 0.85, 0.7, 0.4, 0.5)                                 # glint on the gold letters
     hits = ["D5", "F#5", "A5", "C6", "D6"]
     for m, n in zip(q["macros"], hits):
         at = m["start"]
@@ -398,9 +399,10 @@ def score(tiles):
     # zoom into the book, letters rise one by one
     z0, z1 = q["zoomBook"]
     bus.add(whoosh(z1 - z0 + 0.1, 500, 2600, q=1.2), z0, 0.4, 0, 0.3)
+    # letters spell "nono" then "fofo": a bouncy motif for each brother
     for j, at in enumerate(q["letters"]):
-        n = SCALE[7 + j]
-        pan = -0.6 + j * 0.24
+        n = ["A5", "F#5", "A5", "D6", "D6", "A5", "D6", "F#6"][j]
+        pan = -0.5 if j < 4 else 0.5
         bus.add(pluck(n, 1.0, bright=0.8), at, 0.45, pan, 0.5)
         bus.add(bell(note(n, 12), 0.8, tau=0.25, ratio=1.41, index=1.0), at + 0.02, 0.18, pan, 0.6)
         bus.add(slide_whistle(note(n, 0), note(n, 12), 0.18), at, 0.05, pan, 0.3)
