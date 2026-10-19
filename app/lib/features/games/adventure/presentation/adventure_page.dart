@@ -395,6 +395,30 @@ class _AdventurePageState extends State<AdventurePage> {
 
   @override
   Widget build(BuildContext context) {
+    // The game is landscape only. Apps lock the screen sideways; where that
+    // can't happen (a phone browser held upright) the whole game is drawn
+    // turned a quarter, so it plays sideways until the phone is turned.
+    final media = MediaQuery.of(context);
+    if (_touch && media.size.width < media.size.height) {
+      EdgeInsets turn(EdgeInsets p) =>
+          EdgeInsets.fromLTRB(p.top, p.right, p.bottom, p.left);
+      return RotatedBox(
+        quarterTurns: 1,
+        child: MediaQuery(
+          data: media.copyWith(
+            size: media.size.flipped,
+            padding: turn(media.padding),
+            viewPadding: turn(media.viewPadding),
+            viewInsets: turn(media.viewInsets),
+          ),
+          child: _page(context),
+        ),
+      );
+    }
+    return _page(context);
+  }
+
+  Widget _page(BuildContext context) {
     final l10n = context.l10n;
     final cubit = _cubit;
     return Scaffold(
@@ -426,12 +450,9 @@ class _AdventurePageState extends State<AdventurePage> {
           onKeyEvent: _onKey,
           child: LayoutBuilder(
             builder: (context, c) {
-              final portrait = c.maxWidth < c.maxHeight;
-              _game?.blocked = portrait;
               if (cubit == null) {
                 return const Center(child: CircularProgressIndicator());
               }
-              if (portrait && _touch) return const AdventureRotateHint();
               return BlocConsumer<AdventureCubit, AdventureState>(
                 bloc: cubit,
                 listenWhen: (a, b) =>
@@ -485,18 +506,18 @@ class _AdventurePageState extends State<AdventurePage> {
         (state.phase == AdventurePhase.question ||
             state.phase == AdventurePhase.answered) &&
         state.question != null;
+    // Smaller arrows, closer to the edges, on short (phone) screens.
+    final short = c.maxHeight < 450;
+    final buttonSize = short ? 64.0 : 84.0;
+    final buttonGap = short ? AppDimens.spaceSm : AppDimens.spaceLg;
     final hero = _hero(state);
     final heroName = hero.name;
     return Stack(
       children: [
         Positioned.fill(child: _gameView!),
-        // Tap the right half to jump (touch screens).
+        // Touch screens: tap anywhere (but the arrows) to jump.
         if (_touch && state.running)
-          Positioned(
-            top: 0,
-            bottom: 0,
-            right: 0,
-            width: c.maxWidth / 2,
+          Positioned.fill(
             child: Listener(
               behavior: HitTestBehavior.opaque,
               onPointerDown: (_) => game.input.pressJump(),
@@ -504,15 +525,27 @@ class _AdventurePageState extends State<AdventurePage> {
               onPointerCancel: (_) => game.input.releaseJump(),
             ),
           ),
-        if (_touch && state.running)
+        // ◀ at the left edge, ▶ at the right edge (also in Arabic).
+        if (_touch && state.running) ...[
           Positioned(
-            left: AppDimens.spaceLg,
-            bottom: AppDimens.spaceLg,
-            child: AdventureWalkButtons(
-              onLeft: (down) => game.input.left = down,
-              onRight: (down) => game.input.right = down,
+            left: buttonGap,
+            bottom: buttonGap,
+            child: AdventureHoldButton(
+              size: buttonSize,
+              icon: AppIcons.walkLeft,
+              onHold: (down) => game.input.left = down,
             ),
           ),
+          Positioned(
+            right: buttonGap,
+            bottom: buttonGap,
+            child: AdventureHoldButton(
+              size: buttonSize,
+              icon: AppIcons.walkRight,
+              onHold: (down) => game.input.right = down,
+            ),
+          ),
+        ],
         Positioned(
           top: 0,
           left: 0,
