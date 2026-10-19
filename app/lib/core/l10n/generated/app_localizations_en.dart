@@ -661,7 +661,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adventureHowTo => 'Arrows to walk, space to jump';
 
   @override
-  String get adventureHowToTouch => '◀ ▶ to walk, tap the right side to jump';
+  String get adventureHowToTouch =>
+      '◀ ▶ at the sides to walk, tap anywhere else to jump';
 
   @override
   String adventureStart(String name, int count) {
@@ -752,9 +753,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adventurePause => 'Pause';
-
-  @override
-  String get adventureRotate => 'Turn your device sideways to play';
 
   @override
   String get adventureBonus => 'Bonus letter! +2 stars at the finish';

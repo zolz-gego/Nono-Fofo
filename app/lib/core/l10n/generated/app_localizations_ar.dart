@@ -712,7 +712,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get adventureHowTo => 'الأسهم للمشي والمسافة للنط';
 
   @override
-  String get adventureHowToTouch => '◀ ▶ للمشي واضغط على اليمين للنط';
+  String get adventureHowToTouch =>
+      '◀ ▶ على الجنبين للمشي، واضغط في أي حتة تانية للنط';
 
   @override
   String adventureStart(String name, int count) {
@@ -800,9 +801,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get adventurePause => 'وقفة';
-
-  @override
-  String get adventureRotate => 'لف الجهاز بالعرض عشان تلعب';
 
   @override
   String get adventureBonus => 'حرف بونص! نجمتين زيادة في الآخر';
