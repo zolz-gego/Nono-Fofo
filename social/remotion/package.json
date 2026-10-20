@@ -7,7 +7,8 @@
     "studio": "node scripts/sync-assets.mjs && remotion studio src/index.ts",
     "still": "node scripts/sync-assets.mjs && node scripts/render.mjs still",
     "render": "node scripts/sync-assets.mjs && node scripts/render.mjs video",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "intro": "node scripts/sync-assets.mjs && node scripts/render.mjs intro"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "7.1.0",

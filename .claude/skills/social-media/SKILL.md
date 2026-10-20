@@ -9,6 +9,20 @@ Everything lives in `social/` (map and asset catalog: `social/README.md`).
 Motion is Claude's job (Remotion, in code); voices are made by the user in
 ElevenLabs from the script Claude writes.
 
+## Git
+
+- **No new branch.** Social video work stays on whatever branch is checked out;
+  don't create a branch for it (this overrides the per-chat branch rule in
+  `CLAUDE.md` for social work).
+- **Only resources and the skill go in git:** `social/assets/` (with its
+  `manifest.json` and the README asset catalog), shared engine/tool changes in
+  `social/remotion/` and `social/tools/`, and this skill.
+- **Videos never go in git.** `social/videos/` (scripts, `video.json`, voices),
+  `social/previews/`, `social/out/` and the logo intro (`social/remotion/src/intro/`,
+  `social/tools/synth_intro.py`) are git-ignored and stay on this machine. Never
+  `git add -f` them. Local-only compositions are registered through
+  `src/generated/local.ts` (written by `npm run sync` when `src/intro/` exists).
+
 ## Fixed decisions
 
 - **Format:** portrait 1080×1920, 30 fps, H.264 MP4. Images also portrait.
@@ -54,7 +68,7 @@ ElevenLabs from the script Claude writes.
    - `video.json`: the scenes (format in `social/remotion/src/types.ts`).
      Each `line.say` must equal the script text; `estimate` ≈ 0.28 s per Arabic
      word + 0.3 s per tag sound. Poses come from `app/assets/characters/manifest.json`.
-   - an empty `voice/` folder (keep it with a `.gitkeep`).
+   - an empty `voice/` folder.
 3. **Draft render** without voices so the user can see the motion:
    `cd social/remotion && npm run render -- <NNN-slug>` and check stills with
    `npm run still -- <NNN-slug> <seconds>` (look at them with Read). The sync step
@@ -71,7 +85,6 @@ ElevenLabs from the script Claude writes.
    Listen-check by reading durations from the sync/render output; if a line runs
    over ~4.5 s, split it into two scenes or ask for a faster take. If a caption's
    word highlight drifts, add `words` (start second of each Arabic word).
-6. Add the video to the **Videos** table in `social/README.md` with its status.
 
 ## Adding resources (always keep the catalog up to date)
 

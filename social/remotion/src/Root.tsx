@@ -1,11 +1,13 @@
 import React from 'react';
 import {Composition} from 'remotion';
 import {videos} from './generated/data';
+import {LocalCompositions} from './generated/local';
 import {FPS, H, W} from './theme';
 import {computeTiming} from './timing';
 import {Video, type VideoProps} from './Video';
 
-// One composition per folder in social/videos, id "v<folder>".
+// One composition per folder in social/videos, id "v<folder>", plus any
+// local-only compositions (e.g. the logo intro) that exist on this machine.
 export const RemotionRoot: React.FC = () => (
   <>
     {videos.map((spec) => (
@@ -24,5 +26,6 @@ export const RemotionRoot: React.FC = () => (
         }}
       />
     ))}
+    <LocalCompositions />
   </>
 );

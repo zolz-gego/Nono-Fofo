@@ -67,5 +67,13 @@
       "desc": "Ta-da! short reveal (brass-free: marimba + bell)",
       "duration": 1.5
     }
+  },
+  "music": {
+    "intro_logo_blocks": {
+      "file": "music/intro_logo_blocks.wav",
+      "desc": "Logo intro score (25.5 s, 120 BPM, D hijaz): darbuka, qanun, marimba block landings, risers and the final sting. Synced to remotion/src/intro/cues.json.",
+      "duration": 25.5,
+      "source": "social/tools/synth_intro.py"
+    }
   }
 }

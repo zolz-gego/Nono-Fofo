@@ -10,15 +10,16 @@ from ElevenLabs (Eleven v3). The workflow lives in the `social-media` skill
 
 | Path | What |
 |---|---|
-| `videos/<NNN-slug>/script.md` | The ElevenLabs script: line files, v3 text with emotion tags, captions |
+| `videos/<NNN-slug>/script.md` | *(local only)* The ElevenLabs script: line files, v3 text with emotion tags, captions |
 | `videos/<NNN-slug>/video.json` | The scene list Remotion renders (format: `remotion/src/types.ts`) |
 | `videos/<NNN-slug>/voice/` | The voice MP3s from ElevenLabs, named after each line id |
 | `voices.md` | Nono's and Fofo's ElevenLabs voice prompts + v3 writing rules |
 | `assets/` | **Social-only** resources (catalogued below and in `assets/manifest.json`) |
 | `tools/split_voice.py` | Splits one ElevenLabs take into the per-line voice files |
 | `tools/synth_social_sfx.py` | Synthesizes the social sound effects into `assets/sfx/` |
+| `tools/synth_intro.py` | *(local only)* Logo intro: cuts the logo into blocks and composes its score |
 | `remotion/` | The Remotion project (components, timing, render scripts) |
-| `previews/` | One still per video for the README and PRs |
+| `previews/` | *(local only)* One still per video |
 | `out/` | Rendered MP4s and stills (git-ignored) |
 
 ## Where resources come from
@@ -40,6 +41,9 @@ Run inside `social/remotion` (first time: `npm install`).
 npm run studio                          # live preview / scrub in the browser
 npm run still -- 001-nono-hello 2.5     # one frame -> out/001-nono-hello@2.5s.jpg
 npm run render -- 001-nono-hello        # full video -> out/001-nono-hello.mp4
+npm run intro                           # logo intro -> out/intro-landscape.mp4 + out/intro-portrait.mp4
+npm run still -- intro-portrait 12.5    # one intro frame
+tools/.venv/bin/python social/tools/synth_intro.py        # (from repo root) rebuild intro layout + score
 tools/.venv/bin/python social/tools/synth_social_sfx.py   # (from repo root) rebuild social SFX
 ```
 
@@ -62,6 +66,12 @@ tools/.venv/bin/python social/tools/synth_social_sfx.py   # (from repo root) reb
 | `mg_sparkle` | Magic shimmer | Stars, shining letters |
 | `mg_ta_da` | Marimba + bell reveal | Big moment / catchphrase |
 
+### Music (`assets/music/`)
+
+| id | Track | Used for |
+|---|---|---|
+| `intro_logo_blocks` | 25.5 s score, 120 BPM, D hijaz: darbuka maqsum, bass, qanun plucks, block landings as a marimba melody, risers, final sting. Made by `tools/synth_intro.py`, cued from `remotion/src/intro/cues.json` | Logo intro |
+
 All 107 app SFX (`correct_1`, `confetti`, `fish_splash_1`, …) can be used by id
 too; see `app/assets/audio/manifest.json`.
 
@@ -75,14 +85,14 @@ Font Awesome, registered in `remotion/src/icons.ts`: `book`, `clap`, `fish`,
 `football`, `heart`, `house`, `idea`, `paint`, `puzzle`, `question`, `rocket`,
 `run`, `star`, `trophy`.
 
+## Logo intro
+
+Local only (not in git): `remotion/src/intro/` and `tools/synth_intro.py`. When
+present, `npm run sync` registers its compositions (`intro-portrait`,
+`intro-landscape`) through `src/generated/local.ts`; its score is the
+`intro_logo_blocks` resource above.
+
 ## Videos
 
-| Folder | Title | Status |
-|---|---|---|
-| `001-nono-hello` | Nono says hi (demo) | Voiced (one take split into 4 lines) · rendered |
-| `002-fofo-hello` | Fofo says hi (demo) | Voiced (one take split by hand with `--lines`) · rendered |
-
-<p>
-  <img src="previews/001-nono-hello.jpg" width="240" alt="Nono demo: run keyword card">
-  <img src="previews/002-fofo-hello.jpg" width="240" alt="Fofo demo: puzzles and drawing keyword cards">
-</p>
+Videos are local only: `videos/`, `previews/` and `out/` are git-ignored. Git holds
+the resources (`assets/`), the Remotion engine, the tools and the skill.
