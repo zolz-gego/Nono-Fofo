@@ -20,7 +20,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 sys.path.insert(0, os.path.join(ROOT, "tools", "audio"))
 
 from dsp import (Mix, SR, arp, bell, boing, chime, chord, click, doum, finish, glass, marimba,  # noqa: E402
-                 osc, perc, pluck, pop, reverb, slide_whistle, sparkle, sweep, tek, thud, whoosh,
+                 noise, osc, perc, svf, pluck, pop, reverb, slide_whistle, sparkle, sweep, tek, thud, whoosh,
                  wood, write_wav)
 
 OUT = os.path.join(ROOT, "social", "assets", "sfx")
@@ -92,6 +92,24 @@ def _():
 @sfx("mg_slide_down", "Something drops: slide whistle down", 0.6)
 def _():
     return slide_whistle(1300, 450, 0.35)
+
+
+@sfx("mg_boom", "Cartoon crash: big soft thump, papery crash, then the letters' shimmer", 0.85)
+def _():
+    d = 0.9
+    crash = svf(noise(d), 2400, q=0.6, mode="lp") * perc(d, 0.002, 0.16)
+    m = Mix().add(thud(55, 0.55)).add(thud(90, 0.35), 0.02, 0.6).add(crash, 0.0, 0.7)
+    m.add(wood("D5", 0.12), 0.05, 0.5).add(wood("A4", 0.12), 0.11, 0.4)
+    m.add(sparkle(0.8, 10, start=0.18, gain=0.4))
+    return reverb(m.out(), 0.2)
+
+
+@sfx("mg_skid", "Cartoon skid stop: squeaky sneaker slide", 0.6)
+def _():
+    d = 0.35
+    squeak = osc(np.linspace(1900, 1500, int(SR * d)), d, "tri", vib=0.04, vib_rate=38) * perc(d, 0.005, 0.2)
+    rub = svf(noise(d), 3000, q=2, mode="bp") * perc(d, 0.003, 0.12)
+    return Mix().add(squeak, 0, 0.5).add(rub, 0, 0.6).out()
 
 
 # ================================================================ branding

@@ -22,11 +22,14 @@ export const Character: React.FC<{spec: CharacterSpec; amp: number}> = ({spec, a
     }
   }
   const info = characters[spec.who][pose];
-  const scale = HEIGHT / info.height;
+  const height = HEIGHT * (spec.size ?? 1);
+  const scale = height / info.height;
   const w = info.width * scale;
 
+  const delay = Math.round((spec.delay ?? 0) * fps);
+  if (frame < delay) return null;
   const enter = spec.enter ?? 'left';
-  const inP = spring({frame, fps, config: {damping: 13, stiffness: 140, mass: 0.8}});
+  const inP = spring({frame: frame - delay, fps, config: {damping: 13, stiffness: 140, mass: 0.8}});
   let dx = 0;
   let dy = 0;
   let s = 1;
@@ -44,7 +47,20 @@ export const Character: React.FC<{spec: CharacterSpec; amp: number}> = ({spec, a
   const sx = 1 + breathe - amp * 0.03;
   const sy = 1 - breathe + amp * 0.05;
   const tilt = Math.sin(frame / 4.5) * amp * 3.5;
-  const x = X[spec.at ?? 'center'];
+  const x = spec.x ?? X[spec.at ?? 'center'];
+
+  // Sideways moves (runs across, runs off, comes back).
+  let mx = 0;
+  let flip = !!spec.flip;
+  for (const m of spec.moves ?? []) {
+    const a = m.at * fps;
+    if (frame < a) break;
+    const d = (m.dur ?? 0.4) * fps;
+    // a move shorter than a frame is a jump: it applies from its first frame
+    const k = d <= 1 ? 1 : Math.min(1, (frame - a) / d);
+    mx = mx + (m.to - mx) * (k < 1 ? 1 - Math.pow(1 - k, 2.2) : 1);
+    if (m.flip !== undefined) flip = m.flip;
+  }
 
   return (
     <>
@@ -52,12 +68,12 @@ export const Character: React.FC<{spec: CharacterSpec; amp: number}> = ({spec, a
         src={staticFile(info.file)}
         style={{
           position: 'absolute',
-          left: x - w / 2 + dx,
-          top: FEET_Y - HEIGHT + dy,
+          left: x - w / 2 + dx + mx,
+          top: FEET_Y - height + dy,
           width: w,
-          height: HEIGHT,
+          height,
           transformOrigin: '50% 100%',
-          transform: `translateY(${talkY - hop}px) rotate(${tilt}deg) scale(${sx * s * (0.85 + 0.15 * swapPop)}, ${sy * s * (0.85 + 0.15 * swapPop)}) ${spec.flip ? 'scaleX(-1)' : ''}`,
+          transform: `translateY(${talkY - hop}px) rotate(${tilt}deg) scale(${sx * s * (0.85 + 0.15 * swapPop)}, ${sy * s * (0.85 + 0.15 * swapPop)}) ${flip ? 'scaleX(-1)' : ''}`,
           filter: 'drop-shadow(0 10px 0 rgba(0,0,0,0.08))',
         }}
       />

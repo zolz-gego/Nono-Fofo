@@ -26,6 +26,9 @@ export const TAIL = 0.45; // after the voice, before the next scene
 export const MIN_SCENE = 1.6;
 export const WIPE = 10; // frames the next scene takes to wipe in
 export const END_CARD = 2.6;
+export const END_VOICE_AT = 0.45; // end card voice starts after the logo sting hit
 
 // Safe areas for TikTok / Reels UI (top bar, right buttons, bottom caption).
 export const SAFE = {top: 150, bottom: 1560, left: 70, right: 930};
+// Bottom edge of the caption box (a little under SAFE.bottom, above the post text).
+export const CAPTION_BOTTOM = 1675;

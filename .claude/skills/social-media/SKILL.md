@@ -108,7 +108,9 @@ Whenever a new resource is created or added for the social videos, put it in
   `npm run sync` picks them up for the videos automatically. Never copy app
   assets into `social/assets`.
 - New reusable motion (a sticker, a transition, a new background pattern) goes
-  in `social/remotion/src/components/` and gets a line in the README.
+  in `social/remotion/src/components/` and gets a line in the README. Story
+  props (golden book, Egypt map, letter card, slots, speed lines, shake, arrow)
+  already exist in `Props.tsx`: use them through `props` in `video.json`.
 
 ## Remotion notes
 

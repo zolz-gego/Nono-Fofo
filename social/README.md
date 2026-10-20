@@ -65,6 +65,8 @@ tools/.venv/bin/python social/tools/synth_social_sfx.py   # (from repo root) reb
 | `mg_logo_sting` | Darbuka + qanun run + sparkles | End card (automatic) |
 | `mg_sparkle` | Magic shimmer | Stars, shining letters |
 | `mg_ta_da` | Marimba + bell reveal | Big moment / catchphrase |
+| `mg_boom` | Big soft thump + papery crash + shimmer | Crash / BOOM (Nono into the book) |
+| `mg_skid` | Squeaky sneaker slide | Character skids to a stop |
 
 ### Music (`assets/music/`)
 
@@ -81,9 +83,62 @@ None yet.
 
 ### Icons (keyword cards)
 
-Font Awesome, registered in `remotion/src/icons.ts`: `book`, `clap`, `fish`,
-`football`, `heart`, `house`, `idea`, `paint`, `puzzle`, `question`, `rocket`,
-`run`, `star`, `trophy`.
+Font Awesome, registered in `remotion/src/icons.ts`: `anchor`, `arrowLeft`,
+`arrowRight`, `bolt`, `book`, `cake`, `check`, `church`, `clap`, `compass`, `fish`,
+`football`, `gift`, `heart`, `house`, `idea`, `map`, `medal`, `paint`, `puzzle`,
+`question`, `rocket`, `run`, `sailboat`, `search`, `shield`, `shoes`, `sound`,
+`star`, `trophy`.
+
+### Scene backgrounds (`pattern`, `remotion/src/components/Scenery.tsx`)
+
+Besides `rays`, `dots` and `letters`, a scene can use a themed moving background:
+
+| pattern | What |
+|---|---|
+| `cairo` | Cairo skyline: buildings, domes, minarets, Cairo Tower, far pyramids, drifting clouds, birds, twinkling windows |
+| `field` | Football pitch with glowing gold lines that draw in, sparkles running along them |
+| `doodles` | Crayon drawings that draw themselves (sun, house, star, heart…) + floating puzzle pieces |
+| `icons` | Icons from `icons` (e.g. `["idea","star"]`) float up and light up one by one |
+| `study` | Grandpa's study: mashrabiya window with light beams, bookshelf, rug, dust in the light |
+| `waves` | Sea with moving waves and a felucca sailing by |
+| `desert` | Sun, scrolling dunes and a swaying palm |
+| `board` | Chalkboard with faint chalk letters being written and chalk dust |
+| `grid` | Notebook grid paper with floating numbers |
+| `track` | Running track with a cheering crowd and lane marks rushing by |
+| `trail` | Footprints appearing one by one across the screen |
+
+### Motion props (`remotion/src/components/Props.tsx`)
+
+Story graphics a scene can add with `props` in `video.json` (times in seconds
+from the voice start, like keywords; format in `remotion/src/types.ts`):
+
+| kind | What |
+|---|---|
+| `book` | Grandpa's golden Coptic book: glows, opens (`openAt`), bursts its letters out (`burstAt`), one letter flies back in (`letterInAt`) |
+| `egypt` | Simple Egypt map: the Nile draws in, story places pop up (Alexandria, Pyramids, monastery, village, Nile) and gold letters land all over it |
+| `letter` | A big gold Coptic letter: floats down, turns into a pyramid and back (`pyramidAt` / `letterAt`), grows into the letter card (name ribbon + capital and small tiles, `cardAt`), "says" its sound with a sound chip such as "ا = a" (`pulseAt`, `sound`, `soundEn`), flies away (`outAt`) |
+| `slots` | Letter counter: a row of empty slots with found letters in gold; can stretch to more slots (`to`, `stretchAt`) with a "فاضل ٩ / 9 left" label |
+| `speed` | Speed lines (running) |
+| `ball` | Football bounces in from the right and keeps hopping |
+| `rain` | Gold Coptic letters rain down and bounce off the brothers' heads |
+| `shake` | Screen shake (crash) |
+| `arrow` | Bouncing "this way" arrow |
+
+Characters can also take `size`, `x`, `delay` (late entrance) and `moves`
+(slide sideways: run across, run off, come back, with `flip`).
+
+Scenes can also take:
+- `camera`: keyframes (`at` in scene seconds, `x`/`y` offset, `zoom`, `rot`,
+  `dur`). The brothers and props move with the camera, the background follows
+  with parallax (Cairo skyline, track, icons, study, rays…), captions and
+  keyword cards stay put. Use it to pan to a brother, follow a run, or punch in.
+- `transition`: `wipe` (circle, default), `whip` (fast blurred camera whip)
+  or `cut` (same shot continues, no wipe or sound).
+- `patternAt`: the themed background appears on a word (e.g. the pitch on "الكورة");
+  `before` (`{pattern, icons}`) is what shows until then, so the scene is never plain.
+
+The end card can have a voice: `endCard.voice` is a file id in the video's `voice/`
+folder (e.g. both brothers saying the sign-off); the card stretches to fit it.
 
 ## Logo intro
 

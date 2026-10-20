@@ -1,6 +1,6 @@
 import React from 'react';
 import {interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
-import {color, FONT_AR, FONT_EN, SAFE} from '../theme';
+import {CAPTION_BOTTOM, color, FONT_AR, FONT_EN, H, SAFE} from '../theme';
 import type {Line} from '../types';
 
 // Start time (s from voice start) of each Arabic word: given in video.json,
@@ -33,7 +33,7 @@ export const Captions: React.FC<{line: Line; voiceFrom: number; voiceFrames: num
         position: 'absolute',
         left: SAFE.left,
         width: SAFE.right - SAFE.left,
-        top: 1335,
+        bottom: H - CAPTION_BOTTOM, // anchored at the bottom so long lines grow upwards
         padding: '22px 34px 26px',
         borderRadius: 44,
         background: `color-mix(in srgb, ${color('deepTeal')} 88%, transparent)`,

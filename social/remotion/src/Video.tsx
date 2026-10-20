@@ -3,7 +3,7 @@ import {AbsoluteFill, Audio, Img, interpolate, Sequence, staticFile, useCurrentF
 import {EndCard} from './components/EndCard';
 import {Scene, Sfx} from './components/Scene';
 import {music} from './generated/data';
-import {WIPE} from './theme';
+import {END_VOICE_AT, WIPE} from './theme';
 import type {Timing, VideoSpec} from './types';
 
 export type VideoProps = {spec: VideoSpec; timing: Timing | null};
@@ -35,6 +35,11 @@ export const Video: React.FC<VideoProps> = ({spec, timing}) => {
         <Sequence from={timing.endFrom} name="end card">
           <EndCard ar={spec.endCard.ar} en={spec.endCard.en} />
           <Sfx id="mg_logo_sting" at={0} volume={0.9} />
+          {spec.endCard.voice && (
+            <Sequence from={Math.round(END_VOICE_AT * timing.fps)} layout="none">
+              <Audio src={staticFile(spec.endCard.voice)} />
+            </Sequence>
+          )}
         </Sequence>
       )}
       {/* small logo watermark, hidden on the end card */}

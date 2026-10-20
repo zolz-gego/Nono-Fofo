@@ -6,8 +6,10 @@ video.json order. Prints the pauses it found; if the count doesn't match the
 lines, pass --gap to change the shortest pause it treats as a break. When a
 line has its own long pause (e.g. "... ليه؟"), give the line times by hand with
 --lines start-end,start-end,... (seconds in the take, one per line).
+With both brothers, record one take each and pass --speaker nono|fofo: only
+that brother's lines are cut from the take (kept as voice/<speaker>_take.mp3).
 
-Run:  tools/.venv/bin/python social/tools/split_voice.py <video-folder> <take.mp3> [--gap 0.15] [--lines 0-2.8,2.9-5.1,...]
+Run:  tools/.venv/bin/python social/tools/split_voice.py <video-folder> <take.mp3> [--speaker nono] [--gap 0.15] [--lines 0-2.8,2.9-5.1,...]
 """
 import json
 import os
@@ -22,11 +24,12 @@ import numpy as np
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-def main(folder, take, min_gap=0.15, lines=None):
+def main(folder, take, min_gap=0.15, lines=None, speaker=None):
     vdir = os.path.join(ROOT, "social", "videos", folder)
-    ids = [s["line"]["id"] for s in json.load(open(os.path.join(vdir, "video.json")))["scenes"] if s.get("line")]
+    scenes = json.load(open(os.path.join(vdir, "video.json")))["scenes"]
+    ids = [s["line"]["id"] for s in scenes if s.get("line") and speaker in (None, s["line"]["speaker"])]
     os.makedirs(os.path.join(vdir, "voice"), exist_ok=True)
-    keep = os.path.join(vdir, "voice", "full_take" + os.path.splitext(take)[1])
+    keep = os.path.join(vdir, "voice", (f"{speaker}_take" if speaker else "full_take") + os.path.splitext(take)[1])
     if os.path.abspath(take) != os.path.abspath(keep):
         shutil.copy(take, keep)
 
@@ -84,7 +87,11 @@ def write(x, sr, vdir, ids, bounds):
 
 if __name__ == "__main__":
     args = sys.argv[1:]
-    gap, lines = 0.15, None
+    gap, lines, speaker = 0.15, None, None
+    if "--speaker" in args:
+        k = args.index("--speaker")
+        speaker = args[k + 1]
+        del args[k:k + 2]
     if "--lines" in args:
         k = args.index("--lines")
         lines = [tuple(float(v) for v in part.split("-")) for part in args[k + 1].split(",")]
@@ -93,4 +100,4 @@ if __name__ == "__main__":
         k = args.index("--gap")
         gap = float(args[k + 1])
         del args[k:k + 2]
-    main(args[0], args[1], gap, lines)
+    main(args[0], args[1], gap, lines, speaker)

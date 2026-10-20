@@ -52,6 +52,16 @@
       "desc": "Something drops: slide whistle down",
       "duration": 0.35
     },
+    "mg_boom": {
+      "file": "sfx/mg_boom.wav",
+      "desc": "Cartoon crash: big soft thump, papery crash, then the letters' shimmer",
+      "duration": 1.77
+    },
+    "mg_skid": {
+      "file": "sfx/mg_skid.wav",
+      "desc": "Cartoon skid stop: squeaky sneaker slide",
+      "duration": 0.35
+    },
     "mg_logo_sting": {
       "file": "sfx/mg_logo_sting.wav",
       "desc": "End card: logo pops in with darbuka hit, qanun run and sparkles",

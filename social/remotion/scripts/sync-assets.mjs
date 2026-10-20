@@ -98,6 +98,12 @@ for (const dir of ids(path.join(SOCIAL, 'videos')).sort()) {
     }
     for (const s of scene.sfx ?? []) if (!sfx[s.id]) warn(`${at}: unknown sfx "${s.id}"`);
   }
+  if (spec.endCard?.voice) {
+    const id = spec.endCard.voice;
+    const voice = ['mp3', 'wav', 'm4a'].map((ext) => `${id}.${ext}`).find((f) => fs.existsSync(path.join(folder, 'voice', f)));
+    spec.endCard.voice = voice ? `videos/${dir}/voice/${voice}` : null;
+    if (!voice) warn(`${dir} / end card: no voice yet for "${id}"`);
+  }
   videos.push(spec);
 }
 
