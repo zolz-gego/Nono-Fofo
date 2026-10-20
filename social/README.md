@@ -10,16 +10,16 @@ from ElevenLabs (Eleven v3). The workflow lives in the `social-media` skill
 
 | Path | What |
 |---|---|
-| `videos/<NNN-slug>/script.md` | The ElevenLabs script: line files, v3 text with emotion tags, captions |
+| `videos/<NNN-slug>/script.md` | *(local only)* The ElevenLabs script: line files, v3 text with emotion tags, captions |
 | `videos/<NNN-slug>/video.json` | The scene list Remotion renders (format: `remotion/src/types.ts`) |
 | `videos/<NNN-slug>/voice/` | The voice MP3s from ElevenLabs, named after each line id |
 | `voices.md` | Nono's and Fofo's ElevenLabs voice prompts + v3 writing rules |
 | `assets/` | **Social-only** resources (catalogued below and in `assets/manifest.json`) |
 | `tools/split_voice.py` | Splits one ElevenLabs take into the per-line voice files |
 | `tools/synth_social_sfx.py` | Synthesizes the social sound effects into `assets/sfx/` |
-| `tools/synth_intro.py` | Logo intro: cuts the logo into blocks (`remotion/src/intro/layout.json`) and composes its score |
+| `tools/synth_intro.py` | *(local only)* Logo intro: cuts the logo into blocks and composes its score |
 | `remotion/` | The Remotion project (components, timing, render scripts) |
-| `previews/` | One still per video for the README and PRs |
+| `previews/` | *(local only)* One still per video |
 | `out/` | Rendered MP4s and stills (git-ignored) |
 
 ## Where resources come from
@@ -87,33 +87,12 @@ Font Awesome, registered in `remotion/src/icons.ts`: `book`, `clap`, `fish`,
 
 ## Logo intro
 
-A 25.5 s motion-graphics intro built only from the app logo, in two shapes:
-`intro-landscape` (1920×1080) and `intro-portrait` (1080×1920), 60 fps. Code in
-`remotion/src/intro/`. Picture and sound share one clock, `cues.json`: change a
-time there, rerun `synth_intro.py`, and re-render.
-
-1. **Close-ups (0–5 s):** tiny parts of the logo, rebuilt as sharp vectors
-   (a gold Coptic letter, the pyramid, a palm, the Nile, the book's letters),
-   cut on each beat.
-2. **Pull-back (5–6 s):** each close-up turns out to be the face of a floating
-   alphabet block. The blocks shoot away into the dark, then a hit.
-3. **Blocks (6–16 s):** the logo, cut into 60 wooden Coptic-letter blocks, drops
-   onto a board row by row (each landing is a marimba note). The camera swings to
-   the front, a wave flips every block to show the picture, Nono's and Fofo's faces
-   pop out, then the light cracks through.
-4. **Alive (16–22 s):** a dive into the book (letters rise out), a whip to the
-   pyramid (pyramid, palms and sun fold up like a pop-up book), then down the
-   Nile and out. The ring draws itself and a shine sweeps across.
-5. **Sting (22–25.5 s):** shockwave, a burst of letters and confetti, the logo holds.
+Local only (not in git): `remotion/src/intro/` and `tools/synth_intro.py`. When
+present, `npm run sync` registers its compositions (`intro-portrait`,
+`intro-landscape`) through `src/generated/local.ts`; its score is the
+`intro_logo_blocks` resource above.
 
 ## Videos
 
-| Folder | Title | Status |
-|---|---|---|
-| `001-nono-hello` | Nono says hi (demo) | Voiced (one take split into 4 lines) · rendered |
-| `002-fofo-hello` | Fofo says hi (demo) | Voiced (one take split by hand with `--lines`) · rendered |
-
-<p>
-  <img src="previews/001-nono-hello.jpg" width="240" alt="Nono demo: run keyword card">
-  <img src="previews/002-fofo-hello.jpg" width="240" alt="Fofo demo: puzzles and drawing keyword cards">
-</p>
+Videos are local only: `videos/`, `previews/` and `out/` are git-ignored. Git holds
+the resources (`assets/`), the Remotion engine, the tools and the skill.
