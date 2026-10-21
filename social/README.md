@@ -136,7 +136,7 @@ from the voice start, like keywords; format in `remotion/src/types.ts`):
 | `shake` | Screen shake (crash) |
 | `arrow` | Bouncing "this way" arrow |
 | `runner` | A Coptic letter on little legs with eyes, running along `path` keyframes (`hop` arcs it, e.g. bouncing off a head) |
-| `statues` | Little living statues (cat, jar, queen bust, ankh) tiptoeing and searching; `chaseAt` sends them running off |
+| `statues` | Little living statues (cat, jar, queen bust, ankh) tiptoeing and searching; `chaseAt` sends them running off, `passAt` runs them across the screen in a line |
 | `dizzy` | Stars spinning around a head after a bonk |
 | `pant` | Breath puffs + sweat drops (out of breath) |
 | `compare` | A Coptic letter tile ≈ a Latin letter tile (Ⲉ ≈ E) |
@@ -153,7 +153,7 @@ Scenes can also take:
   `dur`). The brothers and props move with the camera, the background follows
   with parallax (Cairo skyline, track, icons, study, rays…), captions and
   keyword cards stay put. Use it to pan to a brother, follow a run, or punch in.
-- `backdrop`: an image id from the catalog drawn behind the scene, panning with the camera.
+- `backdrop`: an image id from the catalog drawn behind the scene; it moves exactly with the camera (the characters stand on its floor).
 - `transition`: `wipe` (circle, default), `whip` (fast blurred camera whip)
   or `cut` (same shot continues, no wipe or sound).
 - `patternAt`: the themed background appears on a word (e.g. the pitch on "الكورة");

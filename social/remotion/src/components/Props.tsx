@@ -659,7 +659,8 @@ const Runner: React.FC<P<'runner'>> = ({t, k, size = 260, path}) => {
         </g>
       </svg>
       <div style={{position: 'absolute', left: -size / 2, top: -size / 2, width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center', transform: dir < 0 ? 'scaleX(-1)' : undefined}}>
-        <GoldLetter k={k} size={size} />
+        {/* white outline so the gold letter stands out against sandstone */}
+        <GoldLetter k={k} size={size} style={{textShadow: [...Array.from({length: 12}, (_, n) => `${Math.cos((n / 12) * Math.PI * 2) * 7}px ${Math.sin((n / 12) * Math.PI * 2) * 7}px 0 white`), `0 0 ${size * 0.15}px ${GLOW}`].join(', ')}} />
         {/* eyes */}
         {[-1, 1].map((e) => (
           <div key={e} style={{position: 'absolute', left: size / 2 + e * size * 0.1 - size * 0.06, top: size * 0.3, width: size * 0.12, height: size * 0.15, borderRadius: '50%', background: 'white', border: `5px solid ${color('cocoa')}`}}>
@@ -686,17 +687,20 @@ const STATUES: {w: number; h: number; draw: React.ReactNode}[] = [
   {w: 110, h: 210, draw: <><ellipse cx={55} cy={45} rx={30} ry={40} fill="none" stroke={color('letterGold')} strokeWidth={22} /><path d="M45 80 L65 80 L65 210 L45 210 Z M10 95 L100 95 L100 115 L10 115 Z" fill={color('letterGold')} /></>},
 ];
 
-const Statues: React.FC<P<'statues'>> = ({t, fps, at = -1, y = 1300, chaseAt, chase = 'left'}) => {
+const Statues: React.FC<P<'statues'>> = ({t, fps, at = -1, y = 1300, chaseAt, chase = 'left', passAt}) => {
   const xs = [150, 380, 700, 930];
   return (
     <>
       {STATUES.map((st, i) => {
-        const inP = sp(t - at - i * 0.12, fps, 10, 180);
-        if (inP <= 0) return null;
-        const c = chaseAt !== undefined ? t - chaseAt - i * 0.1 : -1;
         const dir = chase === 'left' ? -1 : 1;
+        // pass: they come in from the other side and run across the screen in a line
+        const pk = passAt !== undefined ? t - passAt - i * 0.18 : -1;
+        if (passAt !== undefined && pk < 0) return null;
+        const inP = passAt !== undefined ? 1 : sp(t - at - i * 0.12, fps, 10, 180);
+        if (inP <= 0) return null;
+        const c = passAt !== undefined ? pk : chaseAt !== undefined ? t - chaseAt - i * 0.1 : -1;
         // tiptoe: little hops and looking around; chase: running off-screen
-        const run = c > 0 ? c * 1500 * dir : 0;
+        const run = passAt !== undefined ? (-1100 + pk * 1700) * dir - (xs[i] - 540) : c > 0 ? c * 1500 * dir : 0;
         const hopF = c > 0 ? 9 : 4.5;
         const hop = Math.abs(Math.sin(t * hopF + i * 1.7)) * (c > 0 ? 40 : 22);
         const look = c > 0 ? dir : Math.sin(t * 1.6 + i * 2) > 0 ? 1 : -1;

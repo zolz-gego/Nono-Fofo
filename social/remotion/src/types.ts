@@ -69,7 +69,7 @@ export type PropSpec =
   // a Coptic letter on little legs running along a path (keyframes: reach x,y at `at`); hop = arcs between points
   | {kind: 'runner'; k: string; size?: number; path: {at: number; x: number; y: number; hop?: number}[]}
   // little living statues (cat, jar, bust, ankh) tiptoeing and searching; from `chaseAt` they run off to `chase`
-  | {kind: 'statues'; at?: number; y?: number; chaseAt?: number; chase?: 'left' | 'right'; layer?: 'back' | 'front'}
+  | {kind: 'statues'; at?: number; y?: number; chaseAt?: number; chase?: 'left' | 'right'; passAt?: number; layer?: 'back' | 'front'} // passAt: run across the screen (towards `chase`) in a line
   | {kind: 'dizzy'; at: number; x: number; y: number; until?: number} // stars spinning around a head after a bonk
   | {kind: 'pant'; at: number; x: number; y: number; until?: number; dir?: 'left' | 'right'} // breath puffs + sweat drops (out of breath)
   | {kind: 'compare'; at: number; k: string; latin: string; y?: number} // Coptic letter ≈ Latin letter

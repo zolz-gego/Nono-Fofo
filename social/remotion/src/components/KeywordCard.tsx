@@ -76,7 +76,7 @@ export const KeywordCard: React.FC<{kw: Keyword; index: number; count: number; s
           </div>
         )}
         {kw.coptic && (
-          <div style={{fontFamily: FONT_COPTIC, fontSize: 84, lineHeight: 1.05, color: color('letterGold'), textShadow: `0 4px 0 ${color('cocoa')}`, whiteSpace: 'nowrap'}}>{kw.coptic}</div>
+          <div style={{fontFamily: FONT_COPTIC, fontSize: Math.min(84, 600 / kw.coptic.length), lineHeight: 1.05, color: color('letterGold'), textShadow: `0 4px 0 ${color('cocoa')}`, whiteSpace: 'nowrap'}}>{kw.coptic}</div>
         )}
         <div dir="rtl" style={{fontFamily: FONT_AR, fontWeight: 800, fontSize: 96, lineHeight: 1.1, color: color('deepTeal')}}>
           {kw.ar}

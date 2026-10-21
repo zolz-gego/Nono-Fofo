@@ -46,6 +46,7 @@ export const Scene: React.FC<{scene: SceneSpec; index: number; voiceFrom: number
   const line = scene.line;
   const chars = scene.characters ?? [];
 
+  const world = `scale(${cam.zoom}) rotate(${cam.rot}deg) translate(${-cam.x}px, ${-cam.y}px)`;
   const [sx, sy] = shakeOffset(scene.props, (frame - voiceFrom) / fps);
 
   return (
@@ -59,20 +60,22 @@ export const Scene: React.FC<{scene: SceneSpec; index: number; voiceFrom: number
       }
     >
       <AbsoluteFill style={{transform: `translate(${sx}px, ${sy}px) scale(${sx || sy ? 1.04 : 1})`}}>
-        <AbsoluteFill style={{transform: `scale(${1 + (cam.zoom - 1) * 0.5}) rotate(${cam.rot * 0.5}deg)`}}>
+        {/* an illustrated backdrop is part of the world (characters stand on its floor), so it moves with the
+            camera exactly; patterns only follow with parallax */}
+        <AbsoluteFill style={{transform: scene.backdrop ? world : `scale(${1 + (cam.zoom - 1) * 0.5}) rotate(${cam.rot * 0.5}deg)`}}>
           <Background
             bg={scene.bg}
             bg2={scene.bg2}
             pattern={scene.pattern}
             seed={scene.id}
             icons={scene.icons}
-            camX={cam.x}
+            camX={scene.backdrop ? 0 : cam.x}
             from={scene.patternAt !== undefined ? voiceFrom + sec(scene.patternAt) : 0}
             before={scene.before}
             backdrop={scene.backdrop}
           />
         </AbsoluteFill>
-        <AbsoluteFill style={{transform: `scale(${cam.zoom}) rotate(${cam.rot}deg) translate(${-cam.x}px, ${-cam.y}px)`}}>
+        <AbsoluteFill style={{transform: world}}>
           <Props props={scene.props} voiceFrom={voiceFrom} layer="back" />
           <VoiceAmp voice={line?.voice} from={voiceFrom} frames={voiceFrames}>
             {(amp) => chars.map((c, i) => <Character key={i} spec={c} amp={line?.speaker === c.who ? amp : 0} />)}

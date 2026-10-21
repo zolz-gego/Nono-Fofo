@@ -16,7 +16,7 @@ export const Background: React.FC<{bg: string; bg2?: string; pattern?: string; s
     return (
       <AbsoluteFill style={{background: color(bg)}}>
         {images[backdrop] ? (
-          <Img src={staticFile(images[backdrop])} style={{position: 'absolute', left: -80 - camX * 0.3, top: -60, width: W + 160, height: H + 120, objectFit: 'cover'}} />
+          <Img src={staticFile(images[backdrop])} style={{position: 'absolute', left: -220 - camX * 0.3, top: -180, width: W + 440, height: H + 360, objectFit: 'cover'}} />
         ) : (
           <Museum camX={camX} />
         )}
