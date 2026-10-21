@@ -43,6 +43,13 @@ export const Character: React.FC<{spec: CharacterSpec; amp: number}> = ({spec, a
   const hop = swapFrame >= 0 ? Math.sin(Math.min(1, (frame - swapFrame) / 9) * Math.PI) * 50 : 0;
   const swapPop = swapFrame >= 0 ? spring({frame: frame - swapFrame, fps, config: {damping: 9, stiffness: 220}}) : 1;
 
+  // Repeated jumps (e.g. trying to reach something high).
+  let jump = 0;
+  for (const j of spec.jumps ?? []) {
+    const k = frame / fps - j.at;
+    if (k >= 0 && k < (j.until ?? 99) - j.at) jump = Math.max(jump, Math.abs(Math.sin((k / (j.every ?? 0.55)) * Math.PI)) * (j.height ?? 110));
+  }
+
   const breathe = Math.sin(frame / 11) * 0.012;
   const talkY = -amp * 26;
   const sx = 1 + breathe - amp * 0.03;
@@ -70,7 +77,7 @@ export const Character: React.FC<{spec: CharacterSpec; amp: number}> = ({spec, a
     width: w,
     height,
     transformOrigin: '50% 100%',
-    transform: `translateY(${talkY - hop}px) rotate(${tilt}deg) scale(${sx * s * (0.85 + 0.15 * swapPop)}, ${sy * s * (0.85 + 0.15 * swapPop)}) ${flip ? 'scaleX(-1)' : ''}`,
+    transform: `translateY(${talkY - hop - jump}px) rotate(${tilt}deg) scale(${sx * s * (0.85 + 0.15 * swapPop)}, ${sy * s * (0.85 + 0.15 * swapPop)}) ${flip ? 'scaleX(-1)' : ''}`,
     filter: 'drop-shadow(0 10px 0 rgba(0,0,0,0.08))',
   };
   return info.file ? (

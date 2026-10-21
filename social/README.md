@@ -50,7 +50,7 @@ tools/.venv/bin/python social/tools/synth_social_sfx.py   # (from repo root) reb
 
 ## Asset catalog (social-only)
 
-### Sound effects (`assets/sfx/`, made by `tools/synth_social_sfx.py`)
+### Sound effects (`assets/sfx/`, made by `tools/synth_social_sfx.py`; *ElevenLabs* ones are generated, prompts in their video's `sounds.md`)
 
 | id | Sound | Used for |
 |---|---|---|
@@ -68,6 +68,10 @@ tools/.venv/bin/python social/tools/synth_social_sfx.py   # (from repo root) reb
 | `mg_ta_da` | Marimba + bell reveal | Big moment / catchphrase |
 | `mg_boom` | Big soft thump + papery crash + shimmer | Crash / BOOM (Nono into the book) |
 | `mg_skid` | Squeaky sneaker slide | Character skids to a stop |
+| `mg_stone_wake` | Stone grinding + crumbling + shimmer *(ElevenLabs)* | Statues come alive |
+| `mg_stone_eyes` | Gritty stone scrape + squeak *(ElevenLabs)* | A statue's eyes slide sideways |
+| `mg_stone_tiptoe` | Little stone feet tiptoeing on marble *(ElevenLabs)* | Small statues sneaking around |
+| `mg_stone_run` | Clattering stone footsteps + whoosh *(ElevenLabs)* | Statues running past |
 
 ### Music (`assets/music/`)
 
@@ -91,6 +95,7 @@ on a line). A pose without its PNG yet is drawn as a sandstone placeholder.
 
 | id | Image | Used for |
 |---|---|---|
+| `statue-cat`, `statue-ushabti` | The two little living statues (cut-outs) | `statues` prop (drawn shapes stand in until the PNGs exist) |
 | `gem-hall` | Grand Egyptian Museum hall, portrait, empty floor in the middle | `backdrop` of the museum scenes (a drawn hall stands in until the PNG exists) |
 
 ### Icons (keyword cards)
@@ -136,17 +141,18 @@ from the voice start, like keywords; format in `remotion/src/types.ts`):
 | `shake` | Screen shake (crash) |
 | `arrow` | Bouncing "this way" arrow |
 | `runner` | A Coptic letter on little legs with eyes, running along `path` keyframes (`hop` arcs it, e.g. bouncing off a head) |
-| `statues` | Little living statues (cat, jar, queen bust, ankh) tiptoeing and searching; `chaseAt` sends them running off, `passAt` runs them across the screen in a line |
+| `statues` | Two little living statues (cat + ushabti images) tiptoeing and searching; `chaseAt` sends them running off, `passAt` runs them across the screen in a line |
 | `dizzy` | Stars spinning around a head after a bonk |
 | `pant` | Breath puffs + sweat drops (out of breath) |
 | `compare` | A Coptic letter tile ≈ a Latin letter tile (Ⲉ ≈ E) |
 | `confetti` | Confetti burst |
 
-`book` also takes `letter` (the Avva key that flies in) and `found` (a letter already on the page).
+`book` also takes `letter` (the Avva key that flies in), `found` (a letter already on the page) and `only` (show just those letters).
 Keyword cards can show the word spelled in Coptic: `coptic` (Avva keys) on the keyword. `side` (`left` / `center` / `right`) moves a card off a face.
 
-Characters can also take `size`, `x`, `delay` (late entrance) and `moves`
-(slide sideways: run across, run off, come back, with `flip`).
+Characters can also take `size`, `x`, `delay` (late entrance), `moves`
+(slide sideways: run across, run off, come back, with `flip`) and `jumps`
+(hop up and down, e.g. reaching for something high).
 
 Scenes can also take:
 - `camera`: keyframes (`at` in scene seconds, `x`/`y` offset, `zoom`, `rot`,

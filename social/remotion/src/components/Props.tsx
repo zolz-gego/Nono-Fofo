@@ -1,6 +1,7 @@
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import React from 'react';
-import {interpolate, random, spring, useCurrentFrame, useVideoConfig} from 'remotion';
+import {Img, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {images} from '../generated/data';
 import {ICONS} from '../icons';
 import {color, FONT_AR, FONT_COPTIC, FONT_EN} from '../theme';
 import type {PropSpec} from '../types';
@@ -52,7 +53,7 @@ const Starburst: React.FC<{size: number; fill: string}> = ({size, fill}) => {
 
 // ---------------------------------------------------------------- Grandpa's golden book
 
-const Book: React.FC<P<'book'>> = ({t, fps, x = 540, y = 860, size = 1, openAt, burstAt, letterInAt, letterFrom = [540, 420], letter = 'A', found}) => {
+const Book: React.FC<P<'book'>> = ({t, fps, x = 540, y = 860, size = 1, openAt, burstAt, letterInAt, letterFrom = [540, 420], letter = 'A', found, only}) => {
   const W = 640 * size;
   const H = 400 * size;
   // closed cover flips away, then the open book unfolds
@@ -163,6 +164,8 @@ const Book: React.FC<P<'book'>> = ({t, fps, x = 540, y = 860, size = 1, openAt, 
                   // letters found earlier sit big on the page already
                   const had = side === 1 && i === 3 && !!found;
                   const gone = burst && !back && !had;
+                  // only: a clean page with just the letters found so far
+                  if (only && !back && !had) return <div key={i} />;
                   return (
                     <GoldLetter
                       key={i}
@@ -687,11 +690,14 @@ const STATUES: {w: number; h: number; draw: React.ReactNode}[] = [
   {w: 110, h: 210, draw: <><ellipse cx={55} cy={45} rx={30} ry={40} fill="none" stroke={color('letterGold')} strokeWidth={22} /><path d="M45 80 L65 80 L65 210 L45 210 Z M10 95 L100 95 L100 115 L10 115 Z" fill={color('letterGold')} /></>},
 ];
 
+// Social images of the little statues (drawn shapes stand in until they exist).
+const STATUE_IMAGES = ['statue-cat', 'statue-ushabti'];
+
 const Statues: React.FC<P<'statues'>> = ({t, fps, at = -1, y = 1300, chaseAt, chase = 'left', passAt}) => {
-  const xs = [150, 380, 700, 930];
+  const xs = [330, 750];
   return (
     <>
-      {STATUES.map((st, i) => {
+      {STATUES.slice(0, 2).map((st, i) => {
         const dir = chase === 'left' ? -1 : 1;
         // pass: they come in from the other side and run across the screen in a line
         const pk = passAt !== undefined ? t - passAt - i * 0.18 : -1;
@@ -708,6 +714,9 @@ const Statues: React.FC<P<'statues'>> = ({t, fps, at = -1, y = 1300, chaseAt, ch
         const s = 1.15;
         return (
           <div key={i} style={{position: 'absolute', left: xs[i] - (st.w * s) / 2 + run, top: y - st.h * s - hop, width: st.w * s, height: st.h * s, transformOrigin: '50% 100%', transform: `scale(${inP}) rotate(${tilt}deg) scaleX(${look})`}}>
+            {images[STATUE_IMAGES[i]] ? (
+              <Img src={staticFile(images[STATUE_IMAGES[i]])} style={{position: 'absolute', left: '50%', bottom: 0, height: 270, transform: 'translateX(-50%)'}} />
+            ) : (
             <svg viewBox={`0 0 ${st.w} ${st.h}`} width="100%" height="100%" style={{overflow: 'visible'}}>
               <g stroke={color('cocoa')} strokeWidth={7} strokeLinejoin="round">{st.draw}</g>
               {/* searching eyes */}
@@ -718,6 +727,7 @@ const Statues: React.FC<P<'statues'>> = ({t, fps, at = -1, y = 1300, chaseAt, ch
                 </g>
               ))}
             </svg>
+            )}
             <div style={{position: 'absolute', left: '10%', right: '10%', bottom: -10, height: 16, borderRadius: '50%', background: 'rgba(0,0,0,0.15)'}} />
           </div>
         );

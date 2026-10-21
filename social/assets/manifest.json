@@ -35,6 +35,16 @@
       "width": 1080,
       "height": 1920,
       "source": "AI image tool, prompt in videos/004-running-letter/images.md"
+    },
+    "statue-cat": {
+      "file": "images/statue-cat.png",
+      "desc": "Little living Bastet cat statue (black basalt), cut-out",
+      "source": "AI image tool, prompt in videos/004-running-letter/images.md"
+    },
+    "statue-ushabti": {
+      "file": "images/statue-ushabti.png",
+      "desc": "Little living ushabti figurine (turquoise faience), cut-out",
+      "source": "AI image tool, prompt in videos/004-running-letter/images.md"
     }
   },
   "sfx": {
@@ -112,6 +122,30 @@
       "file": "sfx/mg_ta_da.wav",
       "desc": "Ta-da! short reveal (brass-free: marimba + bell)",
       "duration": 1.5
+    },
+    "mg_stone_wake": {
+      "file": "sfx/mg_stone_wake.wav",
+      "desc": "Statues wake up: stone grinding and cracking, crumbling dust, magic shimmer",
+      "duration": 2.6,
+      "source": "ElevenLabs Sound Effects, prompts in videos/004-running-letter/sounds.md (trimmed)"
+    },
+    "mg_stone_eyes": {
+      "file": "sfx/mg_stone_eyes.wav",
+      "desc": "Big stone eyes slide sideways: gritty scrape + tiny squeak",
+      "duration": 1.05,
+      "source": "ElevenLabs Sound Effects, prompts in videos/004-running-letter/sounds.md (trimmed)"
+    },
+    "mg_stone_tiptoe": {
+      "file": "sfx/mg_stone_tiptoe.wav",
+      "desc": "Small stone figurines tiptoeing on marble",
+      "duration": 3.3,
+      "source": "ElevenLabs Sound Effects, prompts in videos/004-running-letter/sounds.md (trimmed)"
+    },
+    "mg_stone_run": {
+      "file": "sfx/mg_stone_run.wav",
+      "desc": "Small stone statues running past: clattering footsteps + whoosh",
+      "duration": 2.7,
+      "source": "ElevenLabs Sound Effects, prompts in videos/004-running-letter/sounds.md (trimmed)"
     }
   },
   "music": {

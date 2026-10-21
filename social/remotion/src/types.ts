@@ -27,6 +27,7 @@ export type CharacterSpec = {
   // slide sideways: offset in px from his spot, reached at `at` (scene seconds) over `dur`;
   // `flip` sets which way he faces from that moment
   moves?: {at: number; to: number; dur?: number; flip?: boolean}[];
+  jumps?: {at: number; until?: number; height?: number; every?: number}[]; // hop up and down (scene seconds), e.g. reaching for something
 };
 
 export type Keyword = {
@@ -41,7 +42,7 @@ export type Keyword = {
 // Motion-graphics props (src/components/Props.tsx). Times are seconds from the
 // voice start (like keywords); negative = during the scene lead-in.
 export type PropSpec =
-  | {kind: 'book'; x?: number; y?: number; size?: number; openAt?: number; burstAt?: number; letterInAt?: number; letterFrom?: [number, number]; letter?: string; found?: string} // letter: Avva key that flies in (default A); found: one already on the page
+  | {kind: 'book'; x?: number; y?: number; size?: number; openAt?: number; burstAt?: number; letterInAt?: number; letterFrom?: [number, number]; letter?: string; found?: string; only?: boolean} // letter: Avva key that flies in (default A); found: one already on the page; only: hide the other letters
   | {kind: 'egypt'; at?: number}
   | {
       kind: 'letter';
