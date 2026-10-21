@@ -8,7 +8,8 @@
     "still": "node scripts/sync-assets.mjs && node scripts/render.mjs still",
     "render": "node scripts/sync-assets.mjs && node scripts/render.mjs video",
     "typecheck": "tsc --noEmit",
-    "intro": "node scripts/sync-assets.mjs && node scripts/render.mjs intro"
+    "intro": "node scripts/sync-assets.mjs && node scripts/render.mjs intro",
+    "release": "node scripts/sync-assets.mjs && node scripts/render.mjs release"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "7.1.0",

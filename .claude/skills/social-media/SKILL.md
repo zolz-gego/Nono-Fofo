@@ -86,6 +86,37 @@ ElevenLabs from the script Claude writes.
    over ~4.5 s, split it into two scenes or ask for a faster take. If a caption's
    word highlight drifts, add `words` (start second of each Arabic word).
 
+## When the user says the video is done
+
+When the user says a video is finished ("done", "it's ready", "ship it",
+"export it"), do all of this automatically, without asking:
+
+1. **Pick the thumbnail frame:** the most eye-catching moment, with both brothers
+   (or the logo) clear and readable, nothing mid-transition or blurred, and no
+   flash. Check two or three candidates with `npm run still` and look at them.
+2. **Export:** `cd social/remotion && npm run release -- <NNN-slug> <thumb-seconds>`
+   (the intro: `intro-portrait`). It writes `social/out/release/<NNN-slug>/`:
+   - `video.mp4`: high quality for upload (1080×1920, H.264 CRF 12 slow, AAC 320k).
+   - `thumbnail.jpg`: the full-size cover frame.
+   Check the result with `npx remotion ffprobe` (size, fps, duration, audio).
+3. **Write `post.md`** in the same folder with captions for both platforms:
+   - **Instagram (Reels):** a hook line, 2–3 short lines on what happens, and a
+     call to action (تابعونا / Follow us), first in Egyptian Arabic (never MSA,
+     same voice as the brothers) and then the same in English. Then exactly 5
+     hashtags.
+   - **TikTok:** shorter. One Arabic line plus one English line (TikTok shows
+     little before "more"), then 5 hashtags including `#fyp`.
+   - Always include `#نونو_وفوفو` and `#NonoAndFofo`. Pick the rest from the video's
+     topic, mixing Arabic and English: `#اللغة_القبطية` `#LearnCoptic`
+     `#CopticLanguage` `#تعليم_الأطفال` `#KidsLearning` `#قبطي` `#مصر` `#Egypt`
+     `#KidsApp` `#EducationalGames` `#تعليم_ممتع`. End with a short list of extra
+     hashtags to swap in.
+   - Kid-safe and warm. A few emojis are fine. Say "Coptic", never "Bohairic".
+     Don't promise downloads, prices or dates unless the user gave them.
+4. **Deliver:** send `video.mp4`, `thumbnail.jpg` and `post.md` to the user, and
+   paste both captions in the reply so they can copy them. All of it stays local
+   (`social/out/` is git-ignored).
+
 ## Adding resources (always keep the catalog up to date)
 
 Whenever a new resource is created or added for the social videos, put it in
@@ -122,4 +153,5 @@ Whenever a new resource is created or added for the social videos, put it in
   `mg_boing` for `pop`), pose swap (`mg_pose_swap`), keyword (`mg_keyword_pop`/`_2`),
   end card (`mg_logo_sting`). Extra sounds: `sfx` in the scene, any app or
   social id. Music: an app track id, low and ducked under voices.
-- Rendered files go to `social/out/` (git-ignored). Pin exact npm versions.
+- Rendered files go to `social/out/` (git-ignored); finished posts go to
+  `social/out/release/<NNN-slug>/`. Pin exact npm versions.

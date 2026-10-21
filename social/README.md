@@ -41,6 +41,7 @@ Run inside `social/remotion` (first time: `npm install`).
 npm run studio                          # live preview / scrub in the browser
 npm run still -- 001-nono-hello 2.5     # one frame -> out/001-nono-hello@2.5s.jpg
 npm run render -- 001-nono-hello        # full video -> out/001-nono-hello.mp4
+npm run release -- 001-nono-hello 6.5   # finished post -> out/release/001-nono-hello/ (HQ video.mp4 + thumbnail.jpg)
 npm run intro                           # logo intro -> out/intro-landscape.mp4 + out/intro-portrait.mp4
 npm run still -- intro-portrait 12.5    # one intro frame
 tools/.venv/bin/python social/tools/synth_intro.py        # (from repo root) rebuild intro layout + score
