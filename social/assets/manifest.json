@@ -1,6 +1,42 @@
 {
   "version": 1,
-  "images": {},
+  "characters": {
+    "ramses": {
+      "desc": "Giant living statue of Ramses II (Grand Egyptian Museum), deep booming voice `Ramses`. Cut-out PNGs, same framing for every pose.",
+      "source": "AI image tool, prompts in videos/004-running-letter/images.md",
+      "poses": {
+        "idle": {
+          "file": "images/ramses-idle.png",
+          "desc": "standing still like a statue, calm proud smile"
+        },
+        "look": {
+          "file": "images/ramses-look.png",
+          "desc": "eyes turned sharply to the side, searching"
+        },
+        "talk": {
+          "file": "images/ramses-talk.png",
+          "desc": "mouth open, finger up, telling a big secret"
+        },
+        "demand": {
+          "file": "images/ramses-demand.png",
+          "desc": "leaning down, open palm out, grumpy funny frown"
+        },
+        "smile": {
+          "file": "images/ramses-smile.png",
+          "desc": "huge warm smile, clapping"
+        }
+      }
+    }
+  },
+  "images": {
+    "gem-hall": {
+      "file": "images/gem-hall.png",
+      "desc": "Grand Egyptian Museum hall (portrait backdrop, empty floor in the middle)",
+      "width": 1080,
+      "height": 1920,
+      "source": "AI image tool, prompt in videos/004-running-letter/images.md"
+    }
+  },
   "sfx": {
     "mg_whoosh_in": {
       "file": "sfx/mg_whoosh_in.wav",

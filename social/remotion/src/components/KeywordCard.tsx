@@ -2,7 +2,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import React from 'react';
 import {interpolate, random, spring, useCurrentFrame, useVideoConfig} from 'remotion';
 import {ICONS} from '../icons';
-import {color, FONT_AR, FONT_EN} from '../theme';
+import {color, FONT_AR, FONT_COPTIC, FONT_EN} from '../theme';
 import type {Keyword} from '../types';
 
 const CARD_W = 430;
@@ -73,6 +73,9 @@ export const KeywordCard: React.FC<{kw: Keyword; index: number; count: number; s
           >
             <FontAwesomeIcon icon={icon} />
           </div>
+        )}
+        {kw.coptic && (
+          <div style={{fontFamily: FONT_COPTIC, fontSize: 84, lineHeight: 1.05, color: color('letterGold'), textShadow: `0 4px 0 ${color('cocoa')}`, whiteSpace: 'nowrap'}}>{kw.coptic}</div>
         )}
         <div dir="rtl" style={{fontFamily: FONT_AR, fontWeight: 800, fontSize: 96, lineHeight: 1.1, color: color('deepTeal')}}>
           {kw.ar}

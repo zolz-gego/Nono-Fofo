@@ -1,6 +1,7 @@
 import React from 'react';
 import {Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {characters} from '../generated/data';
+import {color} from '../theme';
 import type {CharacterSpec} from '../types';
 
 const HEIGHT = 760; // on-screen height of a standing character
@@ -62,21 +63,55 @@ export const Character: React.FC<{spec: CharacterSpec; amp: number}> = ({spec, a
     if (m.flip !== undefined) flip = m.flip;
   }
 
+  const style: React.CSSProperties = {
+    position: 'absolute',
+    left: x - w / 2 + dx + mx,
+    top: FEET_Y - height + dy,
+    width: w,
+    height,
+    transformOrigin: '50% 100%',
+    transform: `translateY(${talkY - hop}px) rotate(${tilt}deg) scale(${sx * s * (0.85 + 0.15 * swapPop)}, ${sy * s * (0.85 + 0.15 * swapPop)}) ${flip ? 'scaleX(-1)' : ''}`,
+    filter: 'drop-shadow(0 10px 0 rgba(0,0,0,0.08))',
+  };
+  return info.file ? (
+    <Img src={staticFile(info.file)} style={style} />
+  ) : (
+    <div style={style}>
+      <StatuePlaceholder pose={pose} />
+    </div>
+  );
+};
+
+// Stand-in for a guest whose image isn't made yet (e.g. Ramses before his PNGs
+// arrive): a simple sandstone pharaoh statue, drawn on the same 1000×1500 box.
+const StatuePlaceholder: React.FC<{pose: string}> = ({pose}) => {
+  const stone = color('fortWall');
+  const dark = `color-mix(in srgb, ${stone} 70%, black)`;
+  const line = color('cocoa');
+  const eye = pose === 'look' ? 22 : 0;
+  const mouth = pose === 'talk' || pose === 'smile';
   return (
-    <>
-      <Img
-        src={staticFile(info.file)}
-        style={{
-          position: 'absolute',
-          left: x - w / 2 + dx + mx,
-          top: FEET_Y - height + dy,
-          width: w,
-          height,
-          transformOrigin: '50% 100%',
-          transform: `translateY(${talkY - hop}px) rotate(${tilt}deg) scale(${sx * s * (0.85 + 0.15 * swapPop)}, ${sy * s * (0.85 + 0.15 * swapPop)}) ${flip ? 'scaleX(-1)' : ''}`,
-          filter: 'drop-shadow(0 10px 0 rgba(0,0,0,0.08))',
-        }}
-      />
-    </>
+    <svg viewBox="0 0 1000 1500" width="100%" height="100%" style={{overflow: 'visible'}}>
+      <g stroke={line} strokeWidth={14} strokeLinejoin="round">
+        <rect x={250} y={1340} width={500} height={150} rx={20} fill={dark} />
+        <path d="M330 640 L670 640 L720 1340 L280 1340 Z" fill={stone} />
+        <path d="M330 900 L670 900 L700 1180 L300 1180 Z" fill="white" opacity={0.5} />
+        <path d="M300 640 L230 1000 L290 1010 L350 700" fill={stone} />
+        <path d="M700 640 L770 1000 L710 1010 L650 700" fill={stone} />
+        <path d="M290 260 Q500 60 710 260 L780 620 L220 620 Z" fill={color('mistBlue')} />
+        <ellipse cx={500} cy={380} rx={170} ry={200} fill={stone} />
+        <path d="M455 560 L545 560 L530 690 L470 690 Z" fill={dark} />
+        <path d="M480 175 q20 -40 40 0 q-20 30 -40 0" fill={color('sunYellow')} />
+      </g>
+      <ellipse cx={430} cy={360} rx={44} ry={52} fill="white" stroke={line} strokeWidth={10} />
+      <ellipse cx={570} cy={360} rx={44} ry={52} fill="white" stroke={line} strokeWidth={10} />
+      <circle cx={430 + eye} cy={368} r={20} fill={line} />
+      <circle cx={570 + eye} cy={368} r={20} fill={line} />
+      <path d="M385 290 L470 300 M530 300 L615 290" stroke={line} strokeWidth={16} strokeLinecap="round" transform={pose === 'demand' ? 'rotate(8 500 295)' : undefined} />
+      {mouth ? <ellipse cx={500} cy={480} rx={60} ry={pose === 'talk' ? 40 : 28} fill={line} /> : <path d="M445 470 Q500 505 555 470" fill="none" stroke={line} strokeWidth={12} strokeLinecap="round" />}
+      <text x={500} y={1440} textAnchor="middle" fontSize={64} fontFamily="sans-serif" fill="white" opacity={0.85}>
+        {pose}
+      </text>
+    </svg>
   );
 };

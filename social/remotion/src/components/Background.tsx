@@ -1,14 +1,28 @@
 import React from 'react';
-import {AbsoluteFill, interpolate, random, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Img, interpolate, random, staticFile, useCurrentFrame} from 'remotion';
+import {images} from '../generated/data';
 import {color, FONT_COPTIC, H, W} from '../theme';
-import {Scenery, SCENERY} from './Scenery';
+import {Museum, Scenery, SCENERY} from './Scenery';
 
 // Coptic letters (Avva keys) that float around in the background.
 const LETTERS = 'abjdezqiklmnxoprctvfyw'.split('');
 
 // camX: camera offset (px) for parallax; from: frame the themed pattern appears.
-export const Background: React.FC<{bg: string; bg2?: string; pattern?: string; seed: string; icons?: string[]; camX?: number; from?: number; before?: {pattern: string; icons?: string[]}}> = ({bg, bg2, pattern = 'rays', seed, icons, camX = 0, from = 0, before}) => {
+export const Background: React.FC<{bg: string; bg2?: string; pattern?: string; seed: string; icons?: string[]; camX?: number; from?: number; before?: {pattern: string; icons?: string[]}; backdrop?: string}> = ({bg, bg2, pattern = 'rays', seed, icons, camX = 0, from = 0, before, backdrop}) => {
   const frame = useCurrentFrame();
+  // An illustrated backdrop (social image) replaces the pattern; it pans with the
+  // camera. Until the image exists, a drawn museum hall stands in.
+  if (backdrop) {
+    return (
+      <AbsoluteFill style={{background: color(bg)}}>
+        {images[backdrop] ? (
+          <Img src={staticFile(images[backdrop])} style={{position: 'absolute', left: -80 - camX * 0.3, top: -60, width: W + 160, height: H + 120, objectFit: 'cover'}} />
+        ) : (
+          <Museum camX={camX} />
+        )}
+      </AbsoluteFill>
+    );
+  }
   const base = color(bg);
   const accent = bg2 ? color(bg2) : 'rgba(255,255,255,0.22)';
   const cx = W / 2 - camX * 0.3;

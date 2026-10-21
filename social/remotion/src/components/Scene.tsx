@@ -69,6 +69,7 @@ export const Scene: React.FC<{scene: SceneSpec; index: number; voiceFrom: number
             camX={cam.x}
             from={scene.patternAt !== undefined ? voiceFrom + sec(scene.patternAt) : 0}
             before={scene.before}
+            backdrop={scene.backdrop}
           />
         </AbsoluteFill>
         <AbsoluteFill style={{transform: `scale(${cam.zoom}) rotate(${cam.rot}deg) translate(${-cam.x}px, ${-cam.y}px)`}}>

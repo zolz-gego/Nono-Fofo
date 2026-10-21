@@ -78,15 +78,26 @@ tools/.venv/bin/python social/tools/synth_social_sfx.py   # (from repo root) reb
 All 107 app SFX (`correct_1`, `confetti`, `fish_splash_1`, …) can be used by id
 too; see `app/assets/audio/manifest.json`.
 
+### Characters (guests, `assets/images/`, registered under `characters` in the manifest)
+
+| who | Poses | Used for |
+|---|---|---|
+| `ramses` | `idle`, `look`, `talk`, `demand`, `smile` (`ramses-<pose>.png`, cut-out) | Giant living statue of Ramses II (video 004), voice `Ramses` in `voices.md` |
+
+Use them like the brothers (`"who": "ramses"` in `characters`, `"speaker": "ramses"`
+on a line). A pose without its PNG yet is drawn as a sandstone placeholder.
+
 ### Images (`assets/images/`)
 
-None yet.
+| id | Image | Used for |
+|---|---|---|
+| `gem-hall` | Grand Egyptian Museum hall, portrait, empty floor in the middle | `backdrop` of the museum scenes (a drawn hall stands in until the PNG exists) |
 
 ### Icons (keyword cards)
 
 Font Awesome, registered in `remotion/src/icons.ts`: `anchor`, `arrowLeft`,
 `arrowRight`, `bolt`, `book`, `cake`, `check`, `church`, `clap`, `compass`, `fish`,
-`football`, `gift`, `heart`, `house`, `idea`, `map`, `medal`, `paint`, `puzzle`,
+`football`, `gift`, `heart`, `house`, `idea`, `map`, `medal`, `museum`, `paint`, `puzzle`,
 `question`, `rocket`, `run`, `sailboat`, `search`, `shield`, `shoes`, `sound`,
 `star`, `trophy`.
 
@@ -124,6 +135,15 @@ from the voice start, like keywords; format in `remotion/src/types.ts`):
 | `rain` | Gold Coptic letters rain down and bounce off the brothers' heads |
 | `shake` | Screen shake (crash) |
 | `arrow` | Bouncing "this way" arrow |
+| `runner` | A Coptic letter on little legs with eyes, running along `path` keyframes (`hop` arcs it, e.g. bouncing off a head) |
+| `statues` | Little living statues (cat, jar, queen bust, ankh) tiptoeing and searching; `chaseAt` sends them running off |
+| `dizzy` | Stars spinning around a head after a bonk |
+| `pant` | Breath puffs + sweat drops (out of breath) |
+| `compare` | A Coptic letter tile ≈ a Latin letter tile (Ⲉ ≈ E) |
+| `confetti` | Confetti burst |
+
+`book` also takes `letter` (the Avva key that flies in) and `found` (a letter already on the page).
+Keyword cards can show the word spelled in Coptic: `coptic` (Avva keys) on the keyword.
 
 Characters can also take `size`, `x`, `delay` (late entrance) and `moves`
 (slide sideways: run across, run off, come back, with `flip`).
@@ -133,6 +153,7 @@ Scenes can also take:
   `dur`). The brothers and props move with the camera, the background follows
   with parallax (Cairo skyline, track, icons, study, rays…), captions and
   keyword cards stay put. Use it to pan to a brother, follow a run, or punch in.
+- `backdrop`: an image id from the catalog drawn behind the scene, panning with the camera.
 - `transition`: `wipe` (circle, default), `whip` (fast blurred camera whip)
   or `cut` (same shot continues, no wipe or sound).
 - `patternAt`: the themed background appears on a word (e.g. the pitch on "الكورة");

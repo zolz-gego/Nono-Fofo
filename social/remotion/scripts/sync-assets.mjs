@@ -66,6 +66,34 @@ for (const [who, poses] of Object.entries(charManifest.characters)) {
   }
 }
 
+// Social-only characters (guests like Ramses, social/assets/manifest.json): cut-out
+// PNGs in social/assets/images. A pose whose image isn't made yet renders as a
+// placeholder so drafts still work.
+const socialManifest = JSON.parse(fs.readFileSync(path.join(SOCIAL, 'assets', 'manifest.json'), 'utf8'));
+const pngSize = (file) => {
+  const b = fs.readFileSync(file);
+  return [b.readUInt32BE(16), b.readUInt32BE(20)];
+};
+for (const [who, c] of Object.entries(socialManifest.characters ?? {})) {
+  characters[who] = {};
+  for (const [pose, p] of Object.entries(c.poses)) {
+    const src = path.join(SOCIAL, 'assets', p.file);
+    if (fs.existsSync(src)) {
+      const [width, height] = pngSize(src);
+      characters[who][pose] = {file: `social/${p.file}`, width, height, head: [width / 2, height * 0.15]};
+    } else {
+      characters[who][pose] = {file: null, width: 1000, height: 1500, head: [500, 225]};
+      warn(`${who}: no image yet for pose "${pose}" (${p.file}), drawing a placeholder`);
+    }
+  }
+}
+
+// Social images (backdrops etc.): the ones that exist, by id.
+const images = {};
+for (const [id, img] of Object.entries(socialManifest.images ?? {})) {
+  if (fs.existsSync(path.join(SOCIAL, 'assets', img.file))) images[id] = `social/${img.file}`;
+}
+
 // ---------------------------------------------------------------- sounds
 const ids = (dir) => (fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => !f.startsWith('.')) : []);
 const sfx = {};
@@ -97,6 +125,7 @@ for (const dir of ids(path.join(SOCIAL, 'videos')).sort()) {
       }
     }
     for (const s of scene.sfx ?? []) if (!sfx[s.id]) warn(`${at}: unknown sfx "${s.id}"`);
+    if (scene.backdrop && !images[scene.backdrop]) warn(`${at}: no image yet for backdrop "${scene.backdrop}", drawing a placeholder`);
   }
   if (spec.endCard?.voice) {
     const id = spec.endCard.voice;
@@ -116,6 +145,7 @@ fs.writeFileSync(
     `export const characters: Record<string, Record<string, PoseInfo>> = ${JSON.stringify(characters, null, 2)};\n\n` +
     `export const sfx: Record<string, string> = ${JSON.stringify(sfx, null, 2)};\n\n` +
     `export const music: Record<string, string> = ${JSON.stringify(music, null, 2)};\n\n` +
+    `export const images: Record<string, string> = ${JSON.stringify(images, null, 2)};\n\n` +
     `export const videos: VideoSpec[] = ${JSON.stringify(videos, null, 2)};\n`,
 );
 

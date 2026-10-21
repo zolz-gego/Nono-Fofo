@@ -416,6 +416,47 @@ const Trail: React.FC<{base: string}> = ({base}) => {
   );
 };
 
+// ---------------------------------------------------------------- museum hall (stand-in for the gem-hall image)
+
+export const Museum: React.FC<{camX: number}> = ({camX}) => {
+  const frame = useCurrentFrame();
+  const wall = color('monasteryWall');
+  const px = -camX * 0.3;
+  const FLOOR = 1180;
+  return (
+    <AbsoluteFill style={{background: `linear-gradient(${tint(wall, 25)}, ${wall} 60%)`}}>
+      {/* glass ceiling triangles */}
+      <svg width={1080} height={420} style={{position: 'absolute', left: px * 0.5 - 60, top: 0}}>
+        {Array.from({length: 14}, (_, i) => (
+          <path key={i} d={`M${i * 90} 0 L${i * 90 + 45} 140 L${i * 90 + 90} 0`} fill={tint(color('skyTop'), 30)} stroke={shade(wall, 25)} strokeWidth={6} />
+        ))}
+      </svg>
+      {/* sun beams */}
+      {[180, 470, 780].map((x, i) => (
+        <div key={i} style={{position: 'absolute', left: x + px * 0.6, top: 120, width: 140, height: 1300, background: `linear-gradient(${color('studyLight')}, transparent)`, opacity: 0.35 + 0.1 * Math.sin(frame / 25 + i), transform: 'skewX(-14deg)', transformOrigin: 'top'}} />
+      ))}
+      {/* grand staircase with little statues */}
+      {Array.from({length: 7}, (_, i) => (
+        <div key={i} style={{position: 'absolute', left: 140 + i * 40 + px, width: 800 - i * 80, top: FLOOR - 70 - i * 70, height: 70, background: shade(wall, 6 + i * 2), borderTop: `5px solid ${shade(wall, 22)}`}}>
+          {Array.from({length: 3}, (_, j) => (
+            <div key={j} style={{position: 'absolute', left: `${18 + j * 30}%`, bottom: 66, width: 34, height: 58, borderRadius: '16px 16px 4px 4px', background: shade(wall, 28)}} />
+          ))}
+        </div>
+      ))}
+      {/* columns */}
+      {[40, 940].map((x, i) => (
+        <div key={i} style={{position: 'absolute', left: x + px * 1.2, top: 220, width: 100, height: FLOOR - 220, background: `linear-gradient(90deg, ${shade(wall, 10)}, ${tint(wall, 15)}, ${shade(wall, 10)})`, borderLeft: `5px solid ${shade(wall, 25)}`, borderRight: `5px solid ${shade(wall, 25)}`}} />
+      ))}
+      {/* polished floor */}
+      <div style={{position: 'absolute', left: 0, right: 0, top: FLOOR, bottom: 0, background: `linear-gradient(${color('monasteryFloor')}, ${shade(color('monasteryFloor'), 12)})`}}>
+        {Array.from({length: 9}, (_, i) => (
+          <div key={i} style={{position: 'absolute', left: ((i * 160 + px * 1.4) % 1300) - 100, top: 0, bottom: 0, width: 5, background: color('monasteryFloorLine'), transform: `skewX(${(i - 4) * 9}deg)`, transformOrigin: 'top'}} />
+        ))}
+      </div>
+    </AbsoluteFill>
+  );
+};
+
 export const SCENERY = new Set(['cairo', 'field', 'doodles', 'icons', 'study', 'waves', 'desert', 'board', 'grid', 'track', 'trail']);
 
 export const Scenery: React.FC<{pattern: string; base: string; seed: string; icons?: string[]; camX?: number; from?: number}> = ({pattern, base, seed, icons, camX = 0, from = 0}) => {
