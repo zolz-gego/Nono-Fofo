@@ -33,6 +33,7 @@ export type Keyword = {
   ar: string;
   en: string;
   icon?: string; // key of ICONS (src/icons.ts)
+  side?: 'left' | 'center' | 'right'; // where the card sits (default: center for one card, alternating for more)
   coptic?: string; // the word spelled in Coptic letters (Avva keys), shown in gold above the Arabic
   at: number; // seconds from voice start
 };

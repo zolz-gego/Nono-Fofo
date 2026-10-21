@@ -14,7 +14,8 @@ export const KeywordCard: React.FC<{kw: Keyword; index: number; count: number; s
   const {fps} = useVideoConfig();
   if (frame < 0) return null;
   const p = spring({frame, fps, config: {damping: 9, stiffness: 170, mass: 0.7}});
-  const left = count === 1 ? 540 - CARD_W / 2 : index % 2 === 0 ? 90 : 1080 - 90 - CARD_W;
+  const side = kw.side ?? (count === 1 ? 'center' : index % 2 === 0 ? 'left' : 'right');
+  const left = side === 'center' ? 540 - CARD_W / 2 : side === 'left' ? 90 : 1080 - 90 - CARD_W;
   const tilt = (index % 2 === 0 ? -4 : 4) + Math.sin((frame + index * 20) / 14) * 1.5;
   const float = Math.sin((frame + index * 13) / 12) * 8;
   const accent = color(ACCENTS[index % ACCENTS.length]);

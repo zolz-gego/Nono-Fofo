@@ -143,7 +143,7 @@ from the voice start, like keywords; format in `remotion/src/types.ts`):
 | `confetti` | Confetti burst |
 
 `book` also takes `letter` (the Avva key that flies in) and `found` (a letter already on the page).
-Keyword cards can show the word spelled in Coptic: `coptic` (Avva keys) on the keyword.
+Keyword cards can show the word spelled in Coptic: `coptic` (Avva keys) on the keyword. `side` (`left` / `center` / `right`) moves a card off a face.
 
 Characters can also take `size`, `x`, `delay` (late entrance) and `moves`
 (slide sideways: run across, run off, come back, with `flip`).
