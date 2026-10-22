@@ -7,7 +7,7 @@ import type {Timing, VideoSpec} from './types';
 // Scene lengths follow the real voice files (or the estimate until they exist).
 export async function computeTiming(spec: VideoSpec): Promise<Timing> {
   const f = (s: number) => Math.round(s * FPS);
-  const lead = spec.pace?.lead ?? LEAD;
+  const baseLead = spec.pace?.lead ?? LEAD;
   const tail = spec.pace?.tail ?? TAIL;
   let from = 0;
   const scenes: Timing['scenes'] = [];
@@ -15,6 +15,7 @@ export async function computeTiming(spec: VideoSpec): Promise<Timing> {
     const line = scene.line;
     const voiceSec = line ? (line.voice ? await getAudioDurationInSeconds(staticFile(line.voice)) : line.estimate) : 0;
     const keywordEnd = Math.max(0, ...(scene.keywords ?? []).map((k) => k.at + 0.9));
+    const lead = scene.lead ?? baseLead;
     const sec = Math.max(MIN_SCENE, lead + Math.max(voiceSec, keywordEnd) + tail + (scene.hold ?? 0));
     const duration = f(sec);
     scenes.push({from, duration, voiceFrom: f(lead), voiceFrames: f(voiceSec)});

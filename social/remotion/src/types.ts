@@ -104,6 +104,7 @@ export type SceneSpec = {
   keywords?: Keyword[];
   sfx?: {id: string; at: number; volume?: number}[]; // extra sounds, seconds from scene start
   hold?: number; // extra seconds after the line
+  lead?: number; // seconds before the voice starts in this scene (default: the video's pace.lead)
   props?: PropSpec[];
   captions?: boolean; // false = no subtitle box (e.g. the words are already on pop-up cards)
   backdrop?: string; // id of a social image (social/assets/manifest.json "images") drawn behind everything, with parallax
