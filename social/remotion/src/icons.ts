@@ -30,6 +30,7 @@ import {
   faRocket,
   faStar,
   faTrophy,
+  faTriangleExclamation,
   type IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -67,4 +68,5 @@ export const ICONS: Record<string, IconDefinition> = {
   sailboat: faSailboat,
   star: faStar,
   trophy: faTrophy,
+  warning: faTriangleExclamation,
 };

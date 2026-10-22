@@ -79,6 +79,7 @@ export type PropSpec =
   | {kind: 'pant'; at: number; x: number; y: number; until?: number; dir?: 'left' | 'right'} // breath puffs + sweat drops (out of breath)
   | {kind: 'compare'; at: number; k: string; latin: string; y?: number; outAt?: number} // Coptic letter ≈ Latin letter (stays put on screen)
   | {kind: 'confetti'; at: number; count?: number}
+  | {kind: 'banner'; at: number; ar: string; en: string; y?: number; outAt?: number} // yellow warning / note banner, stays put on screen
   // teaser props (components/TeaserProps.tsx)
   // an app screenshot (repo screenshots/<shot>.jpg) in a tablet frame; flies in from `from`, out to `to` at outAt
   | {kind: 'screen'; shot: string; at: number; outAt?: number; x?: number; y?: number; size?: number; tilt?: number; from?: 'bottom' | 'top' | 'left' | 'right' | 'zoom' | 'box'; to?: 'left' | 'right' | 'up' | 'down'}

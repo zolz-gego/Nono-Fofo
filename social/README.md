@@ -119,7 +119,7 @@ Font Awesome, registered in `remotion/src/icons.ts`: `anchor`, `arrowLeft`,
 `arrowRight`, `bolt`, `book`, `cake`, `check`, `church`, `clap`, `compass`, `fish`,
 `football`, `gift`, `heart`, `house`, `idea`, `map`, `medal`, `museum`, `paint`, `puzzle`,
 `question`, `rocket`, `run`, `sailboat`, `search`, `shield`, `shoes`, `sound`,
-`star`, `trophy`.
+`star`, `trophy`, `warning`.
 
 ### Scene backgrounds (`pattern`, `remotion/src/components/Scenery.tsx`)
 
@@ -161,6 +161,7 @@ from the voice start, like keywords; format in `remotion/src/types.ts`):
 | `pant` | Breath puffs + sweat drops (out of breath) |
 | `compare` | A Coptic letter tile ≈ a Latin letter tile (Ⲉ ≈ E); stays put on screen while the camera moves, `outAt` hides it |
 | `confetti` | Confetti burst |
+| `banner` | Yellow warning / note banner with a warning icon (Arabic + English), stays put on screen |
 | `screen` | An app screenshot (repo `screenshots/<shot>.jpg`, copied by `npm run sync`) in a tablet frame; flies in `from` bottom/top/left/right/zoom/box and out `to` a side at `outAt` (`components/TeaserProps.tsx`) |
 | `title` | Big outlined Arabic + English title that stays put on screen: `slam`, `pop` or `stamp` |
 | `alarm` | Spinning siren light + pulsing coral edges |
