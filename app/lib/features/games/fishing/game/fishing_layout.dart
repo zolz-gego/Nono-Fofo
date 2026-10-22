@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
-import '../../letter_hunt/game/target_card_layout.dart';
+import '../../shell/presentation/question_bar_layout.dart';
 import '../domain/fishing_config.dart';
 
 /// The Nile background picture and where its banks and water are.
@@ -14,28 +14,31 @@ class NileArt {
 
 /// Where everything sits in the fishing scene, from the scene size (and the
 /// background picture, when there is one). Both the Flame game and the
-/// Flutter overlay (target card, basket, referee) use it, so they always
+/// Flutter overlay (question bar, basket, referee) use it, so they always
 /// line up.
-class FishingLayout with TargetCardLayout {
+class FishingLayout with QuestionBarLayout {
   FishingLayout(this.size, {required this.goal, this.rtl = false, this.art}) {
     _fitArt();
   }
 
-  @override
   final Size size;
 
-  /// Number of basket slots (fish to catch).
-  @override
+  /// Number of fish to catch.
   final int goal;
 
-  /// Right-to-left UI: the basket fills from the right.
-  @override
+  /// Right-to-left UI: caught fish fly to the bar's icon on the right.
   final bool rtl;
 
   final NileArt? art;
 
   @override
-  double get slotMaxSize => fishWidth * 0.42;
+  double get width => size.width;
+  @override
+  double get height => size.height;
+  bool get isPortrait => height > width;
+
+  /// Where a caught fish flies: the fish on the question bar.
+  Offset get basket => progressIconCenter(rtl: rtl);
 
   // ---------------------------------------------------------------------------
   // Brothers and the river

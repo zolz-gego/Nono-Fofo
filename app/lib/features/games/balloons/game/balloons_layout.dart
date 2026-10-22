@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
-import '../../letter_hunt/game/target_card_layout.dart';
+import '../../shell/presentation/question_bar_layout.dart';
 import 'village_background.dart';
 
 /// The village background picture and where the brothers' feet go in it
@@ -15,12 +15,12 @@ class VillageArt {
 
 /// Where everything sits in the balloons scene, from the scene size (and the
 /// background picture, when there is one). Both the Flame game and the
-/// Flutter overlay (target card, the brother holding the balloons) use it,
+/// Flutter overlay (question bar, the brother holding the balloons) use it,
 /// so they always line up.
 ///
 /// The child's buddy starts on the left and runs around the path; the other
 /// brother stands on the right and keeps the bunch of correct balloons.
-class BalloonsLayout with TargetCardLayout implements VillageFrame {
+class BalloonsLayout with QuestionBarLayout implements VillageFrame {
   BalloonsLayout(
     this.size, {
     required this.goal,
@@ -31,23 +31,22 @@ class BalloonsLayout with TargetCardLayout implements VillageFrame {
     _fitArt();
   }
 
-  @override
   final Size size;
 
-  @override
   final int goal;
 
-  @override
   final bool rtl;
 
   final VillageArt? art;
 
+  @override
+  double get width => size.width;
+  @override
+  double get height => size.height;
+
   /// The receiver's raised fist in his "hold" pose, relative to his feet,
   /// in units of [characterSize] (null when he has no such pose).
   final Offset? receiverFist;
-
-  @override
-  double get slotMaxSize => balloonWidth * 0.5;
 
   /// Where the background picture is drawn (it covers the whole scene).
   @override

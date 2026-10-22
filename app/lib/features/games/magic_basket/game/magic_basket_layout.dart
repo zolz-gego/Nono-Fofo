@@ -4,6 +4,7 @@ import 'dart:ui';
 import '../../balloons/game/balloons_layout.dart';
 import '../../balloons/game/village_background.dart';
 import '../../shell/presentation/game_scaffold.dart';
+import '../../shell/presentation/question_bar_layout.dart';
 import '../domain/magic_basket_config.dart';
 
 /// The tree picture's size and its marked spots.
@@ -16,13 +17,13 @@ class TreeArt {
 
 /// Where everything sits in the Magic basket scene, from the scene size (and
 /// the village picture, when there is one). Both the Flame game and the
-/// Flutter overlay (the card, the brother in the tree) use it, so they
+/// Flutter overlay (the question bar, the brother in the tree) use it, so they
 /// always line up.
 ///
 /// A big apple tree fills the top of the village. The other brother sits on
 /// a branch at the start side (away from the settings button) and throws
 /// the apples; the child's buddy runs along the path with the basket.
-class MagicBasketLayout implements VillageFrame {
+class MagicBasketLayout with QuestionBarLayout implements VillageFrame {
   MagicBasketLayout(
     this.size, {
     required this.goal,
@@ -60,9 +61,6 @@ class MagicBasketLayout implements VillageFrame {
   @override
   double get height => size.height;
 
-  /// Short screens (phones in landscape) get a slimmer top.
-  bool get compact => height < 520;
-
   @override
   Rect? imageRect;
 
@@ -85,29 +83,6 @@ class MagicBasketLayout implements VillageFrame {
     imageRect = Rect.fromLTWH((width - w) / 2, dy, w, h);
     groundY = dy + art.feetY * h;
   }
-
-  // ---------------------------------------------------------------------------
-  // Top: the progress row beside the settings button (apples caught, the
-  // sounds found), and the letter's name in one line under it
-  // ---------------------------------------------------------------------------
-
-  double get hudTop => GameScaffold.buttonInset;
-
-  /// The progress row is as tall as the settings button, between the two
-  /// top corners (the button is in one of them).
-  double get progressHeight => GameScaffold.buttonSize;
-  double get progressLeft => GameScaffold.cornerSize;
-  double get progressWidth => width - GameScaffold.cornerSize * 2;
-
-  double get nameTop => hudTop + progressHeight + (compact ? 4 : 6);
-  double get nameHeight => compact ? 34 : 42;
-
-  /// Bottom of everything at the top.
-  double get cardBottom => nameTop + nameHeight;
-
-  /// The whole top area (speech bubbles stay out of it).
-  Rect get cardRect =>
-      Rect.fromLTRB(progressLeft, hudTop, width - progressLeft, cardBottom);
 
   // ---------------------------------------------------------------------------
   // The tree
