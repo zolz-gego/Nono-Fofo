@@ -45,9 +45,11 @@ abstract final class CharacterMotions {
     CharacterAction.fish ||
     CharacterAction.reel ||
     CharacterAction.jump ||
-    CharacterAction.hold => breathe,
+    CharacterAction.hold ||
+    CharacterAction.sit ||
+    CharacterAction.carry => breathe,
     CharacterAction.run => const MotionSpec(Duration(milliseconds: 420), _run),
-    CharacterAction.cheer => const MotionSpec(
+    CharacterAction.cheer || CharacterAction.toss => const MotionSpec(
       Duration(milliseconds: 700),
       _cheer,
     ),

@@ -13,6 +13,7 @@ import '../../engines/sound/domain/audio_engine.dart';
 import '../../engines/sound/domain/sound_repository.dart';
 import '../../features/games/adventure/data/adventure_config_repository.dart';
 import '../../features/games/balloons/data/balloons_config_repository.dart';
+import '../../features/games/magic_basket/data/magic_basket_config_repository.dart';
 import '../../features/games/cards/data/cards_config_repository.dart';
 import '../../features/games/monastery/data/monastery_config_repository.dart';
 import '../../features/games/snakes_ladders/data/snakes_config_repository.dart';
@@ -79,6 +80,7 @@ Future<void> configureDependencies() async {
   );
   sl.registerLazySingleton(() => FishingConfigRepository(sl()));
   sl.registerLazySingleton(() => BalloonsConfigRepository(sl()));
+  sl.registerLazySingleton(() => MagicBasketConfigRepository(sl()));
   sl.registerLazySingleton(() => WritingConfigRepository(sl()));
   sl.registerLazySingleton(() => CardsConfigRepository(sl()));
   sl.registerLazySingleton(() => MonasteryConfigRepository(sl()));

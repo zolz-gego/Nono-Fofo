@@ -8,6 +8,8 @@ class CopticLetter extends Equatable {
     required this.small,
     required this.capital,
     required this.names,
+    this.sounds = const {},
+    this.neverDrop = const {},
   });
 
   final String id;
@@ -16,6 +18,20 @@ class CopticLetter extends Equatable {
 
   /// Letter name per UI language code, e.g. `{'ar': 'الفا', 'en': 'Alpha'}`.
   final Map<String, String> names;
+
+  /// How the letter is said (Level 2), per UI language code, e.g.
+  /// `{'ar': ['ب', 'ڤ'], 'en': ['b', 'v']}`.
+  final Map<String, List<String>> sounds;
+
+  /// Debatable sounds that never fall as wrong answers when this letter is
+  /// asked, per UI language code.
+  final Map<String, List<String>> neverDrop;
+
+  List<String> soundsIn(String languageCode) =>
+      sounds[languageCode] ?? const [];
+
+  List<String> neverDropIn(String languageCode) =>
+      neverDrop[languageCode] ?? const [];
 
   String nameIn(String languageCode) =>
       names[languageCode] ?? names.values.firstOrNull ?? id;

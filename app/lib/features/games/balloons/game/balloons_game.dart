@@ -23,7 +23,7 @@ import 'village_background.dart';
 /// the child's buddy running under it; he jumps, grabs the string and
 /// brings it to the other brother. Correct balloons join the bunch the
 /// other brother holds; wrong ones pop. Rules and scores live in [cubit].
-class BalloonsGame extends FlameGame {
+class BalloonsGame extends VillageGame {
   BalloonsGame({
     required this.cubit,
     required this.hero,
@@ -42,6 +42,7 @@ class BalloonsGame extends FlameGame {
 
   static final Images _images = Images(prefix: '');
 
+  @override
   late BalloonsLayout layout = _layoutFor(const ui.Size(800, 600));
 
   /// Set by the page from the UI language; the progress slots fill from

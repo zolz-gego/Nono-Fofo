@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import '../../letter_hunt/game/target_card_layout.dart';
+import 'village_background.dart';
 
 /// The village background picture and where the brothers' feet go in it
 /// (fraction of its height).
@@ -19,7 +20,7 @@ class VillageArt {
 ///
 /// The child's buddy starts on the left and runs around the path; the other
 /// brother stands on the right and keeps the bunch of correct balloons.
-class BalloonsLayout with TargetCardLayout {
+class BalloonsLayout with TargetCardLayout implements VillageFrame {
   BalloonsLayout(
     this.size, {
     required this.goal,
@@ -49,9 +50,11 @@ class BalloonsLayout with TargetCardLayout {
   double get slotMaxSize => balloonWidth * 0.5;
 
   /// Where the background picture is drawn (it covers the whole scene).
+  @override
   Rect? imageRect;
 
   /// The line the brothers stand on (middle of the dirt path).
+  @override
   late double groundY;
 
   void _fitArt() {

@@ -71,4 +71,8 @@ abstract final class AppIcons {
   static const FaIconData cards = FontAwesomeIcons.clone;
   static const FaIconData monastery = FontAwesomeIcons.magnifyingGlass;
   static const FaIconData challenge = FontAwesomeIcons.trophy;
+  static const FaIconData magicBasket = FontAwesomeIcons.basketShopping;
+
+  // Magic basket
+  static const FaIconData apple = FontAwesomeIcons.appleWhole;
 }
