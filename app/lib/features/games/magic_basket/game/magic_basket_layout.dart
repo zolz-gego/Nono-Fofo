@@ -113,16 +113,16 @@ class MagicBasketLayout implements VillageFrame {
   // The tree
   // ---------------------------------------------------------------------------
 
-  /// Where the tree picture is drawn: its roots on the path, and at least
-  /// as wide as the scene and as tall as the room under the top rows, so
-  /// on tall screens (phones held upright) the crown fills the top. Its
-  /// sides then go past the screen edges, and it slides sideways (never
-  /// uncovering an edge) so the brother's branch stays on screen.
+  /// Where the tree picture is drawn: its roots on the path and the top of
+  /// its crown past the top edge, so the leaves fill the whole top of the
+  /// scene on any screen. Its sides may go past the screen edges too; it
+  /// slides sideways (never uncovering an edge) so the brother's branch
+  /// stays on screen.
   Rect? get treeRect {
     final tree = this.tree;
     if (tree == null) return null;
     final aspect = tree.imageSize.width / tree.imageSize.height;
-    final tall = (groundY - cardBottom) / tree.marks.rootY;
+    final tall = groundY / (tree.marks.rootY - _crownAbove);
     final w = max(width * 1.04, tall * aspect);
     final h = w / aspect;
     final seat = rtl ? 1 - tree.marks.seat.dx : tree.marks.seat.dx;
@@ -133,6 +133,9 @@ class MagicBasketLayout implements VillageFrame {
     left = left.clamp(width - w, 0.0);
     return Rect.fromLTWH(left, groundY - tree.marks.rootY * h, w, h);
   }
+
+  /// How much of the tree picture's height sits above the top edge.
+  static const double _crownAbove = 0.12;
 
   /// A point of the tree picture (fractions, as drawn in English) on
   /// screen; mirrored in Arabic.
@@ -238,12 +241,11 @@ class MagicBasketLayout implements VillageFrame {
     return columnsLeft + (columnsRight - columnsLeft) * column / (n - 1);
   }
 
-  /// Where a thrown apple starts falling: out of the leaves.
-  double get dropY {
-    final r = treeRect;
-    if (r != null) return r.top + tree!.marks.dropY * r.height;
-    return canopy.bottom - appleSize * 0.35;
-  }
+  /// Where apples start falling: out of the leaves just under the top
+  /// rows, so they fall through the whole scene.
+  double get dropY => tree != null
+      ? cardBottom + appleSize * 0.6
+      : canopy.bottom - appleSize * 0.35;
 
   /// An apple that reaches this line has hit the ground.
   double get floorY => groundY - appleSize * 0.15;

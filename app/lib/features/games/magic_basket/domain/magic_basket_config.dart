@@ -6,11 +6,7 @@ import '../../letter_hunt/domain/letter_hunt_rules.dart';
 /// Spots on the tree picture, as fractions of it (drawn as in English;
 /// Arabic mirrors it).
 class TreeMarks {
-  const TreeMarks({
-    this.seat = const Offset(0.33, 0.6),
-    this.rootY = 0.95,
-    this.dropY = 0.5,
-  });
+  const TreeMarks({this.seat = const Offset(0.33, 0.6), this.rootY = 0.95});
 
   factory TreeMarks.fromJson(Map<String, dynamic>? json) {
     const d = TreeMarks();
@@ -21,7 +17,6 @@ class TreeMarks {
         (json['seatY'] as num?)?.toDouble() ?? d.seat.dy,
       ),
       rootY: (json['rootY'] as num?)?.toDouble() ?? d.rootY,
-      dropY: (json['dropY'] as num?)?.toDouble() ?? d.dropY,
     );
   }
 
@@ -30,9 +25,6 @@ class TreeMarks {
 
   /// The line of the roots, which stands on the path.
   final double rootY;
-
-  /// Where apples come out of the leaves.
-  final double dropY;
 }
 
 /// Settings from `assets/content/games/magic_basket.json`. Defaults here

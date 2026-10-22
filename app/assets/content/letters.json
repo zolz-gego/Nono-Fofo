@@ -16,7 +16,7 @@
     { "id": "lola", "small": "l", "capital": "L", "name": { "ar": "لولا", "en": "Lola" }, "sounds": { "ar": ["ل"], "en": ["l"] } },
     { "id": "mi", "small": "m", "capital": "M", "name": { "ar": "مي", "en": "Mi" }, "sounds": { "ar": ["م"], "en": ["m"] } },
     { "id": "ni", "small": "n", "capital": "N", "name": { "ar": "ني", "en": "Ni" }, "sounds": { "ar": ["ن"], "en": ["n"] } },
-    { "id": "exi", "small": "7", "capital": "&", "name": { "ar": "اكسي", "en": "Exi" }, "sounds": { "ar": ["كس"], "en": ["x"] } },
+    { "id": "exi", "small": "7", "capital": "&", "name": { "ar": "اكسي", "en": "Exi" }, "sounds": { "ar": ["اكس"], "en": ["x"] } },
     { "id": "o", "small": "o", "capital": "O", "name": { "ar": "او", "en": "O" }, "sounds": { "ar": ["و"], "en": ["o"] } },
     { "id": "pi", "small": "p", "capital": "P", "name": { "ar": "بي", "en": "Pi" }, "sounds": { "ar": ["ب"], "en": ["p"] }, "neverDrop": { "ar": ["ف"], "en": ["f"] } },
     { "id": "ro", "small": "r", "capital": "R", "name": { "ar": "رو", "en": "Ro" }, "sounds": { "ar": ["ر"], "en": ["r"] } },

@@ -512,26 +512,38 @@ class MagicBasketGame extends VillageGame {
   }
 }
 
-/// One apple from the thrower's hand to the basket or the ground: a short
-/// arc out of the tree, then a straight fall.
+/// One apple to the basket or the ground. When it starts below the
+/// thrower's hand, he throws it in a short arc out of the tree; when it
+/// starts higher (the drop line is just under the top rows), it pops out
+/// of the leaves there. Then it falls straight down.
 class _Flight {
   _Flight(this.game, this.apple, this.toX) {
     final from = game.layout.throwerHand;
-    apple.position = Vector2(from.dx, from.dy);
-    _from = from;
+    _fromLeaves = game.layout.dropY < from.dy - game.layout.appleSize;
+    final start = _fromLeaves ? ui.Offset(toX, game.layout.dropY) : from;
+    apple.position = Vector2(start.dx, start.dy);
+    if (_fromLeaves) apple.scale = Vector2.zero();
+    _from = start;
   }
 
   final MagicBasketGame game;
   final AppleComponent apple;
   final double toX;
   late final ui.Offset _from;
+  late final bool _fromLeaves;
   double _t = 0;
 
   static const double _arcTime = 0.6;
+  static const double _popTime = 0.35;
 
   void update(double dt) {
     final l = game.layout;
     switch (apple.state) {
+      case AppleState.thrown when _fromLeaves:
+        _t += dt;
+        final k = min(1.0, _t / _popTime);
+        apple.scale = Vector2.all(Curves.easeOutBack.transform(k));
+        if (k >= 1) apple.state = AppleState.falling;
       case AppleState.thrown:
         _t += dt;
         final k = min(1.0, _t / _arcTime);
