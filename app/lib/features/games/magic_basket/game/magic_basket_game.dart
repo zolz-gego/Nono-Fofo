@@ -174,8 +174,14 @@ class MagicBasketGame extends VillageGame {
     _placeHero();
   }
 
-  ui.Offset get _rim =>
-      ui.Offset(_heroX, layout.groundY - layout.basketRimLift);
+  double get _heroHeight => _hero.size.y * _hero.scale.y;
+
+  /// The basket's rim: at the buddy's waist (Fofo is shorter than Nono).
+  ui.Offset get _rim => ui.Offset(
+    _heroX,
+    layout.groundY -
+        (_heroHeight > 0 ? _heroHeight * 0.4 : layout.characterSize * 0.4),
+  );
 
   void _placeHero() {
     final l = layout;
@@ -213,6 +219,15 @@ class MagicBasketGame extends VillageGame {
 
   /// The mouse moved or a finger touched / dragged at [x].
   void aimAt(double x) => _aimX = x.clamp(layout.heroMinX, layout.heroMaxX);
+
+  /// An arrow key was just pressed: a quick tap moves the buddy one step
+  /// (held keys keep him running, see [_keyDirection]).
+  void nudge(int direction) {
+    _aimX = (_heroX + direction * layout.basketWidth * 0.6).clamp(
+      layout.heroMinX,
+      layout.heroMaxX,
+    );
+  }
 
   /// -1 = left, 1 = right, 0 = no arrow key held.
   int get _keyDirection {
@@ -252,14 +267,16 @@ class MagicBasketGame extends VillageGame {
 
   void _moveHero(double dt) {
     final l = layout;
+    // A held key keeps the aim one step ahead; on release he finishes
+    // that step.
     final keys = _keyDirection;
-    double? to;
     if (keys != 0) {
-      _aimX = null;
-      to = keys < 0 ? l.heroMinX : l.heroMaxX;
-    } else {
-      to = _aimX;
+      _aimX = (_heroX + keys * l.basketWidth * 0.6).clamp(
+        l.heroMinX,
+        l.heroMaxX,
+      );
     }
+    final to = _aimX;
     var moving = false;
     if (to != null) {
       final step = l.runSpeed * dt;

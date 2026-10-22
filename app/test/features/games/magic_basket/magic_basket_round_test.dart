@@ -2,10 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nonofofo/core/assets/json_asset_loader.dart';
 import 'package:nonofofo/features/games/magic_basket/domain/magic_basket_config.dart';
 import 'package:nonofofo/features/games/magic_basket/domain/magic_basket_round.dart';
+import 'package:nonofofo/features/letters/data/letter_repository_impl.dart';
 import 'package:nonofofo/features/letters/domain/coptic_letter.dart';
+import 'package:nonofofo/features/levels/domain/game_level.dart';
 
 CopticLetter _letter(
   String id,
@@ -100,5 +104,21 @@ void main() {
       expect(sounds?['en'], isNotEmpty, reason: l['id'] as String);
     }
     expect((json['levels'] as Map)['2'], isNot(contains('so')));
+  });
+
+  test('letters.json sounds reach the round (vida never drops ف)', () async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    final repo = LetterRepositoryImpl(JsonAssetLoader(rootBundle));
+    final letters = await repo.lettersOf(GameLevel.two);
+    final vida = letters.firstWhere((l) => l.id == 'vida');
+    final round = MagicBasketRound.start(
+      config: config,
+      target: vida,
+      pool: letters,
+      language: 'ar',
+    );
+    expect(round.sounds, ['ب', 'ڤ']);
+    expect(round.distractors, isNot(contains('ف')));
+    expect(round.distractors, contains('خ'));
   });
 }

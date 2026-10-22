@@ -141,9 +141,6 @@ class MagicBasketLayout with TargetCardLayout implements VillageFrame {
   double get basketWidth => characterSize * 0.66;
   double get basketHeight => basketWidth * 0.5;
 
-  /// The basket's rim, relative to the buddy's feet.
-  double get basketRimLift => characterSize * 0.5;
-
   double get heroMinX => basketWidth / 2 + 8;
   double get heroMaxX => width - basketWidth / 2 - 8;
 

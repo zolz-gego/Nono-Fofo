@@ -73,6 +73,9 @@ class _MagicBasketPageState extends State<MagicBasketPage> {
 
   String get _language => Localizations.localeOf(context).languageCode;
 
+  /// The language the current round's sounds are in.
+  String? _startedIn;
+
   @override
   void initState() {
     super.initState();
@@ -82,7 +85,17 @@ class _MagicBasketPageState extends State<MagicBasketPage> {
     });
   }
 
+  /// The sounds are Arabic or English letters: a new language starts a
+  /// new round (the thrower also moves to the other side).
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_startedIn != null && _startedIn != _language) _config.then(_start);
+  }
+
   void _start(MagicBasketConfig config) {
+    if (!mounted) return;
+    _startedIn = _language;
     _cubit?.close();
     final cubit = MagicBasketCubit(
       MagicBasketRound.start(
@@ -262,8 +275,9 @@ class _MagicBasketPageState extends State<MagicBasketPage> {
     context.go(AppRoutes.level, extra: widget.args.setup);
   }
 
-  /// Arrow keys and A / D move the basket (the game reads them); handling
-  /// them here keeps them from moving the focus around.
+  /// Arrow keys and A / D move the basket: a tap is one step, a held key
+  /// keeps running (the game reads it). Handling them here also keeps them
+  /// from moving the focus around.
   KeyEventResult _onKey(FocusNode node, KeyEvent event) {
     final keys = {
       LogicalKeyboardKey.arrowLeft,
@@ -271,9 +285,14 @@ class _MagicBasketPageState extends State<MagicBasketPage> {
       LogicalKeyboardKey.keyA,
       LogicalKeyboardKey.keyD,
     };
-    return keys.contains(event.logicalKey)
-        ? KeyEventResult.handled
-        : KeyEventResult.ignored;
+    if (!keys.contains(event.logicalKey)) return KeyEventResult.ignored;
+    if (event is KeyDownEvent) {
+      final left =
+          event.logicalKey == LogicalKeyboardKey.arrowLeft ||
+          event.logicalKey == LogicalKeyboardKey.keyA;
+      _game?.nudge(left ? -1 : 1);
+    }
+    return KeyEventResult.handled;
   }
 
   @override
