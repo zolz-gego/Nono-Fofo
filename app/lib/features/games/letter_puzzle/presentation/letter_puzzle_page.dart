@@ -688,66 +688,90 @@ class _Board extends StatelessWidget {
         const SizedBox(height: AppDimens.spaceSm),
         _NamePlate(text: state.item.word.text, solved: board.solved),
         const SizedBox(height: AppDimens.spaceSm),
-        AppText.body(l10n.letterPuzzleWrite, color: AppColors.ink),
-        const SizedBox(height: AppDimens.spaceSm),
-        // Coptic reads left to right, also in the Arabic app.
-        Directionality(
-          textDirection: TextDirection.ltr,
-          child: Row(
+        // A cream panel, so the cubes and texts read on any background.
+        Container(
+          padding: const EdgeInsets.all(AppDimens.spaceMd),
+          decoration: BoxDecoration(
+            color: AppColors.boardPanel,
+            borderRadius: BorderRadius.circular(AppDimens.radiusLg),
+            border: Border.all(color: AppColors.cubeBorder, width: 2),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.shadow,
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              for (var i = 0; i < n; i++)
-                Padding(
-                  padding: const EdgeInsets.all(4),
-                  child: _Cube(
-                    key: i < cubeKeys.length ? cubeKeys[i] : null,
-                    board: board,
-                    slot: i,
-                    waiting: i == waitingSlot,
-                    size: cube,
-                    enabled: canPlay,
-                    onPlace: onPlace,
-                    onRemove: onRemove,
+              AppText.body(l10n.letterPuzzleWrite, color: AppColors.ink),
+              const SizedBox(height: AppDimens.spaceSm),
+              // Coptic reads left to right, also in the Arabic app.
+              Directionality(
+                textDirection: TextDirection.ltr,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    for (var i = 0; i < n; i++)
+                      Padding(
+                        padding: const EdgeInsets.all(4),
+                        child: _Cube(
+                          key: i < cubeKeys.length ? cubeKeys[i] : null,
+                          board: board,
+                          slot: i,
+                          waiting: i == waitingSlot,
+                          size: cube,
+                          enabled: canPlay,
+                          onPlace: onPlace,
+                          onRemove: onRemove,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: AppDimens.spaceMd),
+              Directionality(
+                textDirection: TextDirection.ltr,
+                child: _Tray(
+                  board: board,
+                  size: cube,
+                  enabled: canPlay,
+                  onPlaceNext: onPlaceNext,
+                  onRemove: onRemove,
+                ),
+              ),
+              const SizedBox(height: AppDimens.spaceMd),
+              SizedBox(
+                height: 52,
+                child: FilledButton.icon(
+                  onPressed: canPlay && board.full ? onCheck : null,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: AppColors.leafGreen,
+                    foregroundColor: AppColors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppDimens.spaceXl,
+                    ),
+                  ),
+                  icon: const FaIcon(AppIcons.checkWord, size: 20),
+                  label: AppText.h3(
+                    l10n.letterPuzzleCheck,
+                    color: AppColors.white,
                   ),
                 ),
+              ),
+              if (showHowTo) ...[
+                const SizedBox(height: AppDimens.spaceSm),
+                AppText(
+                  l10n.letterPuzzleHowTo,
+                  variant: AppTextVariant.caption,
+                  color: AppColors.cocoa,
+                ),
+              ],
             ],
           ),
         ),
-        const SizedBox(height: AppDimens.spaceMd),
-        Directionality(
-          textDirection: TextDirection.ltr,
-          child: _Tray(
-            board: board,
-            size: cube,
-            enabled: canPlay,
-            onPlaceNext: onPlaceNext,
-            onRemove: onRemove,
-          ),
-        ),
-        const SizedBox(height: AppDimens.spaceMd),
-        SizedBox(
-          height: 52,
-          child: FilledButton.icon(
-            onPressed: canPlay && board.full ? onCheck : null,
-            style: FilledButton.styleFrom(
-              backgroundColor: AppColors.leafGreen,
-              foregroundColor: AppColors.white,
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimens.spaceXl,
-              ),
-            ),
-            icon: const FaIcon(AppIcons.checkWord, size: 20),
-            label: AppText.h3(l10n.letterPuzzleCheck, color: AppColors.white),
-          ),
-        ),
-        if (showHowTo) ...[
-          const SizedBox(height: AppDimens.spaceSm),
-          AppText(
-            l10n.letterPuzzleHowTo,
-            variant: AppTextVariant.caption,
-            color: AppColors.cocoa,
-          ),
-        ],
       ],
     );
   }
@@ -923,7 +947,7 @@ class _Tray extends StatelessWidget {
                         dimension: size,
                         child: DecoratedBox(
                           decoration: BoxDecoration(
-                            color: AppColors.cubeEmpty,
+                            color: AppColors.trayGap,
                             borderRadius: BorderRadius.circular(size * 0.18),
                           ),
                         ),

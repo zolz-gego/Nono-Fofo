@@ -478,8 +478,11 @@ reference, so the style matches.
 
 | What | Save the original as | Then |
 |---|---|---|
-| Road card | `design/reference/letter_puzzle/icon.webp` | Claude puts it on the beige square as `app/assets/games/letterPuzzle.png` |
-| Church background, wide (16:9) | `design/reference/letter_puzzle/church.webp` | Claude sizes it into `app/assets/games/letter_puzzle/church.webp` (the `background` in `app/assets/content/games/letter_puzzle.json`) |
+| Road card | `design/reference/letter_puzzle/icon.webp` | `process_letter_puzzle.py` puts it on the beige square as `app/assets/games/letterPuzzle.png` |
+| Church background, wide (16:9) | `design/reference/letter_puzzle/church.webp` | `process_letter_puzzle.py` sizes it into `app/assets/games/letter_puzzle/church.webp` (the `background` in `app/assets/content/games/letter_puzzle.json`) |
+
+Both are done (2026-10-23). To swap one, save the new original under the
+same name and run `tools/.venv/bin/python tools/games/process_letter_puzzle.py`.
 
 ### Road card: `letterPuzzle.png`
 

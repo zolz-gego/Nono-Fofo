@@ -145,7 +145,9 @@ abstract final class AppColors {
   static const Color namePlate = Color(0xFF7A5238);
   static const Color namePlateLight = Color(0xFF9A6B48);
   static const Color cube = cream;
-  static const Color cubeEmpty = Color(0x33FFFBF4);
+  static const Color cubeEmpty = Color(0x1A5B4B3A);
+  static const Color boardPanel = Color(0xE6FFFBF4);
+  static const Color trayGap = Color(0x33FFFBF4);
   static const Color cubeBorder = Color(0xFFE8D4AE);
   static const Color cubeRight = Color(0xFFEAF7E2);
   static const Color cubeWrong = Color(0xFFFFE6DF);
