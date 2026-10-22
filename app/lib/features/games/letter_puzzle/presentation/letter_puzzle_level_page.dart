@@ -83,6 +83,8 @@ class _LetterPuzzleLevelPageState extends State<LetterPuzzleLevelPage> {
     }
   }
 
+  String get _lang => Localizations.localeOf(context).languageCode;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -126,7 +128,8 @@ class _LetterPuzzleLevelPageState extends State<LetterPuzzleLevelPage> {
                     spacing: AppDimens.spaceSm,
                     runSpacing: AppDimens.spaceSm,
                     children: [
-                      for (final (i, n) in config.playableLengths.indexed)
+                      for (final (i, n)
+                          in config.playableLengths(_lang).indexed)
                         _LengthTile(
                               length: n,
                               stars: _progress.bestStars(

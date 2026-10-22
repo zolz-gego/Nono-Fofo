@@ -174,23 +174,23 @@ void main() {
     final ids = {
       for (final l in letters['letters'] as List) (l as Map)['id'] as String,
     };
-    for (final n in config.lengths) {
-      final words = config.words[n] ?? const [];
-      expect(
-        words.length,
-        greaterThanOrEqualTo(config.wordsPerRound),
-        reason: 'length $n',
-      );
-      for (final w in words) {
-        expect(w.letters.length, n, reason: w.ar);
-        expect(ids.containsAll(w.letters), isTrue, reason: w.ar);
+    for (final lang in ['ar', 'en']) {
+      for (final n in config.lengths) {
+        expect(
+          config.wordsFor(lang, n).length,
+          greaterThanOrEqualTo(config.wordsPerRound),
+          reason: '$lang length $n',
+        );
+      }
+      for (final MapEntry(key: n, value: words)
+          in config.words[lang]!.entries) {
+        for (final w in words) {
+          expect(w.letters.length, n, reason: w.text);
+          expect(ids.containsAll(w.letters), isTrue, reason: w.text);
+        }
       }
     }
   });
 }
 
-const _word = PuzzleWord(
-  ar: 'مينا',
-  en: 'Mina',
-  letters: ['mi', 'ita', 'ni', 'alpha'],
-);
+const _word = PuzzleWord(text: 'مينا', letters: ['mi', 'ita', 'ni', 'alpha']);

@@ -103,12 +103,30 @@ class _LetterPuzzlePageState extends State<LetterPuzzlePage> {
     });
   }
 
+  /// The language the round's words are in. Each language has its own
+  /// words, so switching it (in the settings pop-up) starts a new round.
+  String? _lang;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final lang = Localizations.localeOf(context).languageCode;
+    if (lang == _lang) return;
+    final restart = _lang != null && _config != null;
+    _lang = lang;
+    if (restart) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _start();
+      });
+    }
+  }
+
   void _start() {
     _timers.cancelAll();
     _cubit?.close();
     final config = _config!;
     final items = LetterPuzzleCubit.pickItems(
-      pool: config.words[widget.args.length] ?? const [],
+      pool: config.wordsFor(_lang!, widget.args.length),
       alphabet: _alphabet,
       count: config.wordsPerRound,
       random: _random,
@@ -314,7 +332,6 @@ class _LetterPuzzlePageState extends State<LetterPuzzlePage> {
                   key: ValueKey(state.index),
                   state: state,
                   width: boardW,
-                  language: Localizations.localeOf(context).languageCode,
                   showHowTo: state.index == 0,
                   onPlace: (tile, slot) => _cubit?.place(tile, slot),
                   onPlaceNext: (tile) => _cubit?.placeNext(tile),
@@ -439,7 +456,6 @@ class _Board extends StatelessWidget {
     super.key,
     required this.state,
     required this.width,
-    required this.language,
     required this.showHowTo,
     required this.onPlace,
     required this.onPlaceNext,
@@ -449,7 +465,6 @@ class _Board extends StatelessWidget {
 
   final LetterPuzzleState state;
   final double width;
-  final String language;
   final bool showHowTo;
   final void Function(int tile, int slot) onPlace;
   final void Function(int tile) onPlaceNext;
@@ -469,10 +484,7 @@ class _Board extends StatelessWidget {
       children: [
         const SaintIcon(width: 120),
         const SizedBox(height: AppDimens.spaceSm),
-        _NamePlate(
-          text: state.item.word.textIn(language),
-          solved: board.solved,
-        ),
+        _NamePlate(text: state.item.word.text, solved: board.solved),
         const SizedBox(height: AppDimens.spaceSm),
         AppText.body(l10n.letterPuzzleWrite, color: AppColors.ink),
         const SizedBox(height: AppDimens.spaceSm),
