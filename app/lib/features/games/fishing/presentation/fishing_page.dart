@@ -10,6 +10,7 @@ import '../../../../app/di/injection.dart';
 import '../../../../app/router.dart';
 import '../../../../core/domain/character_id.dart';
 import '../../../../core/l10n/l10n.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_icons.dart';
 import '../../../../engines/characters/domain/character_action.dart';
@@ -36,7 +37,7 @@ import '../../letter_hunt/presentation/letter_pick_page.dart';
 import 'fishing_cubit.dart';
 
 /// The fishing game screen: the Flame scene with the hero and his rod, the
-/// target card and basket on top, and the other brother as the referee.
+/// question bar on top, and the other brother as the referee.
 class FishingPage extends StatefulWidget {
   const FishingPage({super.key, required this.args});
 
@@ -278,12 +279,7 @@ class _FishingPageState extends State<FishingPage> {
       AppDimens.spaceSm,
       layout.width - bubbleWidth - AppDimens.spaceSm,
     );
-    final card = Rect.fromLTRB(
-      (layout.width - layout.cardWidth) / 2,
-      layout.cardTop,
-      (layout.width + layout.cardWidth) / 2,
-      layout.cardBottom,
-    );
+    final card = layout.cardRect;
     final aboveRect = Rect.fromLTWH(
       aboveLeft,
       headTop - roomNeeded,
@@ -333,6 +329,7 @@ class _FishingPageState extends State<FishingPage> {
           cubit: _cubit!,
           label: context.l10n.catchLetter,
           icon: AppIcons.fishing,
+          iconColor: AppColors.primary,
         ),
         Positioned(
           left: feet.dx - boxW / 2,
