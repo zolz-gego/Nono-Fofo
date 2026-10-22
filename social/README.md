@@ -222,7 +222,7 @@ same shout as the stitch intro when `media/voice/shout.mp3` exists. Timeline:
 
 **Opening a video with an intro.** Set `"intro": "intro-spin"` (or `intro-stitch`,
 `intro-portrait`) in a video's `video.json`: the intro plays first, then the story
-starts with its own music. The intros are listed in `src/intro/Intros.ts` (local
+starts with its own music. `introVolume` (e.g. `0.4`) turns the intro down to match the story. The intros are listed in `src/intro/Intros.ts` (local
 only); without that folder the field is ignored.
 
 **Caption size.** Captions are 62/40 px by default; `"captionSize": "large"` in

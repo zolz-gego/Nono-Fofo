@@ -17,7 +17,7 @@ export const Video: React.FC<VideoProps> = ({spec, timing}) => {
     <AbsoluteFill style={{backgroundColor: 'black'}}>
       {Intro && (
         <Sequence durationInFrames={timing.intro} name="intro">
-          <Intro />
+          <Intro volume={spec.introVolume ?? 1} />
         </Sequence>
       )}
       <Sequence from={timing.intro} name="story">
