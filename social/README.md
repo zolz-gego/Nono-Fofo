@@ -204,6 +204,11 @@ the logo rises out of the paper while "نونو وفوفو / Nono & Fofo" types 
 same shout as the stitch intro when `media/voice/shout.mp3` exists. Timeline:
 `src/intro/spin.json`; motion: `src/intro/Spin.tsx`; score: `tools/spin_intro.py`.
 
+**Opening a video with an intro.** Set `"intro": "intro-spin"` (or `intro-stitch`,
+`intro-portrait`) in a video's `video.json`: the intro plays first, then the story
+starts with its own music. The intros are listed in `src/intro/Intros.ts` (local
+only); without that folder the field is ignored.
+
 ## Videos
 
 Videos are local only: `videos/`, `previews/` and `out/` are git-ignored. Git holds

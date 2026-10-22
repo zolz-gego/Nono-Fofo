@@ -102,6 +102,7 @@ export type SceneSpec = {
 export type VideoSpec = {
   id: string; // folder name, filled in by sync
   title: string;
+  intro?: string; // a local intro to open with (e.g. "intro-spin"), played before the first scene
   music?: {track: string; volume?: number};
   pace?: {lead?: number; tail?: number}; // seconds around each line (defaults in theme.ts)
   scenes: SceneSpec[];
@@ -110,6 +111,7 @@ export type VideoSpec = {
 
 export type Timing = {
   fps: number;
+  intro: number; // frames of the intro before the first scene (0 = none)
   scenes: {from: number; duration: number; voiceFrom: number; voiceFrames: number}[];
   endFrom: number;
   total: number;

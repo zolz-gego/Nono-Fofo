@@ -165,6 +165,9 @@ fs.writeFileSync(
     (local
       ? `export {LocalCompositions} from '../intro/Compositions';\n`
       : `export const LocalCompositions: React.FC = () => null;\n`) +
+    (fs.existsSync(path.join(INTRO, 'Intros.ts'))
+      ? `export {INTROS} from '../intro/Intros';\n`
+      : `export const INTROS: Record<string, {component: React.FC; frames: number}> = {};\n`) +
     `export const introMedia: string[] = ${JSON.stringify(introMedia)};\n`,
 );
 

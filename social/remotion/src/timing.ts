@@ -1,5 +1,6 @@
 import {getAudioDurationInSeconds} from '@remotion/media-utils';
 import {staticFile} from 'remotion';
+import {INTROS} from './generated/local';
 import {END_CARD, END_VOICE_AT, FPS, LEAD, MIN_SCENE, TAIL} from './theme';
 import type {Timing, VideoSpec} from './types';
 
@@ -22,5 +23,7 @@ export async function computeTiming(spec: VideoSpec): Promise<Timing> {
   const endFrom = from;
   const endVoice = spec.endCard?.voice ? await getAudioDurationInSeconds(staticFile(spec.endCard.voice)) : 0;
   const endSec = spec.endCard?.duration ?? Math.max(END_CARD, END_VOICE_AT + endVoice + 0.7);
-  return {fps: FPS, scenes, endFrom, total: endFrom + (spec.endCard ? f(endSec) : 0)};
+  // scene and end card frames are counted from the end of the intro
+  const intro = spec.intro ? (INTROS[spec.intro]?.frames ?? 0) : 0;
+  return {fps: FPS, intro, scenes, endFrom, total: intro + endFrom + (spec.endCard ? f(endSec) : 0)};
 }
