@@ -159,6 +159,18 @@
       "desc": "Logo intro score (25.5 s, 120 BPM, D hijaz): darbuka, qanun, marimba block landings, risers and the final sting. Synced to remotion/src/intro/cues.json.",
       "duration": 25.5,
       "source": "social/tools/synth_intro.py"
+    },
+    "intro_stitch": {
+      "file": "music/intro_stitch.wav",
+      "desc": "Stitch intro score (4.5 s, 120 BPM, D hijaz): needle whoosh, spinning whirr and qanun run, a zip per stitch, marimba line drawing, knot hit with bell chord and darbuka, fly-out whoosh. Synced to remotion/src/intro/stitch.json.",
+      "duration": 4.5,
+      "source": "social/tools/stitch_intro.py"
+    },
+    "intro_spin": {
+      "file": "music/intro_spin.wav",
+      "desc": "Paper-cut spin intro score (5 s, 120 BPM, D hijaz): knife slices, paper pop, spinning whirr with darbuka and qanun, slide whistle, three ring landings, logo rise hit with bell chord, typing taps. Synced to remotion/src/intro/spin.json.",
+      "duration": 5.0,
+      "source": "social/tools/spin_intro.py"
     }
   }
 }

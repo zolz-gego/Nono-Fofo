@@ -18,6 +18,8 @@ from ElevenLabs (Eleven v3). The workflow lives in the `social-media` skill
 | `tools/split_voice.py` | Splits one ElevenLabs take into the per-line voice files |
 | `tools/synth_social_sfx.py` | Synthesizes the social sound effects into `assets/sfx/` |
 | `tools/synth_intro.py` | *(local only)* Logo intro: cuts the logo into blocks and composes its score |
+| `tools/stitch_intro.py` | *(local only)* Stitch intro: logo line-art frames and its score |
+| `tools/spin_intro.py` | *(local only)* Paper-cut spin intro: composes its score |
 | `remotion/` | The Remotion project (components, timing, render scripts) |
 | `previews/` | *(local only)* One still per video |
 | `out/` | Rendered MP4s and stills (git-ignored) |
@@ -45,6 +47,9 @@ npm run release -- 001-nono-hello 6.5   # finished post -> out/release/001-nono-
 npm run intro                           # logo intro -> out/intro-landscape.mp4 + out/intro-portrait.mp4
 npm run still -- intro-portrait 12.5    # one intro frame
 tools/.venv/bin/python social/tools/synth_intro.py        # (from repo root) rebuild intro layout + score
+tools/.venv/bin/python social/tools/stitch_intro.py       # (from repo root) rebuild the stitch intro art + score (--music: score only)
+npm run still -- intro-stitch 3.2       # one frame of the stitch intro
+npm run render -- intro-spin            # paper-cut spin intro -> out/intro-spin.mp4
 tools/.venv/bin/python social/tools/synth_social_sfx.py   # (from repo root) rebuild social SFX
 ```
 
@@ -79,6 +84,8 @@ tools/.venv/bin/python social/tools/synth_social_sfx.py   # (from repo root) reb
 | id | Track | Used for |
 |---|---|---|
 | `intro_logo_blocks` | 25.5 s score, 120 BPM, D hijaz: darbuka maqsum, bass, qanun plucks, block landings as a marimba melody, risers, final sting. Made by `tools/synth_intro.py`, cued from `remotion/src/intro/cues.json` | Logo intro |
+| `intro_stitch` | 4.5 s score, 120 BPM, D hijaz: needle whoosh, spinning whirr and qanun run, a zip per stitch, marimba while the lines draw, swell into the knot (boom, bell chord, darbuka), fly-out whoosh. Made by `tools/stitch_intro.py`, cued from `remotion/src/intro/stitch.json` | Stitch intro |
+| `intro_spin` | 5 s score, 120 BPM, D hijaz: knife slices, paper pop, spinning whirr with darbuka and qanun, slide whistle, three ring landings, logo rise hit with bell chord, typing taps. Made by `tools/spin_intro.py`, cued from `remotion/src/intro/spin.json` | Paper-cut spin intro |
 
 All 107 app SFX (`correct_1`, `confetti`, `fish_splash_1`, …) can be used by id
 too; see `app/assets/audio/manifest.json`.
@@ -179,6 +186,23 @@ Local only (not in git): `remotion/src/intro/` and `tools/synth_intro.py`. When
 present, `npm run sync` registers its compositions (`intro-portrait`,
 `intro-landscape`) through `src/generated/local.ts`; its score is the
 `intro_logo_blocks` resource above.
+
+**Stitch intro.** `intro-stitch`, 4.5 s, its own clip (not added to the videos):
+a golden needle winds five spinning ribbons of thread into the logo's ring, sews
+it, the line-art draws itself, the colour blooms in, the knot pulls tight with the
+brothers' shout and a "نونو وفوفو / Nono & Fofo" patch, then the logo flies into the
+corner where the videos' watermark sits, so a video placed after it carries on.
+Render: `npm run render -- intro-stitch`. Timeline: `src/intro/stitch.json`; art +
+score: `tools/stitch_intro.py`; files it uses (art frames, the shout voice in
+`media/voice/shout.mp3`, script in `src/intro/shout.md`) live in `src/intro/media/`
+and are copied to `public/intro/` by `npm run sync`.
+
+**Paper-cut spin intro.** `intro-spin`, 5 s, its own clip: circles are cut into
+deep-teal paper, the rings pop out and spin like a gyroscope over a dark hole, the
+centre disc tumbles away to show the logo, the rings land flat, the cuts heal, and
+the logo rises out of the paper while "نونو وفوفو / Nono & Fofo" types in. Plays the
+same shout as the stitch intro when `media/voice/shout.mp3` exists. Timeline:
+`src/intro/spin.json`; motion: `src/intro/Spin.tsx`; score: `tools/spin_intro.py`.
 
 ## Videos
 

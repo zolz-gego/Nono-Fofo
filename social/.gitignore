@@ -11,3 +11,5 @@ videos/
 previews/
 remotion/src/intro/
 tools/synth_intro.py
+tools/stitch_intro.py
+tools/spin_intro.py
