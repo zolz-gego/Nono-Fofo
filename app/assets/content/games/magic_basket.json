@@ -1,0 +1,32 @@
+{
+  "_readme": "Settings for the Magic basket game (Level 2, the village apple tree). Change numbers here; no code change needed. catchesToWin: right apples needed to finish (at least one of each of the letter's sounds; raised to the number of sounds if that is bigger). targetChance: 0..1, how often a new apple carries one of the letter's sounds. maxApplesOnScreen: apples falling at once. dropEverySeconds: time between two apples. fallSeconds: how long an apple takes from the tree to the ground (bigger = slower). Stars: a mistake is a wrong apple in the basket, or (if countMissedAsMistake) a right apple that hit the ground. 0..threeStarsMaxMistakes = 3 stars, up to twoStarsMaxMistakes = 2 stars, more = 1 star. background: the village picture (drawn in code when missing); backgroundMarks.feetY: where the brothers' feet go in it, as a fraction of its height. Sounds per letter live in letters.json. Pictures (made by tools/games/process_magic_basket.py; when a file is missing that part is drawn in code): treeImage, appleImage, basketImage. appleLetterSpot: where the sound goes on the apple (center x/y and size, fractions of the picture; the script prints it). basketOpening: the line across the middle of the basket's opening, as a fraction of its height (the script prints it); apples sit on it and the part below is drawn over them. treeMarks (fractions of the tree picture, as drawn in English; Arabic mirrors it): seatX/seatY = where the brother sits on the branch and rootY = the roots' line that stands on the path. Apples fall from just under the top rows.",
+  "version": 1,
+  "catchesToWin": 5,
+  "targetChance": 0.4,
+  "maxApplesOnScreen": 4,
+  "dropEverySeconds": 1.6,
+  "fallSeconds": 4.5,
+  "countMissedAsMistake": true,
+  "stars": {
+    "threeStarsMaxMistakes": 0,
+    "twoStarsMaxMistakes": 2
+  },
+  "background": "assets/games/balloons/village.webp",
+  "backgroundMarks": {
+    "feetY": 0.88
+  },
+  "treeImage": "assets/games/magic_basket/tree.png",
+  "treeMarks": {
+    "seatX": 0.33,
+    "seatY": 0.6,
+    "rootY": 0.95
+  },
+  "appleImage": "assets/games/magic_basket/apple.png",
+  "appleLetterSpot": {
+    "x": 0.498,
+    "y": 0.593,
+    "size": 0.586
+  },
+  "basketImage": "assets/games/magic_basket/basket.png",
+  "basketOpening": 0.266
+}

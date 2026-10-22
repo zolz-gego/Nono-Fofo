@@ -1,0 +1,13 @@
+# Rendered videos and stills (re-render any time)
+out/
+
+# Remotion
+remotion/node_modules/
+remotion/public/
+remotion/src/generated/
+
+# Videos stay local: only resources (assets/), the engine and the skill are in git
+videos/
+previews/
+remotion/src/intro/
+tools/synth_intro.py

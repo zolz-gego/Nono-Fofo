@@ -30,12 +30,24 @@ enum CharacterAction {
   chalk,
 
   /// Wiping the chalkboard with a sponge (writing game).
-  sponge;
+  sponge,
+
+  /// Sitting on a tree branch, legs dangling (Magic basket game).
+  sit,
+
+  /// Throwing an apple down from the branch (Magic basket game).
+  toss,
+
+  /// Holding a basket in front with both hands (Magic basket game).
+  carry;
 
   /// The pose shown while this one has no picture yet.
   CharacterAction? get fallback => switch (this) {
     chalk => write,
     sponge => encourage,
+    sit => idle,
+    toss => wave,
+    carry => idle,
     _ => null,
   };
 }

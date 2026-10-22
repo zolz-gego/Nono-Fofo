@@ -124,6 +124,23 @@ abstract final class AppColors {
   static const List<Color> balloons = fish;
 
   // ---------------------------------------------------------------------------
+  // Magic basket game (the village apple tree)
+  // ---------------------------------------------------------------------------
+  static const Color treeTrunk = Color(0xFF8A6B4E);
+  static const Color treeTrunkDark = Color(0xFF6B513B);
+  static const Color treeLeaf = Color(0xFF5E9E45);
+  static const Color treeLeafLight = Color(0xFF7DBA5A);
+  static const Color treeLeafDark = Color(0xFF4A8238);
+  static const Color apple = Color(0xFFE5483B);
+  static const Color appleDark = Color(0xFFB8322A);
+  static const Color appleShine = Color(0x66FFFFFF);
+  static const Color appleStem = cocoa;
+  static const Color appleLeaf = leafGreen;
+  static const Color basket = Color(0xFFC9934F);
+  static const Color basketDark = Color(0xFF9A6B35);
+  static const Color basketRim = Color(0xFFDDAE6B);
+
+  // ---------------------------------------------------------------------------
   // Writing game (the chalkboard in Grandpa's study)
   // ---------------------------------------------------------------------------
   static const Color board = Color(0xFF2F5D4E);

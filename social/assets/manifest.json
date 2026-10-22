@@ -1,0 +1,159 @@
+{
+  "version": 1,
+  "characters": {
+    "ramses": {
+      "desc": "Giant living statue of Ramses II (Grand Egyptian Museum), deep booming voice `Ramses`. Cut-out PNGs, same framing for every pose.",
+      "source": "AI image tool, prompts in videos/004-running-letter/images.md",
+      "poses": {
+        "idle": {
+          "file": "images/ramses-idle.png",
+          "desc": "standing still like a statue, calm proud smile"
+        },
+        "look": {
+          "file": "images/ramses-look.png",
+          "desc": "eyes turned sharply to the side, searching"
+        },
+        "talk": {
+          "file": "images/ramses-talk.png",
+          "desc": "mouth open, finger up, telling a big secret"
+        },
+        "demand": {
+          "file": "images/ramses-demand.png",
+          "desc": "leaning down, open palm out, grumpy funny frown"
+        },
+        "smile": {
+          "file": "images/ramses-smile.png",
+          "desc": "huge warm smile, clapping"
+        }
+      }
+    }
+  },
+  "images": {
+    "gem-hall": {
+      "file": "images/gem-hall.png",
+      "desc": "Grand Egyptian Museum hall (portrait backdrop, empty floor in the middle)",
+      "width": 1080,
+      "height": 1920,
+      "source": "AI image tool, prompt in videos/004-running-letter/images.md"
+    },
+    "statue-cat": {
+      "file": "images/statue-cat.png",
+      "desc": "Little living Bastet cat statue (black basalt), cut-out",
+      "source": "AI image tool, prompt in videos/004-running-letter/images.md"
+    },
+    "statue-ushabti": {
+      "file": "images/statue-ushabti.png",
+      "desc": "Little living ushabti figurine (turquoise faience), cut-out",
+      "source": "AI image tool, prompt in videos/004-running-letter/images.md"
+    }
+  },
+  "sfx": {
+    "mg_whoosh_in": {
+      "file": "sfx/mg_whoosh_in.wav",
+      "desc": "Character / big element flies in: airy whoosh up",
+      "duration": 1.2
+    },
+    "mg_whoosh_out": {
+      "file": "sfx/mg_whoosh_out.wav",
+      "desc": "Element flies out: whoosh down",
+      "duration": 0.27
+    },
+    "mg_scene_swipe": {
+      "file": "sfx/mg_scene_swipe.wav",
+      "desc": "Scene change wipe: fast swish + soft tick",
+      "duration": 0.23
+    },
+    "mg_keyword_pop": {
+      "file": "sfx/mg_keyword_pop.wav",
+      "desc": "Keyword card pops in: bubbly pop + bright ding",
+      "duration": 1.01
+    },
+    "mg_keyword_pop_2": {
+      "file": "sfx/mg_keyword_pop_2.wav",
+      "desc": "Keyword pop (variant 2): higher pop + chime",
+      "duration": 1.22
+    },
+    "mg_word_tick": {
+      "file": "sfx/mg_word_tick.wav",
+      "desc": "Caption word lights up: tiny soft tick",
+      "duration": 0.05
+    },
+    "mg_boing": {
+      "file": "sfx/mg_boing.wav",
+      "desc": "Character bounces / lands: cartoon boing",
+      "duration": 0.4
+    },
+    "mg_pose_swap": {
+      "file": "sfx/mg_pose_swap.wav",
+      "desc": "Character changes pose: quick 'fwip'",
+      "duration": 0.07
+    },
+    "mg_slide_up": {
+      "file": "sfx/mg_slide_up.wav",
+      "desc": "Something rises up: slide whistle up",
+      "duration": 0.35
+    },
+    "mg_slide_down": {
+      "file": "sfx/mg_slide_down.wav",
+      "desc": "Something drops: slide whistle down",
+      "duration": 0.35
+    },
+    "mg_boom": {
+      "file": "sfx/mg_boom.wav",
+      "desc": "Cartoon crash: big soft thump, papery crash, then the letters' shimmer",
+      "duration": 1.77
+    },
+    "mg_skid": {
+      "file": "sfx/mg_skid.wav",
+      "desc": "Cartoon skid stop: squeaky sneaker slide",
+      "duration": 0.35
+    },
+    "mg_logo_sting": {
+      "file": "sfx/mg_logo_sting.wav",
+      "desc": "End card: logo pops in with darbuka hit, qanun run and sparkles",
+      "duration": 2.68
+    },
+    "mg_sparkle": {
+      "file": "sfx/mg_sparkle.wav",
+      "desc": "Magic sparkle shimmer (stars, shining letters)",
+      "duration": 1.51
+    },
+    "mg_ta_da": {
+      "file": "sfx/mg_ta_da.wav",
+      "desc": "Ta-da! short reveal (brass-free: marimba + bell)",
+      "duration": 1.5
+    },
+    "mg_stone_wake": {
+      "file": "sfx/mg_stone_wake.wav",
+      "desc": "Statues wake up: stone grinding and cracking, crumbling dust, magic shimmer",
+      "duration": 2.6,
+      "source": "ElevenLabs Sound Effects, prompts in videos/004-running-letter/sounds.md (trimmed)"
+    },
+    "mg_stone_eyes": {
+      "file": "sfx/mg_stone_eyes.wav",
+      "desc": "Big stone eyes slide sideways: gritty scrape + tiny squeak",
+      "duration": 1.05,
+      "source": "ElevenLabs Sound Effects, prompts in videos/004-running-letter/sounds.md (trimmed)"
+    },
+    "mg_stone_tiptoe": {
+      "file": "sfx/mg_stone_tiptoe.wav",
+      "desc": "Small stone figurines tiptoeing on marble",
+      "duration": 3.3,
+      "source": "ElevenLabs Sound Effects, prompts in videos/004-running-letter/sounds.md (trimmed)"
+    },
+    "mg_stone_run": {
+      "file": "sfx/mg_stone_run.wav",
+      "desc": "Small stone statues running past: clattering footsteps + whoosh",
+      "duration": 2.7,
+      "source": "ElevenLabs Sound Effects, prompts in videos/004-running-letter/sounds.md (trimmed)"
+    }
+  },
+  "music": {
+    "intro_logo_blocks": {
+      "file": "music/intro_logo_blocks.wav",
+      "desc": "Logo intro score (25.5 s, 120 BPM, D hijaz): darbuka, qanun, marimba block landings, risers and the final sting. Synced to remotion/src/intro/cues.json.",
+      "duration": 25.5,
+      "source": "social/tools/synth_intro.py"
+    }
+  }
+}

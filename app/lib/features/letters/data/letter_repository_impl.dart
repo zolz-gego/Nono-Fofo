@@ -46,5 +46,12 @@ class LetterRepositoryImpl implements LetterRepository {
     small: raw['small'] as String,
     capital: raw['capital'] as String,
     names: (raw['name'] as Map<String, dynamic>).cast<String, String>(),
+    sounds: _perLanguage(raw['sounds']),
+    neverDrop: _perLanguage(raw['neverDrop']),
   );
+
+  static Map<String, List<String>> _perLanguage(Object? raw) => {
+    for (final e in (raw as Map<String, dynamic>? ?? const {}).entries)
+      e.key: (e.value as List).cast<String>(),
+  };
 }

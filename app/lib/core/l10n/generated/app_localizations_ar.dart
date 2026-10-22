@@ -147,7 +147,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get level1Desc => 'اتعرّف على الحروف';
 
   @override
-  String get level2Desc => 'اقرا كلمات قصيرة';
+  String get level2Desc => 'كل حرف بيتنطق إزاي';
 
   @override
   String get level3Desc => 'اقرا جمل كاملة';
@@ -826,4 +826,37 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get gameHome => 'الرئيسية';
+
+  @override
+  String get gameMagicBasket => 'السلة السحرية';
+
+  @override
+  String get magicBasketPickLetter => 'اختار الحرف اللي هتلمّ أصواته!';
+
+  @override
+  String get magicBasketSounds => 'أصوات';
+
+  @override
+  String magicBasketQuestion(String letter, String name) {
+    return '$letter ($name) بيتنطق إزاي؟ لمّ كل أصواته في السلة!';
+  }
+
+  @override
+  String magicBasketWrong(String target, String caught) {
+    return 'لأ! $target مش بتتنطق $caught';
+  }
+
+  @override
+  String get magicBasketMissed => 'تفاحة صح وقعت! امسكها المرة الجاية';
+
+  @override
+  String magicBasketHaveIt(String sound) {
+    return 'معانا $sound خلاص، دوّر على صوت تاني!';
+  }
+
+  @override
+  String get magicBasketHowTo => 'حرّك السلة بالماوس أو بالأسهم';
+
+  @override
+  String get magicBasketHowToTouch => 'اسحب بصباعك عشان تحرّك السلة';
 }

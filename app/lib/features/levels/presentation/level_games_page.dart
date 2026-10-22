@@ -86,6 +86,7 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
       LevelGame.cards => AppRoutes.cards,
       LevelGame.monastery => AppRoutes.monastery,
       LevelGame.challenge => AppRoutes.challenge,
+      LevelGame.magicBasket => AppRoutes.magicBasket,
     };
     _buddy.play(CharacterAction.cheer, hold: const Duration(seconds: 1));
     // Back from a game: refresh ticks (e.g. the challenge just won).
@@ -144,6 +145,13 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
           sl<GameProgressRepository>(),
           widget.setup.level,
         ),
+      ),
+      LevelGame.magicBasket => RoadStop(
+        image: game.name,
+        placeholder: AppIcons.magicBasket,
+        title: l10n.gameMagicBasket,
+        accent: AppColors.coral,
+        onTap: () => _openGame(index),
       ),
     };
   }

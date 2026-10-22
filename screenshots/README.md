@@ -137,3 +137,12 @@ Stars from coins (plus 2 bonus stars for the hidden bonus letter), the
 letters, coins and time, and a Share button for a picture of the result.
 
 ![Level complete](33-adventure-complete.jpg)
+
+## Magic basket (Level 2: letter sounds)
+
+The brother in the apple tree asks how the letter sounds and drops apples
+with sounds on them; the child moves the basket (mouse, arrow keys or a
+finger) to catch every sound of the letter. The top shows the apples caught
+and a "?" chip per sound until it is caught, then the letter and its name.
+
+![Magic basket](34-magic-basket.jpg)

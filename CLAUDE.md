@@ -2,6 +2,7 @@
 
 ## Git workflow (every chat)
 
+- **Exception: social media videos** (`social/`, the `social-media` skill) don't get a new branch; stay on the current one. Only resources and the skill go in git, never videos (see the skill's "Git" section).
 - **Start of every chat:** before making any file changes, create a new branch from the latest default branch:
   1. `git fetch origin` and check out the default branch, then pull it.
   2. `git checkout -b <type>/<short-kebab-description>` (e.g. `feat/sound-board`, `fix/map-audio-loop`), named after the task in the first message.
@@ -27,3 +28,8 @@
 - Save as JPG in `screenshots/`, named `NN-screen-name.jpg` (e.g. `08-settings.jpg`): continue the numbering for a new screen, and overwrite the existing file for a changed one.
 - Add or update the screen's section in `screenshots/README.md` (a heading, one line on what the screen does, and the image).
 - If a screen also looks different in English, add an `-english` shot too (e.g. `07-home-english.jpg`).
+
+## Social media videos
+
+- TikTok / Instagram videos live in `social/` and follow the `social-media` skill (`.claude/skills/social-media/SKILL.md`). The videos themselves (`social/videos/`, `social/previews/`, `social/out/`, the logo intro) are local only and git-ignored.
+- Any new resource made for the videos (sound, image, icon) goes in `social/assets/` and is registered in `social/assets/manifest.json` and the asset catalog in `social/README.md`. App assets (characters, colors, fonts, music, SFX) stay in the app; the videos pick them up automatically.

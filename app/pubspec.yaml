@@ -91,6 +91,7 @@ flutter:
     - assets/games/
     - assets/games/fishing/
     - assets/games/balloons/
+    - assets/games/magic_basket/
     - assets/games/monastery/
     - assets/games/snakes/
     - assets/games/adventure/

@@ -54,6 +54,7 @@ class LetterPickPage extends StatefulWidget {
     required this.playRoute,
     this.passFail = false,
     this.allLetters = false,
+    this.bothForms = false,
   });
 
   final PlayerSetup setup;
@@ -73,6 +74,10 @@ class LetterPickPage extends StatefulWidget {
 
   /// Offer the whole alphabet instead of the level's letters.
   final bool allLetters;
+
+  /// The tiles show the capital and the small letter (the game asks for
+  /// both).
+  final bool bothForms;
 
   @override
   State<LetterPickPage> createState() => _LetterPickPageState();
@@ -192,6 +197,7 @@ class _LetterPickPageState extends State<LetterPickPage> {
                                       widget.gameId,
                                       letters[i].id,
                                     ),
+                                bothForms: widget.bothForms,
                                 onTap: () => _play(letters[i], letters),
                               )
                               .animate(delay: (40 * i).ms)
@@ -246,6 +252,7 @@ class _LetterTile extends StatelessWidget {
     required this.stars,
     required this.onTap,
     this.passed = false,
+    this.bothForms = false,
   });
 
   final CopticLetter letter;
@@ -253,6 +260,7 @@ class _LetterTile extends StatelessWidget {
   /// Best stars, or null for a pass / not-passed game.
   final int? stars;
   final bool passed;
+  final bool bothForms;
   final VoidCallback onTap;
 
   @override
@@ -274,9 +282,10 @@ class _LetterTile extends StatelessWidget {
               Expanded(
                 child: FittedBox(
                   child: Text(
-                    // Pass / not-passed (writing) levels play both
-                    // forms: show the capital and the small one.
-                    stars == null
+                    // Pass / not-passed (writing) levels and [bothForms]
+                    // games play both forms: show the capital and the
+                    // small one.
+                    stars == null || bothForms
                         ? '${letter.capital} ${letter.small}'
                         : letter.small,
                     // Coptic keys like ")" must not be mirrored in
