@@ -156,7 +156,9 @@ from the voice start, like keywords; format in `remotion/src/types.ts`):
 | `confetti` | Confetti burst |
 
 `book` also takes `letter` (the Avva key that flies in), `found` (a letter already on the page) and `only` (show just those letters).
-Keyword cards can show the word spelled in Coptic: `coptic` (Avva keys) on the keyword. `side` (`left` / `center` / `right`) moves a card off a face.
+Keyword cards can show the word spelled in Coptic: `coptic` (Avva keys) on the keyword. `side` (`left` / `center` / `right`) moves a card off a face. For teaching words, `big` makes a wide card with the Coptic word as the largest
+text, `mark` (an Avva key, e.g. `e`) shows that letter bigger and in coral, and `top`
+stacks cards. A scene with `"captions": false` hides the subtitle box (the words are on the cards).
 
 Characters can also take `size`, `x`, `delay` (late entrance), `moves`
 (slide sideways, or down with `toY`: run across, run off, come back, with `flip`) and `jumps`

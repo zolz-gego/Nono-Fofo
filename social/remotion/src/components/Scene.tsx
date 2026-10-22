@@ -88,7 +88,7 @@ export const Scene: React.FC<{scene: SceneSpec; index: number; voiceFrom: number
       {(scene.keywords ?? []).map((kw, i) => (
         <KeywordCard key={i} kw={kw} index={i} count={scene.keywords!.length} startFrame={voiceFrom + sec(kw.at)} />
       ))}
-      {line && <Captions line={line} voiceFrom={voiceFrom} voiceFrames={voiceFrames} size={captionSize} />}
+      {line && scene.captions !== false && <Captions line={line} voiceFrom={voiceFrom} voiceFrames={voiceFrames} size={captionSize} />}
 
       {line?.voice && (
         <Sequence from={voiceFrom} layout="none">

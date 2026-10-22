@@ -37,6 +37,9 @@ export type Keyword = {
   icon?: string; // key of ICONS (src/icons.ts)
   side?: 'left' | 'center' | 'right'; // where the card sits (default: center for one card, alternating for more)
   coptic?: string; // the word spelled in Coptic letters (Avva keys), shown in gold above the Arabic
+  mark?: string; // Avva key of the letter to highlight in `coptic` (bigger, coral), e.g. "e"
+  big?: boolean; // wide card, Coptic word as the largest text
+  top?: number; // y of the card's top (default 235), e.g. to stack big cards
   at: number; // seconds from voice start
 };
 
@@ -90,6 +93,7 @@ export type SceneSpec = {
   sfx?: {id: string; at: number; volume?: number}[]; // extra sounds, seconds from scene start
   hold?: number; // extra seconds after the line
   props?: PropSpec[];
+  captions?: boolean; // false = no subtitle box (e.g. the words are already on pop-up cards)
   backdrop?: string; // id of a social image (social/assets/manifest.json "images") drawn behind everything, with parallax
   // Camera moves (scene seconds): the world (characters + props) pans/zooms,
   // the background follows with parallax. x/y = camera offset in px.
