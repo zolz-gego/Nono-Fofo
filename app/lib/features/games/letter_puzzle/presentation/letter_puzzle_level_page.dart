@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +19,8 @@ import '../../../../engines/characters/presentation/animated_character.dart';
 import '../../../../engines/characters/presentation/character_controller.dart';
 import '../../../../engines/sound/application/sound_service.dart';
 import '../../../../engines/sound/domain/sound_event.dart';
+import '../../../letters/domain/coptic_letter.dart';
+import '../../../letters/domain/letter_repository.dart';
 import '../../../levels/domain/game_level.dart';
 import '../../../settings/presentation/language_button.dart';
 import '../../../settings/presentation/mute_button.dart';
@@ -27,7 +31,9 @@ import 'letter_puzzle_cubit.dart';
 import 'letter_puzzle_page.dart';
 
 /// Before the Letter puzzle: the child picks how many letters the words
-/// have. Each length shows its best stars.
+/// have. Each length is a wooden name plate (like the one under the icon in
+/// the game) with a real word of that length on letter blocks, and its best
+/// stars. Mix shows mixed-up blocks.
 class LetterPuzzleLevelPage extends StatefulWidget {
   const LetterPuzzleLevelPage({super.key, required this.setup});
 
@@ -44,8 +50,10 @@ class _LetterPuzzleLevelPageState extends State<LetterPuzzleLevelPage> {
     sound: _sound,
     initial: CharacterAction.hint,
   );
-  final Future<LetterPuzzleConfig> _config = sl<LetterPuzzleConfigRepository>()
-      .load();
+  final Future<(LetterPuzzleConfig, List<CopticLetter>)> _content = (
+    sl<LetterPuzzleConfigRepository>().load(),
+    sl<LetterRepository>().allLetters(),
+  ).wait;
   final GameProgressRepository _progress = sl<GameProgressRepository>();
 
   static const double _maxWidth = 960;
@@ -103,13 +111,16 @@ class _LetterPuzzleLevelPageState extends State<LetterPuzzleLevelPage> {
           const SizedBox(width: AppDimens.spaceSm),
         ],
       ),
-      body: FutureBuilder<LetterPuzzleConfig>(
-        future: _config,
+      body: FutureBuilder<(LetterPuzzleConfig, List<CopticLetter>)>(
+        future: _content,
         builder: (context, snap) {
-          final config = snap.data;
-          if (config == null) {
+          final content = snap.data;
+          if (content == null) {
             return const Center(child: CircularProgressIndicator());
           }
+          final (config, letters) = content;
+          final alphabet = {for (final l in letters) l.id: l};
+          final lengths = config.playableLengths(_lang);
           return Align(
             alignment: Alignment.topCenter,
             child: ConstrainedBox(
@@ -125,15 +136,18 @@ class _LetterPuzzleLevelPageState extends State<LetterPuzzleLevelPage> {
                   _header(),
                   Wrap(
                     alignment: WrapAlignment.center,
-                    spacing: AppDimens.spaceSm,
-                    runSpacing: AppDimens.spaceSm,
+                    spacing: AppDimens.spaceMd,
+                    runSpacing: AppDimens.spaceMd,
                     children: [
                       for (final (i, n) in [
-                        ...config.playableLengths(_lang),
+                        ...lengths,
                         LetterPuzzleConfig.mix,
                       ].indexed)
-                        _LengthTile(
+                        _NamePlateTile(
                               length: n,
+                              blocks: n == LetterPuzzleConfig.mix
+                                  ? _mixBlocks(config, lengths, alphabet)
+                                  : _sampleWord(config, n, alphabet),
                               stars: _progress.bestStars(
                                 LetterPuzzleCubit.id,
                                 LetterPuzzleCubit.levelKey(n),
@@ -154,6 +168,31 @@ class _LetterPuzzleLevelPageState extends State<LetterPuzzleLevelPage> {
     );
   }
 
+  /// A real word of [length] letters to show on its plate (the first one
+  /// listed whose letters are all known).
+  List<CopticLetter> _sampleWord(
+    LetterPuzzleConfig config,
+    int length,
+    Map<String, CopticLetter> alphabet,
+  ) {
+    for (final w in config.wordsFor(_lang, length)) {
+      if (w.letters.every(alphabet.containsKey)) {
+        return [for (final id in w.letters) alphabet[id]!];
+      }
+    }
+    return const [];
+  }
+
+  /// Mix: the first letter of each length's word, mixed up.
+  List<CopticLetter> _mixBlocks(
+    LetterPuzzleConfig config,
+    List<int> lengths,
+    Map<String, CopticLetter> alphabet,
+  ) =>
+      [for (final n in lengths) ..._sampleWord(config, n, alphabet).take(1)]
+          .reversed
+          .toList();
+
   Widget _header() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppDimens.spaceMd),
@@ -173,88 +212,121 @@ class _LetterPuzzleLevelPageState extends State<LetterPuzzleLevelPage> {
   }
 }
 
-/// One word length: a row of that many empty cubes, how many letters, and
-/// the best stars. The Mix level shows a dice instead.
-class _LengthTile extends StatelessWidget {
-  const _LengthTile({
+/// One level as a wooden name plate with a gold edge: the word on cream
+/// letter blocks, how many letters, and the best stars. Mix tilts its blocks
+/// every which way and shows a dice.
+class _NamePlateTile extends StatelessWidget {
+  const _NamePlateTile({
     required this.length,
+    required this.blocks,
     required this.stars,
     required this.onTap,
   });
 
   final int length;
 
+  /// The letters on the blocks.
+  final List<CopticLetter> blocks;
+
   /// Best stars so far (0: never finished).
   final int stars;
   final VoidCallback onTap;
 
-  static const double _width = 160;
+  static const double _width = 250;
+  static const double _block = 36;
+
+  bool get _mix => length == LetterPuzzleConfig.mix;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final radius = BorderRadius.circular(AppDimens.radiusMd);
     return SizedBox(
       width: _width,
       child: Material(
-        color: AppColors.surface,
+        color: AppColors.transparent,
         borderRadius: radius,
-        elevation: 2,
+        elevation: 4,
         shadowColor: AppColors.shadow,
-        child: InkWell(
-          borderRadius: radius,
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.all(AppDimens.spaceMd),
-            child: Column(
+        child: Ink(
+          decoration: BoxDecoration(
+            borderRadius: radius,
+            gradient: const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [AppColors.namePlateLight, AppColors.namePlate],
+            ),
+            border: Border.all(color: AppColors.iconGold, width: 3),
+          ),
+          child: InkWell(
+            borderRadius: radius,
+            onTap: onTap,
+            child: Stack(
               children: [
-                SizedBox(
-                  height: 40,
-                  child: length == LetterPuzzleConfig.mix
-                      ? const Center(
-                          child: FaIcon(
-                            AppIcons.random,
-                            size: 28,
-                            color: AppColors.namePlate,
-                          ),
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            for (var i = 0; i < length; i++)
-                              Container(
-                                width: 14,
-                                height: 14,
-                                margin: const EdgeInsets.all(1.5),
-                                decoration: BoxDecoration(
-                                  color: AppColors.iconGoldLight,
-                                  borderRadius: BorderRadius.circular(3),
-                                  border: Border.all(
-                                    color: AppColors.namePlate,
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                ),
-                AppText.h3(
-                  length == LetterPuzzleConfig.mix
-                      ? context.l10n.letterPuzzleMix
-                      : context.l10n.letterPuzzleLength(length),
-                ),
-                const SizedBox(height: AppDimens.spaceXs),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    for (var i = 0; i < 3; i++)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2),
-                        child: FaIcon(
-                          i < stars ? AppIcons.star : AppIcons.starEmpty,
-                          size: 18,
-                          color: i < stars ? AppColors.star : AppColors.outline,
-                        ),
+                // Two gold pins holding the plate up.
+                for (final x in [-0.88, 0.88])
+                  Align(
+                    alignment: Alignment(x, -0.82),
+                    child: Container(
+                      width: 8,
+                      height: 8,
+                      decoration: const BoxDecoration(
+                        color: AppColors.iconGoldLight,
+                        shape: BoxShape.circle,
                       ),
-                  ],
+                    ),
+                  ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppDimens.spaceMd,
+                    AppDimens.spaceMd,
+                    AppDimens.spaceMd,
+                    AppDimens.spaceSm,
+                  ),
+                  child: Column(
+                    children: [
+                      SizedBox(height: _block + 8, child: _blocks()),
+                      const SizedBox(height: AppDimens.spaceSm),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (_mix) ...[
+                            const FaIcon(
+                              AppIcons.random,
+                              size: 18,
+                              color: AppColors.iconGoldLight,
+                            ),
+                            const SizedBox(width: AppDimens.spaceSm),
+                          ],
+                          AppText.h3(
+                            _mix
+                                ? l10n.letterPuzzleMix
+                                : l10n.letterPuzzleLength(length),
+                            color: AppColors.iconGoldLight,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: AppDimens.spaceXs),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          for (var i = 0; i < 3; i++)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 2,
+                              ),
+                              child: FaIcon(
+                                i < stars ? AppIcons.star : AppIcons.starEmpty,
+                                size: 18,
+                                color: i < stars
+                                    ? AppColors.star
+                                    : AppColors.cubeBorder,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -263,4 +335,41 @@ class _LengthTile extends StatelessWidget {
       ),
     );
   }
+
+  /// The word on cream blocks, left to right like all Coptic.
+  Widget _blocks() => LayoutBuilder(
+    builder: (context, c) => _row(
+      blocks.isEmpty ? _block : min(_block, c.maxWidth / blocks.length - 4),
+    ),
+  );
+
+  Widget _row(double size) => Directionality(
+    textDirection: TextDirection.ltr,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        for (final (i, letter) in blocks.indexed)
+          Transform.rotate(
+            angle: _mix ? (i.isEven ? -0.22 : 0.18) : 0,
+            child: Container(
+              width: size,
+              height: size,
+              margin: const EdgeInsets.symmetric(horizontal: 2),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: AppColors.cube,
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: AppColors.cubeBorder, width: 1.5),
+              ),
+              child: FittedBox(
+                child: Padding(
+                  padding: const EdgeInsets.all(3),
+                  child: CopticText.h3(letter.small, color: AppColors.coptic),
+                ),
+              ),
+            ),
+          ),
+      ],
+    ),
+  );
 }
