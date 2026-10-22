@@ -26,6 +26,16 @@
           "desc": "huge warm smile, clapping"
         }
       }
+    },
+    "nono": {
+      "desc": "Extra Nono poses for the social videos (the app's poses stay in the app)",
+      "poses": {
+        "chef": {
+          "file": "images/nono-chef.png",
+          "fallback": "hint",
+          "desc": "Nono in a tall chef hat with a wooden spoon (teaser 006: 'a cooking site!')"
+        }
+      }
     }
   },
   "images": {
@@ -45,6 +55,13 @@
       "file": "images/statue-ushabti.png",
       "desc": "Little living ushabti figurine (turquoise faience), cut-out",
       "source": "AI image tool, prompt in videos/004-running-letter/images.md"
+    },
+    "surprise-cloth": {
+      "file": "images/surprise-cloth.png",
+      "desc": "The big surprise hidden under a golden cloth with a red bow and a '?' tag (cut-out), teaser endings",
+      "width": 1024,
+      "height": 1024,
+      "source": "AI image, prompt in videos/005-teaser-sos/images.md"
     }
   },
   "sfx": {
@@ -123,6 +140,26 @@
       "desc": "Ta-da! short reveal (brass-free: marimba + bell)",
       "duration": 1.5
     },
+    "mg_pant": {
+      "file": "sfx/mg_pant.wav",
+      "desc": "Cartoon out-of-breath panting: quick breathy hah-huh breaths",
+      "duration": 2.91
+    },
+    "mg_siren": {
+      "file": "sfx/mg_siren.wav",
+      "desc": "Cartoon alarm: two-tone wee-woo siren, friendly not scary",
+      "duration": 2.3
+    },
+    "mg_slam": {
+      "file": "sfx/mg_slam.wav",
+      "desc": "Big title slams in: punchy thump + clap + tiny shimmer",
+      "duration": 1.24
+    },
+    "mg_rattle": {
+      "file": "sfx/mg_rattle.wav",
+      "desc": "Wooden box rattles and shakes",
+      "duration": 0.67
+    },
     "mg_stone_wake": {
       "file": "sfx/mg_stone_wake.wav",
       "desc": "Statues wake up: stone grinding and cracking, crumbling dust, magic shimmer",
@@ -154,6 +191,18 @@
       "desc": "Logo intro score (25.5 s, 120 BPM, D hijaz): darbuka, qanun, marimba block landings, risers and the final sting. Synced to remotion/src/intro/cues.json.",
       "duration": 25.5,
       "source": "social/tools/synth_intro.py"
+    },
+    "intro_stitch": {
+      "file": "music/intro_stitch.wav",
+      "desc": "Stitch intro score (4.5 s, 120 BPM, D hijaz): needle whoosh, spinning whirr and qanun run, a zip per stitch, marimba line drawing, knot hit with bell chord and darbuka, fly-out whoosh. Synced to remotion/src/intro/stitch.json.",
+      "duration": 4.5,
+      "source": "social/tools/stitch_intro.py"
+    },
+    "intro_spin": {
+      "file": "music/intro_spin.wav",
+      "desc": "Paper-cut spin intro score (5 s, 120 BPM, D hijaz): knife slices, paper pop, spinning whirr with darbuka and qanun, slide whistle, three ring landings, logo rise hit with bell chord, typing taps. Synced to remotion/src/intro/spin.json.",
+      "duration": 5.0,
+      "source": "social/tools/spin_intro.py"
     }
   }
 }

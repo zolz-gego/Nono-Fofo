@@ -18,13 +18,19 @@ function wordStarts(line: Line, words: string[], voiceSec: number): number[] {
 }
 
 // Arabic line (word by word) with the English subtitle under it.
-export const Captions: React.FC<{line: Line; voiceFrom: number; voiceFrames: number}> = ({line, voiceFrom, voiceFrames}) => {
+export const Captions: React.FC<{line: Line; voiceFrom: number; voiceFrames: number; size?: 'normal' | 'large'}> = ({line, voiceFrom, voiceFrames, size = 'normal'}) => {
+  const big = size === 'large';
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const t = (frame - voiceFrom) / fps;
   const words = line.ar.split(/\s+/).filter(Boolean);
   const starts = wordStarts(line, words, voiceFrames / fps);
   const current = starts.findLastIndex((s) => t >= s);
+  // several subtitles for one line: only the current chunk's words show
+  const chunks = line.chunks ?? [{from: 0, en: line.en}];
+  const ci = Math.max(0, chunks.findLastIndex((c) => c.from <= Math.max(0, current)));
+  const first = chunks[ci].from;
+  const end = chunks[ci + 1]?.from ?? words.length;
   const inP = spring({frame: frame - voiceFrom + 4, fps, config: {damping: 14, stiffness: 180}});
 
   return (
@@ -34,7 +40,7 @@ export const Captions: React.FC<{line: Line; voiceFrom: number; voiceFrames: num
         left: SAFE.left,
         width: SAFE.right - SAFE.left,
         bottom: H - CAPTION_BOTTOM, // anchored at the bottom so long lines grow upwards
-        padding: '16px 28px 18px',
+        padding: big ? '22px 34px 26px' : '16px 28px 18px',
         borderRadius: 44,
         background: `color-mix(in srgb, ${color('deepTeal')} 88%, transparent)`,
         border: `6px solid ${color('cream')}`,
@@ -44,8 +50,9 @@ export const Captions: React.FC<{line: Line; voiceFrom: number; voiceFrames: num
         opacity: inP,
       }}
     >
-      <div dir="rtl" style={{fontFamily: FONT_AR, fontWeight: 800, fontSize: 62, lineHeight: 1.22, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0 18px'}}>
+      <div dir="rtl" style={{fontFamily: FONT_AR, fontWeight: 800, fontSize: big ? 76 : 62, lineHeight: big ? 1.25 : 1.22, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0 18px'}}>
         {words.map((w, i) => {
+          if (i < first || i >= end) return null;
           const on = i === current;
           const said = i <= current;
           const pop = on ? spring({frame: frame - voiceFrom - Math.round(starts[i] * fps), fps, config: {damping: 10, stiffness: 260}}) : 0;
@@ -64,7 +71,7 @@ export const Captions: React.FC<{line: Line; voiceFrom: number; voiceFrames: num
           );
         })}
       </div>
-      <div style={{fontFamily: FONT_EN, fontWeight: 700, fontSize: 40, lineHeight: 1.15, color: color('mistBlue'), marginTop: 4}}>{line.en}</div>
+      <div style={{fontFamily: FONT_EN, fontWeight: 700, fontSize: big ? 50 : 40, lineHeight: 1.15, color: color('mistBlue'), marginTop: big ? 6 : 4}}>{chunks[ci].en}</div>
     </div>
   );
 };

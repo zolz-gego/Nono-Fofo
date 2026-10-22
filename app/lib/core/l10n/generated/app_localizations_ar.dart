@@ -859,4 +859,61 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get magicBasketHowToTouch => 'اسحب بصباعك عشان تحرّك السلة';
+
+  @override
+  String get gameLetterPuzzle => 'رتّب الحروف';
+
+  @override
+  String get letterPuzzlePickLevel => 'هتكتب كلمات من كام حرف؟';
+
+  @override
+  String letterPuzzleLength(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count حرف',
+      few: '$count حروف',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String letterPuzzleStart(String name) {
+    return 'يلا يا $name! الأسامي اللي تحت الأيقونات اتلخبطت. رتّب الحروف القبطي!';
+  }
+
+  @override
+  String letterPuzzleWord(int number, int total) {
+    return 'كلمة $number من $total';
+  }
+
+  @override
+  String get letterPuzzleWrite => 'اكتب بالقبطي:';
+
+  @override
+  String get letterPuzzleCheck => 'اتأكد';
+
+  @override
+  String get letterPuzzleHint => 'مساعدة';
+
+  @override
+  String get letterPuzzleHintSay => 'خليني أساعدك بحرف!';
+
+  @override
+  String get letterPuzzleRight => 'برافو! صح كده';
+
+  @override
+  String get letterPuzzleWrong => 'قرّبت! صلّح الحروف الحمرا';
+
+  @override
+  String get letterPuzzleMistakes => 'غلط';
+
+  @override
+  String get letterPuzzleOtherLevel => 'عدد حروف تاني';
+
+  @override
+  String get letterPuzzleHowTo => 'اسحب الحروف للمربعات، أو دوس على الحرف';
+
+  @override
+  String get letterPuzzleMix => 'عشوائي';
 }

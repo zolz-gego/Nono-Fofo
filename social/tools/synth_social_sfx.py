@@ -19,7 +19,7 @@ import numpy as np
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(ROOT, "tools", "audio"))
 
-from dsp import (Mix, SR, arp, bell, boing, chime, chord, click, doum, finish, glass, marimba,  # noqa: E402
+from dsp import (Mix, SR, arp, bell, boing, chime, chord, click, doum, finish, glass, hump, marimba,  # noqa: E402
                  noise, osc, perc, svf, pluck, pop, reverb, slide_whistle, sparkle, sweep, tek, thud, whoosh,
                  wood, write_wav)
 
@@ -133,6 +133,46 @@ def _():
     m = Mix().add(marimba("G5", 0.3)).add(marimba("C6", 0.8), 0.13)
     m.add(bell("C7", 1.0, tau=0.35, ratio=2.0, index=1.2), 0.13, 0.5).add(thud(80, 0.25), 0.13, 0.5)
     return reverb(m.out(), 0.15)
+
+
+@sfx("mg_pant", "Cartoon out-of-breath panting: quick breathy hah-huh breaths", 0.6)
+def _():
+    m = Mix()
+    for i in range(6):
+        t = i * 0.36
+        out = svf(noise(0.17), 1300, q=2.2, mode="bp") * hump(0.17) + osc(330, 0.17, "tri") * hump(0.17) * 0.06
+        inn = svf(noise(0.13), 2300, q=2.5, mode="bp") * hump(0.13) * 0.55
+        m.add(out, t).add(inn, t + 0.2)
+    return reverb(m.out(), 0.08)
+
+
+# ================================================================ teasers
+
+@sfx("mg_siren", "Cartoon alarm: two-tone wee-woo siren, friendly not scary", 0.7)
+def _():
+    m = Mix()
+    for i in range(4):
+        f = 880 if i % 2 == 0 else 660
+        m.add(osc(f, 0.36, "tri", vib=0.01, vib_rate=9) * hump(0.36), i * 0.36, 0.6)
+        m.add(osc(f * 2, 0.36, "sine") * hump(0.36), i * 0.36, 0.12)
+    return reverb(m.out(), 0.1)
+
+
+@sfx("mg_slam", "Big title slams in: punchy thump + clap + tiny shimmer", 0.85)
+def _():
+    clap = svf(noise(0.12), 1800, q=0.9, mode="bp") * perc(0.12, 0.001, 0.035)
+    m = Mix().add(thud(65, 0.4)).add(doum(0.3), 0.0, 0.6).add(clap, 0.0, 0.9)
+    m.add(sparkle(0.4, 5, start=0.06, gain=0.25))
+    return reverb(m.out(), 0.12)
+
+
+@sfx("mg_rattle", "Wooden box rattles and shakes", 0.7)
+def _():
+    m = Mix()
+    for i in range(9):
+        m.add(wood(["C4", "E4", "D4"][i % 3], 0.07), i * 0.075, 0.7 - i * 0.04)
+        m.add(click(0.02, 2400), i * 0.075 + 0.02, 0.25)
+    return m.out()
 
 
 # ================================================================ render

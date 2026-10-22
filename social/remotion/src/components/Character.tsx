@@ -15,13 +15,19 @@ export const Character: React.FC<{spec: CharacterSpec; amp: number}> = ({spec, a
   const {fps} = useVideoConfig();
 
   let pose = spec.pose;
+  let prevPose = pose;
   let swapFrame = -1;
+  let fade = false;
   for (const s of spec.swaps ?? []) {
     if (frame >= s.at * fps) {
+      prevPose = pose;
       pose = s.pose;
       swapFrame = Math.round(s.at * fps);
+      fade = !!s.fade;
     }
   }
+  // dissolve: the old pose fades out over the new one
+  const fadeK = fade ? Math.min(1, (frame - swapFrame) / (0.45 * fps)) : 1;
   const info = characters[spec.who][pose];
   const height = HEIGHT * (spec.size ?? 1);
   const scale = height / info.height;
@@ -40,8 +46,8 @@ export const Character: React.FC<{spec: CharacterSpec; amp: number}> = ({spec, a
   if (enter === 'pop') s = inP;
 
   // A little hop each time the pose changes.
-  const hop = swapFrame >= 0 ? Math.sin(Math.min(1, (frame - swapFrame) / 9) * Math.PI) * 50 : 0;
-  const swapPop = swapFrame >= 0 ? spring({frame: frame - swapFrame, fps, config: {damping: 9, stiffness: 220}}) : 1;
+  const hop = swapFrame >= 0 && !fade ? Math.sin(Math.min(1, (frame - swapFrame) / 9) * Math.PI) * 50 : 0;
+  const swapPop = swapFrame >= 0 && !fade ? spring({frame: frame - swapFrame, fps, config: {damping: 9, stiffness: 220}}) : 1;
 
   // Repeated jumps (e.g. trying to reach something high).
   let jump = 0;
@@ -59,6 +65,7 @@ export const Character: React.FC<{spec: CharacterSpec; amp: number}> = ({spec, a
 
   // Sideways moves (runs across, runs off, comes back).
   let mx = 0;
+  let my = 0;
   let flip = !!spec.flip;
   for (const m of spec.moves ?? []) {
     const a = m.at * fps;
@@ -66,20 +73,32 @@ export const Character: React.FC<{spec: CharacterSpec; amp: number}> = ({spec, a
     const d = (m.dur ?? 0.4) * fps;
     // a move shorter than a frame is a jump: it applies from its first frame
     const k = d <= 1 ? 1 : Math.min(1, (frame - a) / d);
-    mx = mx + (m.to - mx) * (k < 1 ? 1 - Math.pow(1 - k, 2.2) : 1);
+    const e = k < 1 ? 1 - Math.pow(1 - k, 2.2) : 1;
+    mx = mx + (m.to - mx) * e;
+    if (m.toY !== undefined) my = my + (m.toY - my) * e;
     if (m.flip !== undefined) flip = m.flip;
   }
 
   const style: React.CSSProperties = {
     position: 'absolute',
     left: x - w / 2 + dx + mx,
-    top: FEET_Y - height + dy,
+    top: FEET_Y - height + dy + my,
     width: w,
     height,
     transformOrigin: '50% 100%',
     transform: `translateY(${talkY - hop - jump}px) rotate(${tilt}deg) scale(${sx * s * (0.85 + 0.15 * swapPop)}, ${sy * s * (0.85 + 0.15 * swapPop)}) ${flip ? 'scaleX(-1)' : ''}`,
     filter: 'drop-shadow(0 10px 0 rgba(0,0,0,0.08))',
   };
+  const prev = characters[spec.who][prevPose];
+  if (fadeK < 1 && info.file && prev?.file) {
+    const pw = prev.width * (height / prev.height);
+    return (
+      <>
+        <Img src={staticFile(prev.file)} style={{...style, left: (style.left as number) + (w - pw) / 2, width: pw, opacity: 1 - fadeK}} />
+        <Img src={staticFile(info.file)} style={{...style, opacity: fadeK}} />
+      </>
+    );
+  }
   return info.file ? (
     <Img src={staticFile(info.file)} style={style} />
   ) : (
