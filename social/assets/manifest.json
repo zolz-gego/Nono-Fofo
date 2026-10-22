@@ -123,6 +123,11 @@
       "desc": "Ta-da! short reveal (brass-free: marimba + bell)",
       "duration": 1.5
     },
+    "mg_pant": {
+      "file": "sfx/mg_pant.wav",
+      "desc": "Cartoon out-of-breath panting: quick breathy hah-huh breaths",
+      "duration": 2.91
+    },
     "mg_stone_wake": {
       "file": "sfx/mg_stone_wake.wav",
       "desc": "Statues wake up: stone grinding and cracking, crumbling dust, magic shimmer",

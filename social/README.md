@@ -68,6 +68,7 @@ tools/.venv/bin/python social/tools/synth_social_sfx.py   # (from repo root) reb
 | `mg_ta_da` | Marimba + bell reveal | Big moment / catchphrase |
 | `mg_boom` | Big soft thump + papery crash + shimmer | Crash / BOOM (Nono into the book) |
 | `mg_skid` | Squeaky sneaker slide | Character skids to a stop |
+| `mg_pant` | Breathy hah-huh panting | A character out of breath |
 | `mg_stone_wake` | Stone grinding + crumbling + shimmer *(ElevenLabs)* | Statues come alive |
 | `mg_stone_eyes` | Gritty stone scrape + squeak *(ElevenLabs)* | A statue's eyes slide sideways |
 | `mg_stone_tiptoe` | Little stone feet tiptoeing on marble *(ElevenLabs)* | Small statues sneaking around |
@@ -144,15 +145,16 @@ from the voice start, like keywords; format in `remotion/src/types.ts`):
 | `statues` | Two little living statues (cat + ushabti images) tiptoeing and searching; `chaseAt` sends them running off, `passAt` runs them across the screen in a line |
 | `dizzy` | Stars spinning around a head after a bonk |
 | `pant` | Breath puffs + sweat drops (out of breath) |
-| `compare` | A Coptic letter tile ≈ a Latin letter tile (Ⲉ ≈ E) |
+| `compare` | A Coptic letter tile ≈ a Latin letter tile (Ⲉ ≈ E); stays put on screen while the camera moves, `outAt` hides it |
 | `confetti` | Confetti burst |
 
 `book` also takes `letter` (the Avva key that flies in), `found` (a letter already on the page) and `only` (show just those letters).
 Keyword cards can show the word spelled in Coptic: `coptic` (Avva keys) on the keyword. `side` (`left` / `center` / `right`) moves a card off a face.
 
 Characters can also take `size`, `x`, `delay` (late entrance), `moves`
-(slide sideways: run across, run off, come back, with `flip`) and `jumps`
-(hop up and down, e.g. reaching for something high).
+(slide sideways, or down with `toY`: run across, run off, come back, with `flip`) and `jumps`
+(hop up and down, e.g. reaching for something high). A pose swap with `fade` dissolves
+into the new pose (no hop, no sound).
 
 Scenes can also take:
 - `camera`: keyframes (`at` in scene seconds, `x`/`y` offset, `zoom`, `rot`,
@@ -164,6 +166,9 @@ Scenes can also take:
   or `cut` (same shot continues, no wipe or sound).
 - `patternAt`: the themed background appears on a word (e.g. the pitch on "الكورة");
   `before` (`{pattern, icons}`) is what shows until then, so the scene is never plain.
+
+A long line can show as several subtitles: `chunks` on the line (`from` = index of the
+chunk's first Arabic word, `en` = its English).
 
 The end card can have a voice: `endCard.voice` is a file id in the video's `voice/`
 folder (e.g. both brothers saying the sign-off); the card stretches to fit it.

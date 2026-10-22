@@ -25,6 +25,11 @@ export const Captions: React.FC<{line: Line; voiceFrom: number; voiceFrames: num
   const words = line.ar.split(/\s+/).filter(Boolean);
   const starts = wordStarts(line, words, voiceFrames / fps);
   const current = starts.findLastIndex((s) => t >= s);
+  // several subtitles for one line: only the current chunk's words show
+  const chunks = line.chunks ?? [{from: 0, en: line.en}];
+  const ci = Math.max(0, chunks.findLastIndex((c) => c.from <= Math.max(0, current)));
+  const first = chunks[ci].from;
+  const end = chunks[ci + 1]?.from ?? words.length;
   const inP = spring({frame: frame - voiceFrom + 4, fps, config: {damping: 14, stiffness: 180}});
 
   return (
@@ -46,6 +51,7 @@ export const Captions: React.FC<{line: Line; voiceFrom: number; voiceFrames: num
     >
       <div dir="rtl" style={{fontFamily: FONT_AR, fontWeight: 800, fontSize: 62, lineHeight: 1.22, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0 18px'}}>
         {words.map((w, i) => {
+          if (i < first || i >= end) return null;
           const on = i === current;
           const said = i <= current;
           const pop = on ? spring({frame: frame - voiceFrom - Math.round(starts[i] * fps), fps, config: {damping: 10, stiffness: 260}}) : 0;
@@ -64,7 +70,7 @@ export const Captions: React.FC<{line: Line; voiceFrom: number; voiceFrames: num
           );
         })}
       </div>
-      <div style={{fontFamily: FONT_EN, fontWeight: 700, fontSize: 40, lineHeight: 1.15, color: color('mistBlue'), marginTop: 4}}>{line.en}</div>
+      <div style={{fontFamily: FONT_EN, fontWeight: 700, fontSize: 40, lineHeight: 1.15, color: color('mistBlue'), marginTop: 4}}>{chunks[ci].en}</div>
     </div>
   );
 };

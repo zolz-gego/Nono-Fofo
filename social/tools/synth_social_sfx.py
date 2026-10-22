@@ -19,7 +19,7 @@ import numpy as np
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(ROOT, "tools", "audio"))
 
-from dsp import (Mix, SR, arp, bell, boing, chime, chord, click, doum, finish, glass, marimba,  # noqa: E402
+from dsp import (Mix, SR, arp, bell, boing, chime, chord, click, doum, finish, glass, hump, marimba,  # noqa: E402
                  noise, osc, perc, svf, pluck, pop, reverb, slide_whistle, sparkle, sweep, tek, thud, whoosh,
                  wood, write_wav)
 
@@ -133,6 +133,17 @@ def _():
     m = Mix().add(marimba("G5", 0.3)).add(marimba("C6", 0.8), 0.13)
     m.add(bell("C7", 1.0, tau=0.35, ratio=2.0, index=1.2), 0.13, 0.5).add(thud(80, 0.25), 0.13, 0.5)
     return reverb(m.out(), 0.15)
+
+
+@sfx("mg_pant", "Cartoon out-of-breath panting: quick breathy hah-huh breaths", 0.6)
+def _():
+    m = Mix()
+    for i in range(6):
+        t = i * 0.36
+        out = svf(noise(0.17), 1300, q=2.2, mode="bp") * hump(0.17) + osc(330, 0.17, "tri") * hump(0.17) * 0.06
+        inn = svf(noise(0.13), 2300, q=2.5, mode="bp") * hump(0.13) * 0.55
+        m.add(out, t).add(inn, t + 0.2)
+    return reverb(m.out(), 0.08)
 
 
 # ================================================================ render

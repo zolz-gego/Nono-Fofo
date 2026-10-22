@@ -12,6 +12,7 @@ export type Line = {
   en: string; // English subtitle
   estimate: number; // seconds, used until the voice file exists
   words?: number[]; // optional: start time (s, from voice start) of each Arabic word
+  chunks?: {from: number; en: string}[]; // optional: show the line as several subtitles (from = index of the chunk's first Arabic word)
 };
 
 export type CharacterSpec = {
@@ -20,13 +21,13 @@ export type CharacterSpec = {
   at?: 'center' | 'left' | 'right';
   enter?: 'left' | 'right' | 'bottom' | 'pop' | 'none';
   flip?: boolean;
-  swaps?: {at: number; pose: string}[]; // seconds from scene start
+  swaps?: {at: number; pose: string; fade?: boolean}[]; // seconds from scene start; fade = dissolve into the new pose (no hop, no sound)
   size?: number; // height multiplier (1 = standing height)
   x?: number; // custom x of the feet center (overrides `at`)
   delay?: number; // seconds from scene start before he enters
   // slide sideways: offset in px from his spot, reached at `at` (scene seconds) over `dur`;
   // `flip` sets which way he faces from that moment
-  moves?: {at: number; to: number; dur?: number; flip?: boolean}[];
+  moves?: {at: number; to: number; toY?: number; dur?: number; flip?: boolean}[]; // toY: vertical offset (px, + = down)
   jumps?: {at: number; until?: number; height?: number; every?: number}[]; // hop up and down (scene seconds), e.g. reaching for something
 };
 
@@ -73,7 +74,7 @@ export type PropSpec =
   | {kind: 'statues'; at?: number; y?: number; chaseAt?: number; chase?: 'left' | 'right'; passAt?: number; layer?: 'back' | 'front'} // passAt: run across the screen (towards `chase`) in a line
   | {kind: 'dizzy'; at: number; x: number; y: number; until?: number} // stars spinning around a head after a bonk
   | {kind: 'pant'; at: number; x: number; y: number; until?: number; dir?: 'left' | 'right'} // breath puffs + sweat drops (out of breath)
-  | {kind: 'compare'; at: number; k: string; latin: string; y?: number} // Coptic letter ≈ Latin letter
+  | {kind: 'compare'; at: number; k: string; latin: string; y?: number; outAt?: number} // Coptic letter ≈ Latin letter (stays put on screen)
   | {kind: 'confetti'; at: number; count?: number};
 
 export type SceneSpec = {

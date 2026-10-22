@@ -162,7 +162,7 @@ const Book: React.FC<P<'book'>> = ({t, fps, x = 540, y = 860, size = 1, openAt, 
                   // page letters vanish when they burst out; one comes back with letterIn
                   const back = side === 1 && i === 4 && li >= 0.55;
                   // letters found earlier sit big on the page already
-                  const had = side === 1 && i === 3 && !!found;
+                  const had = side === 0 && i === 4 && !!found;
                   const gone = burst && !back && !had;
                   // only: a clean page with just the letters found so far
                   if (only && !back && !had) return <div key={i} />;
@@ -782,10 +782,11 @@ const Pant: React.FC<P<'pant'>> = ({t, at, x, y, until, dir = 'right'}) => {
   );
 };
 
-const Compare: React.FC<P<'compare'>> = ({t, fps, at, k, latin, y = 470}) => {
-  const a = sp(t - at, fps, 10, 170);
-  const b = sp(t - at - 0.35, fps, 9, 200);
-  const eq = sp(t - at - 0.2, fps, 9, 220);
+const Compare: React.FC<P<'compare'>> = ({t, fps, at, k, latin, y = 470, outAt}) => {
+  const out = outAt !== undefined ? interpolate(t - outAt, [0, 0.25], [1, 0], clamp) : 1;
+  const a = sp(t - at, fps, 10, 170) * out;
+  const b = sp(t - at - 0.35, fps, 9, 200) * out;
+  const eq = sp(t - at - 0.2, fps, 9, 220) * out;
   if (a <= 0) return null;
   const S = 280;
   const tile = (left: number, p: number, bg: string, child: React.ReactNode) => (
@@ -825,16 +826,23 @@ const Confetti: React.FC<P<'confetti'>> = ({t, at, count = 70}) => {
 // ---------------------------------------------------------------- layers
 
 const BACK = new Set(['book', 'egypt', 'speed']);
+const SCREEN = new Set(['compare']);
 
 // Props behind the characters (`layer="back"`) or in front of them.
-export const Props: React.FC<{props?: PropSpec[]; voiceFrom: number; layer: 'back' | 'front'}> = ({props, voiceFrom, layer}) => {
+export const Props: React.FC<{props?: PropSpec[]; voiceFrom: number; layer: 'back' | 'front' | 'screen'}> = ({props, voiceFrom, layer}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const t = (frame - voiceFrom) / fps;
   return (
     <>
       {(props ?? [])
-        .filter((p) => p.kind !== 'shake' && (p.kind === 'statues' ? p.layer !== 'front' : BACK.has(p.kind)) === (layer === 'back'))
+        .filter((p) =>
+          p.kind === 'shake'
+            ? false
+            : SCREEN.has(p.kind)
+              ? layer === 'screen'
+              : layer !== 'screen' && (p.kind === 'statues' ? p.layer !== 'front' : BACK.has(p.kind)) === (layer === 'back'),
+        )
         .map((p, i) => {
           const q = {...p, t, fps} as never;
           switch (p.kind) {
