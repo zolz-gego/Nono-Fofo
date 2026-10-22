@@ -147,7 +147,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get level1Desc => 'Meet the letters';
 
   @override
-  String get level2Desc => 'Read short words';
+  String get level2Desc => 'How each letter sounds';
 
   @override
   String get level3Desc => 'Read full sentences';
@@ -778,4 +778,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gameHome => 'Home';
+
+  @override
+  String get gameMagicBasket => 'Magic basket';
+
+  @override
+  String get magicBasketPickLetter =>
+      'Pick the letter whose sounds you\'ll catch!';
+
+  @override
+  String get magicBasketSounds => 'Sounds of';
+
+  @override
+  String magicBasketQuestion(String letter, String name) {
+    return 'How does $letter ($name) sound? Catch all its sounds in the basket!';
+  }
+
+  @override
+  String magicBasketWrong(String target, String caught) {
+    return 'No! $target doesn\'t sound like $caught';
+  }
+
+  @override
+  String get magicBasketMissed => 'A right apple fell! Catch it next time';
+
+  @override
+  String magicBasketHaveIt(String sound) {
+    return 'We\'ve got $sound, find another sound!';
+  }
+
+  @override
+  String get magicBasketHowTo =>
+      'Move the basket with the mouse or the arrow keys';
+
+  @override
+  String get magicBasketHowToTouch => 'Drag your finger to move the basket';
 }

@@ -1,6 +1,7 @@
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import React from 'react';
-import {interpolate, random, spring, useCurrentFrame, useVideoConfig} from 'remotion';
+import {Img, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {images} from '../generated/data';
 import {ICONS} from '../icons';
 import {color, FONT_AR, FONT_COPTIC, FONT_EN} from '../theme';
 import type {PropSpec} from '../types';
@@ -52,7 +53,7 @@ const Starburst: React.FC<{size: number; fill: string}> = ({size, fill}) => {
 
 // ---------------------------------------------------------------- Grandpa's golden book
 
-const Book: React.FC<P<'book'>> = ({t, fps, x = 540, y = 860, size = 1, openAt, burstAt, letterInAt, letterFrom = [540, 420]}) => {
+const Book: React.FC<P<'book'>> = ({t, fps, x = 540, y = 860, size = 1, openAt, burstAt, letterInAt, letterFrom = [540, 420], letter = 'A', found, only}) => {
   const W = 640 * size;
   const H = 400 * size;
   // closed cover flips away, then the open book unfolds
@@ -160,12 +161,16 @@ const Book: React.FC<P<'book'>> = ({t, fps, x = 540, y = 860, size = 1, openAt, 
                   const key = KEYS[(i + side * 9) % KEYS.length];
                   // page letters vanish when they burst out; one comes back with letterIn
                   const back = side === 1 && i === 4 && li >= 0.55;
-                  const gone = burst && !back;
+                  // letters found earlier sit big on the page already
+                  const had = side === 1 && i === 3 && !!found;
+                  const gone = burst && !back && !had;
+                  // only: a clean page with just the letters found so far
+                  if (only && !back && !had) return <div key={i} />;
                   return (
                     <GoldLetter
                       key={i}
-                      k={back ? 'A' : key}
-                      size={(back ? 110 : 70) * size}
+                      k={back ? letter : had ? found! : key}
+                      size={(back || had ? 110 : 70) * size}
                       style={{opacity: gone ? 0.08 : 1, transform: back ? `scale(${sp(li - 0.55, fps, 8, 200)})` : undefined}}
                     />
                   );
@@ -196,7 +201,7 @@ const Book: React.FC<P<'book'>> = ({t, fps, x = 540, y = 860, size = 1, openAt, 
       {/* one letter flies back in */}
       {li >= 0 && li < 0.6 && (
         <GoldLetter
-          k="A"
+          k={letter}
           size={interpolate(li, [0, 0.55], [220, 110 * size], clamp)}
           style={{
             position: 'absolute',
@@ -618,6 +623,205 @@ const Arrow: React.FC<P<'arrow'>> = ({t, fps, at, x, y, dir}) => {
   );
 };
 
+// ---------------------------------------------------------------- running letter (Ⲉ on little legs)
+
+const Runner: React.FC<P<'runner'>> = ({t, k, size = 260, path}) => {
+  if (!path.length || t < path[0].at) return null;
+  // where along the path: between keyframe i and i+1 (hop = arc height)
+  let i = path.length - 1;
+  for (let j = 0; j < path.length - 1; j++) if (t < path[j + 1].at) { i = j; break; }
+  const a = path[i];
+  const b = path[Math.min(i + 1, path.length - 1)];
+  const p = b === a ? 1 : Math.min(1, (t - a.at) / (b.at - a.at));
+  const x = a.x + (b.x - a.x) * p;
+  const arc = Math.sin(p * Math.PI) * (b.hop ?? 0);
+  const y = a.y + (b.y - a.y) * p - arc;
+  const moving = b !== a && p < 1;
+  const dir = b.x < a.x ? -1 : 1;
+  const step = t * 26;
+  const bob = moving && !b.hop ? Math.abs(Math.sin(step)) * 16 : 0;
+  const spin = b.hop ? p * 360 * dir : 0;
+  const lean = moving && !b.hop ? 10 * dir : 0;
+  const leg = (side: number) => {
+    const sw = moving ? Math.sin(step + side * Math.PI) * 32 : 0;
+    return <line x1={side * 30} y1={0} x2={side * 30 + sw} y2={size * 0.32} stroke={color('cocoa')} strokeWidth={16} strokeLinecap="round" />;
+  };
+  return (
+    <div style={{position: 'absolute', left: x, top: y - bob, width: 0, height: 0, transform: `rotate(${lean + spin}deg)`}}>
+      {/* dust puffs behind */}
+      {moving &&
+        !b.hop &&
+        [0, 1, 2].map((n) => {
+          const q = ((t * 3 + n / 3) % 1);
+          return <div key={n} style={{position: 'absolute', left: -dir * (60 + q * 160) - 30, top: size * 0.3 - q * 30, width: 60 + q * 50, height: 60 + q * 50, borderRadius: '50%', background: 'white', opacity: 0.7 * (1 - q)}} />;
+        })}
+      <svg width={200} height={size * 0.4} style={{position: 'absolute', left: -100, top: size * 0.3, overflow: 'visible'}}>
+        <g transform={`translate(100 0)`}>
+          {leg(-1)}
+          {leg(1)}
+        </g>
+      </svg>
+      <div style={{position: 'absolute', left: -size / 2, top: -size / 2, width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center', transform: dir < 0 ? 'scaleX(-1)' : undefined}}>
+        {/* white outline so the gold letter stands out against sandstone */}
+        <GoldLetter k={k} size={size} style={{textShadow: [...Array.from({length: 12}, (_, n) => `${Math.cos((n / 12) * Math.PI * 2) * 7}px ${Math.sin((n / 12) * Math.PI * 2) * 7}px 0 white`), `0 0 ${size * 0.15}px ${GLOW}`].join(', ')}} />
+        {/* eyes */}
+        {[-1, 1].map((e) => (
+          <div key={e} style={{position: 'absolute', left: size / 2 + e * size * 0.1 - size * 0.06, top: size * 0.3, width: size * 0.12, height: size * 0.15, borderRadius: '50%', background: 'white', border: `5px solid ${color('cocoa')}`}}>
+            <div style={{position: 'absolute', left: '45%', top: '35%', width: '45%', height: '45%', borderRadius: '50%', background: color('cocoa')}} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// ---------------------------------------------------------------- little living statues
+
+const STONE = color('fortWall');
+const STONE_DARK = `color-mix(in srgb, ${STONE} 70%, black)`;
+const STATUES: {w: number; h: number; draw: React.ReactNode}[] = [
+  // cat (Bastet)
+  {w: 130, h: 200, draw: <path d="M30 200 L30 90 L15 20 L50 55 L80 55 L115 20 L100 90 L105 200 Z" fill={color('ink')} />},
+  // canopic jar
+  {w: 130, h: 190, draw: <><path d="M20 80 Q15 190 65 190 Q115 190 110 80 Z" fill={STONE} /><circle cx={65} cy={55} r={42} fill={color('sunYellow')} /></>},
+  // queen bust
+  {w: 140, h: 210, draw: <><path d="M15 210 Q20 130 70 125 Q120 130 125 210 Z" fill={color('mistBlue')} /><circle cx={70} cy={95} r={42} fill={STONE} /><path d="M35 70 L45 0 L105 0 L110 70 Z" fill={color('deepTeal')} /></>},
+  // ankh
+  {w: 110, h: 210, draw: <><ellipse cx={55} cy={45} rx={30} ry={40} fill="none" stroke={color('letterGold')} strokeWidth={22} /><path d="M45 80 L65 80 L65 210 L45 210 Z M10 95 L100 95 L100 115 L10 115 Z" fill={color('letterGold')} /></>},
+];
+
+// Social images of the little statues (drawn shapes stand in until they exist).
+const STATUE_IMAGES = ['statue-cat', 'statue-ushabti'];
+
+const Statues: React.FC<P<'statues'>> = ({t, fps, at = -1, y = 1300, chaseAt, chase = 'left', passAt}) => {
+  const xs = [330, 750];
+  return (
+    <>
+      {STATUES.slice(0, 2).map((st, i) => {
+        const dir = chase === 'left' ? -1 : 1;
+        // pass: they come in from the other side and run across the screen in a line
+        const pk = passAt !== undefined ? t - passAt - i * 0.18 : -1;
+        if (passAt !== undefined && pk < 0) return null;
+        const inP = passAt !== undefined ? 1 : sp(t - at - i * 0.12, fps, 10, 180);
+        if (inP <= 0) return null;
+        const c = passAt !== undefined ? pk : chaseAt !== undefined ? t - chaseAt - i * 0.1 : -1;
+        // tiptoe: little hops and looking around; chase: running off-screen
+        const run = passAt !== undefined ? (-1100 + pk * 1700) * dir - (xs[i] - 540) : c > 0 ? c * 1500 * dir : 0;
+        const hopF = c > 0 ? 9 : 4.5;
+        const hop = Math.abs(Math.sin(t * hopF + i * 1.7)) * (c > 0 ? 40 : 22);
+        const look = c > 0 ? dir : Math.sin(t * 1.6 + i * 2) > 0 ? 1 : -1;
+        const tilt = Math.sin(t * hopF + i) * (c > 0 ? 12 : 6);
+        const s = 1.15;
+        return (
+          <div key={i} style={{position: 'absolute', left: xs[i] - (st.w * s) / 2 + run, top: y - st.h * s - hop, width: st.w * s, height: st.h * s, transformOrigin: '50% 100%', transform: `scale(${inP}) rotate(${tilt}deg) scaleX(${look})`}}>
+            {images[STATUE_IMAGES[i]] ? (
+              <Img src={staticFile(images[STATUE_IMAGES[i]])} style={{position: 'absolute', left: '50%', bottom: 0, height: 270, transform: 'translateX(-50%)'}} />
+            ) : (
+            <svg viewBox={`0 0 ${st.w} ${st.h}`} width="100%" height="100%" style={{overflow: 'visible'}}>
+              <g stroke={color('cocoa')} strokeWidth={7} strokeLinejoin="round">{st.draw}</g>
+              {/* searching eyes */}
+              {[-1, 1].map((e) => (
+                <g key={e}>
+                  <circle cx={st.w / 2 + e * 16} cy={i === 3 ? 45 : i === 0 ? 80 : i === 1 ? 55 : 95} r={12} fill="white" stroke={color('cocoa')} strokeWidth={4} />
+                  <circle cx={st.w / 2 + e * 16 + 5} cy={i === 3 ? 45 : i === 0 ? 80 : i === 1 ? 55 : 95} r={6} fill={color('cocoa')} />
+                </g>
+              ))}
+            </svg>
+            )}
+            <div style={{position: 'absolute', left: '10%', right: '10%', bottom: -10, height: 16, borderRadius: '50%', background: 'rgba(0,0,0,0.15)'}} />
+          </div>
+        );
+      })}
+    </>
+  );
+};
+
+// ---------------------------------------------------------------- dizzy stars, panting, comparison, confetti
+
+const Dizzy: React.FC<P<'dizzy'>> = ({t, at, x, y, until}) => {
+  const k = t - at;
+  if (k < 0 || (until !== undefined && t > until)) return null;
+  const grow = Math.min(1, k / 0.2);
+  return (
+    <>
+      {Array.from({length: 5}, (_, i) => {
+        const a = k * 7 + (i / 5) * Math.PI * 2;
+        const front = Math.sin(a) > 0;
+        return (
+          <div key={i} style={{position: 'absolute', left: x + Math.cos(a) * 150 * grow - 30, top: y + Math.sin(a) * 40 * grow - 30, fontSize: 60, color: i % 2 ? color('sunYellow') : 'white', opacity: front ? 1 : 0.6, transform: `scale(${front ? 1 : 0.75}) rotate(${k * 300}deg)`, filter: `drop-shadow(0 0 2px ${color('cocoa')})`}}>
+            <FontAwesomeIcon icon={ICONS.star} />
+          </div>
+        );
+      })}
+    </>
+  );
+};
+
+const Pant: React.FC<P<'pant'>> = ({t, at, x, y, until, dir = 'right'}) => {
+  const k = t - at;
+  if (k < 0 || (until !== undefined && t > until)) return null;
+  const d = dir === 'right' ? 1 : -1;
+  return (
+    <>
+      {/* breath puffs, one every 0.45 s */}
+      {[0, 1, 2].map((n) => {
+        const q = (k / 0.45 + n / 3) % 1;
+        return <div key={`b${n}`} style={{position: 'absolute', left: x + d * (20 + q * 130) - 30, top: y - q * 30 - 30, width: 50 + q * 60, height: 40 + q * 45, borderRadius: '50%', background: 'white', border: `5px solid ${color('mistBlue')}`, opacity: 0.9 * (1 - q)}} />;
+      })}
+      {/* sweat drops popping off the head */}
+      {[0, 1].map((n) => {
+        const q = (k / 0.7 + n / 2) % 1;
+        const sx = (n ? 1 : -1) * (60 + q * 90);
+        return (
+          <svg key={`s${n}`} width={36} height={50} style={{position: 'absolute', left: x + sx - 18, top: y - 170 - Math.sin(q * Math.PI) * 70 + q * 60, opacity: 1 - q * 0.8, transform: `rotate(${sx * 0.3}deg)`}}>
+            <path d="M18 2 Q34 30 18 48 Q2 30 18 2 Z" fill={color('mistBlue')} stroke={color('deepTeal')} strokeWidth={4} />
+          </svg>
+        );
+      })}
+    </>
+  );
+};
+
+const Compare: React.FC<P<'compare'>> = ({t, fps, at, k, latin, y = 470}) => {
+  const a = sp(t - at, fps, 10, 170);
+  const b = sp(t - at - 0.35, fps, 9, 200);
+  const eq = sp(t - at - 0.2, fps, 9, 220);
+  if (a <= 0) return null;
+  const S = 280;
+  const tile = (left: number, p: number, bg: string, child: React.ReactNode) => (
+    <div style={{position: 'absolute', left, top: y, width: S, height: S, borderRadius: 50, background: bg, border: `9px solid ${color('cocoa')}`, boxShadow: `0 12px 0 ${color('cocoa')}`, display: 'flex', alignItems: 'center', justifyContent: 'center', transform: `scale(${p}) rotate(${(left < 540 ? -4 : 4) + Math.sin(t * 2.5) * 2}deg)`}}>
+      {child}
+    </div>
+  );
+  return (
+    <>
+      {tile(110, a, `radial-gradient(circle at 50% 40%, ${color('slateTeal')}, ${color('deepTeal')})`, <GoldLetter k={k} size={230} />)}
+      <div style={{position: 'absolute', left: 540 - 60, top: y + S / 2 - 70, width: 120, textAlign: 'center', fontFamily: FONT_EN, fontWeight: 800, fontSize: 130, lineHeight: 1, color: 'white', textShadow: `0 6px 0 ${color('cocoa')}`, transform: `scale(${eq})`}}>≈</div>
+      {tile(1080 - 110 - S, b, color('coral'), <div style={{fontFamily: FONT_EN, fontWeight: 800, fontSize: 230, lineHeight: 1, color: 'white', marginTop: 30, textShadow: `0 8px 0 ${color('cocoa')}`}}>{latin}</div>)}
+    </>
+  );
+};
+
+const CONFETTI = ['coral', 'sunYellow', 'leafGreen', 'mistBlue', 'letterGold', 'white'];
+const Confetti: React.FC<P<'confetti'>> = ({t, at, count = 70}) => {
+  const k = t - at;
+  if (k < 0) return null;
+  return (
+    <>
+      {Array.from({length: count}, (_, i) => {
+        const r = (n: string) => random(`conf-${i}-${n}`);
+        const x0 = 540 + (r('x') - 0.5) * 300;
+        const vx = (r('vx') - 0.5) * 1400;
+        const vy = -900 - r('vy') * 900;
+        const x = x0 + vx * k;
+        const y = 900 + vy * k + 1200 * k * k;
+        if (y > 2000) return null;
+        return <div key={i} style={{position: 'absolute', left: x, top: y, width: 22 + r('w') * 16, height: 12 + r('h') * 10, borderRadius: 4, background: color(CONFETTI[i % CONFETTI.length]), transform: `rotate(${k * (300 + r('rot') * 600)}deg) scaleY(${Math.cos(k * 12 + i)})`}} />;
+      })}
+    </>
+  );
+};
+
 // ---------------------------------------------------------------- layers
 
 const BACK = new Set(['book', 'egypt', 'speed']);
@@ -630,7 +834,7 @@ export const Props: React.FC<{props?: PropSpec[]; voiceFrom: number; layer: 'bac
   return (
     <>
       {(props ?? [])
-        .filter((p) => p.kind !== 'shake' && BACK.has(p.kind) === (layer === 'back'))
+        .filter((p) => p.kind !== 'shake' && (p.kind === 'statues' ? p.layer !== 'front' : BACK.has(p.kind)) === (layer === 'back'))
         .map((p, i) => {
           const q = {...p, t, fps} as never;
           switch (p.kind) {
@@ -650,6 +854,18 @@ export const Props: React.FC<{props?: PropSpec[]; voiceFrom: number; layer: 'bac
               return <Rain key={i} {...(q as P<'rain'>)} />;
             case 'arrow':
               return <Arrow key={i} {...(q as P<'arrow'>)} />;
+            case 'runner':
+              return <Runner key={i} {...(q as P<'runner'>)} />;
+            case 'statues':
+              return <Statues key={i} {...(q as P<'statues'>)} />;
+            case 'dizzy':
+              return <Dizzy key={i} {...(q as P<'dizzy'>)} />;
+            case 'pant':
+              return <Pant key={i} {...(q as P<'pant'>)} />;
+            case 'compare':
+              return <Compare key={i} {...(q as P<'compare'>)} />;
+            case 'confetti':
+              return <Confetti key={i} {...(q as P<'confetti'>)} />;
             default:
               return null;
           }

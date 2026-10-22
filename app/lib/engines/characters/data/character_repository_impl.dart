@@ -50,6 +50,13 @@ class CharacterRepositoryImpl implements CharacterRepository {
                 ),
                 _ => null,
               },
+              seat: switch (p['seat']) {
+                [final num x, final num y] => Offset(
+                  x.toDouble(),
+                  y.toDouble(),
+                ),
+                _ => null,
+              },
             ),
       };
     }

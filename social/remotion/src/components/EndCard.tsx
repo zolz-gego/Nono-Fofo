@@ -30,11 +30,11 @@ export const EndCard: React.FC<{ar: string; en: string}> = ({ar, en}) => {
         <div style={{fontFamily: FONT_EN, fontWeight: 800, fontSize: 80, color: 'white', lineHeight: 1.1}}>{en}</div>
       </div>
       <Img
-        src={staticFile(nono.file)}
+        src={staticFile(nono.file!)}
         style={{position: 'absolute', left: 30, top: 1880 - h + bounce(0) + (1 - bros) * 700, height: h, width: (nono.width / nono.height) * h}}
       />
       <Img
-        src={staticFile(fofo.file)}
+        src={staticFile(fofo.file!)}
         style={{position: 'absolute', right: 30, top: 1880 - h * 0.9 + bounce(3) + (1 - bros) * 700, height: h * 0.9, width: (fofo.width / fofo.height) * h * 0.9}}
       />
     </AbsoluteFill>

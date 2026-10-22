@@ -74,9 +74,7 @@ class CharacterComponent extends PositionComponent {
     final pose = roster.pose(character, _action);
     final p = pose == null ? null : point(pose);
     if (pose == null || p == null) return null;
-    final k = _k * scale.x;
-    final x = (p.dx - pose.headCenter.dx) * k;
-    return Offset(mirror ? -x : x, (p.dy - pose.height) * k);
+    return pose.fromFeet(p, _k * scale.x, mirror: mirror);
   }
 
   void play(CharacterAction action) {

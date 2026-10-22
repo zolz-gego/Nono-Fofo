@@ -45,6 +45,20 @@ Preview text:
 [curious] ليه؟ [thoughtful] استنى نفكر شوية... [happy] لقيتها!
 ```
 
+## Ramses (رمسيس, the giant statue)
+
+Save the voice as **`Ramses`**. Guest character (first in video 004). He must
+sound clearly deeper and slower than both brothers, grand but never scary.
+
+**Voice Design prompt:**
+```
+Adult male voice actor performing a giant ancient-statue cartoon character, speaking Egyptian Arabic with a natural Cairo accent. Very deep, booming and slow, grand and dramatic like a pharaoh, but warm, silly and kind underneath, chuckles easily. Clean close-mic studio recording, no background noise, no music.
+```
+Preview text:
+```
+[dramatically] أنا رمسيس... [laughs] أهلاً أهلاً يا ولاد!
+```
+
 ---
 
 ## Writing lines for v3 (for Claude)

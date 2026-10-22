@@ -49,7 +49,7 @@
     }
   },
   "level1Desc": "Meet the letters",
-  "level2Desc": "Read short words",
+  "level2Desc": "How each letter sounds",
   "level3Desc": "Read full sentences",
   "yourName": "What's your name?",
   "nameHint": "Type your name",
@@ -231,5 +231,14 @@
   "gameSettings": "Settings",
   "gamePaused": "Paused",
   "gameResume": "Resume",
-  "gameHome": "Home"
+  "gameHome": "Home",
+  "gameMagicBasket": "Magic basket",
+  "magicBasketPickLetter": "Pick the letter whose sounds you'll catch!",
+  "magicBasketSounds": "Sounds of",
+  "magicBasketQuestion": "How does {letter} ({name}) sound? Catch all its sounds in the basket!",
+  "magicBasketWrong": "No! {target} doesn't sound like {caught}",
+  "magicBasketMissed": "A right apple fell! Catch it next time",
+  "magicBasketHaveIt": "We've got {sound}, find another sound!",
+  "magicBasketHowTo": "Move the basket with the mouse or the arrow keys",
+  "magicBasketHowToTouch": "Drag your finger to move the basket"
 }

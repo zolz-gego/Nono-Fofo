@@ -409,3 +409,58 @@ One friendly-but-grumpy cartoon white seagull with grey wings, flying to the lef
 The game uses the existing *run*, *idle*, *cheer* (jumping), *surprised*
 (hurt) and *celebrate* poses for now. Proper side-view *run* (3–4 frames)
 and *jump* poses would make the running look smoother.
+
+---
+
+## Magic basket art (السلة السحرية), Level 2, for ElevenLabs
+
+The game reuses the balloons village background. The pictures below are in
+the game (generated 2026-10-22); to swap one, save the new original under the
+same name and run the script. Until a file is there the game draws that part
+in code. Attach `design/reference/nono-fofo-approved.webp` when the model
+accepts a reference image.
+
+| What | Save the original as | Then run |
+|---|---|---|
+| Road card | `design/reference/magic_basket/icon.webp` | `tools/.venv/bin/python tools/games/process_magic_basket.py` |
+| Apple tree (cut-out) | `design/reference/magic_basket/tree.webp` | same script; if the branch moves, change `treeMarks` in `app/assets/content/games/magic_basket.json` |
+| Apple (empty label) | `design/reference/magic_basket/apple.webp` | same script; copy the `appleLetterSpot` line it prints into `magic_basket.json` |
+| Basket | `design/reference/magic_basket/basket.webp` | same script; copy the `basketOpening` line it prints into `magic_basket.json` |
+| Nono / Fofo poses (sit, toss, carry) | `Characters/Nono Basket.webp`, `Characters/Fofo Basket.webp` | `tools/.venv/bin/python tools/characters/process_poses.py` (seat and hand points are in its `SEAT` / `HAND` tables) |
+
+### Road card: `magicBasket.png`
+
+Paste the style block first, like the other cards.
+
+```
+A round woven wicker basket in warm tan with a thick rim, centered and slightly tilted toward the viewer, half full of shiny red apples. Two more red apples fall into it from above with small curved motion lines, each with a small cream circle on it showing a big letter: one shows the Arabic letter ب and the other the Latin letter b. A green apple leaf twirls beside them and a few small sunny-yellow #FFC845 star sparkles burst around the basket, as if it is magic. Same size and weight as a single object illustration: bold, simple and readable at small size.
+```
+
+### Apple tree (wide, cut-out)
+
+The tree fills the top of the screen; one brother sits on a branch at the
+side and the apples fall from under the leaves.
+
+```
+A big wide cartoon apple tree for a children's game, flat 2D vector style: thin warm-brown #5B4B3A outlines, flat colors with soft shading, rounded friendly shapes. Very wide, low crown made of round leafy clumps in three greens (leaf green #6CC24A, mid green #5E9E45, dark green #4A8238), much wider than tall, spreading across the whole picture. A short thick brown trunk in the center with two big limbs going up into the crown, and its roots spreading at the bottom. One long sturdy branch sticks out on the LEFT side under the crown, empty, strong enough for a child to sit on. About ten small red apples hidden among the leaves. Keep the area under the crown empty. Whole tree visible, front view, nothing else in the picture. Plain flat pure white background so it can be cut out. No people, no text, no letters, no watermark.
+```
+
+### Apple (generate once)
+
+The game writes the sound in the cream circle, so it must stay empty.
+
+```
+A single cute cartoon red apple for a children's game, flat 2D vector style: thin warm-brown #5B4B3A outline, flat colors with soft shading, rounded friendly shape. Shiny bright red apple, a little darker red on one side, one soft white shine highlight on the upper left, a short brown stem with one green leaf on top. In the middle of the apple a large EMPTY plain cream #FFFBF4 circle with a thin brown outline (about half the apple width); leave it completely empty. Front view, centered, nothing else in the picture. Plain flat pure white background so it can be cut out. No text, no letters, no watermark.
+```
+
+### Basket
+
+```
+A cartoon woven wicker basket for a children's game, flat 2D vector style: thin warm-brown #5B4B3A outline, flat colors with soft shading. Wide and shallow, wider at the top than at the bottom, warm tan weave with darker brown lines, a thick light rim, no handle. Front view, straight, empty, seen slightly from above so the inside of the rim shows. Centered, nothing else in the picture. Plain flat pure white background so it can be cut out. No text, no watermark.
+```
+
+### Basket poses for Nono and Fofo
+
+```
+Using the attached reference for the exact look, clothes and colors: [NONO / FOFO], full body, three poses side by side on one sheet, all facing RIGHT. Pose 1 "sit" (left): sitting on an invisible branch with legs dangling, hands resting on his knees, happy smile. Pose 2 "toss" (middle): sitting the same way, one arm swinging down and forward as if dropping an apple, playful grin. Pose 3 "carry" (right): standing, holding an invisible wide basket in front of his tummy with both hands, arms a little forward, ready and excited. No basket, no apples, no branch (the game draws them). Same flat 2D style, thin warm-brown outlines. Plain solid white background, no shadow, no text.
+```

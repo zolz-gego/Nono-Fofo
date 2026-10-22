@@ -8,7 +8,7 @@ sound like one family.
 
 Run:  tools/.venv/bin/python social/tools/synth_social_sfx.py [id ...]
 Out:  social/assets/sfx/<id>.wav  (44.1 kHz mono 16-bit)
-      social/assets/manifest.json  ("sfx" section; other sections untouched)
+      social/assets/manifest.json  ("sfx" section, keeping entries with a "source"; other sections untouched)
 """
 import json
 import os
@@ -154,6 +154,10 @@ def main(only):
         with open(MANIFEST) as f:
             manifest = json.load(f)
     manifest["version"] = 1
+    # keep sounds that weren't synthesized here (e.g. ElevenLabs SFX, "source" set)
+    for sid, e in manifest.get("sfx", {}).items():
+        if sid not in entries and e.get("source"):
+            entries[sid] = e
     manifest["sfx"] = entries
     with open(MANIFEST, "w") as f:
         json.dump(manifest, f, indent=2, ensure_ascii=False)

@@ -353,7 +353,7 @@ abstract class AppLocalizations {
   /// No description provided for @level2Desc.
   ///
   /// In ar, this message translates to:
-  /// **'اقرا كلمات قصيرة'**
+  /// **'كل حرف بيتنطق إزاي'**
   String get level2Desc;
 
   /// No description provided for @level3Desc.
@@ -1405,6 +1405,60 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الرئيسية'**
   String get gameHome;
+
+  /// No description provided for @gameMagicBasket.
+  ///
+  /// In ar, this message translates to:
+  /// **'السلة السحرية'**
+  String get gameMagicBasket;
+
+  /// No description provided for @magicBasketPickLetter.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار الحرف اللي هتلمّ أصواته!'**
+  String get magicBasketPickLetter;
+
+  /// No description provided for @magicBasketSounds.
+  ///
+  /// In ar, this message translates to:
+  /// **'أصوات'**
+  String get magicBasketSounds;
+
+  /// The brother in the tree asks before throwing. letter is replaced by the Coptic letter (capital and small).
+  ///
+  /// In ar, this message translates to:
+  /// **'{letter} ({name}) بيتنطق إزاي؟ لمّ كل أصواته في السلة!'**
+  String magicBasketQuestion(String letter, String name);
+
+  /// After a wrong apple. target is replaced by the Coptic letter; caught is the sound on the apple.
+  ///
+  /// In ar, this message translates to:
+  /// **'لأ! {target} مش بتتنطق {caught}'**
+  String magicBasketWrong(String target, String caught);
+
+  /// No description provided for @magicBasketMissed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاحة صح وقعت! امسكها المرة الجاية'**
+  String get magicBasketMissed;
+
+  /// A right sound caught again when only the missing sounds fit. Never name the missing sound (that's the answer).
+  ///
+  /// In ar, this message translates to:
+  /// **'معانا {sound} خلاص، دوّر على صوت تاني!'**
+  String magicBasketHaveIt(String sound);
+
+  /// No description provided for @magicBasketHowTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'حرّك السلة بالماوس أو بالأسهم'**
+  String get magicBasketHowTo;
+
+  /// No description provided for @magicBasketHowToTouch.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسحب بصباعك عشان تحرّك السلة'**
+  String get magicBasketHowToTouch;
 }
 
 class _AppLocalizationsDelegate

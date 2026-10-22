@@ -2,15 +2,33 @@ import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import 'balloons_game.dart';
+
+/// What the village needs to know about a scene's layout (the balloons
+/// game, the Magic basket game).
+abstract interface class VillageFrame {
+  double get width;
+  double get height;
+
+  /// Where the background picture is drawn, when there is one.
+  ui.Rect? get imageRect;
+
+  /// The line the brothers stand on (middle of the dirt path).
+  double get groundY;
+}
+
+/// A game played in the village.
+abstract class VillageGame extends FlameGame {
+  VillageFrame get layout;
+}
 
 /// An Egyptian countryside village: big sky with drifting clouds, palms, a
 /// row of pastel mud-brick houses and a pigeon tower, green fields, a small
 /// canal, and the dirt path the brothers stand on. With a background
 /// picture, the picture is drawn where the layout says instead.
-class VillageBackground extends Component with HasGameReference<BalloonsGame> {
+class VillageBackground extends Component with HasGameReference<VillageGame> {
   VillageBackground({this.picture}) : super(priority: 0);
 
   final ui.Image? picture;

@@ -49,7 +49,7 @@
     }
   },
   "level1Desc": "اتعرّف على الحروف",
-  "level2Desc": "اقرا كلمات قصيرة",
+  "level2Desc": "كل حرف بيتنطق إزاي",
   "level3Desc": "اقرا جمل كاملة",
   "yourName": "اسمك إيه؟",
   "nameHint": "اكتب اسمك",
@@ -644,5 +644,44 @@
   "gameSettings": "الإعدادات",
   "gamePaused": "وقفة",
   "gameResume": "كمّل",
-  "gameHome": "الرئيسية"
+  "gameHome": "الرئيسية",
+  "gameMagicBasket": "السلة السحرية",
+  "magicBasketPickLetter": "اختار الحرف اللي هتلمّ أصواته!",
+  "magicBasketSounds": "أصوات",
+  "magicBasketQuestion": "{letter} ({name}) بيتنطق إزاي؟ لمّ كل أصواته في السلة!",
+  "@magicBasketQuestion": {
+    "description": "The brother in the tree asks before throwing. letter is replaced by the Coptic letter (capital and small).",
+    "placeholders": {
+      "letter": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "magicBasketWrong": "لأ! {target} مش بتتنطق {caught}",
+  "@magicBasketWrong": {
+    "description": "After a wrong apple. target is replaced by the Coptic letter; caught is the sound on the apple.",
+    "placeholders": {
+      "target": {
+        "type": "String"
+      },
+      "caught": {
+        "type": "String"
+      }
+    }
+  },
+  "magicBasketMissed": "تفاحة صح وقعت! امسكها المرة الجاية",
+  "magicBasketHaveIt": "معانا {sound} خلاص، دوّر على صوت تاني!",
+  "@magicBasketHaveIt": {
+    "description": "A right sound caught again when only the missing sounds fit. Never name the missing sound (that's the answer).",
+    "placeholders": {
+      "sound": {
+        "type": "String"
+      }
+    }
+  },
+  "magicBasketHowTo": "حرّك السلة بالماوس أو بالأسهم",
+  "magicBasketHowToTouch": "اسحب بصباعك عشان تحرّك السلة"
 }

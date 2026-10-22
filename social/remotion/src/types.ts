@@ -2,11 +2,11 @@
 
 export type ColorName = string; // any key of AppColors (app_colors.dart), e.g. "sunYellow"
 
-export type PoseInfo = {file: string; width: number; height: number; head: [number, number]};
+export type PoseInfo = {file: string | null; width: number; height: number; head: [number, number]}; // file null = image not made yet (placeholder)
 
 export type Line = {
   id: string; // voice file name without extension: voice/<id>.mp3
-  speaker: 'nono' | 'fofo';
+  speaker: string; // 'nono' | 'fofo' | a guest from social/assets/manifest.json (e.g. 'ramses')
   say: string; // ElevenLabs v3 text with [tags], pasted as-is
   ar: string; // on-screen Arabic caption (no tags)
   en: string; // English subtitle
@@ -15,7 +15,7 @@ export type Line = {
 };
 
 export type CharacterSpec = {
-  who: 'nono' | 'fofo';
+  who: string; // 'nono' | 'fofo' | a guest (e.g. 'ramses')
   pose: string;
   at?: 'center' | 'left' | 'right';
   enter?: 'left' | 'right' | 'bottom' | 'pop' | 'none';
@@ -27,19 +27,22 @@ export type CharacterSpec = {
   // slide sideways: offset in px from his spot, reached at `at` (scene seconds) over `dur`;
   // `flip` sets which way he faces from that moment
   moves?: {at: number; to: number; dur?: number; flip?: boolean}[];
+  jumps?: {at: number; until?: number; height?: number; every?: number}[]; // hop up and down (scene seconds), e.g. reaching for something
 };
 
 export type Keyword = {
   ar: string;
   en: string;
   icon?: string; // key of ICONS (src/icons.ts)
+  side?: 'left' | 'center' | 'right'; // where the card sits (default: center for one card, alternating for more)
+  coptic?: string; // the word spelled in Coptic letters (Avva keys), shown in gold above the Arabic
   at: number; // seconds from voice start
 };
 
 // Motion-graphics props (src/components/Props.tsx). Times are seconds from the
 // voice start (like keywords); negative = during the scene lead-in.
 export type PropSpec =
-  | {kind: 'book'; x?: number; y?: number; size?: number; openAt?: number; burstAt?: number; letterInAt?: number; letterFrom?: [number, number]}
+  | {kind: 'book'; x?: number; y?: number; size?: number; openAt?: number; burstAt?: number; letterInAt?: number; letterFrom?: [number, number]; letter?: string; found?: string; only?: boolean} // letter: Avva key that flies in (default A); found: one already on the page; only: hide the other letters
   | {kind: 'egypt'; at?: number}
   | {
       kind: 'letter';
@@ -63,7 +66,15 @@ export type PropSpec =
   | {kind: 'ball'; at: number; x: number; y: number; size?: number} // football bounces in from the right
   | {kind: 'rain'; at?: number; count?: number} // gold Coptic letters fall and bounce off the brothers' heads
   | {kind: 'shake'; at: number}
-  | {kind: 'arrow'; at: number; x: number; y: number; dir: 'left' | 'right'};
+  | {kind: 'arrow'; at: number; x: number; y: number; dir: 'left' | 'right'}
+  // a Coptic letter on little legs running along a path (keyframes: reach x,y at `at`); hop = arcs between points
+  | {kind: 'runner'; k: string; size?: number; path: {at: number; x: number; y: number; hop?: number}[]}
+  // little living statues (cat, jar, bust, ankh) tiptoeing and searching; from `chaseAt` they run off to `chase`
+  | {kind: 'statues'; at?: number; y?: number; chaseAt?: number; chase?: 'left' | 'right'; passAt?: number; layer?: 'back' | 'front'} // passAt: run across the screen (towards `chase`) in a line
+  | {kind: 'dizzy'; at: number; x: number; y: number; until?: number} // stars spinning around a head after a bonk
+  | {kind: 'pant'; at: number; x: number; y: number; until?: number; dir?: 'left' | 'right'} // breath puffs + sweat drops (out of breath)
+  | {kind: 'compare'; at: number; k: string; latin: string; y?: number} // Coptic letter ≈ Latin letter
+  | {kind: 'confetti'; at: number; count?: number};
 
 export type SceneSpec = {
   id: string;
@@ -78,6 +89,7 @@ export type SceneSpec = {
   sfx?: {id: string; at: number; volume?: number}[]; // extra sounds, seconds from scene start
   hold?: number; // extra seconds after the line
   props?: PropSpec[];
+  backdrop?: string; // id of a social image (social/assets/manifest.json "images") drawn behind everything, with parallax
   // Camera moves (scene seconds): the world (characters + props) pans/zooms,
   // the background follows with parallax. x/y = camera offset in px.
   camera?: {at: number; x?: number; y?: number; zoom?: number; rot?: number; dur?: number}[];

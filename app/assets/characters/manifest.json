@@ -182,6 +182,55 @@
           502,
           66
         ]
+      },
+      "sit": {
+        "file": "nono/sit.png",
+        "small": "nono/small/sit.png",
+        "width": 333,
+        "height": 787,
+        "source": "Nono Basket.webp",
+        "head_center": [
+          168,
+          133
+        ],
+        "seat": [
+          80,
+          561
+        ]
+      },
+      "toss": {
+        "file": "nono/toss.png",
+        "small": "nono/small/toss.png",
+        "width": 385,
+        "height": 764,
+        "source": "Nono Basket.webp",
+        "head_center": [
+          178,
+          124
+        ],
+        "hand": [
+          343,
+          515
+        ],
+        "seat": [
+          60,
+          540
+        ]
+      },
+      "carry": {
+        "file": "nono/carry.png",
+        "small": "nono/small/carry.png",
+        "width": 433,
+        "height": 917,
+        "source": "Nono Basket.webp",
+        "head_center": [
+          167,
+          138
+        ],
+        "hand": [
+          321,
+          511
+        ]
       }
     },
     "fofo": {
@@ -360,6 +409,55 @@
         "hand": [
           354,
           51
+        ]
+      },
+      "sit": {
+        "file": "fofo/sit.png",
+        "small": "fofo/small/sit.png",
+        "width": 365,
+        "height": 585,
+        "source": "Fofo Basket.webp",
+        "head_center": [
+          152,
+          133
+        ],
+        "seat": [
+          131,
+          457
+        ]
+      },
+      "toss": {
+        "file": "fofo/toss.png",
+        "small": "fofo/small/toss.png",
+        "width": 346,
+        "height": 566,
+        "source": "Fofo Basket.webp",
+        "head_center": [
+          147,
+          107
+        ],
+        "hand": [
+          320,
+          366
+        ],
+        "seat": [
+          111,
+          436
+        ]
+      },
+      "carry": {
+        "file": "fofo/carry.png",
+        "small": "fofo/small/carry.png",
+        "width": 372,
+        "height": 685,
+        "source": "Fofo Basket.webp",
+        "head_center": [
+          149,
+          123
+        ],
+        "hand": [
+          272,
+          391
         ]
       }
     }

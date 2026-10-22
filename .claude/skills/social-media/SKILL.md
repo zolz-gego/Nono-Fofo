@@ -140,8 +140,15 @@ Whenever a new resource is created or added for the social videos, put it in
   assets into `social/assets`.
 - New reusable motion (a sticker, a transition, a new background pattern) goes
   in `social/remotion/src/components/` and gets a line in the README. Story
-  props (golden book, Egypt map, letter card, slots, speed lines, shake, arrow)
-  already exist in `Props.tsx`: use them through `props` in `video.json`.
+  props (golden book, Egypt map, letter card, slots, speed lines, shake, arrow,
+  running letter, little statues, dizzy stars, panting, letter ≈ Latin
+  comparison, confetti) already exist in `Props.tsx`: use them through `props`
+  in `video.json`.
+- **Guest characters** (e.g. Ramses): cut-out PNG poses in `social/assets/images/`,
+  registered under `characters` in `social/assets/manifest.json`, a voice in
+  `social/voices.md`, and a row in the README catalog. Missing poses render as a
+  placeholder so drafts work before the art arrives. Image prompts for a video go
+  in its folder (`images.md`), in the brothers' style.
 
 ## Remotion notes
 
