@@ -12,7 +12,7 @@ import '../game/magic_basket_layout.dart';
 import 'magic_basket_cubit.dart';
 
 /// The card at the top: [label] + the letter (capital and small) and its
-/// name, one chip per sound of the letter (ticked once caught), and one
+/// name, one chip per sound of the letter (a "?" until caught), and one
 /// apple slot per apple to win. Positions come from [layout].
 class MagicBasketHud extends StatelessWidget {
   const MagicBasketHud({
@@ -132,7 +132,8 @@ class MagicBasketHud extends StatelessWidget {
   }
 }
 
-/// One sound of the letter: grey until an apple with it is caught.
+/// One sound of the letter: a grey "?" until an apple with it is caught,
+/// then the sound itself.
 class _SoundChip extends StatelessWidget {
   const _SoundChip({
     required this.sound,
@@ -178,7 +179,15 @@ class _SoundChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(sound, style: style),
+          // Hidden until caught: the card must not give the answer away.
+          if (caught)
+            Text(sound, style: style)
+          else
+            FaIcon(
+              AppIcons.hiddenSound,
+              size: size * 0.42,
+              color: AppColors.outline,
+            ),
           if (caught) ...[
             SizedBox(width: size * 0.15),
             FaIcon(AppIcons.check, size: size * 0.42, color: AppColors.white),

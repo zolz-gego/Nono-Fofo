@@ -800,13 +800,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String magicBasketMissed(String sound) {
-    return 'The $sound apple fell! Catch it next time';
-  }
+  String get magicBasketMissed => 'A right apple fell! Catch it next time';
 
   @override
-  String magicBasketHaveIt(String sound, String missing) {
-    return 'We\'ve got $sound, now find $missing!';
+  String magicBasketHaveIt(String sound) {
+    return 'We\'ve got $sound, find another sound!';
   }
 
   @override

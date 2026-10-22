@@ -847,13 +847,11 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String magicBasketMissed(String sound) {
-    return 'تفاحة $sound وقعت! امسكها المرة الجاية';
-  }
+  String get magicBasketMissed => 'تفاحة صح وقعت! امسكها المرة الجاية';
 
   @override
-  String magicBasketHaveIt(String sound, String missing) {
-    return 'معانا $sound خلاص، هات $missing!';
+  String magicBasketHaveIt(String sound) {
+    return 'معانا $sound خلاص، دوّر على صوت تاني!';
   }
 
   @override

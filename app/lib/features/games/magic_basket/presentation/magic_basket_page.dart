@@ -213,12 +213,8 @@ class _MagicBasketPageState extends State<MagicBasketPage> {
         _say(_mixed(_cheer(l10n)));
       case BasketEvent.notNeeded:
         _say(
-          _mixed(
-            l10n.magicBasketHaveIt(
-              state.sound ?? '',
-              round.stillMissing.join(_language == 'ar' ? '، ' : ', '),
-            ),
-          ),
+          // Never name the missing sound: that's the answer.
+          _mixed(l10n.magicBasketHaveIt(state.sound ?? '')),
           duration: const Duration(milliseconds: 2800),
         );
       case BasketEvent.wrong:
@@ -238,7 +234,7 @@ class _MagicBasketPageState extends State<MagicBasketPage> {
         }
         _lastMissedLine = now;
         _thrower.react(CharacterReaction.surprised, withSound: false);
-        _say(_mixed(l10n.magicBasketMissed(state.sound ?? '')));
+        _say(_mixed(l10n.magicBasketMissed));
       case BasketEvent.finished:
         _game?.celebrate();
         _thrower

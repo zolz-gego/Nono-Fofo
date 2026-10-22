@@ -75,4 +75,5 @@ abstract final class AppIcons {
 
   // Magic basket
   static const FaIconData apple = FontAwesomeIcons.appleWhole;
+  static const FaIconData hiddenSound = FontAwesomeIcons.question;
 }

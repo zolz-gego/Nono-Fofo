@@ -237,8 +237,8 @@
   "magicBasketSounds": "Sounds of",
   "magicBasketQuestion": "How does {letter} ({name}) sound? Catch all its sounds in the basket!",
   "magicBasketWrong": "No! {target} doesn't sound like {caught}",
-  "magicBasketMissed": "The {sound} apple fell! Catch it next time",
-  "magicBasketHaveIt": "We've got {sound}, now find {missing}!",
+  "magicBasketMissed": "A right apple fell! Catch it next time",
+  "magicBasketHaveIt": "We've got {sound}, find another sound!",
   "magicBasketHowTo": "Move the basket with the mouse or the arrow keys",
   "magicBasketHowToTouch": "Drag your finger to move the basket"
 }

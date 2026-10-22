@@ -672,22 +672,12 @@
       }
     }
   },
-  "magicBasketMissed": "تفاحة {sound} وقعت! امسكها المرة الجاية",
-  "@magicBasketMissed": {
-    "placeholders": {
-      "sound": {
-        "type": "String"
-      }
-    }
-  },
-  "magicBasketHaveIt": "معانا {sound} خلاص، هات {missing}!",
+  "magicBasketMissed": "تفاحة صح وقعت! امسكها المرة الجاية",
+  "magicBasketHaveIt": "معانا {sound} خلاص، دوّر على صوت تاني!",
   "@magicBasketHaveIt": {
-    "description": "A right sound caught again when only the missing sounds fit.",
+    "description": "A right sound caught again when only the missing sounds fit. Never name the missing sound (that's the answer).",
     "placeholders": {
       "sound": {
-        "type": "String"
-      },
-      "missing": {
         "type": "String"
       }
     }

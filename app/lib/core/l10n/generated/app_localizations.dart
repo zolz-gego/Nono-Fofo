@@ -1439,14 +1439,14 @@ abstract class AppLocalizations {
   /// No description provided for @magicBasketMissed.
   ///
   /// In ar, this message translates to:
-  /// **'تفاحة {sound} وقعت! امسكها المرة الجاية'**
-  String magicBasketMissed(String sound);
+  /// **'تفاحة صح وقعت! امسكها المرة الجاية'**
+  String get magicBasketMissed;
 
-  /// A right sound caught again when only the missing sounds fit.
+  /// A right sound caught again when only the missing sounds fit. Never name the missing sound (that's the answer).
   ///
   /// In ar, this message translates to:
-  /// **'معانا {sound} خلاص، هات {missing}!'**
-  String magicBasketHaveIt(String sound, String missing);
+  /// **'معانا {sound} خلاص، دوّر على صوت تاني!'**
+  String magicBasketHaveIt(String sound);
 
   /// No description provided for @magicBasketHowTo.
   ///
