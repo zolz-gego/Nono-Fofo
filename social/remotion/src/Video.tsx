@@ -46,7 +46,7 @@ const Story: React.FC<{spec: VideoSpec; timing: Timing}> = ({spec, timing}) => {
         const last = i === spec.scenes.length - 1 && !spec.endCard;
         return (
           <Sequence key={scene.id} from={t.from} durationInFrames={t.duration + (last ? 0 : WIPE)} name={scene.id}>
-            <Scene scene={scene} index={i} voiceFrom={t.voiceFrom} voiceFrames={t.voiceFrames} />
+            <Scene scene={scene} index={i} voiceFrom={t.voiceFrom} voiceFrames={t.voiceFrames} captionSize={spec.captionSize} />
           </Sequence>
         );
       })}

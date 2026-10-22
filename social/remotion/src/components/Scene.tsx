@@ -36,7 +36,7 @@ export function cameraAt(cam: SceneSpec['camera'], sec: number) {
   return c;
 }
 
-export const Scene: React.FC<{scene: SceneSpec; index: number; voiceFrom: number; voiceFrames: number}> = ({scene, index, voiceFrom, voiceFrames}) => {
+export const Scene: React.FC<{scene: SceneSpec; index: number; voiceFrom: number; voiceFrames: number; captionSize?: 'normal' | 'large'}> = ({scene, index, voiceFrom, voiceFrames, captionSize}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const sec = (s: number) => Math.round(s * fps);
@@ -88,7 +88,7 @@ export const Scene: React.FC<{scene: SceneSpec; index: number; voiceFrom: number
       {(scene.keywords ?? []).map((kw, i) => (
         <KeywordCard key={i} kw={kw} index={i} count={scene.keywords!.length} startFrame={voiceFrom + sec(kw.at)} />
       ))}
-      {line && <Captions line={line} voiceFrom={voiceFrom} voiceFrames={voiceFrames} />}
+      {line && <Captions line={line} voiceFrom={voiceFrom} voiceFrames={voiceFrames} size={captionSize} />}
 
       {line?.voice && (
         <Sequence from={voiceFrom} layout="none">

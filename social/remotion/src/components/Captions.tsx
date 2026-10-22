@@ -18,7 +18,8 @@ function wordStarts(line: Line, words: string[], voiceSec: number): number[] {
 }
 
 // Arabic line (word by word) with the English subtitle under it.
-export const Captions: React.FC<{line: Line; voiceFrom: number; voiceFrames: number}> = ({line, voiceFrom, voiceFrames}) => {
+export const Captions: React.FC<{line: Line; voiceFrom: number; voiceFrames: number; size?: 'normal' | 'large'}> = ({line, voiceFrom, voiceFrames, size = 'normal'}) => {
+  const big = size === 'large';
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const t = (frame - voiceFrom) / fps;
@@ -39,7 +40,7 @@ export const Captions: React.FC<{line: Line; voiceFrom: number; voiceFrames: num
         left: SAFE.left,
         width: SAFE.right - SAFE.left,
         bottom: H - CAPTION_BOTTOM, // anchored at the bottom so long lines grow upwards
-        padding: '16px 28px 18px',
+        padding: big ? '22px 34px 26px' : '16px 28px 18px',
         borderRadius: 44,
         background: `color-mix(in srgb, ${color('deepTeal')} 88%, transparent)`,
         border: `6px solid ${color('cream')}`,
@@ -49,7 +50,7 @@ export const Captions: React.FC<{line: Line; voiceFrom: number; voiceFrames: num
         opacity: inP,
       }}
     >
-      <div dir="rtl" style={{fontFamily: FONT_AR, fontWeight: 800, fontSize: 62, lineHeight: 1.22, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0 18px'}}>
+      <div dir="rtl" style={{fontFamily: FONT_AR, fontWeight: 800, fontSize: big ? 76 : 62, lineHeight: big ? 1.25 : 1.22, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0 18px'}}>
         {words.map((w, i) => {
           if (i < first || i >= end) return null;
           const on = i === current;
@@ -70,7 +71,7 @@ export const Captions: React.FC<{line: Line; voiceFrom: number; voiceFrames: num
           );
         })}
       </div>
-      <div style={{fontFamily: FONT_EN, fontWeight: 700, fontSize: 40, lineHeight: 1.15, color: color('mistBlue'), marginTop: 4}}>{chunks[ci].en}</div>
+      <div style={{fontFamily: FONT_EN, fontWeight: 700, fontSize: big ? 50 : 40, lineHeight: 1.15, color: color('mistBlue'), marginTop: big ? 6 : 4}}>{chunks[ci].en}</div>
     </div>
   );
 };

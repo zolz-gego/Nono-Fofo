@@ -209,6 +209,9 @@ same shout as the stitch intro when `media/voice/shout.mp3` exists. Timeline:
 starts with its own music. The intros are listed in `src/intro/Intros.ts` (local
 only); without that folder the field is ignored.
 
+**Caption size.** Captions are 62/40 px by default; `"captionSize": "large"` in
+`video.json` keeps the bigger 76/50 px captions (video 003 was approved with them).
+
 ## Videos
 
 Videos are local only: `videos/`, `previews/` and `out/` are git-ignored. Git holds
