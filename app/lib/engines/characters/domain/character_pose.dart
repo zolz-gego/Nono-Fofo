@@ -19,6 +19,7 @@ class CharacterPose extends Equatable {
     required this.headCenter,
     this.rodTip,
     this.hand,
+    this.seat,
   });
 
   final CharacterId character;
@@ -35,6 +36,17 @@ class CharacterPose extends Equatable {
   /// Raised fist that holds balloon strings, for poses that have one (in
   /// manifest px).
   final Offset? hand;
+
+  /// Where a sitting pose sits (under the shorts), so a game can put it on
+  /// a branch (in manifest px).
+  final Offset? seat;
+
+  /// [point] of this pose relative to the feet (the spot every pose is
+  /// anchored at: the head's x, the bottom of the picture), at scale [k].
+  Offset fromFeet(Offset point, double k, {bool mirror = false}) {
+    final x = (point.dx - headCenter.dx) * k;
+    return Offset(mirror ? -x : x, (point.dy - height) * k);
+  }
 
   @override
   List<Object?> get props => [character, action, asset];

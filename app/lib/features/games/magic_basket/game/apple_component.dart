@@ -6,6 +6,7 @@ import 'package:flutter/painting.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/typography/app_text_styles.dart';
+import '../../balloons/domain/balloons_config.dart';
 
 enum AppleState {
   /// Flying in an arc from the thrower's hand to its column.
@@ -30,13 +31,22 @@ class AppleComponent extends PositionComponent {
     required this.sound,
     required this.arabic,
     required double size,
+    this.picture,
+    this.letterSpot = const BalloonLetterSpot(ui.Offset(0.5, 0.59), 0.58),
   }) : _spin = (Random().nextDouble() - 0.5) * 0.6,
-       super(size: Vector2.all(size), anchor: Anchor.center, priority: 16);
+       super(size: Vector2.all(size), anchor: Anchor.center, priority: 17);
 
   final String sound;
 
   /// The sound is written in Arabic (else Latin letters).
   final bool arabic;
+
+  /// The apple picture (with an empty cream circle), or null to draw one in
+  /// code.
+  final ui.Image? picture;
+
+  /// Where the sound goes on [picture].
+  final BalloonLetterSpot letterSpot;
   final double _spin;
 
   AppleState state = AppleState.thrown;
@@ -60,7 +70,17 @@ class AppleComponent extends PositionComponent {
                   ? AppTextStyles.arabic(AppTextVariant.h1)
                   : AppTextStyles.english(AppTextVariant.h1))
               .copyWith(
-                fontSize: size.x * (sound.length > 1 ? 0.3 : 0.38),
+                fontSize: switch (picture) {
+                  // The picture fills the height; the spot is sized from
+                  // its width.
+                  final p? =>
+                    size.y *
+                        p.width /
+                        p.height *
+                        letterSpot.size *
+                        (sound.length > 1 ? 0.5 : 0.62),
+                  null => size.x * (sound.length > 1 ? 0.3 : 0.38),
+                },
                 height: 1.1,
                 color: AppColors.ink,
               ),
@@ -94,7 +114,45 @@ class AppleComponent extends PositionComponent {
       ..translate(c.dx, c.dy + r * (1 - squash))
       ..scale(2 - squash, squash)
       ..translate(-c.dx, -c.dy);
+    final picture = this.picture;
+    if (picture != null) {
+      _renderPicture(canvas, picture, w, h);
+    } else {
+      _renderDrawn(canvas, c, r, w, h);
+    }
+    if (opacity < 1) canvas.restore();
+    canvas.restore();
+  }
 
+  /// The picture fills the height; the sound sits on its cream circle.
+  void _renderPicture(ui.Canvas canvas, ui.Image picture, double w, double h) {
+    final pw = h * picture.width / picture.height;
+    final dst = ui.Rect.fromLTWH((w - pw) / 2, 0, pw, h);
+    canvas.drawImageRect(
+      picture,
+      ui.Rect.fromLTWH(
+        0,
+        0,
+        picture.width.toDouble(),
+        picture.height.toDouble(),
+      ),
+      dst,
+      ui.Paint()..filterQuality = ui.FilterQuality.medium,
+    );
+    final spot = ui.Offset(
+      dst.left + letterSpot.center.dx * dst.width,
+      dst.top + letterSpot.center.dy * dst.height,
+    );
+    _text.paint(canvas, spot - ui.Offset(_text.width / 2, _text.height / 2));
+  }
+
+  void _renderDrawn(
+    ui.Canvas canvas,
+    ui.Offset c,
+    double r,
+    double w,
+    double h,
+  ) {
     // Stem and leaf.
     canvas.drawLine(
       ui.Offset(w * 0.5, h * 0.2),
@@ -184,7 +242,5 @@ class AppleComponent extends PositionComponent {
       canvas,
       c + ui.Offset(-_text.width / 2, r * 0.08 - _text.height / 2),
     );
-    if (opacity < 1) canvas.restore();
-    canvas.restore();
   }
 }

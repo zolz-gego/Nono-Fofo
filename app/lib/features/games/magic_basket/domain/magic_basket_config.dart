@@ -1,4 +1,39 @@
+import 'dart:ui' show Offset;
+
+import '../../balloons/domain/balloons_config.dart';
 import '../../letter_hunt/domain/letter_hunt_rules.dart';
+
+/// Spots on the tree picture, as fractions of it (drawn as in English;
+/// Arabic mirrors it).
+class TreeMarks {
+  const TreeMarks({
+    this.seat = const Offset(0.33, 0.6),
+    this.rootY = 0.95,
+    this.dropY = 0.5,
+  });
+
+  factory TreeMarks.fromJson(Map<String, dynamic>? json) {
+    const d = TreeMarks();
+    if (json == null) return d;
+    return TreeMarks(
+      seat: Offset(
+        (json['seatX'] as num?)?.toDouble() ?? d.seat.dx,
+        (json['seatY'] as num?)?.toDouble() ?? d.seat.dy,
+      ),
+      rootY: (json['rootY'] as num?)?.toDouble() ?? d.rootY,
+      dropY: (json['dropY'] as num?)?.toDouble() ?? d.dropY,
+    );
+  }
+
+  /// Where the brother sits on the branch.
+  final Offset seat;
+
+  /// The line of the roots, which stands on the path.
+  final double rootY;
+
+  /// Where apples come out of the leaves.
+  final double dropY;
+}
 
 /// Settings from `assets/content/games/magic_basket.json`. Defaults here
 /// are only used for keys missing from the file.
@@ -14,6 +49,12 @@ class MagicBasketConfig {
     this.twoStarsMaxMistakes = 2,
     this.background,
     this.feetY = 0.9,
+    this.treeImage,
+    this.treeMarks = const TreeMarks(),
+    this.appleImage,
+    this.appleLetterSpot = const BalloonLetterSpot(Offset(0.5, 0.59), 0.58),
+    this.basketImage,
+    this.basketOpening = 0.27,
   });
 
   factory MagicBasketConfig.fromJson(Map<String, dynamic> json) {
@@ -39,6 +80,20 @@ class MagicBasketConfig {
           d.twoStarsMaxMistakes,
       background: json['background'] as String?,
       feetY: (marks['feetY'] as num?)?.toDouble() ?? d.feetY,
+      treeImage: json['treeImage'] as String?,
+      treeMarks: TreeMarks.fromJson(json['treeMarks'] as Map<String, dynamic>?),
+      appleImage: json['appleImage'] as String?,
+      appleLetterSpot: switch (json['appleLetterSpot']) {
+        {'x': final num x, 'y': final num y, 'size': final num size} =>
+          BalloonLetterSpot(
+            Offset(x.toDouble(), y.toDouble()),
+            size.toDouble(),
+          ),
+        _ => d.appleLetterSpot,
+      },
+      basketImage: json['basketImage'] as String?,
+      basketOpening:
+          (json['basketOpening'] as num?)?.toDouble() ?? d.basketOpening,
     );
   }
 
@@ -62,6 +117,19 @@ class MagicBasketConfig {
   /// Where the brothers' feet go in the background picture (fraction of
   /// its height).
   final double feetY;
+
+  /// Pictures (drawn in code while null or missing).
+  final String? treeImage;
+  final TreeMarks treeMarks;
+  final String? appleImage;
+
+  /// Where the sound goes on the apple picture.
+  final BalloonLetterSpot appleLetterSpot;
+  final String? basketImage;
+
+  /// The line across the middle of the basket's opening (fraction of the
+  /// basket picture's height).
+  final double basketOpening;
 
   int starsFor(int mistakes) => starsForMistakes(
     mistakes,

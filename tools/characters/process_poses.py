@@ -30,6 +30,7 @@ SOURCES = {
         "read": "Nono Read.jpeg", "sleep": "Nono Sleep.jpeg", "surprised": "Nono surprised.jpeg",
         "fish": "Nono Fishing.webp", "reel": "Nono Fishing.webp",
         "jump": "Balloons Poses.webp",
+        "sit": "Nono Basket.webp", "toss": "Nono Basket.webp", "carry": "Nono Basket.webp",
     },
     "fofo": {
         "idle": "Fofo idle.jpeg", "cheer": "Fofo Cheer.jpeg", "wrong": "Fofo oops.jpeg",
@@ -38,6 +39,7 @@ SOURCES = {
         "read": "Fofo Read.jpeg", "sleep": "Fofo Sleep.jpeg", "surprised": "Fofo Surprised.jpeg",
         "fish": "Fofo Fishing.webp", "reel": "Fofo Fishing.webp",
         "hold": "Balloons Poses.webp",
+        "sit": "Fofo Basket.webp", "toss": "Fofo Basket.webp", "carry": "Fofo Basket.webp",
     },
 }
 
@@ -56,11 +58,27 @@ PICK = {
     ("fofo", "fish"): (150, 560), ("fofo", "reel"): (690, 600),
     # balloons sheet: Nono jumping (left), Fofo holding strings (right)
     ("nono", "jump"): (455, 330), ("fofo", "hold"): (850, 400),
+    # Magic basket sheets: sit, toss, carry from left to right
+    ("nono", "sit"): (240, 330), ("nono", "toss"): (600, 330), ("nono", "carry"): (1010, 330),
+    ("fofo", "sit"): (250, 380), ("fofo", "toss"): (600, 380), ("fofo", "carry"): (1010, 380),
 }
 
 # Poses with a raised fist that holds balloon strings: the manifest gets the
 # fist, where the game ties the strings. (x, y) in source pixels.
-HAND = {("nono", "jump"): (598, 48), ("fofo", "hold"): (953, 172)}
+HAND = {
+    ("nono", "jump"): (598, 48), ("fofo", "hold"): (953, 172),
+    # Magic basket: the tossing hand (where an apple leaves) and the middle
+    # of the hands that carry the basket.
+    ("nono", "toss"): (775, 445), ("fofo", "toss"): (770, 420),
+    ("nono", "carry"): (1110, 400), ("fofo", "carry"): (1100, 410),
+}
+
+# Sitting poses: the manifest gets the seat (under the shorts), which the
+# game puts on the branch. (x, y) in source pixels.
+SEAT = {
+    ("nono", "sit"): (200, 465), ("nono", "toss"): (545, 465),
+    ("fofo", "sit"): (230, 485), ("fofo", "toss"): (575, 485),
+}
 
 # Poses drawn with other proportions than the main set: sized by height
 # (hair top to feet, like idle) instead of head width.
@@ -323,11 +341,12 @@ def main():
                 tx, ty = rod_tip(rgba)
                 manifest["characters"][name][pose]["rod_tip"] = [
                     round((tx - box[0]) * scale), round((ty - box[1]) * scale)]
-            if (name, pose) in HAND:
-                hx, hy = HAND[(name, pose)]
-                hx, hy = hx - 3, hy - 3  # fix_source trims 3 px
-                manifest["characters"][name][pose]["hand"] = [
-                    round((hx - box[0]) * scale), round((hy - box[1]) * scale)]
+            for key, points in (("hand", HAND), ("seat", SEAT)):
+                if (name, pose) in points:
+                    hx, hy = points[(name, pose)]
+                    hx, hy = hx - 3, hy - 3  # fix_source trims 3 px
+                    manifest["characters"][name][pose][key] = [
+                        round((hx - box[0]) * scale), round((hy - box[1]) * scale)]
             print(f"{name:5} {pose:10} {full.width}x{full.height}  head {hx1 - hx0}px -> x{scale:.2f}")
     with open(os.path.join(OUT, "manifest.json"), "w") as fh:
         json.dump(manifest, fh, indent=2)

@@ -54,27 +54,73 @@ class MagicBasketGame extends VillageGame {
   static final Images _images = Images(prefix: '');
 
   @override
-  late MagicBasketLayout layout = _layoutFor(const ui.Size(800, 600));
+  late MagicBasketLayout layout = layoutFor(const ui.Size(800, 600));
 
   /// Set by the page from the UI language: the thrower sits on the start
   /// side and the slots fill from the right in Arabic.
   bool rtl = false;
 
-  /// The background picture once loaded (the layout lines up with it).
+  /// The background and tree pictures once loaded (the layout lines up
+  /// with them).
   VillageArt? art;
+  TreeArt? tree;
 
-  MagicBasketLayout _layoutFor(ui.Size size) => MagicBasketLayout(
+  /// Pictures for the tree, the apples and the basket (null = drawn in
+  /// code).
+  ui.Image? treePicture;
+  ui.Image? applePicture;
+  ui.Image? basketPicture;
+
+  /// Where the scene's parts go for [size] (the page uses it too, so the
+  /// card and the brother in the tree line up with the game).
+  MagicBasketLayout layoutFor(ui.Size size) => MagicBasketLayout(
     size,
     goal: cubit.round.goal,
     soundCount: cubit.round.sounds.length,
     rtl: rtl,
     art: art,
+    tree: tree,
+    throwerSeat: _throwerPoint(CharacterAction.sit, (p) => p.seat),
+    throwerToss: _throwerPoint(CharacterAction.toss, (p) => p.hand),
   );
+
+  /// A point of the thrower's [action] pose, relative to his feet, in units
+  /// of his size.
+  ui.Offset? _throwerPoint(
+    CharacterAction action,
+    ui.Offset? Function(CharacterPose pose) point,
+  ) {
+    final pose = roster.pose(hero.other, action);
+    final p = pose == null || pose.action != action ? null : point(pose);
+    if (p == null) return null;
+    return pose!.fromFeet(p, 1 / roster.referenceHeight);
+  }
+
+  /// How high the hands carrying the basket are above the buddy's feet, in
+  /// units of his size (null without a "carry" pose).
+  late final double? _carryLift = () {
+    final pose = roster.pose(hero, CharacterAction.carry);
+    final hand = pose?.hand;
+    if (pose == null || hand == null || pose.action != CharacterAction.carry) {
+      return null;
+    }
+    return -pose.fromFeet(hand, 1 / roster.referenceHeight).dy;
+  }();
 
   MagicBasketConfig get config => cubit.round.config;
 
   late final CharacterComponent _hero;
-  final BasketComponent _basket = BasketComponent();
+  late final BasketComponent _basket = BasketComponent(
+    picture: basketPicture,
+    opening: config.basketOpening,
+  );
+
+  /// The basket's front, drawn again over the apples in it.
+  late final BasketComponent _basketFront = BasketComponent(
+    picture: basketPicture,
+    opening: config.basketOpening,
+    frontOnly: true,
+  );
 
   /// Apples in the air (thrown or falling).
   final List<_Flight> _flying = [];
@@ -105,14 +151,30 @@ class MagicBasketGame extends VillageGame {
 
   @override
   Future<void> onLoad() async {
-    final picture = await _tryLoad(config.background);
+    // Load everything at once; one by one the scene stays empty for seconds.
+    final loaded = await Future.wait([
+      _tryLoad(config.background),
+      _tryLoad(config.treeImage),
+      _tryLoad(config.appleImage),
+      _tryLoad(config.basketImage),
+    ]);
+    final picture = loaded[0];
     if (picture != null) {
       art = VillageArt(
         ui.Size(picture.width.toDouble(), picture.height.toDouble()),
         config.feetY,
       );
-      layout = _layoutFor(layout.size);
     }
+    treePicture = loaded[1];
+    applePicture = loaded[2];
+    basketPicture = loaded[3];
+    if (treePicture case final t?) {
+      tree = TreeArt(
+        ui.Size(t.width.toDouble(), t.height.toDouble()),
+        config.treeMarks,
+      );
+    }
+    layout = layoutFor(layout.size);
     _hero = CharacterComponent(
       character: hero,
       roster: roster,
@@ -124,6 +186,7 @@ class MagicBasketGame extends VillageGame {
       AppleTree(),
       _hero,
       _basket,
+      _basketFront,
     ]);
     _loaded = true;
     _place();
@@ -148,7 +211,7 @@ class MagicBasketGame extends VillageGame {
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
     final oldWidth = layout.width;
-    layout = _layoutFor(ui.Size(size.x, size.y));
+    layout = layoutFor(ui.Size(size.x, size.y));
     if (!_loaded) return;
     _heroX = (_heroX / oldWidth * layout.width).clamp(
       layout.heroMinX,
@@ -176,19 +239,36 @@ class MagicBasketGame extends VillageGame {
 
   double get _heroHeight => _hero.size.y * _hero.scale.y;
 
-  /// The basket's rim: at the buddy's waist (Fofo is shorter than Nono).
-  ui.Offset get _rim => ui.Offset(
-    _heroX,
-    layout.groundY -
-        (_heroHeight > 0 ? _heroHeight * 0.4 : layout.characterSize * 0.4),
-  );
+  /// The middle of the basket's opening: at the hands of his "carry" pose,
+  /// else at his waist (Fofo is shorter than Nono).
+  double get _basketHeight {
+    final p = basketPicture;
+    return p == null
+        ? layout.basketHeight
+        : layout.basketWidth * p.height / p.width;
+  }
+
+  ui.Offset get _rim {
+    final lift = _carryLift;
+    return ui.Offset(
+      _heroX,
+      layout.groundY -
+          (lift != null
+              ? lift * layout.characterSize
+              : _heroHeight > 0
+              ? _heroHeight * 0.4
+              : layout.characterSize * 0.4),
+    );
+  }
 
   void _placeHero() {
     final l = layout;
     _hero.position = Vector2(_heroX, l.groundY);
-    _basket
-      ..size = Vector2(l.basketWidth, l.basketHeight)
-      ..position = Vector2(_rim.dx, _rim.dy);
+    for (final b in [_basket, _basketFront]) {
+      b
+        ..size = Vector2(l.basketWidth, _basketHeight)
+        ..position = Vector2(_rim.dx, _rim.dy);
+    }
     for (final (i, a) in _inBasket.indexed) {
       final p = _basketSpot(i);
       a.position = Vector2(p.dx, p.dy);
@@ -334,6 +414,8 @@ class MagicBasketGame extends VillageGame {
       sound: picked,
       arabic: arabic,
       size: l.appleSize,
+      picture: applePicture,
+      letterSpot: config.appleLetterSpot,
     );
     _flying.add(_Flight(this, apple, l.columnX(column)));
     add(apple);

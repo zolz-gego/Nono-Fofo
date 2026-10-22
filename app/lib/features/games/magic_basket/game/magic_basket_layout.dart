@@ -5,6 +5,15 @@ import '../../balloons/game/balloons_layout.dart';
 import '../../balloons/game/village_background.dart';
 import '../../letter_hunt/game/target_card_layout.dart';
 import '../../shell/presentation/game_scaffold.dart';
+import '../domain/magic_basket_config.dart';
+
+/// The tree picture's size and its marked spots.
+class TreeArt {
+  const TreeArt(this.imageSize, this.marks);
+
+  final Size imageSize;
+  final TreeMarks marks;
+}
 
 /// Where everything sits in the Magic basket scene, from the scene size (and
 /// the village picture, when there is one). Both the Flame game and the
@@ -21,6 +30,9 @@ class MagicBasketLayout with TargetCardLayout implements VillageFrame {
     required this.soundCount,
     this.rtl = false,
     this.art,
+    this.tree,
+    this.throwerSeat,
+    this.throwerToss,
   }) {
     _fitArt();
   }
@@ -38,6 +50,14 @@ class MagicBasketLayout with TargetCardLayout implements VillageFrame {
   final bool rtl;
 
   final VillageArt? art;
+
+  /// The tree picture, or null while the tree is drawn in code.
+  final TreeArt? tree;
+
+  /// The thrower's seat and his tossing hand, relative to his feet, in units
+  /// of [throwerSize], facing right (null when his poses have none).
+  final Offset? throwerSeat;
+  final Offset? throwerToss;
 
   @override
   double get slotMaxSize => appleSize * 0.5;
@@ -86,7 +106,27 @@ class MagicBasketLayout with TargetCardLayout implements VillageFrame {
   // The tree
   // ---------------------------------------------------------------------------
 
-  /// The canopy: a wide crown over the whole play area.
+  /// Where the tree picture is drawn: as wide as the scene, its roots on
+  /// the path.
+  Rect? get treeRect {
+    final tree = this.tree;
+    if (tree == null) return null;
+    final w = width * 1.04;
+    final h = w * tree.imageSize.height / tree.imageSize.width;
+    return Rect.fromLTWH((width - w) / 2, groundY - tree.marks.rootY * h, w, h);
+  }
+
+  /// A point of the tree picture (fractions, as drawn in English) on
+  /// screen; mirrored in Arabic.
+  Offset _onTree(Offset f) {
+    final r = treeRect!;
+    return Offset(
+      r.left + (rtl ? 1 - f.dx : f.dx) * r.width,
+      r.top + f.dy * r.height,
+    );
+  }
+
+  /// The canopy of the code-drawn tree: a wide crown over the play area.
   Rect get canopy {
     final top = max(cardTop, height * 0.02);
     final bottom = max(height * 0.42, cardBottom + appleSize * 0.6);
@@ -103,12 +143,15 @@ class MagicBasketLayout with TargetCardLayout implements VillageFrame {
   /// Nono's standing height (the `size` given to the character widgets).
   double get characterSize => (height * 0.25).clamp(100.0, 200.0);
 
-  /// The brother in the tree is a little smaller (he's further back).
-  double get throwerSize => characterSize * 0.82;
+  /// The brother in the tree: as big as the buddy on the tree picture (he
+  /// sits on a big branch), a little smaller on the code-drawn one.
+  double get throwerSize => characterSize * (tree == null ? 0.82 : 1);
 
-  /// Feet of the brother sitting in the tree, on the start side, clear of
-  /// the settings button and of the card.
-  Offset get throwerFeet {
+  /// Where the brother in the tree sits: on the picture's branch, or on
+  /// the code-drawn branch at the start side, clear of the settings button
+  /// and of the card.
+  Offset get seatPoint {
+    if (tree != null) return _onTree(tree!.marks.seat);
     final margin = max(width * 0.1, throwerSize * 0.45) + 8;
     final x = rtl ? width - margin : margin;
     final y = max(
@@ -118,14 +161,29 @@ class MagicBasketLayout with TargetCardLayout implements VillageFrame {
     return Offset(x, min(y, canopy.bottom));
   }
 
-  /// Where an apple leaves his hand.
-  Offset get throwerHand =>
-      throwerFeet +
-      Offset((rtl ? -1 : 1) * throwerSize * 0.25, -throwerSize * 0.55);
+  /// His seat or tossing hand on screen, from his feet (he faces the middle:
+  /// mirrored in Arabic).
+  Offset _fromThrowerFeet(Offset units) =>
+      Offset(rtl ? -units.dx : units.dx, units.dy) * throwerSize;
 
-  /// The branch he sits on, from his side toward the trunk.
+  /// Feet of the brother in the tree (his poses are anchored there).
+  Offset get throwerFeet {
+    final seat = throwerSeat;
+    if (seat == null) return seatPoint;
+    return seatPoint - _fromThrowerFeet(seat);
+  }
+
+  /// Where an apple leaves his hand.
+  Offset get throwerHand {
+    final toss = throwerToss;
+    if (toss != null) return throwerFeet + _fromThrowerFeet(toss);
+    return throwerFeet +
+        Offset((rtl ? -1 : 1) * throwerSize * 0.25, -throwerSize * 0.55);
+  }
+
+  /// The code-drawn branch he sits on.
   (Offset, Offset) get branch {
-    final feet = throwerFeet;
+    final feet = seatPoint;
     final y = feet.dy + throwerSize * 0.02;
     final reach = throwerSize * 0.9;
     return (Offset(feet.dx - reach, y), Offset(feet.dx + reach, y));
@@ -138,7 +196,7 @@ class MagicBasketLayout with TargetCardLayout implements VillageFrame {
   // Basket
   // ---------------------------------------------------------------------------
 
-  double get basketWidth => characterSize * 0.66;
+  double get basketWidth => characterSize * 0.58;
   double get basketHeight => basketWidth * 0.5;
 
   double get heroMinX => basketWidth / 2 + 8;
@@ -162,8 +220,12 @@ class MagicBasketLayout with TargetCardLayout implements VillageFrame {
     return columnsLeft + (columnsRight - columnsLeft) * column / (n - 1);
   }
 
-  /// Where a thrown apple starts falling: just under the leaves.
-  double get dropY => canopy.bottom - appleSize * 0.35;
+  /// Where a thrown apple starts falling: out of the leaves.
+  double get dropY {
+    final r = treeRect;
+    if (r != null) return r.top + tree!.marks.dropY * r.height;
+    return canopy.bottom - appleSize * 0.35;
+  }
 
   /// An apple that reaches this line has hit the ground.
   double get floorY => groundY - appleSize * 0.15;

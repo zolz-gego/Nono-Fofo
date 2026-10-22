@@ -414,20 +414,19 @@ and *jump* poses would make the running look smoother.
 
 ## Magic basket art (السلة السحرية), Level 2, for ElevenLabs
 
-The game reuses the balloons village background and draws the tree, the
-apples and the basket in code for now. Generate these when you want the real
-art, save them as below, and ask Claude to wire them in (cut-outs and the
-spot where the sound is written still need a small script, like the balloons).
-Attach `design/reference/nono-fofo-approved.webp` when the model accepts a
-reference image.
+The game reuses the balloons village background. The pictures below are in
+the game (generated 2026-10-22); to swap one, save the new original under the
+same name and run the script. Until a file is there the game draws that part
+in code. Attach `design/reference/nono-fofo-approved.webp` when the model
+accepts a reference image.
 
-| What | Save the original as |
-|---|---|
-| Road card | `design/reference/magic_basket/icon.webp` |
-| Apple tree (cut-out) | `design/reference/magic_basket/tree.webp` |
-| Apple (empty label) | `design/reference/magic_basket/apple.webp` |
-| Basket | `design/reference/magic_basket/basket.webp` |
-| Nono / Fofo poses (sit, toss, carry) | `Characters/Nono Basket.webp`, `Characters/Fofo Basket.webp` |
+| What | Save the original as | Then run |
+|---|---|---|
+| Road card | `design/reference/magic_basket/icon.webp` | `tools/.venv/bin/python tools/games/process_magic_basket.py` |
+| Apple tree (cut-out) | `design/reference/magic_basket/tree.webp` | same script; if the branch moves, change `treeMarks` in `app/assets/content/games/magic_basket.json` |
+| Apple (empty label) | `design/reference/magic_basket/apple.webp` | same script; copy the `appleLetterSpot` line it prints into `magic_basket.json` |
+| Basket | `design/reference/magic_basket/basket.webp` | same script; copy the `basketOpening` line it prints into `magic_basket.json` |
+| Nono / Fofo poses (sit, toss, carry) | `Characters/Nono Basket.webp`, `Characters/Fofo Basket.webp` | `tools/.venv/bin/python tools/characters/process_poses.py` (seat and hand points are in its `SEAT` / `HAND` tables) |
 
 ### Road card: `magicBasket.png`
 
@@ -461,8 +460,6 @@ A cartoon woven wicker basket for a children's game, flat 2D vector style: thin 
 ```
 
 ### Basket poses for Nono and Fofo
-
-Not needed to play: for now the game uses idle, wave and run.
 
 ```
 Using the attached reference for the exact look, clothes and colors: [NONO / FOFO], full body, three poses side by side on one sheet, all facing RIGHT. Pose 1 "sit" (left): sitting on an invisible branch with legs dangling, hands resting on his knees, happy smile. Pose 2 "toss" (middle): sitting the same way, one arm swinging down and forward as if dropping an apple, playful grin. Pose 3 "carry" (right): standing, holding an invisible wide basket in front of his tummy with both hands, arms a little forward, ready and excited. No basket, no apples, no branch (the game draws them). Same flat 2D style, thin warm-brown outlines. Plain solid white background, no shadow, no text.

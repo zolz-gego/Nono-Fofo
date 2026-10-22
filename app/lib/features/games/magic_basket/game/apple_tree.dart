@@ -6,9 +6,9 @@ import 'package:flame/components.dart';
 import '../../../../core/theme/app_colors.dart';
 import 'magic_basket_game.dart';
 
-/// The big apple tree over the village: trunk, a wide leafy crown with a
-/// few plain apples in it, and the branch the other brother sits on. Drawn
-/// in code until the tree picture is added.
+/// The big apple tree over the village, with the branch the other brother
+/// sits on: the tree picture (mirrored in Arabic, so the branch is on the
+/// start side), or a code-drawn tree when there is none.
 class AppleTree extends Component with HasGameReference<MagicBasketGame> {
   AppleTree() : super(priority: 2);
 
@@ -42,6 +42,35 @@ class AppleTree extends Component with HasGameReference<MagicBasketGame> {
 
   @override
   void render(ui.Canvas canvas) {
+    final picture = game.treePicture;
+    final rect = game.layout.treeRect;
+    if (picture != null && rect != null) {
+      canvas.save();
+      if (game.layout.rtl) {
+        canvas
+          ..translate(rect.center.dx, 0)
+          ..scale(-1, 1)
+          ..translate(-rect.center.dx, 0);
+      }
+      canvas
+        ..drawImageRect(
+          picture,
+          ui.Rect.fromLTWH(
+            0,
+            0,
+            picture.width.toDouble(),
+            picture.height.toDouble(),
+          ),
+          rect,
+          ui.Paint()..filterQuality = ui.FilterQuality.medium,
+        )
+        ..restore();
+      return;
+    }
+    _renderDrawn(canvas);
+  }
+
+  void _renderDrawn(ui.Canvas canvas) {
     final l = game.layout;
     final crown = l.canopy;
 
@@ -143,15 +172,51 @@ class AppleTree extends Component with HasGameReference<MagicBasketGame> {
   }
 }
 
-/// The woven basket the buddy carries, drawn in front of him. Apples in it
-/// sit just behind the front so their tops show over the rim.
+/// The woven basket the buddy carries, drawn in front of him, placed by the
+/// middle of its opening. Apples in it sit on that line: a second
+/// [frontOnly] basket draws the part below it again over them, so they
+/// look inside.
 class BasketComponent extends PositionComponent {
-  BasketComponent() : super(anchor: Anchor.topCenter, priority: 18);
+  BasketComponent({this.picture, this.opening = 0, this.frontOnly = false})
+    : super(
+        anchor: Anchor(0.5, picture == null ? 0 : opening),
+        priority: frontOnly ? 18 : 16,
+      );
+
+  /// The basket picture, or null to draw one in code.
+  final ui.Image? picture;
+
+  /// The middle of the opening, as a fraction of the picture's height.
+  final double opening;
+  final bool frontOnly;
 
   @override
   void render(ui.Canvas canvas) {
     final w = size.x;
     final h = size.y;
+    final picture = this.picture;
+    if (picture != null) {
+      final src = ui.Rect.fromLTWH(
+        0,
+        0,
+        picture.width.toDouble(),
+        picture.height.toDouble(),
+      );
+      final dst = ui.Rect.fromLTWH(0, 0, w, h);
+      canvas.save();
+      if (frontOnly) canvas.clipRect(ui.Rect.fromLTRB(0, h * opening, w, h));
+      canvas
+        ..drawImageRect(
+          picture,
+          src,
+          dst,
+          ui.Paint()..filterQuality = ui.FilterQuality.medium,
+        )
+        ..restore();
+      return;
+    }
+    // The code-drawn basket has its rim at the top: all of it is the front.
+    if (!frontOnly) return;
     final body = ui.Path()
       ..moveTo(0, 0)
       ..lineTo(w, 0)

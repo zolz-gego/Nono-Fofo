@@ -318,13 +318,7 @@ class _MagicBasketPageState extends State<MagicBasketPage> {
                   final rtl = Directionality.of(context) == TextDirection.rtl;
                   game.rtl = rtl;
                   return _scene(
-                    MagicBasketLayout(
-                      constraints.biggest,
-                      goal: cubit.round.goal,
-                      soundCount: cubit.round.sounds.length,
-                      rtl: rtl,
-                      art: game.art,
-                    ),
+                    game.layoutFor(constraints.biggest),
                     game,
                     cubit,
                   );
@@ -340,10 +334,12 @@ class _MagicBasketPageState extends State<MagicBasketPage> {
     MagicBasketCubit cubit,
   ) {
     final roster = context.read<CharacterRoster>();
-    final pose = roster.pose(_throwerId, CharacterAction.sit);
+    // The character's box is idle-sized, its feet at the bottom middle;
+    // every pose is drawn from there.
+    final idle = roster.pose(_throwerId, CharacterAction.idle);
     final k = layout.throwerSize / roster.referenceHeight;
-    final boxW = (pose?.width ?? 0) * k;
-    final boxH = (pose?.height ?? 0) * k;
+    final boxW = (idle?.width ?? 0) * k;
+    final boxH = (idle?.height ?? 0) * k;
     final feet = layout.throwerFeet;
     final rtl = layout.rtl;
 
