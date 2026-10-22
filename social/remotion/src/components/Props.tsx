@@ -5,6 +5,7 @@ import {images} from '../generated/data';
 import {ICONS} from '../icons';
 import {color, FONT_AR, FONT_COPTIC, FONT_EN} from '../theme';
 import type {PropSpec} from '../types';
+import {Alarm, Box, Bubble, Picture, Screen, Title} from './TeaserProps';
 
 // Motion-graphics props for story scenes. Every time is in seconds from the
 // voice start (`t`), so props line up with the spoken words like keywords do.
@@ -162,7 +163,7 @@ const Book: React.FC<P<'book'>> = ({t, fps, x = 540, y = 860, size = 1, openAt, 
                   // page letters vanish when they burst out; one comes back with letterIn
                   const back = side === 1 && i === 4 && li >= 0.55;
                   // letters found earlier sit big on the page already
-                  const had = side === 1 && i === 3 && !!found;
+                  const had = side === 0 && i === 4 && !!found;
                   const gone = burst && !back && !had;
                   // only: a clean page with just the letters found so far
                   if (only && !back && !had) return <div key={i} />;
@@ -782,10 +783,11 @@ const Pant: React.FC<P<'pant'>> = ({t, at, x, y, until, dir = 'right'}) => {
   );
 };
 
-const Compare: React.FC<P<'compare'>> = ({t, fps, at, k, latin, y = 470}) => {
-  const a = sp(t - at, fps, 10, 170);
-  const b = sp(t - at - 0.35, fps, 9, 200);
-  const eq = sp(t - at - 0.2, fps, 9, 220);
+const Compare: React.FC<P<'compare'>> = ({t, fps, at, k, latin, y = 470, outAt}) => {
+  const out = outAt !== undefined ? interpolate(t - outAt, [0, 0.25], [1, 0], clamp) : 1;
+  const a = sp(t - at, fps, 10, 170) * out;
+  const b = sp(t - at - 0.35, fps, 9, 200) * out;
+  const eq = sp(t - at - 0.2, fps, 9, 220) * out;
   if (a <= 0) return null;
   const S = 280;
   const tile = (left: number, p: number, bg: string, child: React.ReactNode) => (
@@ -822,19 +824,65 @@ const Confetti: React.FC<P<'confetti'>> = ({t, at, count = 70}) => {
   );
 };
 
+// ---------------------------------------------------------------- warning banner (a yellow note on screen)
+
+const Banner: React.FC<P<'banner'>> = ({t, fps, at, ar, en, y = 250, outAt}) => {
+  const out = outAt !== undefined ? interpolate(t - outAt, [0, 0.25], [1, 0], clamp) : 1;
+  const p = sp(t - at, fps, 10, 190) * out;
+  if (p <= 0) return null;
+  const blink = 0.85 + 0.15 * Math.sin((t - at) * 9);
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: 90,
+        top: y,
+        width: 900,
+        padding: '22px 30px',
+        borderRadius: 28,
+        background: color('sunYellow'),
+        border: `8px solid ${color('cocoa')}`,
+        boxShadow: `0 14px 0 ${color('cocoa')}`,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 26,
+        transform: `scale(${p}) rotate(${-2 + Math.sin(t * 2) * 0.8}deg)`,
+        opacity: out,
+      }}
+    >
+      <div style={{fontSize: 92, color: color('cocoa'), opacity: blink, flexShrink: 0}}>
+        <FontAwesomeIcon icon={ICONS.warning} />
+      </div>
+      <div style={{flex: 1, textAlign: 'center'}}>
+        <div dir="rtl" style={{fontFamily: FONT_AR, fontWeight: 800, fontSize: 72, lineHeight: 1.1, color: color('cocoa')}}>
+          {ar}
+        </div>
+        <div style={{fontFamily: FONT_EN, fontWeight: 800, fontSize: 40, lineHeight: 1.15, color: color('deepTeal')}}>{en}</div>
+      </div>
+    </div>
+  );
+};
+
 // ---------------------------------------------------------------- layers
 
 const BACK = new Set(['book', 'egypt', 'speed']);
+const SCREEN = new Set(['compare', 'title', 'alarm', 'banner']);
 
 // Props behind the characters (`layer="back"`) or in front of them.
-export const Props: React.FC<{props?: PropSpec[]; voiceFrom: number; layer: 'back' | 'front'}> = ({props, voiceFrom, layer}) => {
+export const Props: React.FC<{props?: PropSpec[]; voiceFrom: number; layer: 'back' | 'front' | 'screen'}> = ({props, voiceFrom, layer}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const t = (frame - voiceFrom) / fps;
   return (
     <>
       {(props ?? [])
-        .filter((p) => p.kind !== 'shake' && (p.kind === 'statues' ? p.layer !== 'front' : BACK.has(p.kind)) === (layer === 'back'))
+        .filter((p) =>
+          p.kind === 'shake'
+            ? false
+            : SCREEN.has(p.kind)
+              ? layer === 'screen'
+              : layer !== 'screen' && (p.kind === 'statues' ? p.layer !== 'front' : BACK.has(p.kind)) === (layer === 'back'),
+        )
         .map((p, i) => {
           const q = {...p, t, fps} as never;
           switch (p.kind) {
@@ -864,8 +912,22 @@ export const Props: React.FC<{props?: PropSpec[]; voiceFrom: number; layer: 'bac
               return <Pant key={i} {...(q as P<'pant'>)} />;
             case 'compare':
               return <Compare key={i} {...(q as P<'compare'>)} />;
+            case 'banner':
+              return <Banner key={i} {...(q as P<'banner'>)} />;
             case 'confetti':
               return <Confetti key={i} {...(q as P<'confetti'>)} />;
+            case 'screen':
+              return <Screen key={i} {...(q as P<'screen'>)} />;
+            case 'title':
+              return <Title key={i} {...(q as P<'title'>)} />;
+            case 'alarm':
+              return <Alarm key={i} {...(q as P<'alarm'>)} />;
+            case 'box':
+              return <Box key={i} {...(q as P<'box'>)} />;
+            case 'image':
+              return <Picture key={i} {...(q as P<'image'>)} />;
+            case 'bubble':
+              return <Bubble key={i} {...(q as P<'bubble'>)} />;
             default:
               return null;
           }

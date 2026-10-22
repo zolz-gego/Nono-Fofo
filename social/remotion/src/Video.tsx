@@ -3,14 +3,33 @@ import {AbsoluteFill, Audio, Img, interpolate, Sequence, staticFile, useCurrentF
 import {EndCard} from './components/EndCard';
 import {Scene, Sfx} from './components/Scene';
 import {music} from './generated/data';
+import {INTROS} from './generated/local';
 import {END_VOICE_AT, WIPE} from './theme';
 import type {Timing, VideoSpec} from './types';
 
 export type VideoProps = {spec: VideoSpec; timing: Timing | null};
 
 export const Video: React.FC<VideoProps> = ({spec, timing}) => {
-  const frame = useCurrentFrame();
   if (!timing) return null;
+  const Intro = timing.intro ? INTROS[spec.intro!]?.component : undefined;
+  // The intro plays first; the story (and its music) starts when it ends.
+  return (
+    <AbsoluteFill style={{backgroundColor: 'black'}}>
+      {Intro && (
+        <Sequence durationInFrames={timing.intro} name="intro">
+          <Intro volume={spec.introVolume ?? 1} />
+        </Sequence>
+      )}
+      <Sequence from={timing.intro} name="story">
+        <Story spec={spec} timing={timing} />
+      </Sequence>
+    </AbsoluteFill>
+  );
+};
+
+const Story: React.FC<{spec: VideoSpec; timing: Timing}> = ({spec, timing}) => {
+  const frame = useCurrentFrame();
+  const total = timing.total - timing.intro;
 
   // Background music sits low and dips further while someone talks.
   const talking = (f: number) =>
@@ -18,7 +37,7 @@ export const Video: React.FC<VideoProps> = ({spec, timing}) => {
   const baseVol = spec.music?.volume ?? 0.16;
   const musicVol = (f: number) =>
     (talking(f) ? baseVol * 0.55 : baseVol) *
-    interpolate(f, [0, 8, timing.total - 20, timing.total], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    interpolate(f, [0, 8, total - 20, total], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 
   return (
     <AbsoluteFill style={{backgroundColor: 'black'}}>
@@ -27,7 +46,7 @@ export const Video: React.FC<VideoProps> = ({spec, timing}) => {
         const last = i === spec.scenes.length - 1 && !spec.endCard;
         return (
           <Sequence key={scene.id} from={t.from} durationInFrames={t.duration + (last ? 0 : WIPE)} name={scene.id}>
-            <Scene scene={scene} index={i} voiceFrom={t.voiceFrom} voiceFrames={t.voiceFrames} />
+            <Scene scene={scene} index={i} voiceFrom={t.voiceFrom} voiceFrames={t.voiceFrames} captionSize={spec.captionSize} />
           </Sequence>
         );
       })}

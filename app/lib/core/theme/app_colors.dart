@@ -124,6 +124,35 @@ abstract final class AppColors {
   static const List<Color> balloons = fish;
 
   // ---------------------------------------------------------------------------
+  // Letter puzzle (inside an old church, placeholder art)
+  // ---------------------------------------------------------------------------
+  static const Color churchWall = Color(0xFFF2E3C6);
+  static const Color churchWallShade = Color(0xFFE2CDA6);
+  static const Color churchArch = Color(0xFFC99B5E);
+  static const Color churchArchDark = Color(0xFF8A5F3E);
+  static const Color churchFloor = Color(0xFFB98A5E);
+  static const Color churchFloorLine = Color(0xFFA27650);
+  static const Color churchWindow = Color(0xFF9FD8F0);
+  static const Color churchWindowGlow = Color(0x55FFE9B0);
+  static const Color churchCurtain = Color(0xFFB4333C);
+  static const Color churchCurtainDark = Color(0xFF8E2530);
+  static const Color iconGold = Color(0xFFD9A93A);
+  static const Color iconGoldLight = Color(0xFFF3D27A);
+  static const Color iconBack = Color(0xFF1F5E6E);
+  static const Color iconHalo = Color(0xFFF7D774);
+  static const Color iconRobe = Color(0xFFB4533C);
+  static const Color iconFace = Color(0xFFE8B98A);
+  static const Color namePlate = Color(0xFF7A5238);
+  static const Color namePlateLight = Color(0xFF9A6B48);
+  static const Color cube = cream;
+  static const Color cubeEmpty = Color(0x1A5B4B3A);
+  static const Color boardPanel = Color(0xE6FFFBF4);
+  static const Color trayGap = Color(0x33FFFBF4);
+  static const Color cubeBorder = Color(0xFFE8D4AE);
+  static const Color cubeRight = Color(0xFFEAF7E2);
+  static const Color cubeWrong = Color(0xFFFFE6DF);
+
+  // ---------------------------------------------------------------------------
   // Magic basket game (the village apple tree)
   // ---------------------------------------------------------------------------
   static const Color treeTrunk = Color(0xFF8A6B4E);

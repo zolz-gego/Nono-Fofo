@@ -12,6 +12,7 @@ export type Line = {
   en: string; // English subtitle
   estimate: number; // seconds, used until the voice file exists
   words?: number[]; // optional: start time (s, from voice start) of each Arabic word
+  chunks?: {from: number; en: string}[]; // optional: show the line as several subtitles (from = index of the chunk's first Arabic word)
 };
 
 export type CharacterSpec = {
@@ -20,13 +21,13 @@ export type CharacterSpec = {
   at?: 'center' | 'left' | 'right';
   enter?: 'left' | 'right' | 'bottom' | 'pop' | 'none';
   flip?: boolean;
-  swaps?: {at: number; pose: string}[]; // seconds from scene start
+  swaps?: {at: number; pose: string; fade?: boolean}[]; // seconds from scene start; fade = dissolve into the new pose (no hop, no sound)
   size?: number; // height multiplier (1 = standing height)
   x?: number; // custom x of the feet center (overrides `at`)
   delay?: number; // seconds from scene start before he enters
   // slide sideways: offset in px from his spot, reached at `at` (scene seconds) over `dur`;
   // `flip` sets which way he faces from that moment
-  moves?: {at: number; to: number; dur?: number; flip?: boolean}[];
+  moves?: {at: number; to: number; toY?: number; dur?: number; flip?: boolean}[]; // toY: vertical offset (px, + = down)
   jumps?: {at: number; until?: number; height?: number; every?: number}[]; // hop up and down (scene seconds), e.g. reaching for something
 };
 
@@ -36,6 +37,9 @@ export type Keyword = {
   icon?: string; // key of ICONS (src/icons.ts)
   side?: 'left' | 'center' | 'right'; // where the card sits (default: center for one card, alternating for more)
   coptic?: string; // the word spelled in Coptic letters (Avva keys), shown in gold above the Arabic
+  mark?: string; // Avva key of the letter to highlight in `coptic` (bigger, coral), e.g. "e"
+  big?: boolean; // wide card, Coptic word as the largest text
+  top?: number; // y of the card's top (default 235), e.g. to stack big cards
   at: number; // seconds from voice start
 };
 
@@ -73,8 +77,21 @@ export type PropSpec =
   | {kind: 'statues'; at?: number; y?: number; chaseAt?: number; chase?: 'left' | 'right'; passAt?: number; layer?: 'back' | 'front'} // passAt: run across the screen (towards `chase`) in a line
   | {kind: 'dizzy'; at: number; x: number; y: number; until?: number} // stars spinning around a head after a bonk
   | {kind: 'pant'; at: number; x: number; y: number; until?: number; dir?: 'left' | 'right'} // breath puffs + sweat drops (out of breath)
-  | {kind: 'compare'; at: number; k: string; latin: string; y?: number} // Coptic letter ≈ Latin letter
-  | {kind: 'confetti'; at: number; count?: number};
+  | {kind: 'compare'; at: number; k: string; latin: string; y?: number; outAt?: number} // Coptic letter ≈ Latin letter (stays put on screen)
+  | {kind: 'confetti'; at: number; count?: number}
+  | {kind: 'banner'; at: number; ar: string; en: string; y?: number; outAt?: number} // yellow warning / note banner, stays put on screen
+  // teaser props (components/TeaserProps.tsx)
+  // an app screenshot (repo screenshots/<shot>.jpg) in a tablet frame; flies in from `from`, out to `to` at outAt
+  | {kind: 'screen'; shot: string; at: number; outAt?: number; x?: number; y?: number; size?: number; tilt?: number; from?: 'bottom' | 'top' | 'left' | 'right' | 'zoom' | 'box'; to?: 'left' | 'right' | 'up' | 'down'}
+  // big outlined title (stays put on screen): slam = drops from huge, pop = springs up, stamp = lands tilted
+  | {kind: 'title'; ar: string; en?: string; at: number; outAt?: number; y?: number; size?: number; fill?: string; style?: 'slam' | 'pop' | 'stamp'; rot?: number}
+  | {kind: 'alarm'; at: number; until?: number} // spinning siren light + pulsing coral edges
+  // golden "?" box: drops in at `at`, rattles at each `shakes` time, lid peeks open (wide = all the way) and snaps shut, padlock at lockAt
+  | {kind: 'box'; at?: number; x?: number; y?: number; size?: number; shakes?: number[]; opens?: {at: number; until: number; wide?: boolean}[]; lockAt?: number}
+  // comic speech bubble (tail points to the speaker); wrongAt stamps a red X over it
+  // a social image (social/assets/manifest.json "images") popping in, e.g. the covered surprise; placeholder until it exists
+  | {kind: 'image'; id: string; at: number; outAt?: number; x?: number; y?: number; height?: number; rot?: number; from?: 'pop' | 'bottom' | 'top'; glow?: boolean}
+  | {kind: 'bubble'; ar: string; en?: string; at: number; outAt?: number; x?: number; y?: number; tail?: 'left' | 'right'; wrongAt?: number};
 
 export type SceneSpec = {
   id: string;
@@ -88,7 +105,9 @@ export type SceneSpec = {
   keywords?: Keyword[];
   sfx?: {id: string; at: number; volume?: number}[]; // extra sounds, seconds from scene start
   hold?: number; // extra seconds after the line
+  lead?: number; // seconds before the voice starts in this scene (default: the video's pace.lead)
   props?: PropSpec[];
+  captions?: boolean; // false = no subtitle box (e.g. the words are already on pop-up cards)
   backdrop?: string; // id of a social image (social/assets/manifest.json "images") drawn behind everything, with parallax
   // Camera moves (scene seconds): the world (characters + props) pans/zooms,
   // the background follows with parallax. x/y = camera offset in px.
@@ -101,6 +120,9 @@ export type SceneSpec = {
 export type VideoSpec = {
   id: string; // folder name, filled in by sync
   title: string;
+  intro?: string; // a local intro to open with (e.g. "intro-spin"), played before the first scene
+  introVolume?: number; // loudness of the intro (1 = as made), to match the story
+  captionSize?: 'normal' | 'large'; // large = the bigger captions videos used before 004 (76/50 px)
   music?: {track: string; volume?: number};
   pace?: {lead?: number; tail?: number}; // seconds around each line (defaults in theme.ts)
   scenes: SceneSpec[];
@@ -109,6 +131,7 @@ export type VideoSpec = {
 
 export type Timing = {
   fps: number;
+  intro: number; // frames of the intro before the first scene (0 = none)
   scenes: {from: number; duration: number; voiceFrom: number; voiceFrames: number}[];
   endFrom: number;
   total: number;

@@ -36,7 +36,7 @@ export function cameraAt(cam: SceneSpec['camera'], sec: number) {
   return c;
 }
 
-export const Scene: React.FC<{scene: SceneSpec; index: number; voiceFrom: number; voiceFrames: number}> = ({scene, index, voiceFrom, voiceFrames}) => {
+export const Scene: React.FC<{scene: SceneSpec; index: number; voiceFrom: number; voiceFrames: number; captionSize?: 'normal' | 'large'}> = ({scene, index, voiceFrom, voiceFrames, captionSize}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const sec = (s: number) => Math.round(s * fps);
@@ -83,10 +83,12 @@ export const Scene: React.FC<{scene: SceneSpec; index: number; voiceFrom: number
           <Props props={scene.props} voiceFrom={voiceFrom} layer="front" />
         </AbsoluteFill>
       </AbsoluteFill>
+      {/* screen props stay put while the camera moves */}
+      <Props props={scene.props} voiceFrom={voiceFrom} layer="screen" />
       {(scene.keywords ?? []).map((kw, i) => (
         <KeywordCard key={i} kw={kw} index={i} count={scene.keywords!.length} startFrame={voiceFrom + sec(kw.at)} />
       ))}
-      {line && <Captions line={line} voiceFrom={voiceFrom} voiceFrames={voiceFrames} />}
+      {line && scene.captions !== false && <Captions line={line} voiceFrom={voiceFrom} voiceFrames={voiceFrames} size={captionSize} />}
 
       {line?.voice && (
         <Sequence from={voiceFrom} layout="none">
@@ -95,7 +97,7 @@ export const Scene: React.FC<{scene: SceneSpec; index: number; voiceFrom: number
       )}
       {index > 0 && scene.transition !== 'cut' && <Sfx id={scene.transition === 'whip' ? 'mg_whoosh_out' : 'mg_scene_swipe'} at={0} volume={0.8} />}
       {chars.map((c, i) => (c.enter ?? 'left') !== 'none' && <Sfx key={`e${i}`} id={c.enter === 'pop' ? 'mg_boing' : 'mg_whoosh_in'} at={1 + sec(c.delay ?? 0)} volume={0.7} />)}
-      {chars.flatMap((c, i) => (c.swaps ?? []).map((s, j) => <Sfx key={`p${i}-${j}`} id="mg_pose_swap" at={sec(s.at)} volume={0.8} />))}
+      {chars.flatMap((c, i) => (c.swaps ?? []).map((s, j) => !s.fade && <Sfx key={`p${i}-${j}`} id="mg_pose_swap" at={sec(s.at)} volume={0.8} />))}
       {(scene.keywords ?? []).map((kw, i) => (
         <Sfx key={`k${i}`} id={i % 2 ? 'mg_keyword_pop_2' : 'mg_keyword_pop'} at={voiceFrom + sec(kw.at)} volume={0.75} />
       ))}

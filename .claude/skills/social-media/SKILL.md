@@ -19,7 +19,7 @@ ElevenLabs from the script Claude writes.
   `social/remotion/` and `social/tools/`, and this skill.
 - **Videos never go in git.** `social/videos/` (scripts, `video.json`, voices),
   `social/previews/`, `social/out/` and the logo intro (`social/remotion/src/intro/`,
-  `social/tools/synth_intro.py`) are git-ignored and stay on this machine. Never
+  `social/tools/synth_intro.py`, `social/tools/stitch_intro.py`, `social/tools/spin_intro.py`) are git-ignored and stay on this machine. Never
   `git add -f` them. Local-only compositions are registered through
   `src/generated/local.ts` (written by `npm run sync` when `src/intro/` exists).
 
@@ -95,7 +95,7 @@ When the user says a video is finished ("done", "it's ready", "ship it",
    (or the logo) clear and readable, nothing mid-transition or blurred, and no
    flash. Check two or three candidates with `npm run still` and look at them.
 2. **Export:** `cd social/remotion && npm run release -- <NNN-slug> <thumb-seconds>`
-   (the intro: `intro-portrait`). It writes `social/out/release/<NNN-slug>/`:
+   (the intros: `intro-portrait`, and the short `intro-stitch` and `intro-spin`). It writes `social/out/release/<NNN-slug>/`:
    - `video.mp4`: high quality for upload (1080×1920, H.264 CRF 12 slow, AAC 320k).
    - `thumbnail.jpg`: the full-size cover frame.
    Check the result with `npx remotion ffprobe` (size, fps, duration, audio).

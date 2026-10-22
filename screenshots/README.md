@@ -146,3 +146,29 @@ finger) to catch every sound of the letter. The top shows the apples caught
 and a "?" chip per sound until it is caught, then the letter and its name.
 
 ![Magic basket](34-magic-basket.jpg)
+
+## Level 2 road
+
+Level 2 now has two games: Magic basket and the Letter puzzle.
+
+![Level 2 road](35-level2-road.jpg)
+
+## Letter puzzle: word length (Level 2)
+
+Pick how many Coptic letters the words have (3 to 7), or Mix for every
+length. Each level is a wooden name plate with a real word on letter
+blocks, and its best stars.
+
+![Letter puzzle levels](36-letter-puzzle-levels.jpg)
+
+## Letter puzzle (Level 2: spelling in Coptic)
+
+In the church, a word shows on the name card under a saint's icon; the
+child drags (or taps) its shuffled Coptic letters into the cubes and
+checks. Right letters turn green and stay, wrong ones turn red and go back;
+the buddy runs to each cube a letter goes into. Ten words a round; failed
+checks and hints count as mistakes for the stars. The English app has its
+own "Franco English" words.
+
+![Letter puzzle](37-letter-puzzle.jpg)
+![Letter puzzle in English](38-letter-puzzle-english.jpg)
