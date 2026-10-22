@@ -240,5 +240,19 @@
   "magicBasketMissed": "A right apple fell! Catch it next time",
   "magicBasketHaveIt": "We've got {sound}, find another sound!",
   "magicBasketHowTo": "Move the basket with the mouse or the arrow keys",
-  "magicBasketHowToTouch": "Drag your finger to move the basket"
+  "magicBasketHowToTouch": "Drag your finger to move the basket",
+  "gameLetterPuzzle": "Letter puzzle",
+  "letterPuzzlePickLevel": "How many letters in each word?",
+  "letterPuzzleLength": "{count, plural, one{{count} letter} other{{count} letters}}",
+  "letterPuzzleStart": "Come on, {name}! The names under the icons got mixed up. Put the Coptic letters in order!",
+  "letterPuzzleWord": "Word {number} of {total}",
+  "letterPuzzleWrite": "Write in Coptic:",
+  "letterPuzzleCheck": "Check",
+  "letterPuzzleHint": "Hint",
+  "letterPuzzleHintSay": "Let me help with one letter!",
+  "letterPuzzleRight": "Bravo! That's right",
+  "letterPuzzleWrong": "Almost! Fix the red letters",
+  "letterPuzzleMistakes": "Mistakes",
+  "letterPuzzleOtherLevel": "Other word length",
+  "letterPuzzleHowTo": "Drag the letters into the boxes, or tap a letter"
 }

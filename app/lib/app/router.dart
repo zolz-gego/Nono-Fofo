@@ -13,6 +13,8 @@ import '../features/games/challenge/presentation/challenge_picker_page.dart';
 import '../features/games/fishing/presentation/fishing_cubit.dart';
 import '../features/games/fishing/presentation/fishing_page.dart';
 import '../features/games/letter_hunt/presentation/letter_pick_page.dart';
+import '../features/games/letter_puzzle/presentation/letter_puzzle_level_page.dart';
+import '../features/games/letter_puzzle/presentation/letter_puzzle_page.dart';
 import '../features/games/magic_basket/presentation/magic_basket_cubit.dart';
 import '../features/games/magic_basket/presentation/magic_basket_page.dart';
 import '../features/games/monastery/presentation/monastery_level_page.dart';
@@ -45,6 +47,11 @@ abstract final class AppRoutes {
   /// then catch its sounds (extra: [LetterHuntArgs]).
   static const magicBasket = '/level/magic-basket';
   static const magicBasketPlay = '/level/magic-basket/play';
+
+  /// Letter puzzle (Level 2, the church): pick a word length (extra:
+  /// [PlayerSetup]), then spell 10 words (extra: [LetterPuzzleArgs]).
+  static const letterPuzzle = '/level/letter-puzzle';
+  static const letterPuzzlePlay = '/level/letter-puzzle/play';
 
   /// Write the letter (Grandpa's house): pick a letter (extra:
   /// [PlayerSetup]), then write it (extra: [LetterHuntArgs]).
@@ -128,6 +135,14 @@ final GoRouter appRouter = GoRouter(
     _withExtra<LetterHuntArgs>(
       AppRoutes.magicBasketPlay,
       (context, extra) => MagicBasketPage(args: extra),
+    ),
+    _withExtra<PlayerSetup>(
+      AppRoutes.letterPuzzle,
+      (context, extra) => LetterPuzzleLevelPage(setup: extra),
+    ),
+    _withExtra<LetterPuzzleArgs>(
+      AppRoutes.letterPuzzlePlay,
+      (context, extra) => LetterPuzzlePage(args: extra),
     ),
     _withExtra<PlayerSetup>(
       AppRoutes.writing,

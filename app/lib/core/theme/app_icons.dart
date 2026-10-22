@@ -72,8 +72,13 @@ abstract final class AppIcons {
   static const FaIconData monastery = FontAwesomeIcons.magnifyingGlass;
   static const FaIconData challenge = FontAwesomeIcons.trophy;
   static const FaIconData magicBasket = FontAwesomeIcons.basketShopping;
+  static const FaIconData letterPuzzle = FontAwesomeIcons.puzzlePiece;
 
   // Magic basket
   static const FaIconData apple = FontAwesomeIcons.appleWhole;
   static const FaIconData hiddenSound = FontAwesomeIcons.question;
+
+  // Letter puzzle
+  static const FaIconData checkWord = FontAwesomeIcons.check;
+  static const FaIconData wordLength = FontAwesomeIcons.rulerHorizontal;
 }

@@ -813,4 +813,59 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get magicBasketHowToTouch => 'Drag your finger to move the basket';
+
+  @override
+  String get gameLetterPuzzle => 'Letter puzzle';
+
+  @override
+  String get letterPuzzlePickLevel => 'How many letters in each word?';
+
+  @override
+  String letterPuzzleLength(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count letters',
+      one: '$count letter',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String letterPuzzleStart(String name) {
+    return 'Come on, $name! The names under the icons got mixed up. Put the Coptic letters in order!';
+  }
+
+  @override
+  String letterPuzzleWord(int number, int total) {
+    return 'Word $number of $total';
+  }
+
+  @override
+  String get letterPuzzleWrite => 'Write in Coptic:';
+
+  @override
+  String get letterPuzzleCheck => 'Check';
+
+  @override
+  String get letterPuzzleHint => 'Hint';
+
+  @override
+  String get letterPuzzleHintSay => 'Let me help with one letter!';
+
+  @override
+  String get letterPuzzleRight => 'Bravo! That\'s right';
+
+  @override
+  String get letterPuzzleWrong => 'Almost! Fix the red letters';
+
+  @override
+  String get letterPuzzleMistakes => 'Mistakes';
+
+  @override
+  String get letterPuzzleOtherLevel => 'Other word length';
+
+  @override
+  String get letterPuzzleHowTo =>
+      'Drag the letters into the boxes, or tap a letter';
 }

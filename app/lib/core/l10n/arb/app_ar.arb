@@ -683,5 +683,43 @@
     }
   },
   "magicBasketHowTo": "حرّك السلة بالماوس أو بالأسهم",
-  "magicBasketHowToTouch": "اسحب بصباعك عشان تحرّك السلة"
+  "magicBasketHowToTouch": "اسحب بصباعك عشان تحرّك السلة",
+  "gameLetterPuzzle": "رتّب الحروف",
+  "letterPuzzlePickLevel": "هتكتب كلمات من كام حرف؟",
+  "letterPuzzleLength": "{count, plural, few{{count} حروف} other{{count} حرف}}",
+  "@letterPuzzleLength": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "letterPuzzleStart": "يلا يا {name}! الأسامي اللي تحت الأيقونات اتلخبطت. رتّب الحروف القبطي!",
+  "@letterPuzzleStart": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "letterPuzzleWord": "كلمة {number} من {total}",
+  "@letterPuzzleWord": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "letterPuzzleWrite": "اكتب بالقبطي:",
+  "letterPuzzleCheck": "اتأكد",
+  "letterPuzzleHint": "مساعدة",
+  "letterPuzzleHintSay": "خليني أساعدك بحرف!",
+  "letterPuzzleRight": "برافو! صح كده",
+  "letterPuzzleWrong": "قرّبت! صلّح الحروف الحمرا",
+  "letterPuzzleMistakes": "غلط",
+  "letterPuzzleOtherLevel": "عدد حروف تاني",
+  "letterPuzzleHowTo": "اسحب الحروف للمربعات، أو دوس على الحرف"
 }

@@ -1459,6 +1459,90 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اسحب بصباعك عشان تحرّك السلة'**
   String get magicBasketHowToTouch;
+
+  /// No description provided for @gameLetterPuzzle.
+  ///
+  /// In ar, this message translates to:
+  /// **'رتّب الحروف'**
+  String get gameLetterPuzzle;
+
+  /// No description provided for @letterPuzzlePickLevel.
+  ///
+  /// In ar, this message translates to:
+  /// **'هتكتب كلمات من كام حرف؟'**
+  String get letterPuzzlePickLevel;
+
+  /// No description provided for @letterPuzzleLength.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, few{{count} حروف} other{{count} حرف}}'**
+  String letterPuzzleLength(int count);
+
+  /// No description provided for @letterPuzzleStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'يلا يا {name}! الأسامي اللي تحت الأيقونات اتلخبطت. رتّب الحروف القبطي!'**
+  String letterPuzzleStart(String name);
+
+  /// No description provided for @letterPuzzleWord.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة {number} من {total}'**
+  String letterPuzzleWord(int number, int total);
+
+  /// No description provided for @letterPuzzleWrite.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب بالقبطي:'**
+  String get letterPuzzleWrite;
+
+  /// No description provided for @letterPuzzleCheck.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتأكد'**
+  String get letterPuzzleCheck;
+
+  /// No description provided for @letterPuzzleHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مساعدة'**
+  String get letterPuzzleHint;
+
+  /// No description provided for @letterPuzzleHintSay.
+  ///
+  /// In ar, this message translates to:
+  /// **'خليني أساعدك بحرف!'**
+  String get letterPuzzleHintSay;
+
+  /// No description provided for @letterPuzzleRight.
+  ///
+  /// In ar, this message translates to:
+  /// **'برافو! صح كده'**
+  String get letterPuzzleRight;
+
+  /// No description provided for @letterPuzzleWrong.
+  ///
+  /// In ar, this message translates to:
+  /// **'قرّبت! صلّح الحروف الحمرا'**
+  String get letterPuzzleWrong;
+
+  /// No description provided for @letterPuzzleMistakes.
+  ///
+  /// In ar, this message translates to:
+  /// **'غلط'**
+  String get letterPuzzleMistakes;
+
+  /// No description provided for @letterPuzzleOtherLevel.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد حروف تاني'**
+  String get letterPuzzleOtherLevel;
+
+  /// No description provided for @letterPuzzleHowTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسحب الحروف للمربعات، أو دوس على الحرف'**
+  String get letterPuzzleHowTo;
 }
 
 class _AppLocalizationsDelegate

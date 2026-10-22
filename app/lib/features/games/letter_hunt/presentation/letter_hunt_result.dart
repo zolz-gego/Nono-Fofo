@@ -24,6 +24,8 @@ class LetterHuntResult extends StatefulWidget {
     required this.onPlayAgain,
     required this.onOtherLetter,
     required this.onBackToGames,
+    this.otherLabel,
+    this.otherIcon = AppIcons.letters,
   });
 
   final int stars;
@@ -31,6 +33,10 @@ class LetterHuntResult extends StatefulWidget {
   final VoidCallback onPlayAgain;
   final VoidCallback onOtherLetter;
   final VoidCallback onBackToGames;
+
+  /// The "other" button's text and icon (default: another letter).
+  final String Function(AppLocalizations l10n)? otherLabel;
+  final FaIconData otherIcon;
 
   @override
   State<LetterHuntResult> createState() => _LetterHuntResultState();
@@ -134,11 +140,11 @@ class _LetterHuntResultState extends State<LetterHuntResult> {
                                 Expanded(
                                   child: OutlinedButton.icon(
                                     onPressed: widget.onOtherLetter,
-                                    icon: const FaIcon(
-                                      AppIcons.letters,
-                                      size: 18,
+                                    icon: FaIcon(widget.otherIcon, size: 18),
+                                    label: Text(
+                                      widget.otherLabel?.call(l10n) ??
+                                          l10n.otherLetter,
                                     ),
-                                    label: Text(l10n.otherLetter),
                                   ),
                                 ),
                                 const SizedBox(width: AppDimens.spaceSm),
