@@ -8,12 +8,14 @@
   2. `git checkout -b <type>/<short-kebab-description>` (e.g. `feat/sound-board`, `fix/map-audio-loop`), named after the task in the first message.
   - If the session is already on a non-default branch created for this chat (or in a worktree the app made), use it instead of creating another.
 - **Work on that branch only.** Commit as you go with clear messages. Never commit directly to the default branch.
-- **When the user says the task is completed** (e.g. "done", "task completed", "ship it"), do this automatically, without asking for confirmation:
-  1. **Screenshot every screen the task added or changed** and save it in `screenshots/` (see "Screenshots" below).
-  2. Commit any remaining changes, including the screenshots.
+- **When the user says the task is completed** (e.g. "done", "task completed", "ship it"):
+  1. **Ask the user whether to add screenshots** for this task. Only if they say yes, screenshot every screen the task added or changed and save it in `screenshots/` (see "Screenshots" below).
+  2. Then, without asking for any more confirmation, commit any remaining changes (including the screenshots, if any).
   3. `git push -u origin <branch>`.
-  4. Open a PR into the default branch with `gh pr create`. Give it a clear title and a body that summarizes what changed and why, and embed each new or updated screenshot.
-  5. Reply with the PR link.
+  4. Open a PR into `dev` with `gh pr create --base dev`. Give it a clear title and a body that summarizes what changed and why, and embed each new or updated screenshot (if any).
+  5. Merge that PR (`gh pr merge --merge`).
+  6. Open a PR from `dev` into `main` (`gh pr create --base main --head dev`) with a title and body summarizing the change, then merge it too (`gh pr merge --merge`).
+  7. Reply with both PR links.
 - Don't open a PR before the user says the task is completed.
 
 ## UI conventions
