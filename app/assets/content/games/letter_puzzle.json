@@ -1,5 +1,5 @@
 {
-  "_readme": "Settings and words for the Letter puzzle game (Level 2, the church). words.ar is played in the Arabic app, words.en in the English app; each is grouped by word length in Coptic letters (the Arabic or English word can be any length). Each word: text = shown on the name card, coptic = the answer (for reading only), letters = the answer as letter ids from letters.json (the game uses this). The answer is the word's sounds written in Coptic letters (English words: \"Franco English\", e.g. Chair = shai ei ro). The tiles are exactly these letters, shuffled. wordsPerRound: words in one round, picked at random from the chosen length. lengths: word lengths offered in the picker (other lengths are kept but not played). Stars: a mistake is a failed check or a hint. 0..threeStarsMaxMistakes = 3 stars, up to twoStarsMaxMistakes = 2 stars, more = 1 star.",
+  "_readme": "Settings and words for the Letter puzzle game (Level 2, the church). words.ar is played in the Arabic app, words.en in the English app; each is grouped by word length in Coptic letters (the Arabic or English word can be any length). Each word: text = shown on the name card, coptic = the answer (for reading only), letters = the answer as letter ids from letters.json (the game uses this). The answer is the word's sounds written in Coptic letters (English words: \"Franco English\", e.g. Chair = shai ei ro). The tiles are exactly these letters, shuffled. wordsPerRound: words in one round, picked at random from the chosen length. lengths: word lengths offered in the picker (other lengths are kept but not played); the picker also has a Mix level with words of every offered length. A word never comes twice in one round. background: the church picture (drawn in code when missing). Stars: a mistake is a failed check or a hint. 0..threeStarsMaxMistakes = 3 stars, up to twoStarsMaxMistakes = 2 stars, more = 1 star.",
   "version": 2,
   "wordsPerRound": 10,
   "lengths": [
@@ -13,6 +13,7 @@
     "threeStarsMaxMistakes": 2,
     "twoStarsMaxMistakes": 5
   },
+  "background": "assets/games/letter_puzzle/church.webp",
   "words": {
     "ar": {
       "2": [
@@ -225,8 +226,8 @@
         },
         {
           "text": "شيبس",
-          "coptic": "ϣⲓⲯ",
-          "letters": ["shai", "iota", "epsi"]
+          "coptic": "ϣⲏⲯ",
+          "letters": ["shai", "ita", "epsi"]
         },
         {
           "text": "هز",
@@ -257,6 +258,56 @@
           "text": "افا",
           "coptic": "ⲁⲩⲁ",
           "letters": ["alpha", "epsilon", "alpha"]
+        },
+        {
+          "text": "عصا",
+          "coptic": "ⲁⲥⲁ",
+          "letters": ["alpha", "sima", "alpha"]
+        },
+        {
+          "text": "رف",
+          "coptic": "ⲣⲁⲫ",
+          "letters": ["ro", "alpha", "phi"]
+        },
+        {
+          "text": "بير",
+          "coptic": "ⲃⲓⲣ",
+          "letters": ["vida", "iota", "ro"]
+        },
+        {
+          "text": "سور",
+          "coptic": "ⲥⲟⲣ",
+          "letters": ["sima", "o", "ro"]
+        },
+        {
+          "text": "شال",
+          "coptic": "ϣⲁⲗ",
+          "letters": ["shai", "alpha", "lola"]
+        },
+        {
+          "text": "تاج",
+          "coptic": "ⲧⲁϫ",
+          "letters": ["tav", "alpha", "janja"]
+        },
+        {
+          "text": "لوح",
+          "coptic": "ⲗⲟϩ",
+          "letters": ["lola", "o", "hori"]
+        },
+        {
+          "text": "ثوب",
+          "coptic": "ⲑⲟⲃ",
+          "letters": ["thita", "o", "vida"]
+        },
+        {
+          "text": "زير",
+          "coptic": "ⲍⲓⲣ",
+          "letters": ["zita", "iota", "ro"]
+        },
+        {
+          "text": "كوز",
+          "coptic": "ⲕⲟⲍ",
+          "letters": ["kappa", "o", "zita"]
         }
       ],
       "4": [
@@ -367,8 +418,8 @@
         },
         {
           "text": "سينا",
-          "coptic": "ⲥⲓⲛⲁ",
-          "letters": ["sima", "iota", "ni", "alpha"]
+          "coptic": "ⲥⲏⲛⲁ",
+          "letters": ["sima", "ita", "ni", "alpha"]
         },
         {
           "text": "أسد",
@@ -469,6 +520,56 @@
           "text": "طول",
           "coptic": "ⲧⲟⲩⲗ",
           "letters": ["tav", "o", "epsilon", "lola"]
+        },
+        {
+          "text": "راهب",
+          "coptic": "ⲣⲁϩⲃ",
+          "letters": ["ro", "alpha", "hori", "vida"]
+        },
+        {
+          "text": "طقس",
+          "coptic": "ⲧⲁⲕⲥ",
+          "letters": ["tav", "alpha", "kappa", "sima"]
+        },
+        {
+          "text": "لحن",
+          "coptic": "ⲗⲁϩⲛ",
+          "letters": ["lola", "alpha", "hori", "ni"]
+        },
+        {
+          "text": "شمعة",
+          "coptic": "ϣⲁⲙⲁ",
+          "letters": ["shai", "alpha", "mi", "alpha"]
+        },
+        {
+          "text": "قبة",
+          "coptic": "ⲕⲟⲃⲁ",
+          "letters": ["kappa", "o", "vida", "alpha"]
+        },
+        {
+          "text": "برج",
+          "coptic": "ⲃⲟⲣϫ",
+          "letters": ["vida", "o", "ro", "janja"]
+        },
+        {
+          "text": "فرن",
+          "coptic": "ⲫⲟⲣⲛ",
+          "letters": ["phi", "o", "ro", "ni"]
+        },
+        {
+          "text": "سلم",
+          "coptic": "ⲥⲓⲗⲙ",
+          "letters": ["sima", "iota", "lola", "mi"]
+        },
+        {
+          "text": "حبل",
+          "coptic": "ϩⲁⲃⲗ",
+          "letters": ["hori", "alpha", "vida", "lola"]
+        },
+        {
+          "text": "دلو",
+          "coptic": "ⲇⲁⲗⲟ",
+          "letters": ["delta", "alpha", "lola", "o"]
         }
       ],
       "5": [
@@ -658,14 +759,14 @@
           "letters": ["tav", "alpha", "lola", "ei", "tav"]
         },
         {
-          "text": "تامن",
-          "coptic": "ⲧⲁⲙⲉⲛ",
-          "letters": ["tav", "alpha", "mi", "ei", "ni"]
+          "text": "ثامن",
+          "coptic": "ⲑⲁⲙⲉⲛ",
+          "letters": ["thita", "alpha", "mi", "ei", "ni"]
         },
         {
           "text": "قميص",
-          "coptic": "ⲕⲁⲙⲓⲥ",
-          "letters": ["kappa", "alpha", "mi", "iota", "sima"]
+          "coptic": "ⲕⲁⲙⲏⲥ",
+          "letters": ["kappa", "alpha", "mi", "ita", "sima"]
         },
         {
           "text": "نوكيا",
@@ -746,6 +847,56 @@
           "text": "بافلي",
           "coptic": "ⲡⲁⲩⲗⲏ",
           "letters": ["pi", "alpha", "epsilon", "lola", "ita"]
+        },
+        {
+          "text": "ناقوس",
+          "coptic": "ⲛⲁⲕⲟⲥ",
+          "letters": ["ni", "alpha", "kappa", "o", "sima"]
+        },
+        {
+          "text": "حصير",
+          "coptic": "ϩⲁⲥⲓⲣ",
+          "letters": ["hori", "alpha", "sima", "iota", "ro"]
+        },
+        {
+          "text": "راهبة",
+          "coptic": "ⲣⲁϩⲃⲁ",
+          "letters": ["ro", "alpha", "hori", "vida", "alpha"]
+        },
+        {
+          "text": "صليب",
+          "coptic": "ⲥⲁⲗⲓⲃ",
+          "letters": ["sima", "alpha", "lola", "iota", "vida"]
+        },
+        {
+          "text": "ابريق",
+          "coptic": "ⲁⲃⲣⲓⲕ",
+          "letters": ["alpha", "vida", "ro", "iota", "kappa"]
+        },
+        {
+          "text": "ساقية",
+          "coptic": "ⲥⲁⲕⲓⲁ",
+          "letters": ["sima", "alpha", "kappa", "iota", "alpha"]
+        },
+        {
+          "text": "بلاط",
+          "coptic": "ⲃⲁⲗⲁⲧ",
+          "letters": ["vida", "alpha", "lola", "alpha", "tav"]
+        },
+        {
+          "text": "شباك",
+          "coptic": "ϣⲓⲃⲁⲕ",
+          "letters": ["shai", "iota", "vida", "alpha", "kappa"]
+        },
+        {
+          "text": "تونية",
+          "coptic": "ⲧⲟⲛⲓⲁ",
+          "letters": ["tav", "o", "ni", "iota", "alpha"]
+        },
+        {
+          "text": "لقان",
+          "coptic": "ⲗⲁⲕⲁⲛ",
+          "letters": ["lola", "alpha", "kappa", "alpha", "ni"]
         }
       ],
       "6": [
@@ -786,8 +937,8 @@
         },
         {
           "text": "ميخائيل",
-          "coptic": "ⲙⲓϧⲁⲓⲗ",
-          "letters": ["mi", "iota", "khai", "alpha", "iota", "lola"]
+          "coptic": "ⲙⲓϧⲁⲏⲗ",
+          "letters": ["mi", "iota", "khai", "alpha", "ita", "lola"]
         },
         {
           "text": "رافائيل",
@@ -905,14 +1056,59 @@
           "letters": ["vida", "alpha", "ro", "vida", "alpha", "ro"]
         },
         {
-          "text": "دولت",
-          "coptic": "ⲇⲁⲱⲗⲁⲧ",
-          "letters": ["delta", "alpha", "omega", "lola", "alpha", "tav"]
-        },
-        {
           "text": "مرقس",
           "coptic": "ⲙⲁⲣⲕⲟⲥ",
           "letters": ["mi", "alpha", "ro", "kappa", "o", "sima"]
+        },
+        {
+          "text": "مذبح",
+          "coptic": "ⲙⲁⲇⲃⲁϩ",
+          "letters": ["mi", "alpha", "delta", "vida", "alpha", "hori"]
+        },
+        {
+          "text": "قربان",
+          "coptic": "ⲕⲟⲣⲃⲁⲛ",
+          "letters": ["kappa", "o", "ro", "vida", "alpha", "ni"]
+        },
+        {
+          "text": "قلاية",
+          "coptic": "ⲕⲁⲗⲁⲓⲁ",
+          "letters": ["kappa", "alpha", "lola", "alpha", "iota", "alpha"]
+        },
+        {
+          "text": "قنديل",
+          "coptic": "ⲕⲁⲛⲇⲓⲗ",
+          "letters": ["kappa", "alpha", "ni", "delta", "iota", "lola"]
+        },
+        {
+          "text": "ايقونة",
+          "coptic": "ⲁⲓⲕⲟⲛⲁ",
+          "letters": ["alpha", "iota", "kappa", "o", "ni", "alpha"]
+        },
+        {
+          "text": "مغارة",
+          "coptic": "ⲙⲁⲅⲁⲣⲁ",
+          "letters": ["mi", "alpha", "gamma", "alpha", "ro", "alpha"]
+        },
+        {
+          "text": "سجادة",
+          "coptic": "ⲥⲉϫⲁⲇⲁ",
+          "letters": ["sima", "ei", "janja", "alpha", "delta", "alpha"]
+        },
+        {
+          "text": "مخزن",
+          "coptic": "ⲙⲁϧⲍⲁⲛ",
+          "letters": ["mi", "alpha", "khai", "zita", "alpha", "ni"]
+        },
+        {
+          "text": "حديقة",
+          "coptic": "ϩⲁⲇⲓⲕⲁ",
+          "letters": ["hori", "alpha", "delta", "iota", "kappa", "alpha"]
+        },
+        {
+          "text": "مطبخ",
+          "coptic": "ⲙⲁⲧⲃⲁϧ",
+          "letters": ["mi", "alpha", "tav", "vida", "alpha", "khai"]
         }
       ],
       "7": [
@@ -983,8 +1179,8 @@
         },
         {
           "text": "سيرافيم",
-          "coptic": "ⲥⲉⲣⲁⲫⲓⲙ",
-          "letters": ["sima", "ei", "ro", "alpha", "phi", "iota", "mi"]
+          "coptic": "ⲥⲉⲣⲁⲫⲏⲙ",
+          "letters": ["sima", "ei", "ro", "alpha", "phi", "ita", "mi"]
         },
         {
           "text": "شاروبيم",
@@ -1025,6 +1221,61 @@
           "text": "اسبرايت",
           "coptic": "ⲁⲥⲡⲣⲁⲓⲧ",
           "letters": ["alpha", "sima", "pi", "ro", "alpha", "iota", "tav"]
+        },
+        {
+          "text": "مكتبة",
+          "coptic": "ⲙⲁⲕⲧⲁⲃⲁ",
+          "letters": ["mi", "alpha", "kappa", "tav", "alpha", "vida", "alpha"]
+        },
+        {
+          "text": "شمعدان",
+          "coptic": "ϣⲁⲙⲁⲇⲁⲛ",
+          "letters": ["shai", "alpha", "mi", "alpha", "delta", "alpha", "ni"]
+        },
+        {
+          "text": "مخطوطة",
+          "coptic": "ⲙⲁϧⲧⲟⲧⲁ",
+          "letters": ["mi", "alpha", "khai", "tav", "o", "tav", "alpha"]
+        },
+        {
+          "text": "سنكسار",
+          "coptic": "ⲥⲓⲛⲕⲥⲁⲣ",
+          "letters": ["sima", "iota", "ni", "kappa", "sima", "alpha", "ro"]
+        },
+        {
+          "text": "مناولة",
+          "coptic": "ⲙⲁⲛⲁⲟⲗⲁ",
+          "letters": ["mi", "alpha", "ni", "alpha", "o", "lola", "alpha"]
+        },
+        {
+          "text": "مسبحة",
+          "coptic": "ⲙⲁⲥⲃⲁϩⲁ",
+          "letters": ["mi", "alpha", "sima", "vida", "alpha", "hori", "alpha"]
+        },
+        {
+          "text": "قلالي",
+          "coptic": "ⲕⲁⲗⲗⲁⲗⲓ",
+          "letters": ["kappa", "alpha", "lola", "lola", "alpha", "lola", "iota"]
+        },
+        {
+          "text": "معمودية",
+          "coptic": "ⲙⲁⲙⲟⲇⲓⲁ",
+          "letters": ["mi", "alpha", "mi", "o", "delta", "iota", "alpha"]
+        },
+        {
+          "text": "شمامسة",
+          "coptic": "ϣⲁⲙⲁⲙⲥⲁ",
+          "letters": ["shai", "alpha", "mi", "alpha", "mi", "sima", "alpha"]
+        },
+        {
+          "text": "مقصورة",
+          "coptic": "ⲙⲁⲕⲥⲟⲣⲁ",
+          "letters": ["mi", "alpha", "kappa", "sima", "o", "ro", "alpha"]
+        },
+        {
+          "text": "قربانة",
+          "coptic": "ⲕⲟⲣⲃⲁⲛⲁ",
+          "letters": ["kappa", "o", "ro", "vida", "alpha", "ni", "alpha"]
         }
       ],
       "8": [
@@ -1047,6 +1298,11 @@
           "text": "بارثينوس",
           "coptic": "ⲡⲁⲣⲑⲉⲛⲟⲑ",
           "letters": ["pi", "alpha", "ro", "thita", "ei", "ni", "o", "thita"]
+        },
+        {
+          "text": "منجلية",
+          "coptic": "ⲙⲁⲛϫⲁⲗⲓⲁ",
+          "letters": ["mi", "alpha", "ni", "janja", "alpha", "lola", "iota", "alpha"]
         }
       ],
       "9": [
@@ -1208,6 +1464,56 @@
           "text": "Fax",
           "coptic": "ⲫⲁⲝ",
           "letters": ["phi", "alpha", "exi"]
+        },
+        {
+          "text": "Oil",
+          "coptic": "ⲟⲓⲗ",
+          "letters": ["o", "iota", "lola"]
+        },
+        {
+          "text": "Pew",
+          "coptic": "ⲡⲓⲟ",
+          "letters": ["pi", "iota", "o"]
+        },
+        {
+          "text": "Hymn",
+          "coptic": "ϩⲓⲙ",
+          "letters": ["hori", "iota", "mi"]
+        },
+        {
+          "text": "Robe",
+          "coptic": "ⲣⲟⲃ",
+          "letters": ["ro", "o", "vida"]
+        },
+        {
+          "text": "Nun",
+          "coptic": "ⲛⲁⲛ",
+          "letters": ["ni", "alpha", "ni"]
+        },
+        {
+          "text": "Rug",
+          "coptic": "ⲣⲁⲅ",
+          "letters": ["ro", "alpha", "gamma"]
+        },
+        {
+          "text": "Well",
+          "coptic": "ⲱⲉⲗ",
+          "letters": ["omega", "ei", "lola"]
+        },
+        {
+          "text": "Jar",
+          "coptic": "ϫⲁⲣ",
+          "letters": ["janja", "alpha", "ro"]
+        },
+        {
+          "text": "Dome",
+          "coptic": "ⲇⲟⲙ",
+          "letters": ["delta", "o", "mi"]
+        },
+        {
+          "text": "Cell",
+          "coptic": "ⲥⲉⲗ",
+          "letters": ["sima", "ei", "lola"]
         }
       ],
       "4": [
@@ -1345,6 +1651,56 @@
           "text": "Pharaoh",
           "coptic": "ⲫⲁⲣⲟ",
           "letters": ["phi", "alpha", "ro", "o"]
+        },
+        {
+          "text": "Monk",
+          "coptic": "ⲙⲟⲛⲕ",
+          "letters": ["mi", "o", "ni", "kappa"]
+        },
+        {
+          "text": "Bench",
+          "coptic": "ⲃⲉⲛϭ",
+          "letters": ["vida", "ei", "ni", "chima"]
+        },
+        {
+          "text": "Gate",
+          "coptic": "ⲅⲉⲓⲧ",
+          "letters": ["gamma", "ei", "iota", "tav"]
+        },
+        {
+          "text": "Harp",
+          "coptic": "ϩⲁⲣⲡ",
+          "letters": ["hori", "alpha", "ro", "pi"]
+        },
+        {
+          "text": "Drum",
+          "coptic": "ⲇⲣⲁⲙ",
+          "letters": ["delta", "ro", "alpha", "mi"]
+        },
+        {
+          "text": "Psalm",
+          "coptic": "ⲥⲁⲗⲙ",
+          "letters": ["sima", "alpha", "lola", "mi"]
+        },
+        {
+          "text": "Wine",
+          "coptic": "ⲱⲁⲓⲛ",
+          "letters": ["omega", "alpha", "iota", "ni"]
+        },
+        {
+          "text": "Shelf",
+          "coptic": "ϣⲉⲗϥ",
+          "letters": ["shai", "ei", "lola", "fai"]
+        },
+        {
+          "text": "Fence",
+          "coptic": "ϥⲉⲛⲥ",
+          "letters": ["fai", "ei", "ni", "sima"]
+        },
+        {
+          "text": "Oven",
+          "coptic": "ⲟⲃⲉⲛ",
+          "letters": ["o", "vida", "ei", "ni"]
         }
       ],
       "5": [
@@ -1532,6 +1888,61 @@
           "text": "Kitchen",
           "coptic": "ⲕⲓϭⲉⲛ",
           "letters": ["kappa", "iota", "chima", "ei", "ni"]
+        },
+        {
+          "text": "Altar",
+          "coptic": "ⲟⲗⲧⲁⲣ",
+          "letters": ["o", "lola", "tav", "alpha", "ro"]
+        },
+        {
+          "text": "Icon",
+          "coptic": "ⲁⲓⲕⲟⲛ",
+          "letters": ["alpha", "iota", "kappa", "o", "ni"]
+        },
+        {
+          "text": "Choir",
+          "coptic": "ⲕⲱⲁⲓⲣ",
+          "letters": ["kappa", "omega", "alpha", "iota", "ro"]
+        },
+        {
+          "text": "Tower",
+          "coptic": "ⲧⲁⲱⲉⲣ",
+          "letters": ["tav", "alpha", "omega", "ei", "ro"]
+        },
+        {
+          "text": "Stairs",
+          "coptic": "ⲥⲧⲉⲣⲍ",
+          "letters": ["sima", "tav", "ei", "ro", "zita"]
+        },
+        {
+          "text": "Bishop",
+          "coptic": "ⲃⲓϣⲟⲡ",
+          "letters": ["vida", "iota", "shai", "o", "pi"]
+        },
+        {
+          "text": "Chalice",
+          "coptic": "ϭⲁⲗⲓⲥ",
+          "letters": ["chima", "alpha", "lola", "iota", "sima"]
+        },
+        {
+          "text": "Organ",
+          "coptic": "ⲟⲣⲅⲁⲛ",
+          "letters": ["o", "ro", "gamma", "alpha", "ni"]
+        },
+        {
+          "text": "Bricks",
+          "coptic": "ⲃⲣⲓⲕⲥ",
+          "letters": ["vida", "ro", "iota", "kappa", "sima"]
+        },
+        {
+          "text": "Chapel",
+          "coptic": "ϭⲁⲡⲉⲗ",
+          "letters": ["chima", "alpha", "pi", "ei", "lola"]
+        },
+        {
+          "text": "Shrine",
+          "coptic": "ϣⲣⲁⲓⲛ",
+          "letters": ["shai", "ro", "alpha", "iota", "ni"]
         }
       ],
       "6": [
@@ -1664,6 +2075,56 @@
           "text": "Dolphin",
           "coptic": "ⲇⲟⲗⲫⲓⲛ",
           "letters": ["delta", "o", "lola", "phi", "iota", "ni"]
+        },
+        {
+          "text": "Censer",
+          "coptic": "ⲥⲉⲛⲥⲉⲣ",
+          "letters": ["sima", "ei", "ni", "sima", "ei", "ro"]
+        },
+        {
+          "text": "Pulpit",
+          "coptic": "ⲡⲟⲗⲡⲓⲧ",
+          "letters": ["pi", "o", "lola", "pi", "iota", "tav"]
+        },
+        {
+          "text": "Sermon",
+          "coptic": "ⲥⲉⲣⲙⲟⲛ",
+          "letters": ["sima", "ei", "ro", "mi", "o", "ni"]
+        },
+        {
+          "text": "Desert",
+          "coptic": "ⲇⲉⲍⲉⲣⲧ",
+          "letters": ["delta", "ei", "zita", "ei", "ro", "tav"]
+        },
+        {
+          "text": "Mosaic",
+          "coptic": "ⲙⲟⲍⲁⲓⲕ",
+          "letters": ["mi", "o", "zita", "alpha", "iota", "kappa"]
+        },
+        {
+          "text": "Basin",
+          "coptic": "ⲃⲉⲓⲥⲉⲛ",
+          "letters": ["vida", "ei", "iota", "sima", "ei", "ni"]
+        },
+        {
+          "text": "Carpet",
+          "coptic": "ⲕⲁⲣⲡⲉⲧ",
+          "letters": ["kappa", "alpha", "ro", "pi", "ei", "tav"]
+        },
+        {
+          "text": "Tunic",
+          "coptic": "ⲧⲓⲟⲛⲓⲕ",
+          "letters": ["tav", "iota", "o", "ni", "iota", "kappa"]
+        },
+        {
+          "text": "Hermit",
+          "coptic": "ϩⲉⲣⲙⲓⲧ",
+          "letters": ["hori", "ei", "ro", "mi", "iota", "tav"]
+        },
+        {
+          "text": "Curtain",
+          "coptic": "ⲕⲉⲣⲧⲉⲛ",
+          "letters": ["kappa", "ei", "ro", "tav", "ei", "ni"]
         }
       ],
       "7": [
@@ -1751,6 +2212,56 @@
           "text": "Nazareth",
           "coptic": "ⲛⲁⲍⲁⲣⲉⲑ",
           "letters": ["ni", "alpha", "zita", "alpha", "ro", "ei", "thita"]
+        },
+        {
+          "text": "Lantern",
+          "coptic": "ⲗⲁⲛⲧⲉⲣⲛ",
+          "letters": ["lola", "alpha", "ni", "tav", "ei", "ro", "ni"]
+        },
+        {
+          "text": "Candles",
+          "coptic": "ⲕⲁⲛⲇⲟⲗⲍ",
+          "letters": ["kappa", "alpha", "ni", "delta", "o", "lola", "zita"]
+        },
+        {
+          "text": "Baptism",
+          "coptic": "ⲃⲁⲡⲧⲓⲍⲙ",
+          "letters": ["vida", "alpha", "pi", "tav", "iota", "zita", "mi"]
+        },
+        {
+          "text": "Blessing",
+          "coptic": "ⲃⲗⲉⲥⲓⲛⲅ",
+          "letters": ["vida", "lola", "ei", "sima", "iota", "ni", "gamma"]
+        },
+        {
+          "text": "Pilgrim",
+          "coptic": "ⲡⲓⲗⲅⲣⲓⲙ",
+          "letters": ["pi", "iota", "lola", "gamma", "ro", "iota", "mi"]
+        },
+        {
+          "text": "Fasting",
+          "coptic": "ⲫⲁⲥⲧⲓⲛⲅ",
+          "letters": ["phi", "alpha", "sima", "tav", "iota", "ni", "gamma"]
+        },
+        {
+          "text": "Lectern",
+          "coptic": "ⲗⲉⲕⲧⲉⲣⲛ",
+          "letters": ["lola", "ei", "kappa", "tav", "ei", "ro", "ni"]
+        },
+        {
+          "text": "Chanting",
+          "coptic": "ϭⲁⲛⲧⲓⲛⲅ",
+          "letters": ["chima", "alpha", "ni", "tav", "iota", "ni", "gamma"]
+        },
+        {
+          "text": "Praying",
+          "coptic": "ⲡⲣⲉⲓⲓⲛⲅ",
+          "letters": ["pi", "ro", "ei", "iota", "iota", "ni", "gamma"]
+        },
+        {
+          "text": "Gospels",
+          "coptic": "ⲅⲟⲥⲡⲉⲗⲍ",
+          "letters": ["gamma", "o", "sima", "pi", "ei", "lola", "zita"]
         }
       ]
     }

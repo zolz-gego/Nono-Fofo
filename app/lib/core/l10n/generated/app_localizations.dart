@@ -1543,6 +1543,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اسحب الحروف للمربعات، أو دوس على الحرف'**
   String get letterPuzzleHowTo;
+
+  /// No description provided for @letterPuzzleMix.
+  ///
+  /// In ar, this message translates to:
+  /// **'عشوائي'**
+  String get letterPuzzleMix;
 }
 
 class _AppLocalizationsDelegate

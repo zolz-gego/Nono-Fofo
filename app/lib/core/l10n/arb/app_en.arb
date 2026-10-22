@@ -254,5 +254,6 @@
   "letterPuzzleWrong": "Almost! Fix the red letters",
   "letterPuzzleMistakes": "Mistakes",
   "letterPuzzleOtherLevel": "Other word length",
-  "letterPuzzleHowTo": "Drag the letters into the boxes, or tap a letter"
+  "letterPuzzleHowTo": "Drag the letters into the boxes, or tap a letter",
+  "letterPuzzleMix": "Mix"
 }

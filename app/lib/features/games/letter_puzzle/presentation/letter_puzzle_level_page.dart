@@ -128,13 +128,15 @@ class _LetterPuzzleLevelPageState extends State<LetterPuzzleLevelPage> {
                     spacing: AppDimens.spaceSm,
                     runSpacing: AppDimens.spaceSm,
                     children: [
-                      for (final (i, n)
-                          in config.playableLengths(_lang).indexed)
+                      for (final (i, n) in [
+                        ...config.playableLengths(_lang),
+                        LetterPuzzleConfig.mix,
+                      ].indexed)
                         _LengthTile(
                               length: n,
                               stars: _progress.bestStars(
                                 LetterPuzzleCubit.id,
-                                '$n',
+                                LetterPuzzleCubit.levelKey(n),
                               ),
                               onTap: () => _play(n),
                             )
@@ -172,7 +174,7 @@ class _LetterPuzzleLevelPageState extends State<LetterPuzzleLevelPage> {
 }
 
 /// One word length: a row of that many empty cubes, how many letters, and
-/// the best stars.
+/// the best stars. The Mix level shows a dice instead.
 class _LengthTile extends StatelessWidget {
   const _LengthTile({
     required this.length,
@@ -207,24 +209,38 @@ class _LengthTile extends StatelessWidget {
               children: [
                 SizedBox(
                   height: 40,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (var i = 0; i < length; i++)
-                        Container(
-                          width: 14,
-                          height: 14,
-                          margin: const EdgeInsets.all(1.5),
-                          decoration: BoxDecoration(
-                            color: AppColors.iconGoldLight,
-                            borderRadius: BorderRadius.circular(3),
-                            border: Border.all(color: AppColors.namePlate),
+                  child: length == LetterPuzzleConfig.mix
+                      ? const Center(
+                          child: FaIcon(
+                            AppIcons.random,
+                            size: 28,
+                            color: AppColors.namePlate,
                           ),
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            for (var i = 0; i < length; i++)
+                              Container(
+                                width: 14,
+                                height: 14,
+                                margin: const EdgeInsets.all(1.5),
+                                decoration: BoxDecoration(
+                                  color: AppColors.iconGoldLight,
+                                  borderRadius: BorderRadius.circular(3),
+                                  border: Border.all(
+                                    color: AppColors.namePlate,
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
-                    ],
-                  ),
                 ),
-                AppText.h3(context.l10n.letterPuzzleLength(length)),
+                AppText.h3(
+                  length == LetterPuzzleConfig.mix
+                      ? context.l10n.letterPuzzleMix
+                      : context.l10n.letterPuzzleLength(length),
+                ),
                 const SizedBox(height: AppDimens.spaceXs),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -21,7 +21,11 @@ class LetterPuzzleConfig {
     this.threeStarsMaxMistakes = 2,
     this.twoStarsMaxMistakes = 5,
     this.words = const {},
+    this.background,
   });
+
+  /// The picker's "Mix" level: words of every length, mixed.
+  static const int mix = 0;
 
   factory LetterPuzzleConfig.fromJson(Map<String, dynamic> json) {
     const d = LetterPuzzleConfig();
@@ -43,6 +47,7 @@ class LetterPuzzleConfig {
       twoStarsMaxMistakes:
           (stars['twoStarsMaxMistakes'] as num?)?.toInt() ??
           d.twoStarsMaxMistakes,
+      background: json['background'] as String?,
       words: {
         for (final MapEntry(key: lang, value: byLength) in words.entries)
           lang: {
@@ -68,6 +73,15 @@ class LetterPuzzleConfig {
   /// The words of [length] letters for the [languageCode] app.
   List<PuzzleWord> wordsFor(String languageCode, int length) =>
       words[languageCode]?[length] ?? const [];
+
+  /// The words a round of [length] picks from: one length, or every
+  /// offered length for [mix].
+  List<PuzzleWord> poolFor(String languageCode, int length) => length == mix
+      ? [for (final n in lengths) ...wordsFor(languageCode, n)]
+      : wordsFor(languageCode, length);
+
+  /// The church picture behind the game (drawn in code when missing).
+  final String? background;
 
   /// Lengths that have words in [languageCode], in the picker's order.
   List<int> playableLengths(String languageCode) => [

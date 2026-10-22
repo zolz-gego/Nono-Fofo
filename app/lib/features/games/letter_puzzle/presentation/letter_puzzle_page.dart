@@ -16,6 +16,7 @@ import '../../../../core/theme/app_icons.dart';
 import '../../../../core/typography/app_text_styles.dart';
 import '../../../../core/widgets/text/app_texts.dart';
 import '../../../../engines/characters/domain/character_action.dart';
+import '../../../../engines/characters/domain/character_pose.dart';
 import '../../../../engines/characters/domain/character_reaction.dart';
 import '../../../../engines/characters/presentation/animated_character.dart';
 import '../../../../engines/characters/presentation/character_controller.dart';
@@ -34,7 +35,8 @@ import '../domain/puzzle_board.dart';
 import 'church_background.dart';
 import 'letter_puzzle_cubit.dart';
 
-/// Who plays the Letter puzzle, and how long the words are.
+/// Who plays the Letter puzzle, and how long the words are
+/// ([LetterPuzzleConfig.mix]: every length).
 class LetterPuzzleArgs {
   const LetterPuzzleArgs({required this.setup, required this.length});
 
@@ -90,6 +92,31 @@ class _LetterPuzzlePageState extends State<LetterPuzzlePage> {
   /// Phones: no brothers, the board gets the whole screen.
   static const double _smallScreen = 600;
 
+  /// How long the buddy takes to run to a cube (or back to his corner).
+  static const Duration _heroRun = Duration(milliseconds: 450);
+
+  /// How long the buddy waits by a cube before going back to his corner.
+  static const Duration _heroStay = Duration(milliseconds: 800);
+
+  /// The cube the buddy ran to (null: in his corner).
+  int? _heroAt;
+  bool _heroFacesLeft = false;
+
+  /// Bumped on every run, so an old "arrived" or "go home" doesn't cut in.
+  int _moveToken = 0;
+
+  /// A cube whose new letter shows once the buddy gets there.
+  int? _waitingSlot;
+
+  /// The cubes as of the last event, to see which one just got a letter.
+  List<int?> _lastSlots = const [];
+  int _lastIndex = -1;
+
+  /// The game area and each cube, for working out where the buddy runs.
+  final GlobalKey _stageKey = GlobalKey();
+  List<GlobalKey> _cubeKeys = const [];
+  int _cubeKeysFor = -1;
+
   @override
   void initState() {
     super.initState();
@@ -126,7 +153,7 @@ class _LetterPuzzlePageState extends State<LetterPuzzlePage> {
     _cubit?.close();
     final config = _config!;
     final items = LetterPuzzleCubit.pickItems(
-      pool: config.wordsFor(_lang!, widget.args.length),
+      pool: config.poolFor(_lang!, widget.args.length),
       alphabet: _alphabet,
       count: config.wordsPerRound,
       random: _random,
@@ -141,7 +168,12 @@ class _LetterPuzzlePageState extends State<LetterPuzzlePage> {
         random: _random,
       );
       _showResult = false;
+      _heroAt = null;
+      _waitingSlot = null;
+      _lastSlots = const [];
+      _lastIndex = -1;
     });
+    _moveToken++;
     _hero.idle();
     _other.idle();
     _sound.play(SoundEvent.levelStart);
@@ -174,6 +206,7 @@ class _LetterPuzzlePageState extends State<LetterPuzzlePage> {
 
   void _onEvent(BuildContext context, LetterPuzzleState state) {
     final l10n = context.l10n;
+    _followLetters(state);
     switch (state.event) {
       case LetterPuzzleEvent.none:
         break;
@@ -190,7 +223,7 @@ class _LetterPuzzlePageState extends State<LetterPuzzlePage> {
       case LetterPuzzleEvent.hint:
         _sound.play(SoundEvent.hintRevealed);
         if (!_small) {
-          _hero.play(CharacterAction.hint, hold: const Duration(seconds: 2));
+          // He's already running to the cube (see _followLetters).
           _hero.say(
             l10n.letterPuzzleHintSay,
             duration: const Duration(seconds: 2),
@@ -216,6 +249,126 @@ class _LetterPuzzlePageState extends State<LetterPuzzlePage> {
           setState(() => _showResult = true);
         });
     }
+  }
+
+  /// A letter just went into a cube (a tap, a drop or a hint): the buddy
+  /// runs there and the letter shows when he arrives. A new word sends him
+  /// back to his corner.
+  void _followLetters(LetterPuzzleState state) {
+    final slots = state.board.slots;
+    // A new word starts with every cube empty.
+    final sameWord = state.index == _lastIndex;
+    final before = sameWord
+        ? _lastSlots
+        : List<int?>.filled(slots.length, null);
+    int? placed;
+    for (var i = 0; i < slots.length; i++) {
+      if (slots[i] != null && slots[i] != before[i]) {
+        placed = i;
+        break;
+      }
+    }
+    _lastSlots = slots;
+    _lastIndex = state.index;
+    if (_small) return;
+    if (placed != null) {
+      _runTo(placed);
+    } else if (!sameWord && _heroAt != null) {
+      _goHome();
+    }
+  }
+
+  void _runTo(int slot) {
+    final token = ++_moveToken;
+    final from = _heroRect(_heroAt);
+    final to = _heroRect(slot);
+    _hero
+      ..hideSpeech()
+      ..play(CharacterAction.run);
+    _sound.play(SoundEvent.charRun, by: _heroId);
+    setState(() {
+      _heroAt = slot;
+      _waitingSlot = slot;
+      if (from != null &&
+          to != null &&
+          (to.center.dx - from.center.dx).abs() > 1) {
+        _heroFacesLeft = to.center.dx < from.center.dx;
+      }
+    });
+    _later(_heroRun, () {
+      if (token != _moveToken) return;
+      setState(() => _waitingSlot = null);
+      _hero.play(CharacterAction.hint, hold: const Duration(milliseconds: 700));
+      _later(_heroStay, () {
+        if (token == _moveToken) _goHome();
+      });
+    });
+  }
+
+  void _goHome() {
+    if (_heroAt == null) return;
+    final token = ++_moveToken;
+    _hero.play(CharacterAction.run);
+    setState(() {
+      _heroAt = null;
+      _waitingSlot = null;
+    });
+    _later(_heroRun, () {
+      if (token == _moveToken) _hero.idle();
+    });
+  }
+
+  /// Layout of the last build, for the buddy's spots.
+  ({Size size, double charSize, bool rtl})? _layout;
+
+  /// The buddy's box in his corner, or beside cube [slot] with the cube at
+  /// about his hands. Null before the first layout.
+  Rect? _heroRect(int? slot) {
+    final layout = _layout;
+    if (layout == null) return null;
+    final roster = context.read<CharacterRoster>();
+    final idle = roster.pose(_heroId, CharacterAction.idle);
+    final ref = roster.referenceHeight;
+    final aspect = idle == null ? 0.45 : idle.width / idle.height;
+    final homeH = layout.charSize * (idle?.height ?? ref) / ref;
+    final homeW = homeH * aspect;
+    final onLeft = !layout.rtl;
+    final homeX = onLeft
+        ? _cornerWidth / 2
+        : layout.size.width - _cornerWidth / 2;
+    final home = Rect.fromLTWH(
+      homeX - homeW / 2,
+      layout.size.height - homeH,
+      homeW,
+      homeH,
+    );
+    final cube = slot == null ? null : _cubeRect(slot);
+    if (cube == null) return home;
+    final h = (cube.height * 2.1).clamp(90.0, max(90.0, homeH)).toDouble();
+    final w = h * aspect;
+    final c = cube.center;
+    final fromLeft = home.center.dx < c.dx;
+    final x = fromLeft ? c.dx - w * 0.95 : c.dx - w * 0.05;
+    return Rect.fromLTWH(
+      x.clamp(0.0, max(0.0, layout.size.width - w)),
+      (c.dy - h * 0.45).clamp(0.0, max(0.0, layout.size.height - h)),
+      w,
+      h,
+    );
+  }
+
+  /// Where cube [slot] is on the game area (null until it's laid out).
+  Rect? _cubeRect(int slot) {
+    if (slot >= _cubeKeys.length) return null;
+    final cube = _cubeKeys[slot].currentContext?.findRenderObject();
+    final stage = _stageKey.currentContext?.findRenderObject();
+    if (cube is! RenderBox || stage is! RenderBox || !cube.attached) {
+      return null;
+    }
+    return Rect.fromPoints(
+      cube.localToGlobal(Offset.zero, ancestor: stage),
+      cube.localToGlobal(cube.size.bottomRight(Offset.zero), ancestor: stage),
+    );
   }
 
   void _onHint() {
@@ -271,7 +424,7 @@ class _LetterPuzzlePageState extends State<LetterPuzzlePage> {
       ],
       body: Stack(
         children: [
-          const Positioned.fill(child: ChurchBackground()),
+          Positioned.fill(child: _background()),
           if (cubit == null)
             const Center(child: CircularProgressIndicator())
           else
@@ -290,6 +443,17 @@ class _LetterPuzzlePageState extends State<LetterPuzzlePage> {
     );
   }
 
+  /// The church picture, or the church drawn in code until there is one.
+  Widget _background() {
+    final path = _config?.background;
+    if (path == null) return const ChurchBackground();
+    return Image.asset(
+      path,
+      fit: BoxFit.cover,
+      errorBuilder: (_, _, _) => const ChurchBackground(),
+    );
+  }
+
   Widget _screen(Size size, LetterPuzzleState state) {
     final l10n = context.l10n;
     final rtl = Directionality.of(context) == TextDirection.rtl;
@@ -299,8 +463,14 @@ class _LetterPuzzlePageState extends State<LetterPuzzlePage> {
     // Room for a brother at each side, wide enough for his speech bubble.
     final side = small ? AppDimens.spaceSm : _cornerWidth + AppDimens.spaceSm;
     final boardW = min(size.width - side * 2, 820.0);
+    _layout = (size: size, charSize: charSize, rtl: rtl);
+    if (_cubeKeysFor != state.index) {
+      _cubeKeysFor = state.index;
+      _cubeKeys = [for (var i = 0; i < state.board.length; i++) GlobalKey()];
+    }
 
     return Stack(
+      key: _stageKey,
       children: [
         Positioned(
           top: AppDimens.spaceSm,
@@ -333,6 +503,8 @@ class _LetterPuzzlePageState extends State<LetterPuzzlePage> {
                   state: state,
                   width: boardW,
                   showHowTo: state.index == 0,
+                  cubeKeys: _cubeKeys,
+                  waitingSlot: _waitingSlot,
                   onPlace: (tile, slot) => _cubit?.place(tile, slot),
                   onPlaceNext: (tile) => _cubit?.placeNext(tile),
                   onRemove: (slot) => _cubit?.remove(slot),
@@ -343,8 +515,8 @@ class _LetterPuzzlePageState extends State<LetterPuzzlePage> {
           ),
         ),
         if (!small) ...[
-          _corner(_hero, charSize, onLeft: !rtl),
           _corner(_other, charSize, onLeft: rtl),
+          _runningHero(charSize, rtl),
         ],
         if (_showResult && state.finished)
           Positioned.fill(
@@ -361,6 +533,28 @@ class _LetterPuzzlePageState extends State<LetterPuzzlePage> {
         if (state.items.isEmpty)
           Center(child: AppText.body(l10n.gamesComingSoon)),
       ],
+    );
+  }
+
+  /// The buddy: in his corner, or beside the cube he ran to.
+  Widget _runningHero(double charSize, bool rtl) {
+    final rect = _heroRect(_heroAt);
+    final homeFacesLeft = rtl;
+    final child = AnimatedCharacter(
+      controller: _hero,
+      size: charSize,
+      mirror: _heroAt == null ? homeFacesLeft : _heroFacesLeft,
+    );
+    if (rect == null) {
+      return _corner(_hero, charSize, onLeft: !rtl);
+    }
+    return AnimatedPositioned.fromRect(
+      rect: rect,
+      duration: _heroRun,
+      curve: Curves.easeInOut,
+      child: IgnorePointer(
+        child: FittedBox(alignment: Alignment.bottomCenter, child: child),
+      ),
     );
   }
 
@@ -457,6 +651,8 @@ class _Board extends StatelessWidget {
     required this.state,
     required this.width,
     required this.showHowTo,
+    required this.cubeKeys,
+    required this.waitingSlot,
     required this.onPlace,
     required this.onPlaceNext,
     required this.onRemove,
@@ -466,6 +662,12 @@ class _Board extends StatelessWidget {
   final LetterPuzzleState state;
   final double width;
   final bool showHowTo;
+
+  /// One key per cube, so the page can find where each cube is.
+  final List<GlobalKey> cubeKeys;
+
+  /// A cube whose letter waits for the buddy to bring it.
+  final int? waitingSlot;
   final void Function(int tile, int slot) onPlace;
   final void Function(int tile) onPlaceNext;
   final void Function(int slot) onRemove;
@@ -498,8 +700,10 @@ class _Board extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(4),
                   child: _Cube(
+                    key: i < cubeKeys.length ? cubeKeys[i] : null,
                     board: board,
                     slot: i,
+                    waiting: i == waitingSlot,
                     size: cube,
                     enabled: canPlay,
                     onPlace: onPlace,
@@ -597,7 +801,9 @@ class _NamePlate extends StatelessWidget {
 /// can be dragged out or tapped back to the tray.
 class _Cube extends StatelessWidget {
   const _Cube({
+    super.key,
     required this.board,
+    required this.waiting,
     required this.slot,
     required this.size,
     required this.enabled,
@@ -607,6 +813,9 @@ class _Cube extends StatelessWidget {
 
   final PuzzleBoard board;
   final int slot;
+
+  /// Its new letter is on the way (shown empty until the buddy arrives).
+  final bool waiting;
   final double size;
   final bool enabled;
   final void Function(int tile, int slot) onPlace;
@@ -614,7 +823,7 @@ class _Cube extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tile = board.slots[slot];
+    final tile = waiting ? null : board.slots[slot];
     final locked = board.locked[slot];
     final mark = board.marks[slot];
     return DragTarget<int>(
@@ -642,6 +851,7 @@ class _Cube extends StatelessWidget {
           size: size,
           mark: mark,
           highlight: hover,
+          popIn: true,
         );
         if (locked || !enabled) return face;
         return _DraggableTile(
@@ -770,6 +980,7 @@ class _TileFace extends StatelessWidget {
     this.mark = SlotMark.none,
     this.highlight = false,
     this.lifted = false,
+    this.popIn = false,
   });
 
   final CopticLetter letter;
@@ -777,6 +988,9 @@ class _TileFace extends StatelessWidget {
   final SlotMark mark;
   final bool highlight;
   final bool lifted;
+
+  /// Pops in when it first shows (a letter landing in its cube).
+  final bool popIn;
 
   @override
   Widget build(BuildContext context) {
@@ -820,6 +1034,13 @@ class _TileFace extends StatelessWidget {
       return face.animate().scale(
         begin: const Offset(1.15, 1.15),
         duration: AppDimens.normal,
+        curve: Curves.easeOutBack,
+      );
+    }
+    if (popIn) {
+      return face.animate().scale(
+        begin: const Offset(0.6, 0.6),
+        duration: AppDimens.fast,
         curve: Curves.easeOutBack,
       );
     }

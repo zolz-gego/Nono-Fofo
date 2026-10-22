@@ -155,6 +155,18 @@ void main() {
       ).called(1);
     });
 
+    test('a round never repeats a word, even if the list does', () {
+      final alphabet = {for (final l in mina) l.id: l};
+      const other = PuzzleWord(text: 'منا', letters: ['mi', 'ni', 'alpha']);
+      final items = LetterPuzzleCubit.pickItems(
+        pool: const [_word, _word, other, other],
+        alphabet: alphabet,
+        count: 10,
+        random: Random(8),
+      );
+      expect(items.map((i) => i.word.text).toList()..sort(), ['منا', 'مينا']);
+    });
+
     test('stars: 0-2 mistakes = 3, 3-5 = 2, more = 1', () {
       const c = LetterPuzzleConfig();
       expect([0, 2, 3, 5, 6, 20].map(c.starsFor), [3, 3, 2, 2, 1, 1]);
@@ -182,6 +194,21 @@ void main() {
           reason: '$lang length $n',
         );
       }
+      final all = [for (final ws in config.words[lang]!.values) ...ws];
+      expect(
+        {for (final w in all) w.text}.length,
+        all.length,
+        reason: '$lang: a word is listed twice',
+      );
+      expect(
+        {for (final w in all) w.letters.join(' ')}.length,
+        all.length,
+        reason: '$lang: a spelling is listed twice',
+      );
+      expect(
+        config.poolFor(lang, LetterPuzzleConfig.mix).length,
+        greaterThan(config.wordsFor(lang, 3).length),
+      );
       for (final MapEntry(key: n, value: words)
           in config.words[lang]!.entries) {
         for (final w in words) {

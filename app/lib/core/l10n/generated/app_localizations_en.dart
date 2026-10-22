@@ -868,4 +868,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get letterPuzzleHowTo =>
       'Drag the letters into the boxes, or tap a letter';
+
+  @override
+  String get letterPuzzleMix => 'Mix';
 }

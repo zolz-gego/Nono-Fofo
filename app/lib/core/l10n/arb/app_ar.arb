@@ -721,5 +721,6 @@
   "letterPuzzleWrong": "قرّبت! صلّح الحروف الحمرا",
   "letterPuzzleMistakes": "غلط",
   "letterPuzzleOtherLevel": "عدد حروف تاني",
-  "letterPuzzleHowTo": "اسحب الحروف للمربعات، أو دوس على الحرف"
+  "letterPuzzleHowTo": "اسحب الحروف للمربعات، أو دوس على الحرف",
+  "letterPuzzleMix": "عشوائي"
 }

@@ -17,6 +17,7 @@ One illustration per game card on the level road. Same tool and workflow as
 | امسك البالونة / Catch the balloon | `balloons.png` |
 | كروت جدو / Grandpa's Cards | `cards.png` |
 | دوّر في الدير / Search the Monastery | `monastery.png` |
+| رتّب الحروف / Letter puzzle (Level 2) | `letterPuzzle.png` |
 | تحدّى أخوك / Challenge your brother | `challenge.png` |
 
 ---
@@ -464,3 +465,37 @@ A cartoon woven wicker basket for a children's game, flat 2D vector style: thin 
 ```
 Using the attached reference for the exact look, clothes and colors: [NONO / FOFO], full body, three poses side by side on one sheet, all facing RIGHT. Pose 1 "sit" (left): sitting on an invisible branch with legs dangling, hands resting on his knees, happy smile. Pose 2 "toss" (middle): sitting the same way, one arm swinging down and forward as if dropping an apple, playful grin. Pose 3 "carry" (right): standing, holding an invisible wide basket in front of his tummy with both hands, arms a little forward, ready and excited. No basket, no apples, no branch (the game draws them). Same flat 2D style, thin warm-brown outlines. Plain solid white background, no shadow, no text.
 ```
+
+---
+
+## Letter puzzle art (رتّب الحروف), Level 2
+
+Inside an old Coptic church: the brothers fix the name cards under the
+saints' icons by putting Coptic letters in order. Until a file is there the
+game draws that part in code. Attach
+`design/reference/nono-fofo-approved.webp` when the model accepts a
+reference, so the style matches.
+
+| What | Save the original as | Then |
+|---|---|---|
+| Road card | `design/reference/letter_puzzle/icon.webp` | Claude puts it on the beige square as `app/assets/games/letterPuzzle.png` |
+| Church background, wide (16:9) | `design/reference/letter_puzzle/church.webp` | Claude sizes it into `app/assets/games/letter_puzzle/church.webp` (the `background` in `app/assets/content/games/letter_puzzle.json`) |
+
+### Road card: `letterPuzzle.png`
+
+Paste the **style block** first, like the other cards.
+
+```
+A small saint's icon in a shiny golden frame at the top: a simple saint with a round golden halo and a coral-red robe on a deep teal #0F4C5C background, kind face, no details that are hard to read at small size. Under it a wooden name plaque in warm cocoa brown with a thin gold edge. In front of the plaque a row of four chunky cream #FFFBF4 letter tiles like toy blocks, each showing one big Coptic letter in cocoa brown #5B4B3A: ⲙ ⲏ ⲛ ⲁ. Three tiles sit neatly in a row with a leaf-green #6CC24A outline glow, and the last tile (ⲁ) floats a little above its empty spot with small curved motion lines, as if a child is placing it. A few small sunny-yellow #FFC845 star sparkles. Bold, simple and readable at small size, because it is shown only about 150 pixels wide on the road.
+```
+
+### Church background (wide, landscape 16:9)
+
+The board (the icon, the name card, the cubes and the letter tray) sits in
+the middle and the brothers stand on the floor in the two bottom corners, so
+the middle must stay calm and the bottom corners must be floor.
+
+```
+The inside of a warm, old Egyptian Coptic church for a children's game background, flat 2D vector cartoon style: thin warm-brown #5B4B3A outlines, flat colors with soft shading, rounded friendly shapes, cheerful and calm. Wide landscape 16:9, seen straight from the front at a child's eye level. At the back, a carved dark wooden iconostasis (the screen in front of the altar) with a row of small arched panels and a few small golden-framed icons of saints with round halos (simple shapes, no faces in detail), and a closed curtained door in its center with a small cross above it. Cream and warm sand stone walls with tall round-arched windows of mist-blue #A8DADC glass with a small cross in each. Two or three brass oil lamps (qandil) hanging on thin chains from a wooden-beamed ceiling. Coral-red #FF7A5C velvet curtains tied at both far sides. A warm wooden floor in the bottom fifth of the picture, with a long woven rug in slate teal #4F7C82 with a coral border. Soft golden light coming in through the windows. Keep the center of the picture simple and uncluttered, with no furniture there (a game board will be shown on top of it), and keep the bottom left and bottom right corners as open floor where two kids will stand. Use only these colors: deep teal #0F4C5C, mist blue #A8DADC, warm sand #EFE6D8, slate teal #4F7C82, cocoa brown #5B4B3A, sunny yellow #FFC845, coral #FF7A5C, leaf green #6CC24A, cream #FFFBF4, plus wood browns and gold. No people, no text, no letters of any alphabet, no watermark, no frame or border.
+```
+

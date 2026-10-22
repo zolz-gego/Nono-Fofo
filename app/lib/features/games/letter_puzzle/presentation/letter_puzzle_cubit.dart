@@ -129,6 +129,10 @@ class LetterPuzzleCubit extends Cubit<LetterPuzzleState> {
   /// Key the best stars are saved under (per word length).
   static const String id = 'letterPuzzle';
 
+  /// The level a word length's best stars are saved under.
+  static String levelKey(int length) =>
+      length == LetterPuzzleConfig.mix ? 'mix' : '$length';
+
   final GameProgressRepository _progress;
   final LetterPuzzleConfig config;
   final int length;
@@ -142,7 +146,9 @@ class LetterPuzzleCubit extends Cubit<LetterPuzzleState> {
       );
 
   /// Picks the round's words: [count] of [pool] at random, letters looked
-  /// up in [alphabet] (words with an unknown letter are skipped).
+  /// up in [alphabet] (words with an unknown letter are skipped). A word
+  /// never comes twice in a round, even when the list has it twice (same
+  /// text, or same spelling).
   static List<PuzzleItem> pickItems({
     required List<PuzzleWord> pool,
     required Map<String, CopticLetter> alphabet,
@@ -157,7 +163,13 @@ class LetterPuzzleCubit extends Cubit<LetterPuzzleState> {
             letters: [for (final id in w.letters) alphabet[id]!],
           ),
     ]..shuffle(random);
-    return items.take(count).toList();
+    final texts = <String>{}, spellings = <String>{};
+    return [
+      for (final item in items)
+        if (texts.add(item.word.text) &&
+            spellings.add(item.word.letters.join(' ')))
+          item,
+    ].take(count).toList();
   }
 
   void _move(PuzzleBoard? board) {
@@ -242,7 +254,7 @@ class LetterPuzzleCubit extends Cubit<LetterPuzzleState> {
       return;
     }
     final stars = config.starsFor(state.mistakes);
-    final isNewBest = await _progress.saveStars(id, '$length', stars);
+    final isNewBest = await _progress.saveStars(id, levelKey(length), stars);
     emit(
       state.copyWith(
         stars: stars,

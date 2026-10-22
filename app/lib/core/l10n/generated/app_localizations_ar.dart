@@ -913,4 +913,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get letterPuzzleHowTo => 'اسحب الحروف للمربعات، أو دوس على الحرف';
+
+  @override
+  String get letterPuzzleMix => 'عشوائي';
 }
