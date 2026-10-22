@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import '../../balloons/game/balloons_layout.dart';
 import '../../balloons/game/village_background.dart';
-import '../../letter_hunt/game/target_card_layout.dart';
 import '../../shell/presentation/game_scaffold.dart';
 import '../domain/magic_basket_config.dart';
 
@@ -23,7 +22,7 @@ class TreeArt {
 /// A big apple tree fills the top of the village. The other brother sits on
 /// a branch at the start side (away from the settings button) and throws
 /// the apples; the child's buddy runs along the path with the basket.
-class MagicBasketLayout with TargetCardLayout implements VillageFrame {
+class MagicBasketLayout implements VillageFrame {
   MagicBasketLayout(
     this.size, {
     required this.goal,
@@ -37,16 +36,13 @@ class MagicBasketLayout with TargetCardLayout implements VillageFrame {
     _fitArt();
   }
 
-  @override
   final Size size;
 
-  @override
   final int goal;
 
   /// How many sounds the letter has (one chip each on the card).
   final int soundCount;
 
-  @override
   final bool rtl;
 
   final VillageArt? art;
@@ -60,7 +56,12 @@ class MagicBasketLayout with TargetCardLayout implements VillageFrame {
   final Offset? throwerToss;
 
   @override
-  double get slotMaxSize => appleSize * 0.5;
+  double get width => size.width;
+  @override
+  double get height => size.height;
+
+  /// Short screens (phones in landscape) get a slimmer top.
+  bool get compact => height < 520;
 
   @override
   Rect? imageRect;
@@ -86,34 +87,51 @@ class MagicBasketLayout with TargetCardLayout implements VillageFrame {
   }
 
   // ---------------------------------------------------------------------------
-  // Card: "Ⲁⲁ (Alpha)", the sound chips, then the apple slots
+  // Top: the progress row beside the settings button (apples caught, the
+  // sounds found), and the letter's name in one line under it
   // ---------------------------------------------------------------------------
 
-  /// Height of the row of sound chips under the letter.
-  double get chipSize => compact ? 26 : 38;
+  double get hudTop => GameScaffold.buttonInset;
 
-  @override
-  double get slotsTop =>
-      cardTop +
-      (compact ? cardLetterSize * 1.15 + 6 : 10 + cardLetterSize * 1.25 + 14) +
-      chipSize +
-      (compact ? 6 : 10);
+  /// The progress row is as tall as the settings button, between the two
+  /// top corners (the button is in one of them).
+  double get progressHeight => GameScaffold.buttonSize;
+  double get progressLeft => GameScaffold.cornerSize;
+  double get progressWidth => width - GameScaffold.cornerSize * 2;
 
-  /// Top of the sound chips row.
-  double get chipsTop => slotsTop - chipSize - (compact ? 6 : 10);
+  double get nameTop => hudTop + progressHeight + (compact ? 4 : 6);
+  double get nameHeight => compact ? 34 : 42;
+
+  /// Bottom of everything at the top.
+  double get cardBottom => nameTop + nameHeight;
+
+  /// The whole top area (speech bubbles stay out of it).
+  Rect get cardRect =>
+      Rect.fromLTRB(progressLeft, hudTop, width - progressLeft, cardBottom);
 
   // ---------------------------------------------------------------------------
   // The tree
   // ---------------------------------------------------------------------------
 
-  /// Where the tree picture is drawn: as wide as the scene, its roots on
-  /// the path.
+  /// Where the tree picture is drawn: its roots on the path, and at least
+  /// as wide as the scene and as tall as the room under the top rows, so
+  /// on tall screens (phones held upright) the crown fills the top. Its
+  /// sides then go past the screen edges, and it slides sideways (never
+  /// uncovering an edge) so the brother's branch stays on screen.
   Rect? get treeRect {
     final tree = this.tree;
     if (tree == null) return null;
-    final w = width * 1.04;
-    final h = w * tree.imageSize.height / tree.imageSize.width;
-    return Rect.fromLTWH((width - w) / 2, groundY - tree.marks.rootY * h, w, h);
+    final aspect = tree.imageSize.width / tree.imageSize.height;
+    final tall = (groundY - cardBottom) / tree.marks.rootY;
+    final w = max(width * 1.04, tall * aspect);
+    final h = w / aspect;
+    final seat = rtl ? 1 - tree.marks.seat.dx : tree.marks.seat.dx;
+    var left = (width - w) / 2;
+    final seatX = left + seat * w;
+    if (seatX < width * 0.2) left += width * 0.2 - seatX;
+    if (seatX > width * 0.8) left -= seatX - width * 0.8;
+    left = left.clamp(width - w, 0.0);
+    return Rect.fromLTWH(left, groundY - tree.marks.rootY * h, w, h);
   }
 
   /// A point of the tree picture (fractions, as drawn in English) on
@@ -128,7 +146,7 @@ class MagicBasketLayout with TargetCardLayout implements VillageFrame {
 
   /// The canopy of the code-drawn tree: a wide crown over the play area.
   Rect get canopy {
-    final top = max(cardTop, height * 0.02);
+    final top = max(hudTop, height * 0.02);
     final bottom = max(height * 0.42, cardBottom + appleSize * 0.6);
     return Rect.fromLTRB(width * 0.02, top, width * 0.98, bottom);
   }

@@ -11,9 +11,10 @@ import '../../../../core/widgets/text/app_texts.dart';
 import '../game/magic_basket_layout.dart';
 import 'magic_basket_cubit.dart';
 
-/// The card at the top: [label] + the letter (capital and small) and its
-/// name, one chip per sound of the letter (a "?" until caught), and one
-/// apple slot per apple to win. Positions come from [layout].
+/// The top of the scene, in two compact rows. Beside the settings button:
+/// the apples caught out of the goal and one chip per sound of the letter
+/// (a "?" until caught). Under it, in one line: [label], the letter
+/// (capital and small) and its name. Positions come from [layout].
 class MagicBasketHud extends StatelessWidget {
   const MagicBasketHud({
     super.key,
@@ -30,105 +31,170 @@ class MagicBasketHud extends StatelessWidget {
   Widget build(BuildContext context) =>
       BlocBuilder<MagicBasketCubit, MagicBasketState>(
         bloc: cubit,
-        builder: _card,
+        builder: _rows,
       );
 
-  Widget _card(BuildContext context, MagicBasketState state) {
+  Widget _rows(BuildContext context, MagicBasketState state) {
     final round = state.round;
     final l = layout;
     final lang = Localizations.localeOf(context).languageCode;
     final arabic = lang == 'ar';
+    final chip = l.progressHeight * 0.78;
 
     // A wrong catch or a fallen apple gives the letter a little shake.
     final shake =
         state.event == BasketEvent.wrong || state.event == BasketEvent.missed;
 
     return Positioned(
-      top: l.cardTop,
-      left: (l.width - l.cardWidth) / 2,
-      width: l.cardWidth,
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.surface.withValues(alpha: 0.94),
-          borderRadius: BorderRadius.circular(AppDimens.radiusMd),
-          border: Border.all(color: AppColors.speechBubbleBorder, width: 2),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.shadow,
-              blurRadius: 8,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            SizedBox(
-              height: l.chipsTop - l.cardTop,
+      left: l.progressLeft,
+      top: l.hudTop,
+      width: l.progressWidth,
+      height: l.cardBottom - l.hudTop,
+      child: Column(
+        children: [
+          SizedBox(
+            height: l.progressHeight,
+            child: Center(
               child: FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    AppText.h3(label),
-                    const SizedBox(width: AppDimens.spaceSm),
-                    Text(
-                          '${round.target.capital}${round.target.small}',
-                          // Coptic keys must not be mirrored in Arabic.
-                          textDirection: TextDirection.ltr,
-                          style: AppTextStyles.coptic(
-                            AppTextVariant.h1,
-                          ).copyWith(fontSize: l.cardLetterSize, height: 1.1),
-                        )
-                        .animate(
-                          key: ValueKey(state.eventId),
-                          target: shake ? 1 : 0,
-                        )
-                        .shake(hz: 5, offset: const Offset(6, 0)),
-                    const SizedBox(width: AppDimens.spaceSm),
-                    AppText(
-                      round.target.nameIn(lang),
-                      variant: AppTextVariant.caption,
-                      color: AppColors.textMuted,
+                    _Pill(
+                      height: chip,
+                      child: _Count(
+                        caught: state.landed,
+                        goal: round.goal,
+                        size: chip,
+                      ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: l.chipSize,
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    for (final (i, s) in round.sounds.indexed) ...[
-                      if (i > 0) const SizedBox(width: AppDimens.spaceSm),
+                    for (final s in round.sounds) ...[
+                      const SizedBox(width: AppDimens.spaceSm),
                       _SoundChip(
                         sound: s,
                         arabic: arabic,
                         caught: round.hasCaught(s),
-                        size: l.chipSize,
+                        size: chip,
                       ),
                     ],
                   ],
                 ),
               ),
             ),
-            SizedBox(height: l.slotsTop - l.chipsTop - l.chipSize),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                for (var i = 0; i < round.goal; i++) ...[
-                  if (i > 0) SizedBox(width: l.slotGap),
-                  _Slot(size: l.slotSize, filled: i < state.landed),
-                ],
-              ],
+          ),
+          SizedBox(height: l.nameTop - l.hudTop - l.progressHeight),
+          SizedBox(
+            height: l.nameHeight,
+            child: Center(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: _Pill(
+                  height: l.nameHeight,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AppText(
+                        label,
+                        variant: AppTextVariant.h3,
+                        color: AppColors.textHeading,
+                      ),
+                      const SizedBox(width: AppDimens.spaceSm),
+                      Text(
+                            '${round.target.capital}${round.target.small}',
+                            // Coptic keys must not be mirrored in Arabic.
+                            textDirection: TextDirection.ltr,
+                            style: AppTextStyles.coptic(AppTextVariant.h1)
+                                .copyWith(
+                                  fontSize: l.nameHeight * 0.8,
+                                  height: 1.1,
+                                ),
+                          )
+                          .animate(
+                            key: ValueKey(state.eventId),
+                            target: shake ? 1 : 0,
+                          )
+                          .shake(hz: 5, offset: const Offset(6, 0)),
+                      const SizedBox(width: AppDimens.spaceSm),
+                      AppText(
+                        round.target.nameIn(lang),
+                        variant: AppTextVariant.h3,
+                        color: AppColors.textMuted,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            SizedBox(height: l.cardBottomPadding),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+  }
+}
+
+/// A light rounded box behind a group on the top rows, so they read over
+/// the sky and the leaves.
+class _Pill extends StatelessWidget {
+  const _Pill({required this.height, required this.child});
+
+  final double height;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    height: height,
+    padding: EdgeInsets.symmetric(horizontal: height * 0.35),
+    decoration: BoxDecoration(
+      color: AppColors.surface.withValues(alpha: 0.92),
+      borderRadius: BorderRadius.circular(height / 2),
+      border: Border.all(color: AppColors.speechBubbleBorder, width: 2),
+      boxShadow: [
+        BoxShadow(
+          color: AppColors.shadow,
+          blurRadius: 6,
+          offset: const Offset(0, 2),
+        ),
+      ],
+    ),
+    alignment: Alignment.center,
+    child: child,
+  );
+}
+
+/// "🍎 3/5": the apples in the basket out of the goal. Pops on each catch.
+class _Count extends StatelessWidget {
+  const _Count({required this.caught, required this.goal, required this.size});
+
+  final int caught;
+  final int goal;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FaIcon(AppIcons.apple, size: size * 0.5, color: AppColors.apple),
+            SizedBox(width: size * 0.18),
+            Text(
+              '$caught/$goal',
+              // Numbers read left to right in both languages.
+              textDirection: TextDirection.ltr,
+              style: AppTextStyles.english(AppTextVariant.h3).copyWith(
+                fontSize: size * 0.5,
+                height: 1.1,
+                color: AppColors.textHeading,
+              ),
+            ),
+          ],
+        )
+        .animate(key: ValueKey(caught))
+        .scale(
+          begin: const Offset(1.3, 1.3),
+          end: const Offset(1, 1),
+          curve: Curves.elasticOut,
+          duration: AppDimens.slow,
+        );
   }
 }
 
@@ -198,47 +264,6 @@ class _SoundChip extends StatelessWidget {
     if (!caught) return chip;
     return chip.animate().scale(
       begin: const Offset(1.3, 1.3),
-      curve: Curves.elasticOut,
-      duration: AppDimens.slow,
-    );
-  }
-}
-
-class _Slot extends StatelessWidget {
-  const _Slot({required this.size, required this.filled});
-
-  final double size;
-  final bool filled;
-
-  @override
-  Widget build(BuildContext context) {
-    final slot = Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: filled
-            ? AppColors.sunYellow
-            : AppColors.mistBlue.withValues(alpha: 0.5),
-        border: Border.all(
-          color: filled
-              ? AppColors.cocoa
-              : AppColors.outline.withValues(alpha: 0.5),
-          width: 2,
-        ),
-      ),
-      alignment: Alignment.center,
-      child: FaIcon(
-        AppIcons.apple,
-        size: size * 0.5,
-        color: filled
-            ? AppColors.apple
-            : AppColors.outline.withValues(alpha: 0.45),
-      ),
-    );
-    if (!filled) return slot;
-    return slot.animate().scale(
-      begin: const Offset(1.5, 1.5),
       curve: Curves.elasticOut,
       duration: AppDimens.slow,
     );
