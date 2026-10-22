@@ -1,0 +1,700 @@
+{
+  "_readme": "Settings and words for the Letter puzzle game (Level 2, the church). Each word: ar = shown in Arabic, en = shown in English, coptic = the answer (for reading only), letters = the answer as letter ids from letters.json (the game uses this). The answer is the Arabic word's sounds written in Coptic letters. The tiles are exactly these letters, shuffled. wordsPerRound: words in one round, picked at random from the chosen length. lengths: word lengths offered in the picker (Coptic letters). Stars: a mistake is a failed Submit or a hint. 0..threeStarsMaxMistakes = 3 stars, up to twoStarsMaxMistakes = 2 stars, more = 1 star.",
+  "version": 1,
+  "wordsPerRound": 10,
+  "lengths": [
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "stars": {
+    "threeStarsMaxMistakes": 2,
+    "twoStarsMaxMistakes": 5
+  },
+  "words": {
+    "3": [
+      {
+        "ar": "مَن",
+        "en": "Manna",
+        "coptic": "ⲙⲁⲛ",
+        "letters": ["mi", "alpha", "ni"]
+      },
+      {
+        "ar": "زيت",
+        "en": "Oil",
+        "coptic": "ⲍⲓⲧ",
+        "letters": ["zita", "iota", "tav"]
+      },
+      {
+        "ar": "نور",
+        "en": "Light",
+        "coptic": "ⲛⲟⲣ",
+        "letters": ["ni", "o", "ro"]
+      },
+      {
+        "ar": "كاس",
+        "en": "Cup",
+        "coptic": "ⲕⲁⲥ",
+        "letters": ["kappa", "alpha", "sima"]
+      },
+      {
+        "ar": "دير",
+        "en": "Monastery",
+        "coptic": "ⲇⲏⲣ",
+        "letters": ["delta", "ita", "ro"]
+      },
+      {
+        "ar": "رب",
+        "en": "Lord",
+        "coptic": "ⲣⲁⲃ",
+        "letters": ["ro", "alpha", "vida"]
+      },
+      {
+        "ar": "أبا",
+        "en": "Abba",
+        "coptic": "ⲁⲃⲁ",
+        "letters": ["alpha", "vida", "alpha"]
+      },
+      {
+        "ar": "دان",
+        "en": "Dan",
+        "coptic": "ⲇⲁⲛ",
+        "letters": ["delta", "alpha", "ni"]
+      },
+      {
+        "ar": "جاد",
+        "en": "Gad",
+        "coptic": "ϫⲁⲇ",
+        "letters": ["janja", "alpha", "delta"]
+      },
+      {
+        "ar": "لوط",
+        "en": "Lot",
+        "coptic": "ⲗⲱⲧ",
+        "letters": ["lola", "omega", "tav"]
+      },
+      {
+        "ar": "سيث",
+        "en": "Seth",
+        "coptic": "ⲥⲏⲑ",
+        "letters": ["sima", "ita", "thita"]
+      },
+      {
+        "ar": "أيوب",
+        "en": "Job",
+        "coptic": "ⲓⲱⲃ",
+        "letters": ["iota", "omega", "vida"]
+      },
+      {
+        "ar": "إيڤا",
+        "en": "Eve",
+        "coptic": "ⲉⲩⲁ",
+        "letters": ["ei", "epsilon", "alpha"]
+      },
+      {
+        "ar": "توت",
+        "en": "Thout",
+        "coptic": "ⲧⲟⲧ",
+        "letters": ["tav", "o", "tav"]
+      },
+      {
+        "ar": "باب",
+        "en": "Door",
+        "coptic": "ⲃⲁⲃ",
+        "letters": ["vida", "alpha", "vida"]
+      },
+      {
+        "ar": "تين",
+        "en": "Fig",
+        "coptic": "ⲧⲓⲛ",
+        "letters": ["tav", "iota", "ni"]
+      },
+      {
+        "ar": "ديك",
+        "en": "Rooster",
+        "coptic": "ⲇⲓⲕ",
+        "letters": ["delta", "iota", "kappa"]
+      }
+    ],
+    "4": [
+      {
+        "ar": "مينا",
+        "en": "Mina",
+        "coptic": "ⲙⲏⲛⲁ",
+        "letters": ["mi", "ita", "ni", "alpha"]
+      },
+      {
+        "ar": "آدم",
+        "en": "Adam",
+        "coptic": "ⲁⲇⲁⲙ",
+        "letters": ["alpha", "delta", "alpha", "mi"]
+      },
+      {
+        "ar": "آمين",
+        "en": "Amen",
+        "coptic": "ⲁⲙⲏⲛ",
+        "letters": ["alpha", "mi", "ita", "ni"]
+      },
+      {
+        "ar": "أنبا",
+        "en": "Anba",
+        "coptic": "ⲁⲛⲃⲁ",
+        "letters": ["alpha", "ni", "vida", "alpha"]
+      },
+      {
+        "ar": "بابا",
+        "en": "Pope",
+        "coptic": "ⲡⲁⲡⲁ",
+        "letters": ["pi", "alpha", "pi", "alpha"]
+      },
+      {
+        "ar": "موسى",
+        "en": "Moses",
+        "coptic": "ⲙⲟⲥⲁ",
+        "letters": ["mi", "o", "sima", "alpha"]
+      },
+      {
+        "ar": "داود",
+        "en": "David",
+        "coptic": "ⲇⲁⲟⲇ",
+        "letters": ["delta", "alpha", "o", "delta"]
+      },
+      {
+        "ar": "متى",
+        "en": "Matthew",
+        "coptic": "ⲙⲁⲧⲁ",
+        "letters": ["mi", "alpha", "tav", "alpha"]
+      },
+      {
+        "ar": "سارة",
+        "en": "Sarah",
+        "coptic": "ⲥⲁⲣⲁ",
+        "letters": ["sima", "alpha", "ro", "alpha"]
+      },
+      {
+        "ar": "إيليا",
+        "en": "Elijah",
+        "coptic": "ⲓⲗⲓⲁ",
+        "letters": ["iota", "lola", "iota", "alpha"]
+      },
+      {
+        "ar": "فادي",
+        "en": "Fady",
+        "coptic": "ⲫⲁⲇⲓ",
+        "letters": ["phi", "alpha", "delta", "iota"]
+      },
+      {
+        "ar": "رامي",
+        "en": "Ramy",
+        "coptic": "ⲣⲁⲙⲓ",
+        "letters": ["ro", "alpha", "mi", "iota"]
+      },
+      {
+        "ar": "نبي",
+        "en": "Prophet",
+        "coptic": "ⲛⲁⲃⲓ",
+        "letters": ["ni", "alpha", "vida", "iota"]
+      },
+      {
+        "ar": "سما",
+        "en": "Heaven",
+        "coptic": "ⲥⲁⲙⲁ",
+        "letters": ["sima", "alpha", "mi", "alpha"]
+      },
+      {
+        "ar": "إيمان",
+        "en": "Faith",
+        "coptic": "ⲓⲙⲁⲛ",
+        "letters": ["iota", "mi", "alpha", "ni"]
+      },
+      {
+        "ar": "رجا",
+        "en": "Hope",
+        "coptic": "ⲣⲁϫⲁ",
+        "letters": ["ro", "alpha", "janja", "alpha"]
+      },
+      {
+        "ar": "خبز",
+        "en": "Bread",
+        "coptic": "ϧⲟⲃⲍ",
+        "letters": ["khai", "o", "vida", "zita"]
+      },
+      {
+        "ar": "فلك",
+        "en": "Ark",
+        "coptic": "ⲫⲟⲗⲕ",
+        "letters": ["phi", "o", "lola", "kappa"]
+      },
+      {
+        "ar": "نهر",
+        "en": "River",
+        "coptic": "ⲛⲁϩⲣ",
+        "letters": ["ni", "alpha", "hori", "ro"]
+      },
+      {
+        "ar": "سينا",
+        "en": "Sinai",
+        "coptic": "ⲥⲓⲛⲁ",
+        "letters": ["sima", "iota", "ni", "alpha"]
+      },
+      {
+        "ar": "أسد",
+        "en": "Lion",
+        "coptic": "ⲁⲥⲁⲇ",
+        "letters": ["alpha", "sima", "alpha", "delta"]
+      }
+    ],
+    "5": [
+      {
+        "ar": "يوسف",
+        "en": "Joseph",
+        "coptic": "ⲓⲟⲥⲉϥ",
+        "letters": ["iota", "o", "sima", "ei", "fai"]
+      },
+      {
+        "ar": "يونان",
+        "en": "Jonah",
+        "coptic": "ⲓⲟⲛⲁⲛ",
+        "letters": ["iota", "o", "ni", "alpha", "ni"]
+      },
+      {
+        "ar": "بولس",
+        "en": "Paul",
+        "coptic": "ⲃⲟⲗⲟⲥ",
+        "letters": ["vida", "o", "lola", "o", "sima"]
+      },
+      {
+        "ar": "بيشوي",
+        "en": "Bishoy",
+        "coptic": "ⲡⲓϣⲱⲓ",
+        "letters": ["pi", "iota", "shai", "omega", "iota"]
+      },
+      {
+        "ar": "ماركو",
+        "en": "Marco",
+        "coptic": "ⲙⲁⲣⲕⲟ",
+        "letters": ["mi", "alpha", "ro", "kappa", "o"]
+      },
+      {
+        "ar": "كاراس",
+        "en": "Karas",
+        "coptic": "ⲕⲁⲣⲁⲥ",
+        "letters": ["kappa", "alpha", "ro", "alpha", "sima"]
+      },
+      {
+        "ar": "بيتر",
+        "en": "Peter",
+        "coptic": "ⲡⲓⲧⲉⲣ",
+        "letters": ["pi", "iota", "tav", "ei", "ro"]
+      },
+      {
+        "ar": "توماس",
+        "en": "Thomas",
+        "coptic": "ⲑⲱⲙⲁⲥ",
+        "letters": ["thita", "omega", "mi", "alpha", "sima"]
+      },
+      {
+        "ar": "مرثا",
+        "en": "Martha",
+        "coptic": "ⲙⲁⲣⲑⲁ",
+        "letters": ["mi", "alpha", "ro", "thita", "alpha"]
+      },
+      {
+        "ar": "ماريا",
+        "en": "Maria",
+        "coptic": "ⲙⲁⲣⲓⲁ",
+        "letters": ["mi", "alpha", "ro", "iota", "alpha"]
+      },
+      {
+        "ar": "هابيل",
+        "en": "Abel",
+        "coptic": "ϩⲁⲃⲏⲗ",
+        "letters": ["hori", "alpha", "vida", "ita", "lola"]
+      },
+      {
+        "ar": "أبونا",
+        "en": "Abouna",
+        "coptic": "ⲁⲃⲟⲛⲁ",
+        "letters": ["alpha", "vida", "o", "ni", "alpha"]
+      },
+      {
+        "ar": "إنجيل",
+        "en": "Gospel",
+        "coptic": "ⲓⲛϫⲓⲗ",
+        "letters": ["iota", "ni", "janja", "iota", "lola"]
+      },
+      {
+        "ar": "شماس",
+        "en": "Deacon",
+        "coptic": "ϣⲁⲙⲁⲥ",
+        "letters": ["shai", "alpha", "mi", "alpha", "sima"]
+      },
+      {
+        "ar": "كاهن",
+        "en": "Priest",
+        "coptic": "ⲕⲁϩⲉⲛ",
+        "letters": ["kappa", "alpha", "hori", "ei", "ni"]
+      },
+      {
+        "ar": "هيكل",
+        "en": "Sanctuary",
+        "coptic": "ϩⲏⲕⲁⲗ",
+        "letters": ["hori", "ita", "kappa", "alpha", "lola"]
+      },
+      {
+        "ar": "ملاك",
+        "en": "Angel",
+        "coptic": "ⲙⲁⲗⲁⲕ",
+        "letters": ["mi", "alpha", "lola", "alpha", "kappa"]
+      },
+      {
+        "ar": "رسول",
+        "en": "Apostle",
+        "coptic": "ⲣⲁⲥⲟⲗ",
+        "letters": ["ro", "alpha", "sima", "o", "lola"]
+      },
+      {
+        "ar": "ميلاد",
+        "en": "Nativity",
+        "coptic": "ⲙⲓⲗⲁⲇ",
+        "letters": ["mi", "iota", "lola", "alpha", "delta"]
+      },
+      {
+        "ar": "سلام",
+        "en": "Peace",
+        "coptic": "ⲥⲁⲗⲁⲙ",
+        "letters": ["sima", "alpha", "lola", "alpha", "mi"]
+      },
+      {
+        "ar": "جرس",
+        "en": "Bell",
+        "coptic": "ϫⲁⲣⲁⲥ",
+        "letters": ["janja", "alpha", "ro", "alpha", "sima"]
+      },
+      {
+        "ar": "بخور",
+        "en": "Incense",
+        "coptic": "ⲃⲁϧⲟⲣ",
+        "letters": ["vida", "alpha", "khai", "o", "ro"]
+      },
+      {
+        "ar": "شورية",
+        "en": "Censer",
+        "coptic": "ϣⲟⲣⲓⲁ",
+        "letters": ["shai", "o", "ro", "iota", "alpha"]
+      },
+      {
+        "ar": "كرمة",
+        "en": "Vine",
+        "coptic": "ⲕⲁⲣⲙⲁ",
+        "letters": ["kappa", "alpha", "ro", "mi", "alpha"]
+      },
+      {
+        "ar": "نجمة",
+        "en": "Star",
+        "coptic": "ⲛⲉϫⲙⲁ",
+        "letters": ["ni", "ei", "janja", "mi", "alpha"]
+      },
+      {
+        "ar": "جبل",
+        "en": "Mountain",
+        "coptic": "ϫⲁⲃⲁⲗ",
+        "letters": ["janja", "alpha", "vida", "alpha", "lola"]
+      },
+      {
+        "ar": "خروف",
+        "en": "Lamb",
+        "coptic": "ϧⲁⲣⲟϥ",
+        "letters": ["khai", "alpha", "ro", "o", "fai"]
+      },
+      {
+        "ar": "كرسي",
+        "en": "Chair",
+        "coptic": "ⲕⲟⲣⲥⲓ",
+        "letters": ["kappa", "o", "ro", "sima", "iota"]
+      },
+      {
+        "ar": "كتاب",
+        "en": "Book",
+        "coptic": "ⲕⲓⲧⲁⲃ",
+        "letters": ["kappa", "iota", "tav", "alpha", "vida"]
+      },
+      {
+        "ar": "فانوس",
+        "en": "Lantern",
+        "coptic": "ⲫⲁⲛⲟⲥ",
+        "letters": ["phi", "alpha", "ni", "o", "sima"]
+      }
+    ],
+    "6": [
+      {
+        "ar": "مريم",
+        "en": "Mary",
+        "coptic": "ⲙⲁⲣⲓⲁⲙ",
+        "letters": ["mi", "alpha", "ro", "iota", "alpha", "mi"]
+      },
+      {
+        "ar": "شنودة",
+        "en": "Shenouda",
+        "coptic": "ϣⲉⲛⲟⲇⲁ",
+        "letters": ["shai", "ei", "ni", "o", "delta", "alpha"]
+      },
+      {
+        "ar": "جرجس",
+        "en": "George",
+        "coptic": "ϫⲉⲣϫⲉⲥ",
+        "letters": ["janja", "ei", "ro", "janja", "ei", "sima"]
+      },
+      {
+        "ar": "تادرس",
+        "en": "Theodore",
+        "coptic": "ⲧⲁⲇⲣⲟⲥ",
+        "letters": ["tav", "alpha", "delta", "ro", "o", "sima"]
+      },
+      {
+        "ar": "أبانوب",
+        "en": "Abanoub",
+        "coptic": "ⲁⲃⲁⲛⲟⲃ",
+        "letters": ["alpha", "vida", "alpha", "ni", "o", "vida"]
+      },
+      {
+        "ar": "مارينا",
+        "en": "Marina",
+        "coptic": "ⲙⲁⲣⲓⲛⲁ",
+        "letters": ["mi", "alpha", "ro", "iota", "ni", "alpha"]
+      },
+      {
+        "ar": "مايكل",
+        "en": "Michael",
+        "coptic": "ⲙⲁⲓⲕⲉⲗ",
+        "letters": ["mi", "alpha", "iota", "kappa", "ei", "lola"]
+      },
+      {
+        "ar": "ميخائيل",
+        "en": "Michael (archangel)",
+        "coptic": "ⲙⲓϧⲁⲓⲗ",
+        "letters": ["mi", "iota", "khai", "alpha", "iota", "lola"]
+      },
+      {
+        "ar": "رافائيل",
+        "en": "Raphael",
+        "coptic": "ⲣⲁⲫⲁⲓⲗ",
+        "letters": ["ro", "alpha", "phi", "alpha", "iota", "lola"]
+      },
+      {
+        "ar": "سوريال",
+        "en": "Suriel",
+        "coptic": "ⲥⲟⲣⲓⲁⲗ",
+        "letters": ["sima", "o", "ro", "iota", "alpha", "lola"]
+      },
+      {
+        "ar": "دانيال",
+        "en": "Daniel",
+        "coptic": "ⲇⲁⲛⲓⲁⲗ",
+        "letters": ["delta", "alpha", "ni", "iota", "alpha", "lola"]
+      },
+      {
+        "ar": "مونيكا",
+        "en": "Monica",
+        "coptic": "ⲙⲟⲛⲓⲕⲁ",
+        "letters": ["mi", "o", "ni", "iota", "kappa", "alpha"]
+      },
+      {
+        "ar": "كاترين",
+        "en": "Catherine",
+        "coptic": "ⲕⲁⲧⲣⲓⲛ",
+        "letters": ["kappa", "alpha", "tav", "ro", "iota", "ni"]
+      },
+      {
+        "ar": "فيرينا",
+        "en": "Verena",
+        "coptic": "ⲫⲓⲣⲓⲛⲁ",
+        "letters": ["phi", "iota", "ro", "iota", "ni", "alpha"]
+      },
+      {
+        "ar": "كنيسة",
+        "en": "Church",
+        "coptic": "ⲕⲁⲛⲓⲥⲁ",
+        "letters": ["kappa", "alpha", "ni", "iota", "sima", "alpha"]
+      },
+      {
+        "ar": "مزمور",
+        "en": "Psalm",
+        "coptic": "ⲙⲁⲍⲙⲟⲣ",
+        "letters": ["mi", "alpha", "zita", "mi", "o", "ro"]
+      },
+      {
+        "ar": "بركة",
+        "en": "Blessing",
+        "coptic": "ⲃⲁⲣⲁⲕⲁ",
+        "letters": ["vida", "alpha", "ro", "alpha", "kappa", "alpha"]
+      },
+      {
+        "ar": "منارة",
+        "en": "Bell tower",
+        "coptic": "ⲙⲁⲛⲁⲣⲁ",
+        "letters": ["mi", "alpha", "ni", "alpha", "ro", "alpha"]
+      },
+      {
+        "ar": "زيتون",
+        "en": "Olives",
+        "coptic": "ⲍⲁⲓⲧⲟⲛ",
+        "letters": ["zita", "alpha", "iota", "tav", "o", "ni"]
+      },
+      {
+        "ar": "شجرة",
+        "en": "Tree",
+        "coptic": "ϣⲁϫⲁⲣⲁ",
+        "letters": ["shai", "alpha", "janja", "alpha", "ro", "alpha"]
+      },
+      {
+        "ar": "كنبة",
+        "en": "Sofa",
+        "coptic": "ⲕⲁⲛⲁⲃⲁ",
+        "letters": ["kappa", "alpha", "ni", "alpha", "vida", "alpha"]
+      },
+      {
+        "ar": "ستارة",
+        "en": "Curtain",
+        "coptic": "ⲥⲉⲧⲁⲣⲁ",
+        "letters": ["sima", "ei", "tav", "alpha", "ro", "alpha"]
+      },
+      {
+        "ar": "مركب",
+        "en": "Boat",
+        "coptic": "ⲙⲁⲣⲕⲁⲃ",
+        "letters": ["mi", "alpha", "ro", "kappa", "alpha", "vida"]
+      }
+    ],
+    "7": [
+      {
+        "ar": "يوستينا",
+        "en": "Justina",
+        "coptic": "ⲓⲟⲥⲧⲓⲛⲁ",
+        "letters": ["iota", "o", "sima", "tav", "iota", "ni", "alpha"]
+      },
+      {
+        "ar": "دميانة",
+        "en": "Demiana",
+        "coptic": "ⲇⲓⲙⲓⲁⲛⲁ",
+        "letters": ["delta", "iota", "mi", "iota", "alpha", "ni", "alpha"]
+      },
+      {
+        "ar": "برنابا",
+        "en": "Barnabas",
+        "coptic": "ⲃⲁⲣⲛⲁⲃⲁ",
+        "letters": ["vida", "alpha", "ro", "ni", "alpha", "vida", "alpha"]
+      },
+      {
+        "ar": "أندراوس",
+        "en": "Andrew",
+        "coptic": "ⲁⲛⲇⲣⲁⲟⲥ",
+        "letters": ["alpha", "ni", "delta", "ro", "alpha", "o", "sima"]
+      },
+      {
+        "ar": "فيلبس",
+        "en": "Philip",
+        "coptic": "ⲫⲓⲗⲓⲡⲟⲥ",
+        "letters": ["phi", "iota", "lola", "iota", "pi", "o", "sima"]
+      },
+      {
+        "ar": "كيرلس",
+        "en": "Cyril",
+        "coptic": "ⲕⲓⲣⲟⲗⲟⲥ",
+        "letters": ["kappa", "iota", "ro", "o", "lola", "o", "sima"]
+      },
+      {
+        "ar": "إبراهيم",
+        "en": "Abraham",
+        "coptic": "ⲁⲃⲣⲁϩⲓⲙ",
+        "letters": ["alpha", "vida", "ro", "alpha", "hori", "iota", "mi"]
+      },
+      {
+        "ar": "جبرائيل",
+        "en": "Gabriel",
+        "coptic": "ϫⲉⲃⲣⲁⲓⲗ",
+        "letters": ["janja", "ei", "vida", "ro", "alpha", "iota", "lola"]
+      },
+      {
+        "ar": "مارتينا",
+        "en": "Martina",
+        "coptic": "ⲙⲁⲣⲧⲓⲛⲁ",
+        "letters": ["mi", "alpha", "ro", "tav", "iota", "ni", "alpha"]
+      },
+      {
+        "ar": "يوناثان",
+        "en": "Jonathan",
+        "coptic": "ⲓⲟⲛⲁⲑⲁⲛ",
+        "letters": ["iota", "o", "ni", "alpha", "thita", "alpha", "ni"]
+      },
+      {
+        "ar": "سليمان",
+        "en": "Solomon",
+        "coptic": "ⲥⲟⲗⲓⲙⲁⲛ",
+        "letters": ["sima", "o", "lola", "iota", "mi", "alpha", "ni"]
+      },
+      {
+        "ar": "زكريا",
+        "en": "Zechariah",
+        "coptic": "ⲍⲁⲕⲁⲣⲓⲁ",
+        "letters": ["zita", "alpha", "kappa", "alpha", "ro", "iota", "alpha"]
+      },
+      {
+        "ar": "مارمينا",
+        "en": "Mar Mina",
+        "coptic": "ⲙⲁⲣⲙⲓⲛⲁ",
+        "letters": ["mi", "alpha", "ro", "mi", "iota", "ni", "alpha"]
+      },
+      {
+        "ar": "سيرافيم",
+        "en": "Seraphim",
+        "coptic": "ⲥⲉⲣⲁⲫⲓⲙ",
+        "letters": ["sima", "ei", "ro", "alpha", "phi", "iota", "mi"]
+      },
+      {
+        "ar": "شاروبيم",
+        "en": "Cherubim",
+        "coptic": "ϣⲁⲣⲟⲃⲓⲙ",
+        "letters": ["shai", "alpha", "ro", "o", "vida", "iota", "mi"]
+      },
+      {
+        "ar": "ملايكة",
+        "en": "Angels",
+        "coptic": "ⲙⲁⲗⲁⲓⲕⲁ",
+        "letters": ["mi", "alpha", "lola", "alpha", "iota", "kappa", "alpha"]
+      },
+      {
+        "ar": "مزامير",
+        "en": "Psalms",
+        "coptic": "ⲙⲁⲍⲁⲙⲓⲣ",
+        "letters": ["mi", "alpha", "zita", "alpha", "mi", "iota", "ro"]
+      },
+      {
+        "ar": "جلجثة",
+        "en": "Golgotha",
+        "coptic": "ϫⲟⲗϫⲟⲑⲁ",
+        "letters": ["janja", "o", "lola", "janja", "o", "thita", "alpha"]
+      },
+      {
+        "ar": "أورشليم",
+        "en": "Jerusalem",
+        "coptic": "ⲟⲣϣⲁⲗⲓⲙ",
+        "letters": ["o", "ro", "shai", "alpha", "lola", "iota", "mi"]
+      },
+      {
+        "ar": "ترنيمة",
+        "en": "Hymn",
+        "coptic": "ⲧⲁⲣⲛⲓⲙⲁ",
+        "letters": ["tav", "alpha", "ro", "ni", "iota", "mi", "alpha"]
+      },
+      {
+        "ar": "مبخرة",
+        "en": "Censer",
+        "coptic": "ⲙⲉⲃϧⲁⲣⲁ",
+        "letters": ["mi", "ei", "vida", "khai", "alpha", "ro", "alpha"]
+      }
+    ]
+  }
+}
