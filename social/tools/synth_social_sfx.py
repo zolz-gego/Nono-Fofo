@@ -146,6 +146,35 @@ def _():
     return reverb(m.out(), 0.08)
 
 
+# ================================================================ teasers
+
+@sfx("mg_siren", "Cartoon alarm: two-tone wee-woo siren, friendly not scary", 0.7)
+def _():
+    m = Mix()
+    for i in range(4):
+        f = 880 if i % 2 == 0 else 660
+        m.add(osc(f, 0.36, "tri", vib=0.01, vib_rate=9) * hump(0.36), i * 0.36, 0.6)
+        m.add(osc(f * 2, 0.36, "sine") * hump(0.36), i * 0.36, 0.12)
+    return reverb(m.out(), 0.1)
+
+
+@sfx("mg_slam", "Big title slams in: punchy thump + clap + tiny shimmer", 0.85)
+def _():
+    clap = svf(noise(0.12), 1800, q=0.9, mode="bp") * perc(0.12, 0.001, 0.035)
+    m = Mix().add(thud(65, 0.4)).add(doum(0.3), 0.0, 0.6).add(clap, 0.0, 0.9)
+    m.add(sparkle(0.4, 5, start=0.06, gain=0.25))
+    return reverb(m.out(), 0.12)
+
+
+@sfx("mg_rattle", "Wooden box rattles and shakes", 0.7)
+def _():
+    m = Mix()
+    for i in range(9):
+        m.add(wood(["C4", "E4", "D4"][i % 3], 0.07), i * 0.075, 0.7 - i * 0.04)
+        m.add(click(0.02, 2400), i * 0.075 + 0.02, 0.25)
+    return m.out()
+
+
 # ================================================================ render
 
 def main(only):

@@ -5,6 +5,7 @@ import {images} from '../generated/data';
 import {ICONS} from '../icons';
 import {color, FONT_AR, FONT_COPTIC, FONT_EN} from '../theme';
 import type {PropSpec} from '../types';
+import {Alarm, Box, Bubble, Screen, Title} from './TeaserProps';
 
 // Motion-graphics props for story scenes. Every time is in seconds from the
 // voice start (`t`), so props line up with the spoken words like keywords do.
@@ -826,7 +827,7 @@ const Confetti: React.FC<P<'confetti'>> = ({t, at, count = 70}) => {
 // ---------------------------------------------------------------- layers
 
 const BACK = new Set(['book', 'egypt', 'speed']);
-const SCREEN = new Set(['compare']);
+const SCREEN = new Set(['compare', 'title', 'alarm']);
 
 // Props behind the characters (`layer="back"`) or in front of them.
 export const Props: React.FC<{props?: PropSpec[]; voiceFrom: number; layer: 'back' | 'front' | 'screen'}> = ({props, voiceFrom, layer}) => {
@@ -874,6 +875,16 @@ export const Props: React.FC<{props?: PropSpec[]; voiceFrom: number; layer: 'bac
               return <Compare key={i} {...(q as P<'compare'>)} />;
             case 'confetti':
               return <Confetti key={i} {...(q as P<'confetti'>)} />;
+            case 'screen':
+              return <Screen key={i} {...(q as P<'screen'>)} />;
+            case 'title':
+              return <Title key={i} {...(q as P<'title'>)} />;
+            case 'alarm':
+              return <Alarm key={i} {...(q as P<'alarm'>)} />;
+            case 'box':
+              return <Box key={i} {...(q as P<'box'>)} />;
+            case 'bubble':
+              return <Bubble key={i} {...(q as P<'bubble'>)} />;
             default:
               return null;
           }

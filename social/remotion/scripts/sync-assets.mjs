@@ -42,6 +42,8 @@ sync(path.join(APP, 'characters'), path.join(PUB, 'app', 'characters'), (n) => n
 sync(path.join(APP, 'audio', 'music'), path.join(PUB, 'app', 'audio', 'music'));
 sync(path.join(APP, 'audio', 'sfx'), path.join(PUB, 'app', 'audio', 'sfx'));
 sync(path.join(APP, 'brand'), path.join(PUB, 'app', 'brand'));
+// the app's screenshots (repo screenshots/), shown in teasers with the `screen` prop
+sync(path.join(ROOT, 'screenshots'), path.join(PUB, 'app', 'screens'), (n) => !n.endsWith('.jpg'));
 sync(path.join(APP, 'fonts'), path.join(PUB, 'app', 'fonts'), (n) => n.endsWith('.txt'));
 sync(path.join(SOCIAL, 'assets'), path.join(PUB, 'social'), (n) => n === 'manifest.json');
 sync(path.join(REMOTION, 'src', 'intro', 'media'), path.join(PUB, 'intro'), (n) => n.endsWith('.json'));

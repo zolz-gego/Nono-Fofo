@@ -128,6 +128,21 @@
       "desc": "Cartoon out-of-breath panting: quick breathy hah-huh breaths",
       "duration": 2.91
     },
+    "mg_siren": {
+      "file": "sfx/mg_siren.wav",
+      "desc": "Cartoon alarm: two-tone wee-woo siren, friendly not scary",
+      "duration": 2.3
+    },
+    "mg_slam": {
+      "file": "sfx/mg_slam.wav",
+      "desc": "Big title slams in: punchy thump + clap + tiny shimmer",
+      "duration": 1.24
+    },
+    "mg_rattle": {
+      "file": "sfx/mg_rattle.wav",
+      "desc": "Wooden box rattles and shakes",
+      "duration": 0.67
+    },
     "mg_stone_wake": {
       "file": "sfx/mg_stone_wake.wav",
       "desc": "Statues wake up: stone grinding and cracking, crumbling dust, magic shimmer",

@@ -78,7 +78,17 @@ export type PropSpec =
   | {kind: 'dizzy'; at: number; x: number; y: number; until?: number} // stars spinning around a head after a bonk
   | {kind: 'pant'; at: number; x: number; y: number; until?: number; dir?: 'left' | 'right'} // breath puffs + sweat drops (out of breath)
   | {kind: 'compare'; at: number; k: string; latin: string; y?: number; outAt?: number} // Coptic letter ≈ Latin letter (stays put on screen)
-  | {kind: 'confetti'; at: number; count?: number};
+  | {kind: 'confetti'; at: number; count?: number}
+  // teaser props (components/TeaserProps.tsx)
+  // an app screenshot (repo screenshots/<shot>.jpg) in a tablet frame; flies in from `from`, out to `to` at outAt
+  | {kind: 'screen'; shot: string; at: number; outAt?: number; x?: number; y?: number; size?: number; tilt?: number; from?: 'bottom' | 'top' | 'left' | 'right' | 'zoom' | 'box'; to?: 'left' | 'right' | 'up' | 'down'}
+  // big outlined title (stays put on screen): slam = drops from huge, pop = springs up, stamp = lands tilted
+  | {kind: 'title'; ar: string; en?: string; at: number; outAt?: number; y?: number; size?: number; fill?: string; style?: 'slam' | 'pop' | 'stamp'; rot?: number}
+  | {kind: 'alarm'; at: number; until?: number} // spinning siren light + pulsing coral edges
+  // golden "?" box: drops in at `at`, rattles at each `shakes` time, lid peeks open (wide = all the way) and snaps shut, padlock at lockAt
+  | {kind: 'box'; at?: number; x?: number; y?: number; size?: number; shakes?: number[]; opens?: {at: number; until: number; wide?: boolean}[]; lockAt?: number}
+  // comic speech bubble (tail points to the speaker); wrongAt stamps a red X over it
+  | {kind: 'bubble'; ar: string; en?: string; at: number; outAt?: number; x?: number; y?: number; tail?: 'left' | 'right'; wrongAt?: number};
 
 export type SceneSpec = {
   id: string;

@@ -74,6 +74,9 @@ tools/.venv/bin/python social/tools/synth_social_sfx.py   # (from repo root) reb
 | `mg_boom` | Big soft thump + papery crash + shimmer | Crash / BOOM (Nono into the book) |
 | `mg_skid` | Squeaky sneaker slide | Character skids to a stop |
 | `mg_pant` | Breathy hah-huh panting | A character out of breath |
+| `mg_siren` | Friendly two-tone wee-woo siren | Alarm opening (teasers) |
+| `mg_slam` | Punchy thump + clap + tiny shimmer | A big title slams in |
+| `mg_rattle` | Wooden box rattling | The secret box shakes |
 | `mg_stone_wake` | Stone grinding + crumbling + shimmer *(ElevenLabs)* | Statues come alive |
 | `mg_stone_eyes` | Gritty stone scrape + squeak *(ElevenLabs)* | A statue's eyes slide sideways |
 | `mg_stone_tiptoe` | Little stone feet tiptoeing on marble *(ElevenLabs)* | Small statues sneaking around |
@@ -154,6 +157,11 @@ from the voice start, like keywords; format in `remotion/src/types.ts`):
 | `pant` | Breath puffs + sweat drops (out of breath) |
 | `compare` | A Coptic letter tile ≈ a Latin letter tile (Ⲉ ≈ E); stays put on screen while the camera moves, `outAt` hides it |
 | `confetti` | Confetti burst |
+| `screen` | An app screenshot (repo `screenshots/<shot>.jpg`, copied by `npm run sync`) in a tablet frame; flies in `from` bottom/top/left/right/zoom/box and out `to` a side at `outAt` (`components/TeaserProps.tsx`) |
+| `title` | Big outlined Arabic + English title that stays put on screen: `slam`, `pop` or `stamp` |
+| `alarm` | Spinning siren light + pulsing coral edges |
+| `box` | Golden "?" treasure box: drops in, rattles (`shakes`), lid peeks or opens wide (`opens`) with light pouring out and slams shut, padlock at `lockAt` |
+| `bubble` | Comic speech bubble (Arabic + English, `tail` towards the speaker); `wrongAt` stamps a red X over it |
 
 `book` also takes `letter` (the Avva key that flies in), `found` (a letter already on the page) and `only` (show just those letters).
 Keyword cards can show the word spelled in Coptic: `coptic` (Avva keys) on the keyword. `side` (`left` / `center` / `right`) moves a card off a face. For teaching words, `big` makes a wide card with the Coptic word as the largest
