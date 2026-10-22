@@ -45,8 +45,7 @@ class BalloonsGame extends VillageGame {
   @override
   late BalloonsLayout layout = _layoutFor(const ui.Size(800, 600));
 
-  /// Set by the page from the UI language; the progress slots fill from
-  /// the right in Arabic.
+  /// Set by the page from the UI language.
   bool rtl = false;
 
   /// The background picture once loaded (the layout lines up with it).

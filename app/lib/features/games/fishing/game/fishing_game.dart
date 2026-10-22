@@ -151,7 +151,7 @@ class FishingGame extends FlameGame {
     final heroH = _hero.size.y * _hero.scale.y;
     _rod
       ..hand = l.heroFeet + ui.Offset(s * 0.1, -heroH * 0.45)
-      // Keep the tip below the target card at the top.
+      // Keep the tip below the question bar at the top.
       ..restTip = ui.Offset(
         l.heroFeet.dx + s * 0.85,
         max(l.heroFeet.dy - heroH * 0.82, l.cardBottom + 14),
@@ -414,7 +414,7 @@ class _Cast {
           ..position = Vector2(c.dx, c.dy)
           ..hang = 1 - k
           ..scale = Vector2.all(
-            ui.lerpDouble(1, _l.slotSize / _l.fishWidth, k)!,
+            ui.lerpDouble(1, _l.progressIconSize / _l.fishWidth, k)!,
           );
         if (_t >= _flyTime) {
           game._removeFish(fish);
@@ -433,7 +433,7 @@ class _Cast {
       _rod
         ..hook = null
         ..bend = 0;
-      _slot = game._layoutFor(_l.size).slotCenter(game.cubit.round.caught - 1);
+      _slot = game._layoutFor(_l.size).basket;
       // The fish flies on its own; the rod is free for the next cast.
       game._flying.add(this);
       game._cast = null;

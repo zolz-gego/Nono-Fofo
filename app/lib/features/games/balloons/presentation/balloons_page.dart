@@ -10,6 +10,7 @@ import '../../../../app/di/injection.dart';
 import '../../../../app/router.dart';
 import '../../../../core/domain/character_id.dart';
 import '../../../../core/l10n/l10n.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_icons.dart';
 import '../../../../engines/characters/domain/character_action.dart';
@@ -36,7 +37,7 @@ import '../game/balloons_layout.dart';
 import 'balloons_cubit.dart';
 
 /// The balloons game screen: the village scene with the buddy catching
-/// balloons, the target card on top, and the other brother on the right
+/// balloons, the question bar on top, and the other brother on the right
 /// who keeps the correct balloons and says when one is wrong.
 class BalloonsPage extends StatefulWidget {
   const BalloonsPage({super.key, required this.args});
@@ -329,6 +330,7 @@ class _BalloonsPageState extends State<BalloonsPage> {
           cubit: cubit,
           label: context.l10n.balloonsCatch,
           icon: AppIcons.check,
+          iconColor: AppColors.correct,
         ),
         Positioned(
           left: feet.dx - boxW / 2,

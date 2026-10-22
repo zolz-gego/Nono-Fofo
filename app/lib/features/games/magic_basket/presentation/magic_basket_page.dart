@@ -370,11 +370,7 @@ class _MagicBasketPageState extends State<MagicBasketPage> {
               child: GameWidget(key: ObjectKey(game), game: game),
             ),
           ),
-          MagicBasketHud(
-            layout: layout,
-            cubit: cubit,
-            label: context.l10n.magicBasketSounds,
-          ),
+          MagicBasketHud(layout: layout, cubit: cubit),
           Positioned(
             left: feet.dx - boxW / 2,
             top: feet.dy - boxH,
