@@ -1,5 +1,6 @@
 import React from 'react';
 import {Img, interpolate, spring, staticFile} from 'remotion';
+import {images} from '../generated/data';
 import {color, FONT_AR, FONT_EN} from '../theme';
 import type {PropSpec} from '../types';
 
@@ -283,6 +284,34 @@ export const Bubble: React.FC<P<'bubble'>> = ({t, fps, ar, en, at, outAt, x = 54
           </svg>
         )}
       </div>
+    </div>
+  );
+};
+
+// ---------------------------------------------------------------- social image
+
+// A social image (e.g. the covered surprise) springing in; a dashed placeholder until the PNG exists.
+export const Picture: React.FC<P<'image'>> = ({t, fps, id, at, outAt, x = 540, y = 820, height = 700, rot = 0, from = 'pop', glow}) => {
+  const k = t - at;
+  if (k < 0) return null;
+  const o = outAt === undefined ? 0 : interpolate(t - outAt, [0, 0.25], [0, 1], clamp);
+  if (o >= 1) return null;
+  const p = sp(k, fps, 10, 150);
+  const dy = from === 'bottom' ? (1 - p) * 1400 : from === 'top' ? (1 - p) * -1400 : 0;
+  const s = (from === 'pop' ? p : 1) * (1 - o);
+  const sway = Math.sin(t * 2) * 1.5;
+  return (
+    <div style={{position: 'absolute', left: x, top: y, transform: `translate(-50%, -50%) translateY(${dy}px) rotate(${rot + sway}deg) scale(${s})`}}>
+      {glow && (
+        <div style={{position: 'absolute', left: '50%', top: '50%', width: height * 1.6, height: height * 1.6, transform: 'translate(-50%, -50%)', borderRadius: '50%', background: `radial-gradient(circle, ${color('foundGlow')}, transparent 65%)`, opacity: 0.6 + 0.3 * Math.sin(t * 4)}} />
+      )}
+      {images[id] ? (
+        <Img src={staticFile(images[id])} style={{position: 'relative', height, display: 'block'}} />
+      ) : (
+        <div style={{position: 'relative', width: height * 0.8, height, borderRadius: 40, border: `10px dashed ${color('cream')}`, background: 'rgba(255,255,255,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FONT_EN, fontWeight: 800, fontSize: 48, color: color('cream'), textAlign: 'center'}}>
+          {id}
+        </div>
+      )}
     </div>
   );
 };

@@ -5,7 +5,7 @@ import {images} from '../generated/data';
 import {ICONS} from '../icons';
 import {color, FONT_AR, FONT_COPTIC, FONT_EN} from '../theme';
 import type {PropSpec} from '../types';
-import {Alarm, Box, Bubble, Screen, Title} from './TeaserProps';
+import {Alarm, Box, Bubble, Picture, Screen, Title} from './TeaserProps';
 
 // Motion-graphics props for story scenes. Every time is in seconds from the
 // voice start (`t`), so props line up with the spoken words like keywords do.
@@ -883,6 +883,8 @@ export const Props: React.FC<{props?: PropSpec[]; voiceFrom: number; layer: 'bac
               return <Alarm key={i} {...(q as P<'alarm'>)} />;
             case 'box':
               return <Box key={i} {...(q as P<'box'>)} />;
+            case 'image':
+              return <Picture key={i} {...(q as P<'image'>)} />;
             case 'bubble':
               return <Bubble key={i} {...(q as P<'bubble'>)} />;
             default:

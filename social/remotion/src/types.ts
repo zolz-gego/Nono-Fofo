@@ -88,6 +88,8 @@ export type PropSpec =
   // golden "?" box: drops in at `at`, rattles at each `shakes` time, lid peeks open (wide = all the way) and snaps shut, padlock at lockAt
   | {kind: 'box'; at?: number; x?: number; y?: number; size?: number; shakes?: number[]; opens?: {at: number; until: number; wide?: boolean}[]; lockAt?: number}
   // comic speech bubble (tail points to the speaker); wrongAt stamps a red X over it
+  // a social image (social/assets/manifest.json "images") popping in, e.g. the covered surprise; placeholder until it exists
+  | {kind: 'image'; id: string; at: number; outAt?: number; x?: number; y?: number; height?: number; rot?: number; from?: 'pop' | 'bottom' | 'top'; glow?: boolean}
   | {kind: 'bubble'; ar: string; en?: string; at: number; outAt?: number; x?: number; y?: number; tail?: 'left' | 'right'; wrongAt?: number};
 
 export type SceneSpec = {

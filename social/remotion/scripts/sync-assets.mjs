@@ -71,19 +71,23 @@ for (const [who, poses] of Object.entries(charManifest.characters)) {
 
 // Social-only characters (guests like Ramses, social/assets/manifest.json): cut-out
 // PNGs in social/assets/images. A pose whose image isn't made yet renders as a
-// placeholder so drafts still work.
+// placeholder (or its `fallback` pose) so drafts still work. A social entry for an
+// app character (e.g. "nono") adds extra poses next to the app's own.
 const socialManifest = JSON.parse(fs.readFileSync(path.join(SOCIAL, 'assets', 'manifest.json'), 'utf8'));
 const pngSize = (file) => {
   const b = fs.readFileSync(file);
   return [b.readUInt32BE(16), b.readUInt32BE(20)];
 };
 for (const [who, c] of Object.entries(socialManifest.characters ?? {})) {
-  characters[who] = {};
+  characters[who] = characters[who] ?? {};
   for (const [pose, p] of Object.entries(c.poses)) {
     const src = path.join(SOCIAL, 'assets', p.file);
     if (fs.existsSync(src)) {
       const [width, height] = pngSize(src);
       characters[who][pose] = {file: `social/${p.file}`, width, height, head: [width / 2, height * 0.15]};
+    } else if (p.fallback && characters[who][p.fallback]) {
+      characters[who][pose] = characters[who][p.fallback];
+      warn(`${who}: no image yet for pose "${pose}" (${p.file}), using "${p.fallback}"`);
     } else {
       characters[who][pose] = {file: null, width: 1000, height: 1500, head: [500, 225]};
       warn(`${who}: no image yet for pose "${pose}" (${p.file}), drawing a placeholder`);

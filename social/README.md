@@ -99,6 +99,9 @@ too; see `app/assets/audio/manifest.json`.
 |---|---|---|
 | `ramses` | `idle`, `look`, `talk`, `demand`, `smile` (`ramses-<pose>.png`, cut-out) | Giant living statue of Ramses II (video 004), voice `Ramses` in `voices.md` |
 
+| `nono` (extra poses) | `chef` (`nono-chef.png`, falls back to `hint` until it exists) | Extra Nono poses for the social videos only; the app's own poses stay in the app |
+
+An entry for an app character adds poses next to the app's; `fallback` names the pose drawn until the PNG exists.
 Use them like the brothers (`"who": "ramses"` in `characters`, `"speaker": "ramses"`
 on a line). A pose without its PNG yet is drawn as a sandstone placeholder.
 
@@ -107,6 +110,7 @@ on a line). A pose without its PNG yet is drawn as a sandstone placeholder.
 | id | Image | Used for |
 |---|---|---|
 | `statue-cat`, `statue-ushabti` | The two little living statues (cut-outs) | `statues` prop (drawn shapes stand in until the PNGs exist) |
+| `surprise-cloth` | The big surprise under a golden cloth with a red bow and a "?" tag (cut-out) | Teaser endings (005, 006) |
 | `gem-hall` | Grand Egyptian Museum hall, portrait, empty floor in the middle | `backdrop` of the museum scenes (a drawn hall stands in until the PNG exists) |
 
 ### Icons (keyword cards)
@@ -161,6 +165,7 @@ from the voice start, like keywords; format in `remotion/src/types.ts`):
 | `title` | Big outlined Arabic + English title that stays put on screen: `slam`, `pop` or `stamp` |
 | `alarm` | Spinning siren light + pulsing coral edges |
 | `box` | Golden "?" treasure box: drops in, rattles (`shakes`), lid peeks or opens wide (`opens`) with light pouring out and slams shut, padlock at `lockAt` |
+| `image` | A social image (from `images` in the manifest) springing in, optional glow; dashed placeholder until the PNG exists |
 | `bubble` | Comic speech bubble (Arabic + English, `tail` towards the speaker); `wrongAt` stamps a red X over it |
 
 `book` also takes `letter` (the Avva key that flies in), `found` (a letter already on the page) and `only` (show just those letters).
