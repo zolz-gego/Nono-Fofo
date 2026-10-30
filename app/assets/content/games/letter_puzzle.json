@@ -1,5 +1,5 @@
 {
-  "_readme": "Settings and words for the Letter puzzle game (Level 2, the church). words.ar is played in the Arabic app, words.en in the English app; each is grouped by word length in Coptic letters (the Arabic or English word can be any length). Each word: text = shown on the name card, coptic = the answer (for reading only), letters = the answer as letter ids from letters.json (the game uses this). The answer is the word's sounds written in Coptic letters (English words: \"Franco English\", e.g. Chair = shai ei ro). The tiles are exactly these letters, shuffled. sounds = what each letter sounds like in this word, one per letter (used by the Match the letters game): Arabic words use the word's own letter, or the letter's own sound (ا ي و) for a vowel the word doesn't write; English words use the letter's Latin sound (ϣ = sh, ⲏ = y). wordsPerRound: words in one round, picked at random from the chosen length. lengths: word lengths offered in the picker (other lengths are kept but not played); the picker also has a Mix level with words of every offered length. A word never comes twice in one round. background: the church picture (drawn in code when missing). Stars: a mistake is a failed check or a hint. 0..threeStarsMaxMistakes = 3 stars, up to twoStarsMaxMistakes = 2 stars, more = 1 star.",
+  "_readme": "Settings and words for the Letter puzzle game (Level 2, the church). words.ar is played in the Arabic app, words.en in the English app; each is grouped by word length in Coptic letters (the Arabic or English word can be any length). Each word: text = shown on the name card, coptic = the answer (for reading only), letters = the answer as letter ids from letters.json (the game uses this). The answer is the word's sounds written in Coptic letters (English words: \"Franco English\", e.g. Chair = shai ei ro). The tiles are exactly these letters, shuffled. sounds = what each letter sounds like in this word, one per letter (used by the Match the letters game): Arabic words use the word's own letter, or a haraka (ـَ ـِ ـُ) for a vowel the word doesn't write; English words use the letter's Latin sound (ϣ = sh, ⲏ = y). wordsPerRound: words in one round, picked at random from the chosen length. lengths: word lengths offered in the picker (other lengths are kept but not played); the picker also has a Mix level with words of every offered length. A word never comes twice in one round. background: the church picture (drawn in code when missing). Stars: a mistake is a failed check or a hint. 0..threeStarsMaxMistakes = 3 stars, up to twoStarsMaxMistakes = 2 stars, more = 1 star.",
   "version": 2,
   "wordsPerRound": 10,
   "lengths": [
@@ -53,7 +53,7 @@
           "text": "مَن",
           "coptic": "ⲙⲁⲛ",
           "letters": ["mi", "alpha", "ni"],
-          "sounds": ["م", "ا", "ن"]
+          "sounds": ["م", "ـَ", "ن"]
         },
         {
           "text": "زيت",
@@ -77,7 +77,7 @@
           "text": "رب",
           "coptic": "ⲣⲁⲃ",
           "letters": ["ro", "alpha", "vida"],
-          "sounds": ["ر", "ا", "ب"]
+          "sounds": ["ر", "ـَ", "ب"]
         },
         {
           "text": "دان",
@@ -149,7 +149,7 @@
           "text": "زو",
           "coptic": "ⲍⲟⲟ",
           "letters": ["zita", "o", "o"],
-          "sounds": ["ز", "و", "و"]
+          "sounds": ["ز", "ـُ", "و"]
         },
         {
           "text": "يوم",
@@ -161,13 +161,13 @@
           "text": "كل",
           "coptic": "ⲕⲟⲗ",
           "letters": ["kappa", "o", "lola"],
-          "sounds": ["ك", "و", "ل"]
+          "sounds": ["ك", "ـُ", "ل"]
         },
         {
           "text": "ني",
           "coptic": "ⲛⲁⲓ",
           "letters": ["ni", "alpha", "iota"],
-          "sounds": ["ن", "ا", "ي"]
+          "sounds": ["ن", "ـَ", "ي"]
         },
         {
           "text": "نام",
@@ -197,7 +197,7 @@
           "text": "تظ",
           "coptic": "ⲧⲟⲍ",
           "letters": ["tav", "o", "zita"],
-          "sounds": ["ت", "و", "ظ"]
+          "sounds": ["ت", "ـُ", "ظ"]
         },
         {
           "text": "مين",
@@ -221,13 +221,13 @@
           "text": "نص",
           "coptic": "ⲛⲟⲥ",
           "letters": ["ni", "o", "sima"],
-          "sounds": ["ن", "و", "ص"]
+          "sounds": ["ن", "ـُ", "ص"]
         },
         {
           "text": "كم",
           "coptic": "ⲕⲟⲙ",
           "letters": ["kappa", "o", "mi"],
-          "sounds": ["ك", "و", "م"]
+          "sounds": ["ك", "ـُ", "م"]
         },
         {
           "text": "ماك",
@@ -275,19 +275,19 @@
           "text": "هز",
           "coptic": "ϩⲁⲍ",
           "letters": ["hori", "alpha", "zita"],
-          "sounds": ["ه", "ا", "ز"]
+          "sounds": ["ه", "ـَ", "ز"]
         },
         {
           "text": "خش",
           "coptic": "ϧⲟϣ",
           "letters": ["khai", "o", "shai"],
-          "sounds": ["خ", "و", "ش"]
+          "sounds": ["خ", "ـُ", "ش"]
         },
         {
           "text": "كخ",
           "coptic": "ⲕⲓϧ",
           "letters": ["kappa", "iota", "khai"],
-          "sounds": ["ك", "ي", "خ"]
+          "sounds": ["ك", "ـِ", "خ"]
         },
         {
           "text": "تيبستي",
@@ -311,13 +311,13 @@
           "text": "عصا",
           "coptic": "ⲁⲥⲁ",
           "letters": ["alpha", "sima", "alpha"],
-          "sounds": ["ا", "ص", "ا"]
+          "sounds": ["ـَ", "ص", "ا"]
         },
         {
           "text": "رف",
           "coptic": "ⲣⲁⲫ",
           "letters": ["ro", "alpha", "phi"],
-          "sounds": ["ر", "ا", "ف"]
+          "sounds": ["ر", "ـَ", "ف"]
         },
         {
           "text": "بير",
@@ -391,7 +391,7 @@
           "text": "آدم",
           "coptic": "ⲁⲇⲁⲙ",
           "letters": ["alpha", "delta", "alpha", "mi"],
-          "sounds": ["آ", "د", "ا", "م"]
+          "sounds": ["آ", "د", "ـَ", "م"]
         },
         {
           "text": "آمين",
@@ -427,7 +427,7 @@
           "text": "متى",
           "coptic": "ⲙⲁⲧⲁ",
           "letters": ["mi", "alpha", "tav", "alpha"],
-          "sounds": ["م", "ا", "ت", "ى"]
+          "sounds": ["م", "ـَ", "ت", "ى"]
         },
         {
           "text": "سارة",
@@ -457,13 +457,13 @@
           "text": "نبي",
           "coptic": "ⲛⲁⲃⲓ",
           "letters": ["ni", "alpha", "vida", "iota"],
-          "sounds": ["ن", "ا", "ب", "ي"]
+          "sounds": ["ن", "ـَ", "ب", "ي"]
         },
         {
           "text": "سما",
           "coptic": "ⲥⲁⲙⲁ",
           "letters": ["sima", "alpha", "mi", "alpha"],
-          "sounds": ["س", "ا", "م", "ا"]
+          "sounds": ["س", "ـَ", "م", "ا"]
         },
         {
           "text": "إيمان",
@@ -475,25 +475,25 @@
           "text": "رجا",
           "coptic": "ⲣⲁϫⲁ",
           "letters": ["ro", "alpha", "janja", "alpha"],
-          "sounds": ["ر", "ا", "ج", "ا"]
+          "sounds": ["ر", "ـَ", "ج", "ا"]
         },
         {
           "text": "خبز",
           "coptic": "ϧⲟⲃⲍ",
           "letters": ["khai", "o", "vida", "zita"],
-          "sounds": ["خ", "و", "ب", "ز"]
+          "sounds": ["خ", "ـُ", "ب", "ز"]
         },
         {
           "text": "فلك",
           "coptic": "ⲫⲟⲗⲕ",
           "letters": ["phi", "o", "lola", "kappa"],
-          "sounds": ["ف", "و", "ل", "ك"]
+          "sounds": ["ف", "ـُ", "ل", "ك"]
         },
         {
           "text": "نهر",
           "coptic": "ⲛⲁϩⲣ",
           "letters": ["ni", "alpha", "hori", "ro"],
-          "sounds": ["ن", "ا", "ه", "ر"]
+          "sounds": ["ن", "ـَ", "ه", "ر"]
         },
         {
           "text": "سينا",
@@ -505,7 +505,7 @@
           "text": "أسد",
           "coptic": "ⲁⲥⲁⲇ",
           "letters": ["alpha", "sima", "alpha", "delta"],
-          "sounds": ["أ", "س", "ا", "د"]
+          "sounds": ["أ", "س", "ـَ", "د"]
         },
         {
           "text": "فازا",
@@ -517,7 +517,7 @@
           "text": "زكا",
           "coptic": "ⲍⲁⲕⲁ",
           "letters": ["zita", "alpha", "kappa", "alpha"],
-          "sounds": ["ز", "ا", "ك", "ا"]
+          "sounds": ["ز", "ـَ", "ك", "ا"]
         },
         {
           "text": "ازكا",
@@ -529,7 +529,7 @@
           "text": "لبس",
           "coptic": "ⲗⲉⲃⲥ",
           "letters": ["lola", "ei", "vida", "sima"],
-          "sounds": ["ل", "ي", "ب", "س"]
+          "sounds": ["ل", "ـِ", "ب", "س"]
         },
         {
           "text": "باصي",
@@ -577,7 +577,7 @@
           "text": "اكسب",
           "coptic": "ⲁⲝⲁⲃ",
           "letters": ["alpha", "exi", "alpha", "vida"],
-          "sounds": ["ا", "كس", "ا", "ب"]
+          "sounds": ["ا", "كس", "ـَ", "ب"]
         },
         {
           "text": "فول",
@@ -589,7 +589,7 @@
           "text": "خرم",
           "coptic": "ϧⲟⲣⲙ",
           "letters": ["khai", "o", "ro", "mi"],
-          "sounds": ["خ", "و", "ر", "م"]
+          "sounds": ["خ", "ـُ", "ر", "م"]
         },
         {
           "text": "هادي",
@@ -601,7 +601,7 @@
           "text": "فخر",
           "coptic": "ⲫⲁϧⲣ",
           "letters": ["phi", "alpha", "khai", "ro"],
-          "sounds": ["ف", "ا", "خ", "ر"]
+          "sounds": ["ف", "ـَ", "خ", "ر"]
         },
         {
           "text": "دينا",
@@ -613,7 +613,7 @@
           "text": "شتا",
           "coptic": "ϣⲉⲧⲁ",
           "letters": ["shai", "ei", "tav", "alpha"],
-          "sounds": ["ش", "ي", "ت", "ا"]
+          "sounds": ["ش", "ـِ", "ت", "ا"]
         },
         {
           "text": "طول",
@@ -631,55 +631,55 @@
           "text": "طقس",
           "coptic": "ⲧⲁⲕⲥ",
           "letters": ["tav", "alpha", "kappa", "sima"],
-          "sounds": ["ط", "ا", "ق", "س"]
+          "sounds": ["ط", "ـَ", "ق", "س"]
         },
         {
           "text": "لحن",
           "coptic": "ⲗⲁϩⲛ",
           "letters": ["lola", "alpha", "hori", "ni"],
-          "sounds": ["ل", "ا", "ح", "ن"]
+          "sounds": ["ل", "ـَ", "ح", "ن"]
         },
         {
           "text": "شمعة",
           "coptic": "ϣⲁⲙⲁ",
           "letters": ["shai", "alpha", "mi", "alpha"],
-          "sounds": ["ش", "ا", "م", "ة"]
+          "sounds": ["ش", "ـَ", "م", "ة"]
         },
         {
           "text": "قبة",
           "coptic": "ⲕⲟⲃⲁ",
           "letters": ["kappa", "o", "vida", "alpha"],
-          "sounds": ["ق", "و", "ب", "ة"]
+          "sounds": ["ق", "ـُ", "ب", "ة"]
         },
         {
           "text": "برج",
           "coptic": "ⲃⲟⲣϫ",
           "letters": ["vida", "o", "ro", "janja"],
-          "sounds": ["ب", "و", "ر", "ج"]
+          "sounds": ["ب", "ـُ", "ر", "ج"]
         },
         {
           "text": "فرن",
           "coptic": "ⲫⲟⲣⲛ",
           "letters": ["phi", "o", "ro", "ni"],
-          "sounds": ["ف", "و", "ر", "ن"]
+          "sounds": ["ف", "ـُ", "ر", "ن"]
         },
         {
           "text": "سلم",
           "coptic": "ⲥⲓⲗⲙ",
           "letters": ["sima", "iota", "lola", "mi"],
-          "sounds": ["س", "ي", "ل", "م"]
+          "sounds": ["س", "ـِ", "ل", "م"]
         },
         {
           "text": "حبل",
           "coptic": "ϩⲁⲃⲗ",
           "letters": ["hori", "alpha", "vida", "lola"],
-          "sounds": ["ح", "ا", "ب", "ل"]
+          "sounds": ["ح", "ـَ", "ب", "ل"]
         },
         {
           "text": "دلو",
           "coptic": "ⲇⲁⲗⲟ",
           "letters": ["delta", "alpha", "lola", "o"],
-          "sounds": ["د", "ا", "ل", "و"]
+          "sounds": ["د", "ـَ", "ل", "و"]
         }
       ],
       "5": [
@@ -687,7 +687,7 @@
           "text": "يوسف",
           "coptic": "ⲓⲟⲥⲉϥ",
           "letters": ["iota", "o", "sima", "ei", "fai"],
-          "sounds": ["ي", "و", "س", "ي", "ف"]
+          "sounds": ["ي", "و", "س", "ـِ", "ف"]
         },
         {
           "text": "يونان",
@@ -699,7 +699,7 @@
           "text": "بولس",
           "coptic": "ⲃⲟⲗⲟⲥ",
           "letters": ["vida", "o", "lola", "o", "sima"],
-          "sounds": ["ب", "و", "ل", "و", "س"]
+          "sounds": ["ب", "و", "ل", "ـُ", "س"]
         },
         {
           "text": "بيشوي",
@@ -723,7 +723,7 @@
           "text": "بيتر",
           "coptic": "ⲡⲓⲧⲉⲣ",
           "letters": ["pi", "iota", "tav", "ei", "ro"],
-          "sounds": ["ب", "ي", "ت", "ي", "ر"]
+          "sounds": ["ب", "ي", "ت", "ـِ", "ر"]
         },
         {
           "text": "توماس",
@@ -735,7 +735,7 @@
           "text": "مرثا",
           "coptic": "ⲙⲁⲣⲑⲁ",
           "letters": ["mi", "alpha", "ro", "thita", "alpha"],
-          "sounds": ["م", "ا", "ر", "ث", "ا"]
+          "sounds": ["م", "ـَ", "ر", "ث", "ا"]
         },
         {
           "text": "ماريا",
@@ -765,31 +765,31 @@
           "text": "شماس",
           "coptic": "ϣⲁⲙⲁⲥ",
           "letters": ["shai", "alpha", "mi", "alpha", "sima"],
-          "sounds": ["ش", "ا", "م", "ا", "س"]
+          "sounds": ["ش", "ـَ", "م", "ا", "س"]
         },
         {
           "text": "كاهن",
           "coptic": "ⲕⲁϩⲉⲛ",
           "letters": ["kappa", "alpha", "hori", "ei", "ni"],
-          "sounds": ["ك", "ا", "ه", "ي", "ن"]
+          "sounds": ["ك", "ا", "ه", "ـِ", "ن"]
         },
         {
           "text": "هيكل",
           "coptic": "ϩⲏⲕⲁⲗ",
           "letters": ["hori", "ita", "kappa", "alpha", "lola"],
-          "sounds": ["ه", "ي", "ك", "ا", "ل"]
+          "sounds": ["ه", "ي", "ك", "ـَ", "ل"]
         },
         {
           "text": "ملاك",
           "coptic": "ⲙⲁⲗⲁⲕ",
           "letters": ["mi", "alpha", "lola", "alpha", "kappa"],
-          "sounds": ["م", "ا", "ل", "ا", "ك"]
+          "sounds": ["م", "ـَ", "ل", "ا", "ك"]
         },
         {
           "text": "رسول",
           "coptic": "ⲣⲁⲥⲟⲗ",
           "letters": ["ro", "alpha", "sima", "o", "lola"],
-          "sounds": ["ر", "ا", "س", "و", "ل"]
+          "sounds": ["ر", "ـَ", "س", "و", "ل"]
         },
         {
           "text": "ميلاد",
@@ -801,19 +801,19 @@
           "text": "سلام",
           "coptic": "ⲥⲁⲗⲁⲙ",
           "letters": ["sima", "alpha", "lola", "alpha", "mi"],
-          "sounds": ["س", "ا", "ل", "ا", "م"]
+          "sounds": ["س", "ـَ", "ل", "ا", "م"]
         },
         {
           "text": "جرس",
           "coptic": "ϫⲁⲣⲁⲥ",
           "letters": ["janja", "alpha", "ro", "alpha", "sima"],
-          "sounds": ["ج", "ا", "ر", "ا", "س"]
+          "sounds": ["ج", "ـَ", "ر", "ـَ", "س"]
         },
         {
           "text": "بخور",
           "coptic": "ⲃⲁϧⲟⲣ",
           "letters": ["vida", "alpha", "khai", "o", "ro"],
-          "sounds": ["ب", "ا", "خ", "و", "ر"]
+          "sounds": ["ب", "ـَ", "خ", "و", "ر"]
         },
         {
           "text": "شورية",
@@ -825,37 +825,37 @@
           "text": "كرمة",
           "coptic": "ⲕⲁⲣⲙⲁ",
           "letters": ["kappa", "alpha", "ro", "mi", "alpha"],
-          "sounds": ["ك", "ا", "ر", "م", "ة"]
+          "sounds": ["ك", "ـَ", "ر", "م", "ة"]
         },
         {
           "text": "نجمة",
           "coptic": "ⲛⲉϫⲙⲁ",
           "letters": ["ni", "ei", "janja", "mi", "alpha"],
-          "sounds": ["ن", "ي", "ج", "م", "ة"]
+          "sounds": ["ن", "ـِ", "ج", "م", "ة"]
         },
         {
           "text": "جبل",
           "coptic": "ϫⲁⲃⲁⲗ",
           "letters": ["janja", "alpha", "vida", "alpha", "lola"],
-          "sounds": ["ج", "ا", "ب", "ا", "ل"]
+          "sounds": ["ج", "ـَ", "ب", "ـَ", "ل"]
         },
         {
           "text": "خروف",
           "coptic": "ϧⲁⲣⲟϥ",
           "letters": ["khai", "alpha", "ro", "o", "fai"],
-          "sounds": ["خ", "ا", "ر", "و", "ف"]
+          "sounds": ["خ", "ـَ", "ر", "و", "ف"]
         },
         {
           "text": "كرسي",
           "coptic": "ⲕⲟⲣⲥⲓ",
           "letters": ["kappa", "o", "ro", "sima", "iota"],
-          "sounds": ["ك", "و", "ر", "س", "ي"]
+          "sounds": ["ك", "ـُ", "ر", "س", "ي"]
         },
         {
           "text": "كتاب",
           "coptic": "ⲕⲓⲧⲁⲃ",
           "letters": ["kappa", "iota", "tav", "alpha", "vida"],
-          "sounds": ["ك", "ي", "ت", "ا", "ب"]
+          "sounds": ["ك", "ـِ", "ت", "ا", "ب"]
         },
         {
           "text": "فانوس",
@@ -867,13 +867,13 @@
           "text": "ياكل",
           "coptic": "ⲓⲁⲕⲟⲗ",
           "letters": ["iota", "alpha", "kappa", "o", "lola"],
-          "sounds": ["ي", "ا", "ك", "و", "ل"]
+          "sounds": ["ي", "ا", "ك", "ـُ", "ل"]
         },
         {
           "text": "نزل",
           "coptic": "ⲛⲉⲍⲉⲗ",
           "letters": ["ni", "ei", "zita", "ei", "lola"],
-          "sounds": ["ن", "ي", "ز", "ي", "ل"]
+          "sounds": ["ن", "ـِ", "ز", "ـِ", "ل"]
         },
         {
           "text": "لولا",
@@ -885,7 +885,7 @@
           "text": "سمك",
           "coptic": "ⲥⲁⲙⲁⲕ",
           "letters": ["sima", "alpha", "mi", "alpha", "kappa"],
-          "sounds": ["س", "ا", "م", "ا", "ك"]
+          "sounds": ["س", "ـَ", "م", "ـَ", "ك"]
         },
         {
           "text": "سامبا",
@@ -903,19 +903,19 @@
           "text": "تالت",
           "coptic": "ⲧⲁⲗⲉⲧ",
           "letters": ["tav", "alpha", "lola", "ei", "tav"],
-          "sounds": ["ت", "ا", "ل", "ي", "ت"]
+          "sounds": ["ت", "ا", "ل", "ـِ", "ت"]
         },
         {
           "text": "ثامن",
           "coptic": "ⲑⲁⲙⲉⲛ",
           "letters": ["thita", "alpha", "mi", "ei", "ni"],
-          "sounds": ["ث", "ا", "م", "ي", "ن"]
+          "sounds": ["ث", "ا", "م", "ـِ", "ن"]
         },
         {
           "text": "قميص",
           "coptic": "ⲕⲁⲙⲏⲥ",
           "letters": ["kappa", "alpha", "mi", "ita", "sima"],
-          "sounds": ["ق", "ا", "م", "ي", "ص"]
+          "sounds": ["ق", "ـَ", "م", "ي", "ص"]
         },
         {
           "text": "نوكيا",
@@ -927,7 +927,7 @@
           "text": "ويلكم",
           "coptic": "ⲱⲗⲕⲟⲙ",
           "letters": ["omega", "lola", "kappa", "o", "mi"],
-          "sounds": ["و", "ل", "ك", "و", "م"]
+          "sounds": ["و", "ل", "ك", "ـُ", "م"]
         },
         {
           "text": "ازازة",
@@ -951,13 +951,13 @@
           "text": "دلتا",
           "coptic": "ⲇⲉⲗⲧⲁ",
           "letters": ["delta", "ei", "lola", "tav", "alpha"],
-          "sounds": ["د", "ي", "ل", "ت", "ا"]
+          "sounds": ["د", "ـِ", "ل", "ت", "ا"]
         },
         {
           "text": "ذاكر",
           "coptic": "ⲇⲁⲕⲉⲣ",
           "letters": ["delta", "alpha", "kappa", "ei", "ro"],
-          "sounds": ["ذ", "ا", "ك", "ي", "ر"]
+          "sounds": ["ذ", "ا", "ك", "ـِ", "ر"]
         },
         {
           "text": "اكسيوس",
@@ -975,37 +975,37 @@
           "text": "شتم",
           "coptic": "ϣⲁⲧⲁⲙ",
           "letters": ["shai", "alpha", "tav", "alpha", "mi"],
-          "sounds": ["ش", "ا", "ت", "ا", "م"]
+          "sounds": ["ش", "ـَ", "ت", "ـَ", "م"]
         },
         {
           "text": "خليل",
           "coptic": "ϧⲁⲗⲓⲗ",
           "letters": ["khai", "alpha", "lola", "iota", "lola"],
-          "sounds": ["خ", "ا", "ل", "ي", "ل"]
+          "sounds": ["خ", "ـَ", "ل", "ي", "ل"]
         },
         {
           "text": "دبي",
           "coptic": "ⲇⲟⲃⲁⲓ",
           "letters": ["delta", "o", "vida", "alpha", "iota"],
-          "sounds": ["د", "و", "ب", "ا", "ي"]
+          "sounds": ["د", "ـُ", "ب", "ـَ", "ي"]
         },
         {
           "text": "شرف",
           "coptic": "ϣⲁⲣⲁⲫ",
           "letters": ["shai", "alpha", "ro", "alpha", "phi"],
-          "sounds": ["ش", "ا", "ر", "ا", "ف"]
+          "sounds": ["ش", "ـَ", "ر", "ـَ", "ف"]
         },
         {
           "text": "شرفة",
           "coptic": "ϣⲟⲣⲫⲁ",
           "letters": ["shai", "o", "ro", "phi", "alpha"],
-          "sounds": ["ش", "و", "ر", "ف", "ة"]
+          "sounds": ["ش", "ـُ", "ر", "ف", "ة"]
         },
         {
           "text": "دبشة",
           "coptic": "ⲇⲁⲃϣⲁ",
           "letters": ["delta", "alpha", "vida", "shai", "alpha"],
-          "sounds": ["د", "ا", "ب", "ش", "ة"]
+          "sounds": ["د", "ـَ", "ب", "ش", "ة"]
         },
         {
           "text": "بافلي",
@@ -1023,7 +1023,7 @@
           "text": "حصير",
           "coptic": "ϩⲁⲥⲓⲣ",
           "letters": ["hori", "alpha", "sima", "iota", "ro"],
-          "sounds": ["ح", "ا", "ص", "ي", "ر"]
+          "sounds": ["ح", "ـَ", "ص", "ي", "ر"]
         },
         {
           "text": "راهبة",
@@ -1035,7 +1035,7 @@
           "text": "صليب",
           "coptic": "ⲥⲁⲗⲓⲃ",
           "letters": ["sima", "alpha", "lola", "iota", "vida"],
-          "sounds": ["ص", "ا", "ل", "ي", "ب"]
+          "sounds": ["ص", "ـَ", "ل", "ي", "ب"]
         },
         {
           "text": "ابريق",
@@ -1053,13 +1053,13 @@
           "text": "بلاط",
           "coptic": "ⲃⲁⲗⲁⲧ",
           "letters": ["vida", "alpha", "lola", "alpha", "tav"],
-          "sounds": ["ب", "ا", "ل", "ا", "ط"]
+          "sounds": ["ب", "ـَ", "ل", "ا", "ط"]
         },
         {
           "text": "شباك",
           "coptic": "ϣⲓⲃⲁⲕ",
           "letters": ["shai", "iota", "vida", "alpha", "kappa"],
-          "sounds": ["ش", "ي", "ب", "ا", "ك"]
+          "sounds": ["ش", "ـِ", "ب", "ا", "ك"]
         },
         {
           "text": "تونية",
@@ -1071,7 +1071,7 @@
           "text": "لقان",
           "coptic": "ⲗⲁⲕⲁⲛ",
           "letters": ["lola", "alpha", "kappa", "alpha", "ni"],
-          "sounds": ["ل", "ا", "ق", "ا", "ن"]
+          "sounds": ["ل", "ـَ", "ق", "ا", "ن"]
         }
       ],
       "6": [
@@ -1079,25 +1079,25 @@
           "text": "مريم",
           "coptic": "ⲙⲁⲣⲓⲁⲙ",
           "letters": ["mi", "alpha", "ro", "iota", "alpha", "mi"],
-          "sounds": ["م", "ا", "ر", "ي", "ا", "م"]
+          "sounds": ["م", "ـَ", "ر", "ي", "ـَ", "م"]
         },
         {
           "text": "شنودة",
           "coptic": "ϣⲉⲛⲟⲇⲁ",
           "letters": ["shai", "ei", "ni", "o", "delta", "alpha"],
-          "sounds": ["ش", "ي", "ن", "و", "د", "ة"]
+          "sounds": ["ش", "ـِ", "ن", "و", "د", "ة"]
         },
         {
           "text": "جرجس",
           "coptic": "ϫⲉⲣϫⲉⲥ",
           "letters": ["janja", "ei", "ro", "janja", "ei", "sima"],
-          "sounds": ["ج", "ي", "ر", "ج", "ي", "س"]
+          "sounds": ["ج", "ـِ", "ر", "ج", "ـِ", "س"]
         },
         {
           "text": "تادرس",
           "coptic": "ⲧⲁⲇⲣⲟⲥ",
           "letters": ["tav", "alpha", "delta", "ro", "o", "sima"],
-          "sounds": ["ت", "ا", "د", "ر", "و", "س"]
+          "sounds": ["ت", "ا", "د", "ر", "ـُ", "س"]
         },
         {
           "text": "أبانوب",
@@ -1115,7 +1115,7 @@
           "text": "مايكل",
           "coptic": "ⲙⲁⲓⲕⲉⲗ",
           "letters": ["mi", "alpha", "iota", "kappa", "ei", "lola"],
-          "sounds": ["م", "ا", "ي", "ك", "ي", "ل"]
+          "sounds": ["م", "ا", "ي", "ك", "ـِ", "ل"]
         },
         {
           "text": "ميخائيل",
@@ -1163,55 +1163,55 @@
           "text": "كنيسة",
           "coptic": "ⲕⲁⲛⲓⲥⲁ",
           "letters": ["kappa", "alpha", "ni", "iota", "sima", "alpha"],
-          "sounds": ["ك", "ا", "ن", "ي", "س", "ة"]
+          "sounds": ["ك", "ـَ", "ن", "ي", "س", "ة"]
         },
         {
           "text": "مزمور",
           "coptic": "ⲙⲁⲍⲙⲟⲣ",
           "letters": ["mi", "alpha", "zita", "mi", "o", "ro"],
-          "sounds": ["م", "ا", "ز", "م", "و", "ر"]
+          "sounds": ["م", "ـَ", "ز", "م", "و", "ر"]
         },
         {
           "text": "بركة",
           "coptic": "ⲃⲁⲣⲁⲕⲁ",
           "letters": ["vida", "alpha", "ro", "alpha", "kappa", "alpha"],
-          "sounds": ["ب", "ا", "ر", "ا", "ك", "ة"]
+          "sounds": ["ب", "ـَ", "ر", "ـَ", "ك", "ة"]
         },
         {
           "text": "منارة",
           "coptic": "ⲙⲁⲛⲁⲣⲁ",
           "letters": ["mi", "alpha", "ni", "alpha", "ro", "alpha"],
-          "sounds": ["م", "ا", "ن", "ا", "ر", "ة"]
+          "sounds": ["م", "ـَ", "ن", "ا", "ر", "ة"]
         },
         {
           "text": "زيتون",
           "coptic": "ⲍⲁⲓⲧⲟⲛ",
           "letters": ["zita", "alpha", "iota", "tav", "o", "ni"],
-          "sounds": ["ز", "ا", "ي", "ت", "و", "ن"]
+          "sounds": ["ز", "ـَ", "ي", "ت", "و", "ن"]
         },
         {
           "text": "شجرة",
           "coptic": "ϣⲁϫⲁⲣⲁ",
           "letters": ["shai", "alpha", "janja", "alpha", "ro", "alpha"],
-          "sounds": ["ش", "ا", "ج", "ا", "ر", "ة"]
+          "sounds": ["ش", "ـَ", "ج", "ـَ", "ر", "ة"]
         },
         {
           "text": "كنبة",
           "coptic": "ⲕⲁⲛⲁⲃⲁ",
           "letters": ["kappa", "alpha", "ni", "alpha", "vida", "alpha"],
-          "sounds": ["ك", "ا", "ن", "ا", "ب", "ة"]
+          "sounds": ["ك", "ـَ", "ن", "ـَ", "ب", "ة"]
         },
         {
           "text": "ستارة",
           "coptic": "ⲥⲉⲧⲁⲣⲁ",
           "letters": ["sima", "ei", "tav", "alpha", "ro", "alpha"],
-          "sounds": ["س", "ي", "ت", "ا", "ر", "ة"]
+          "sounds": ["س", "ـِ", "ت", "ا", "ر", "ة"]
         },
         {
           "text": "مركب",
           "coptic": "ⲙⲁⲣⲕⲁⲃ",
           "letters": ["mi", "alpha", "ro", "kappa", "alpha", "vida"],
-          "sounds": ["م", "ا", "ر", "ك", "ا", "ب"]
+          "sounds": ["م", "ـَ", "ر", "ك", "ـَ", "ب"]
         },
         {
           "text": "امباليه",
@@ -1223,7 +1223,7 @@
           "text": "مصيبة",
           "coptic": "ⲙⲟⲥⲓⲃⲁ",
           "letters": ["mi", "o", "sima", "iota", "vida", "alpha"],
-          "sounds": ["م", "و", "ص", "ي", "ب", "ة"]
+          "sounds": ["م", "ـُ", "ص", "ي", "ب", "ة"]
         },
         {
           "text": "اناناس",
@@ -1235,19 +1235,19 @@
           "text": "بقطر",
           "coptic": "ⲃⲟⲕⲧⲟⲣ",
           "letters": ["vida", "o", "kappa", "tav", "o", "ro"],
-          "sounds": ["ب", "و", "ق", "ط", "و", "ر"]
+          "sounds": ["ب", "ـُ", "ق", "ط", "ـُ", "ر"]
         },
         {
           "text": "كمون",
           "coptic": "ⲕⲁⲙⲟⲩⲛ",
           "letters": ["kappa", "alpha", "mi", "o", "epsilon", "ni"],
-          "sounds": ["ك", "ا", "م", "و", "و", "ن"]
+          "sounds": ["ك", "ـَ", "م", "و", "و", "ن"]
         },
         {
           "text": "كلية",
           "coptic": "ⲕⲟⲗⲉⲓⲁ",
           "letters": ["kappa", "o", "lola", "ei", "iota", "alpha"],
-          "sounds": ["ك", "و", "ل", "ي", "ي", "ة"]
+          "sounds": ["ك", "ـُ", "ل", "ـِ", "ي", "ة"]
         },
         {
           "text": "استيكه",
@@ -1259,37 +1259,37 @@
           "text": "بربر",
           "coptic": "ⲃⲁⲣⲃⲁⲣ",
           "letters": ["vida", "alpha", "ro", "vida", "alpha", "ro"],
-          "sounds": ["ب", "ا", "ر", "ب", "ا", "ر"]
+          "sounds": ["ب", "ـَ", "ر", "ب", "ـَ", "ر"]
         },
         {
           "text": "مرقس",
           "coptic": "ⲙⲁⲣⲕⲟⲥ",
           "letters": ["mi", "alpha", "ro", "kappa", "o", "sima"],
-          "sounds": ["م", "ا", "ر", "ق", "و", "س"]
+          "sounds": ["م", "ـَ", "ر", "ق", "ـُ", "س"]
         },
         {
           "text": "مذبح",
           "coptic": "ⲙⲁⲇⲃⲁϩ",
           "letters": ["mi", "alpha", "delta", "vida", "alpha", "hori"],
-          "sounds": ["م", "ا", "ذ", "ب", "ا", "ح"]
+          "sounds": ["م", "ـَ", "ذ", "ب", "ـَ", "ح"]
         },
         {
           "text": "قربان",
           "coptic": "ⲕⲟⲣⲃⲁⲛ",
           "letters": ["kappa", "o", "ro", "vida", "alpha", "ni"],
-          "sounds": ["ق", "و", "ر", "ب", "ا", "ن"]
+          "sounds": ["ق", "ـُ", "ر", "ب", "ا", "ن"]
         },
         {
           "text": "قلاية",
           "coptic": "ⲕⲁⲗⲁⲓⲁ",
           "letters": ["kappa", "alpha", "lola", "alpha", "iota", "alpha"],
-          "sounds": ["ق", "ا", "ل", "ا", "ي", "ة"]
+          "sounds": ["ق", "ـَ", "ل", "ا", "ي", "ة"]
         },
         {
           "text": "قنديل",
           "coptic": "ⲕⲁⲛⲇⲓⲗ",
           "letters": ["kappa", "alpha", "ni", "delta", "iota", "lola"],
-          "sounds": ["ق", "ا", "ن", "د", "ي", "ل"]
+          "sounds": ["ق", "ـَ", "ن", "د", "ي", "ل"]
         },
         {
           "text": "ايقونة",
@@ -1301,31 +1301,31 @@
           "text": "مغارة",
           "coptic": "ⲙⲁⲅⲁⲣⲁ",
           "letters": ["mi", "alpha", "gamma", "alpha", "ro", "alpha"],
-          "sounds": ["م", "ا", "غ", "ا", "ر", "ة"]
+          "sounds": ["م", "ـَ", "غ", "ا", "ر", "ة"]
         },
         {
           "text": "سجادة",
           "coptic": "ⲥⲉϫⲁⲇⲁ",
           "letters": ["sima", "ei", "janja", "alpha", "delta", "alpha"],
-          "sounds": ["س", "ي", "ج", "ا", "د", "ة"]
+          "sounds": ["س", "ـِ", "ج", "ا", "د", "ة"]
         },
         {
           "text": "مخزن",
           "coptic": "ⲙⲁϧⲍⲁⲛ",
           "letters": ["mi", "alpha", "khai", "zita", "alpha", "ni"],
-          "sounds": ["م", "ا", "خ", "ز", "ا", "ن"]
+          "sounds": ["م", "ـَ", "خ", "ز", "ـَ", "ن"]
         },
         {
           "text": "حديقة",
           "coptic": "ϩⲁⲇⲓⲕⲁ",
           "letters": ["hori", "alpha", "delta", "iota", "kappa", "alpha"],
-          "sounds": ["ح", "ا", "د", "ي", "ق", "ة"]
+          "sounds": ["ح", "ـَ", "د", "ي", "ق", "ة"]
         },
         {
           "text": "مطبخ",
           "coptic": "ⲙⲁⲧⲃⲁϧ",
           "letters": ["mi", "alpha", "tav", "vida", "alpha", "khai"],
-          "sounds": ["م", "ا", "ط", "ب", "ا", "خ"]
+          "sounds": ["م", "ـَ", "ط", "ب", "ـَ", "خ"]
         }
       ],
       "7": [
@@ -1339,13 +1339,13 @@
           "text": "دميانة",
           "coptic": "ⲇⲉⲙⲓⲁⲛⲁ",
           "letters": ["delta", "ei", "mi", "iota", "alpha", "ni", "alpha"],
-          "sounds": ["د", "ي", "م", "ي", "ا", "ن", "ة"]
+          "sounds": ["د", "ـِ", "م", "ي", "ا", "ن", "ة"]
         },
         {
           "text": "برنابا",
           "coptic": "ⲃⲁⲣⲛⲁⲃⲁ",
           "letters": ["vida", "alpha", "ro", "ni", "alpha", "vida", "alpha"],
-          "sounds": ["ب", "ا", "ر", "ن", "ا", "ب", "ا"]
+          "sounds": ["ب", "ـَ", "ر", "ن", "ا", "ب", "ا"]
         },
         {
           "text": "أندراوس",
@@ -1357,13 +1357,13 @@
           "text": "فيلبس",
           "coptic": "ⲫⲓⲗⲓⲡⲟⲥ",
           "letters": ["phi", "iota", "lola", "iota", "pi", "o", "sima"],
-          "sounds": ["ف", "ي", "ل", "ي", "ب", "و", "س"]
+          "sounds": ["ف", "ي", "ل", "ـِ", "ب", "ـُ", "س"]
         },
         {
           "text": "كيرلس",
           "coptic": "ⲕⲓⲣⲟⲗⲟⲥ",
           "letters": ["kappa", "iota", "ro", "o", "lola", "o", "sima"],
-          "sounds": ["ك", "ي", "ر", "و", "ل", "و", "س"]
+          "sounds": ["ك", "ي", "ر", "ـُ", "ل", "ـُ", "س"]
         },
         {
           "text": "إبراهيم",
@@ -1375,7 +1375,7 @@
           "text": "جبرائيل",
           "coptic": "ϫⲉⲃⲣⲁⲓⲗ",
           "letters": ["janja", "ei", "vida", "ro", "alpha", "iota", "lola"],
-          "sounds": ["ج", "ي", "ب", "ر", "ا", "ي", "ل"]
+          "sounds": ["ج", "ـِ", "ب", "ر", "ا", "ي", "ل"]
         },
         {
           "text": "مارتينا",
@@ -1393,13 +1393,13 @@
           "text": "سليمان",
           "coptic": "ⲥⲟⲗⲓⲙⲁⲛ",
           "letters": ["sima", "o", "lola", "iota", "mi", "alpha", "ni"],
-          "sounds": ["س", "و", "ل", "ي", "م", "ا", "ن"]
+          "sounds": ["س", "ـُ", "ل", "ي", "م", "ا", "ن"]
         },
         {
           "text": "زكريا",
           "coptic": "ⲍⲁⲕⲁⲣⲓⲁ",
           "letters": ["zita", "alpha", "kappa", "alpha", "ro", "iota", "alpha"],
-          "sounds": ["ز", "ا", "ك", "ا", "ر", "ي", "ا"]
+          "sounds": ["ز", "ـَ", "ك", "ـَ", "ر", "ي", "ا"]
         },
         {
           "text": "مارمينا",
@@ -1423,37 +1423,37 @@
           "text": "ملايكة",
           "coptic": "ⲙⲁⲗⲁⲓⲕⲁ",
           "letters": ["mi", "alpha", "lola", "alpha", "iota", "kappa", "alpha"],
-          "sounds": ["م", "ا", "ل", "ا", "ي", "ك", "ة"]
+          "sounds": ["م", "ـَ", "ل", "ا", "ي", "ك", "ة"]
         },
         {
           "text": "مزامير",
           "coptic": "ⲙⲁⲍⲁⲙⲓⲣ",
           "letters": ["mi", "alpha", "zita", "alpha", "mi", "iota", "ro"],
-          "sounds": ["م", "ا", "ز", "ا", "م", "ي", "ر"]
+          "sounds": ["م", "ـَ", "ز", "ا", "م", "ي", "ر"]
         },
         {
           "text": "جلجثة",
           "coptic": "ϫⲟⲗϫⲟⲑⲁ",
           "letters": ["janja", "o", "lola", "janja", "o", "thita", "alpha"],
-          "sounds": ["ج", "و", "ل", "ج", "و", "ث", "ة"]
+          "sounds": ["ج", "ـُ", "ل", "ج", "ـُ", "ث", "ة"]
         },
         {
           "text": "أورشليم",
           "coptic": "ⲟⲣϣⲁⲗⲓⲙ",
           "letters": ["o", "ro", "shai", "alpha", "lola", "iota", "mi"],
-          "sounds": ["أو", "ر", "ش", "ا", "ل", "ي", "م"]
+          "sounds": ["أو", "ر", "ش", "ـَ", "ل", "ي", "م"]
         },
         {
           "text": "ترنيمة",
           "coptic": "ⲧⲁⲣⲛⲓⲙⲁ",
           "letters": ["tav", "alpha", "ro", "ni", "iota", "mi", "alpha"],
-          "sounds": ["ت", "ا", "ر", "ن", "ي", "م", "ة"]
+          "sounds": ["ت", "ـَ", "ر", "ن", "ي", "م", "ة"]
         },
         {
           "text": "مبخرة",
           "coptic": "ⲙⲉⲃϧⲁⲣⲁ",
           "letters": ["mi", "ei", "vida", "khai", "alpha", "ro", "alpha"],
-          "sounds": ["م", "ي", "ب", "خ", "ا", "ر", "ة"]
+          "sounds": ["م", "ـِ", "ب", "خ", "ـَ", "ر", "ة"]
         },
         {
           "text": "اسبرايت",
@@ -1465,37 +1465,37 @@
           "text": "مكتبة",
           "coptic": "ⲙⲁⲕⲧⲁⲃⲁ",
           "letters": ["mi", "alpha", "kappa", "tav", "alpha", "vida", "alpha"],
-          "sounds": ["م", "ا", "ك", "ت", "ا", "ب", "ة"]
+          "sounds": ["م", "ـَ", "ك", "ت", "ـَ", "ب", "ة"]
         },
         {
           "text": "شمعدان",
           "coptic": "ϣⲁⲙⲁⲇⲁⲛ",
           "letters": ["shai", "alpha", "mi", "alpha", "delta", "alpha", "ni"],
-          "sounds": ["ش", "ا", "م", "ا", "د", "ا", "ن"]
+          "sounds": ["ش", "ـَ", "م", "ـَ", "د", "ا", "ن"]
         },
         {
           "text": "مخطوطة",
           "coptic": "ⲙⲁϧⲧⲟⲧⲁ",
           "letters": ["mi", "alpha", "khai", "tav", "o", "tav", "alpha"],
-          "sounds": ["م", "ا", "خ", "ط", "و", "ط", "ة"]
+          "sounds": ["م", "ـَ", "خ", "ط", "و", "ط", "ة"]
         },
         {
           "text": "سنكسار",
           "coptic": "ⲥⲓⲛⲕⲥⲁⲣ",
           "letters": ["sima", "iota", "ni", "kappa", "sima", "alpha", "ro"],
-          "sounds": ["س", "ي", "ن", "ك", "س", "ا", "ر"]
+          "sounds": ["س", "ـِ", "ن", "ك", "س", "ا", "ر"]
         },
         {
           "text": "مناولة",
           "coptic": "ⲙⲁⲛⲁⲟⲗⲁ",
           "letters": ["mi", "alpha", "ni", "alpha", "o", "lola", "alpha"],
-          "sounds": ["م", "ا", "ن", "ا", "و", "ل", "ة"]
+          "sounds": ["م", "ـَ", "ن", "ا", "و", "ل", "ة"]
         },
         {
           "text": "مسبحة",
           "coptic": "ⲙⲁⲥⲃⲁϩⲁ",
           "letters": ["mi", "alpha", "sima", "vida", "alpha", "hori", "alpha"],
-          "sounds": ["م", "ا", "س", "ب", "ا", "ح", "ة"]
+          "sounds": ["م", "ـَ", "س", "ب", "ـَ", "ح", "ة"]
         },
         {
           "text": "قلالي",
@@ -1507,25 +1507,25 @@
           "text": "معمودية",
           "coptic": "ⲙⲁⲙⲟⲇⲓⲁ",
           "letters": ["mi", "alpha", "mi", "o", "delta", "iota", "alpha"],
-          "sounds": ["م", "ا", "م", "و", "د", "ي", "ة"]
+          "sounds": ["م", "ـَ", "م", "و", "د", "ي", "ة"]
         },
         {
           "text": "شمامسة",
           "coptic": "ϣⲁⲙⲁⲙⲥⲁ",
           "letters": ["shai", "alpha", "mi", "alpha", "mi", "sima", "alpha"],
-          "sounds": ["ش", "ا", "م", "ا", "م", "س", "ة"]
+          "sounds": ["ش", "ـَ", "م", "ا", "م", "س", "ة"]
         },
         {
           "text": "مقصورة",
           "coptic": "ⲙⲁⲕⲥⲟⲣⲁ",
           "letters": ["mi", "alpha", "kappa", "sima", "o", "ro", "alpha"],
-          "sounds": ["م", "ا", "ق", "ص", "و", "ر", "ة"]
+          "sounds": ["م", "ـَ", "ق", "ص", "و", "ر", "ة"]
         },
         {
           "text": "قربانة",
           "coptic": "ⲕⲟⲣⲃⲁⲛⲁ",
           "letters": ["kappa", "o", "ro", "vida", "alpha", "ni", "alpha"],
-          "sounds": ["ق", "و", "ر", "ب", "ا", "ن", "ة"]
+          "sounds": ["ق", "ـُ", "ر", "ب", "ا", "ن", "ة"]
         }
       ],
       "8": [
@@ -1557,7 +1557,7 @@
           "text": "منجلية",
           "coptic": "ⲙⲁⲛϫⲁⲗⲓⲁ",
           "letters": ["mi", "alpha", "ni", "janja", "alpha", "lola", "iota", "alpha"],
-          "sounds": ["م", "ا", "ن", "ج", "ا", "ل", "ي", "ة"]
+          "sounds": ["م", "ـَ", "ن", "ج", "ـَ", "ل", "ي", "ة"]
         }
       ],
       "9": [
