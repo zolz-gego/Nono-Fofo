@@ -27,6 +27,12 @@ export const MIN_SCENE = 1.6;
 export const WIPE = 10; // frames the next scene takes to wipe in
 export const END_CARD = 2.6;
 export const END_VOICE_AT = 0.45; // end card voice starts after the logo sting hit
+export const END_AFTER_VOICE = 1.0; // the end card stays this long after its voice ends
+export const END_STING = 3.0; // the logo sting (with its sparkle tail) always plays out
+export const END_SETTLE = 0.6; // the brothers stop bouncing this long before the very end
+// Every finished video (npm run release) opens with this intro unless its
+// video.json names another one or sets "intro": "none".
+export const RELEASE_INTRO = 'intro-spin';
 
 // Safe areas for TikTok / Reels UI (top bar, right buttons, bottom caption).
 export const SAFE = {top: 150, bottom: 1560, left: 70, right: 930};

@@ -871,4 +871,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get letterPuzzleMix => 'Mix';
+
+  @override
+  String get gameMatchLetters => 'Match the letters';
+
+  @override
+  String matchLettersStart(String name) {
+    return 'Let\'s go, $name! Join each Coptic letter to its sound in the word.';
+  }
+
+  @override
+  String get matchLettersPickLevel => 'How many letters in each word?';
+
+  @override
+  String get matchLettersDo => 'Join each letter to its sound:';
+
+  @override
+  String get matchLettersHowTo =>
+      'Draw a line from a letter to its sound, or tap the letter then its sound';
+
+  @override
+  String get matchLettersHintSay => 'Let me draw one line!';
+
+  @override
+  String get matchLettersWrong => 'Almost! Fix the red lines';
+
+  @override
+  String get harakaFatha => 'fatha';
+
+  @override
+  String get harakaKasra => 'kasra';
+
+  @override
+  String get harakaDamma => 'damma';
 }

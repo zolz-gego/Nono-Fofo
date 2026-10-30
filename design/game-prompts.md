@@ -17,6 +17,7 @@ One illustration per game card on the level road. Same tool and workflow as
 | امسك البالونة / Catch the balloon | `balloons.png` |
 | كروت جدو / Grandpa's Cards | `cards.png` |
 | دوّر في الدير / Search the Monastery | `monastery.png` |
+| وصّل الحروف / Match the letters (Level 2) | `matchLetters.png` |
 | رتّب الحروف / Letter puzzle (Level 2) | `letterPuzzle.png` |
 | تحدّى أخوك / Challenge your brother | `challenge.png` |
 
@@ -502,3 +503,25 @@ the middle must stay calm and the bottom corners must be floor.
 The inside of a warm, old Egyptian Coptic church for a children's game background, flat 2D vector cartoon style: thin warm-brown #5B4B3A outlines, flat colors with soft shading, rounded friendly shapes, cheerful and calm. Wide landscape 16:9, seen straight from the front at a child's eye level. At the back, a carved dark wooden iconostasis (the screen in front of the altar) with a row of small arched panels and a few small golden-framed icons of saints with round halos (simple shapes, no faces in detail), and a closed curtained door in its center with a small cross above it. Cream and warm sand stone walls with tall round-arched windows of mist-blue #A8DADC glass with a small cross in each. Two or three brass oil lamps (qandil) hanging on thin chains from a wooden-beamed ceiling. Coral-red #FF7A5C velvet curtains tied at both far sides. A warm wooden floor in the bottom fifth of the picture, with a long woven rug in slate teal #4F7C82 with a coral border. Soft golden light coming in through the windows. Keep the center of the picture simple and uncluttered, with no furniture there (a game board will be shown on top of it), and keep the bottom left and bottom right corners as open floor where two kids will stand. Use only these colors: deep teal #0F4C5C, mist blue #A8DADC, warm sand #EFE6D8, slate teal #4F7C82, cocoa brown #5B4B3A, sunny yellow #FFC845, coral #FF7A5C, leaf green #6CC24A, cream #FFFBF4, plus wood browns and gold. No people, no text, no letters of any alphabet, no watermark, no frame or border.
 ```
 
+## Match the letters art (وصّل الحروف), Level 2
+
+By the Pyramids: the brothers join each Coptic letter of a word to its
+sound with a line. The game reuses the Snakes & Ladders Pyramids background,
+so only the road card is new.
+
+| What | Save the original as | Then |
+|---|---|---|
+| Road card | `design/reference/match_letters/icon.webp` | `tools/.venv/bin/python tools/games/process_match_letters.py` puts it on the beige square as `app/assets/games/matchLetters.png` |
+
+Done (2026-10-31). The model joined ⲏ to both ن and ي and left ⲛ alone, so
+the ⲏ→ن line was moved to start at ⲛ by hand (`icon_original.webp` is the
+picture as generated). Check the lines on a new version: every Coptic tile
+needs exactly one line, to its right sound.
+
+### Road card: `matchLetters.png`
+
+Paste the **style block** first, like the other cards.
+
+```
+Two short columns of chunky cream #FFFBF4 letter tiles like toy blocks, side by side with a gap between them. The left column shows three big Coptic letters in cocoa brown #5B4B3A: ⲙ ⲏ ⲛ. The right column shows three big Arabic letters in cocoa brown, in a mixed-up order: ن م ي. Thick rounded deep teal #0F4C5C lines cross the gap joining each Coptic tile to its Arabic tile (ⲙ to م, ⲏ to ي, ⲛ to ن), with a small round dot at each end; the top line glows leaf green #6CC24A as if just drawn right. Behind the columns, two small simple golden pyramids on a warm sand dune. A few small sunny-yellow #FFC845 star sparkles. Bold, simple and readable at small size, because it is shown only about 150 pixels wide on the road.
+```

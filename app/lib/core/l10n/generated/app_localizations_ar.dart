@@ -916,4 +916,37 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get letterPuzzleMix => 'عشوائي';
+
+  @override
+  String get gameMatchLetters => 'وصّل الحروف';
+
+  @override
+  String matchLettersStart(String name) {
+    return 'يلا يا $name! وصّل كل حرف قبطي بصوته في الكلمة.';
+  }
+
+  @override
+  String get matchLettersPickLevel => 'هتوصّل كلمات من كام حرف؟';
+
+  @override
+  String get matchLettersDo => 'وصّل كل حرف بصوته:';
+
+  @override
+  String get matchLettersHowTo =>
+      'ارسم خط من الحرف لصوته، أو دوس على الحرف وبعدين على صوته';
+
+  @override
+  String get matchLettersHintSay => 'خليني أوصّل لك خط!';
+
+  @override
+  String get matchLettersWrong => 'قرّبت! صلّح الخطوط الحمرا';
+
+  @override
+  String get harakaFatha => 'فتحة';
+
+  @override
+  String get harakaKasra => 'كسرة';
+
+  @override
+  String get harakaDamma => 'ضمة';
 }

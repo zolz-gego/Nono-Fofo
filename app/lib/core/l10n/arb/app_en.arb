@@ -255,5 +255,15 @@
   "letterPuzzleMistakes": "Mistakes",
   "letterPuzzleOtherLevel": "Other word length",
   "letterPuzzleHowTo": "Drag the letters into the boxes, or tap a letter",
-  "letterPuzzleMix": "Mix"
+  "letterPuzzleMix": "Mix",
+  "gameMatchLetters": "Match the letters",
+  "matchLettersStart": "Let's go, {name}! Join each Coptic letter to its sound in the word.",
+  "matchLettersPickLevel": "How many letters in each word?",
+  "matchLettersDo": "Join each letter to its sound:",
+  "matchLettersHowTo": "Draw a line from a letter to its sound, or tap the letter then its sound",
+  "matchLettersHintSay": "Let me draw one line!",
+  "matchLettersWrong": "Almost! Fix the red lines",
+  "harakaFatha": "fatha",
+  "harakaKasra": "kasra",
+  "harakaDamma": "damma"
 }

@@ -120,7 +120,7 @@ export type SceneSpec = {
 export type VideoSpec = {
   id: string; // folder name, filled in by sync
   title: string;
-  intro?: string; // a local intro to open with (e.g. "intro-spin"), played before the first scene
+  intro?: string; // intro to open with (e.g. "intro-spin"); npm run release adds RELEASE_INTRO when unset; "none" = no intro
   introVolume?: number; // loudness of the intro (1 = as made), to match the story
   captionSize?: 'normal' | 'large'; // large = the bigger captions videos used before 004 (76/50 px)
   music?: {track: string; volume?: number};

@@ -722,5 +722,22 @@
   "letterPuzzleMistakes": "غلط",
   "letterPuzzleOtherLevel": "عدد حروف تاني",
   "letterPuzzleHowTo": "اسحب الحروف للمربعات، أو دوس على الحرف",
-  "letterPuzzleMix": "عشوائي"
+  "letterPuzzleMix": "عشوائي",
+  "gameMatchLetters": "وصّل الحروف",
+  "matchLettersStart": "يلا يا {name}! وصّل كل حرف قبطي بصوته في الكلمة.",
+  "@matchLettersStart": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "matchLettersPickLevel": "هتوصّل كلمات من كام حرف؟",
+  "matchLettersDo": "وصّل كل حرف بصوته:",
+  "matchLettersHowTo": "ارسم خط من الحرف لصوته، أو دوس على الحرف وبعدين على صوته",
+  "matchLettersHintSay": "خليني أوصّل لك خط!",
+  "matchLettersWrong": "قرّبت! صلّح الخطوط الحمرا",
+  "harakaFatha": "فتحة",
+  "harakaKasra": "كسرة",
+  "harakaDamma": "ضمة"
 }
