@@ -507,8 +507,16 @@ The inside of a warm, old Egyptian Coptic church for a children's game backgroun
 
 By the Pyramids: the brothers join each Coptic letter of a word to its
 sound with a line. The game reuses the Snakes & Ladders Pyramids background,
-so only the road card is new. Until `app/assets/games/matchLetters.png` is
-there, the road shows a placeholder icon.
+so only the road card is new.
+
+| What | Save the original as | Then |
+|---|---|---|
+| Road card | `design/reference/match_letters/icon.webp` | `tools/.venv/bin/python tools/games/process_match_letters.py` puts it on the beige square as `app/assets/games/matchLetters.png` |
+
+Done (2026-10-31). The model joined ⲏ to both ن and ي and left ⲛ alone, so
+the ⲏ→ن line was moved to start at ⲛ by hand (`icon_original.webp` is the
+picture as generated). Check the lines on a new version: every Coptic tile
+needs exactly one line, to its right sound.
 
 ### Road card: `matchLetters.png`
 
