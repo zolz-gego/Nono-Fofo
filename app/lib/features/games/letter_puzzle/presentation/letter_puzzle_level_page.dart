@@ -30,14 +30,34 @@ import '../domain/letter_puzzle_config.dart';
 import 'letter_puzzle_cubit.dart';
 import 'letter_puzzle_page.dart';
 
-/// Before the Letter puzzle: the child picks how many letters the words
-/// have. Each length is a wooden name plate (like the one under the icon in
-/// the game) with a real word of that length on letter blocks, and its best
-/// stars. Mix shows mixed-up blocks.
+/// Before the Letter puzzle (or Match the letters, which plays the same
+/// words): the child picks how many letters the words have. Each length is
+/// a wooden name plate (like the one under the icon in the game) with a real
+/// word of that length on letter blocks, and its best stars. Mix shows
+/// mixed-up blocks.
 class LetterPuzzleLevelPage extends StatefulWidget {
-  const LetterPuzzleLevelPage({super.key, required this.setup});
+  const LetterPuzzleLevelPage({
+    super.key,
+    required this.setup,
+    this.gameId = LetterPuzzleCubit.id,
+    this.title,
+    this.prompt,
+    this.playRoute = AppRoutes.letterPuzzlePlay,
+  });
 
   final PlayerSetup setup;
+
+  /// Key the game's best stars are saved under.
+  final String gameId;
+
+  /// The game's name in the top bar (default: Letter puzzle).
+  final String Function(AppLocalizations l10n)? title;
+
+  /// The buddy's question over the plates (default: the puzzle's).
+  final String Function(AppLocalizations l10n)? prompt;
+
+  /// Where a picked length plays (extra: [LetterPuzzleArgs]).
+  final String playRoute;
 
   @override
   State<LetterPuzzleLevelPage> createState() => _LetterPuzzleLevelPageState();
@@ -62,7 +82,7 @@ class _LetterPuzzleLevelPageState extends State<LetterPuzzleLevelPage> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(milliseconds: 400), () {
-      if (mounted) _buddy.say(context.l10n.letterPuzzlePickLevel);
+      if (mounted) _buddy.say(_prompt);
     });
   }
 
@@ -76,7 +96,7 @@ class _LetterPuzzleLevelPageState extends State<LetterPuzzleLevelPage> {
     _sound.play(SoundEvent.select);
     _buddy.play(CharacterAction.cheer, hold: const Duration(seconds: 1));
     await context.push(
-      AppRoutes.letterPuzzlePlay,
+      widget.playRoute,
       extra: LetterPuzzleArgs(setup: widget.setup, length: length),
     );
     if (mounted) setState(() {}); // Show new best stars.
@@ -91,6 +111,9 @@ class _LetterPuzzleLevelPageState extends State<LetterPuzzleLevelPage> {
     }
   }
 
+  String get _prompt =>
+      widget.prompt?.call(context.l10n) ?? context.l10n.letterPuzzlePickLevel;
+
   String get _lang => Localizations.localeOf(context).languageCode;
 
   @override
@@ -98,7 +121,7 @@ class _LetterPuzzleLevelPageState extends State<LetterPuzzleLevelPage> {
     final l10n = context.l10n;
     return Scaffold(
       appBar: AppTopBar(
-        title: l10n.gameLetterPuzzle,
+        title: widget.title?.call(l10n) ?? l10n.gameLetterPuzzle,
         onLogoTap: () => context.go(AppRoutes.home),
         actions: [
           IconButton(
@@ -149,7 +172,7 @@ class _LetterPuzzleLevelPageState extends State<LetterPuzzleLevelPage> {
                                   ? _mixBlocks(config, lengths, alphabet)
                                   : _sampleWord(config, n, alphabet),
                               stars: _progress.bestStars(
-                                LetterPuzzleCubit.id,
+                                widget.gameId,
                                 LetterPuzzleCubit.levelKey(n),
                               ),
                               onTap: () => _play(n),
@@ -205,7 +228,7 @@ class _LetterPuzzleLevelPageState extends State<LetterPuzzleLevelPage> {
             child: AnimatedCharacter(controller: _buddy, size: 130),
           ),
           const SizedBox(width: AppDimens.spaceLg),
-          Expanded(child: AppText.h2(context.l10n.letterPuzzlePickLevel)),
+          Expanded(child: AppText.h2(_prompt)),
         ],
       ),
     );

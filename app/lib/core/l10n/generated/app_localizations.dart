@@ -1549,6 +1549,66 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'عشوائي'**
   String get letterPuzzleMix;
+
+  /// No description provided for @gameMatchLetters.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصّل الحروف'**
+  String get gameMatchLetters;
+
+  /// No description provided for @matchLettersStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'يلا يا {name}! وصّل كل حرف قبطي بصوته في الكلمة.'**
+  String matchLettersStart(String name);
+
+  /// No description provided for @matchLettersPickLevel.
+  ///
+  /// In ar, this message translates to:
+  /// **'هتوصّل كلمات من كام حرف؟'**
+  String get matchLettersPickLevel;
+
+  /// No description provided for @matchLettersDo.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصّل كل حرف بصوته:'**
+  String get matchLettersDo;
+
+  /// No description provided for @matchLettersHowTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'ارسم خط من الحرف لصوته، أو دوس على الحرف وبعدين على صوته'**
+  String get matchLettersHowTo;
+
+  /// No description provided for @matchLettersHintSay.
+  ///
+  /// In ar, this message translates to:
+  /// **'خليني أوصّل لك خط!'**
+  String get matchLettersHintSay;
+
+  /// No description provided for @matchLettersWrong.
+  ///
+  /// In ar, this message translates to:
+  /// **'قرّبت! صلّح الخطوط الحمرا'**
+  String get matchLettersWrong;
+
+  /// No description provided for @harakaFatha.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتحة'**
+  String get harakaFatha;
+
+  /// No description provided for @harakaKasra.
+  ///
+  /// In ar, this message translates to:
+  /// **'كسرة'**
+  String get harakaKasra;
+
+  /// No description provided for @harakaDamma.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضمة'**
+  String get harakaDamma;
 }
 
 class _AppLocalizationsDelegate

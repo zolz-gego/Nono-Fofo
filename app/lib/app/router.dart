@@ -15,6 +15,8 @@ import '../features/games/fishing/presentation/fishing_page.dart';
 import '../features/games/letter_hunt/presentation/letter_pick_page.dart';
 import '../features/games/letter_puzzle/presentation/letter_puzzle_level_page.dart';
 import '../features/games/letter_puzzle/presentation/letter_puzzle_page.dart';
+import '../features/games/match_letters/presentation/match_letters_cubit.dart';
+import '../features/games/match_letters/presentation/match_letters_page.dart';
 import '../features/games/magic_basket/presentation/magic_basket_cubit.dart';
 import '../features/games/magic_basket/presentation/magic_basket_page.dart';
 import '../features/games/monastery/presentation/monastery_level_page.dart';
@@ -47,6 +49,11 @@ abstract final class AppRoutes {
   /// then catch its sounds (extra: [LetterHuntArgs]).
   static const magicBasket = '/level/magic-basket';
   static const magicBasketPlay = '/level/magic-basket/play';
+
+  /// Match the letters (Level 2, the Pyramids): pick a word length (extra:
+  /// [PlayerSetup]), then match 10 words (extra: [LetterPuzzleArgs]).
+  static const matchLetters = '/level/match-letters';
+  static const matchLettersPlay = '/level/match-letters/play';
 
   /// Letter puzzle (Level 2, the church): pick a word length (extra:
   /// [PlayerSetup]), then spell 10 words (extra: [LetterPuzzleArgs]).
@@ -135,6 +142,20 @@ final GoRouter appRouter = GoRouter(
     _withExtra<LetterHuntArgs>(
       AppRoutes.magicBasketPlay,
       (context, extra) => MagicBasketPage(args: extra),
+    ),
+    _withExtra<PlayerSetup>(
+      AppRoutes.matchLetters,
+      (context, extra) => LetterPuzzleLevelPage(
+        setup: extra,
+        gameId: MatchLettersCubit.id,
+        title: (l10n) => l10n.gameMatchLetters,
+        prompt: (l10n) => l10n.matchLettersPickLevel,
+        playRoute: AppRoutes.matchLettersPlay,
+      ),
+    ),
+    _withExtra<LetterPuzzleArgs>(
+      AppRoutes.matchLettersPlay,
+      (context, extra) => MatchLettersPage(args: extra),
     ),
     _withExtra<PlayerSetup>(
       AppRoutes.letterPuzzle,
