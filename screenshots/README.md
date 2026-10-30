@@ -172,3 +172,15 @@ own "Franco English" words.
 
 ![Letter puzzle](37-letter-puzzle.jpg)
 ![Letter puzzle in English](38-letter-puzzle-english.jpg)
+
+## Match the letters (Level 2: letter sounds)
+
+By the Pyramids, a word shows on the name plate; its Coptic letters go down
+one column and what each sounds like in the word goes down the other,
+shuffled (Arabic letters, or a haraka with its name such as "(فتحة)"; Latin
+in English). The child draws a line from each letter to its sound, or taps
+one then the other, and the buddy runs over to draw it. Once every letter
+has a line it checks: right lines turn green, wrong ones turn red and go.
+It is the second game on the Level 2 road, before the Letter puzzle.
+
+![Match the letters](39-match-letters.jpg)

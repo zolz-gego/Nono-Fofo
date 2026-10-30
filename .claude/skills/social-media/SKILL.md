@@ -40,8 +40,18 @@ ElevenLabs from the script Claude writes.
   never an age or "boy/child" (see `social/voices.md`).
 - **Talking:** no mouth animation. Characters bob/squash with the voice
   loudness and switch poses on key words.
-- **Branding:** start straight in the action; small logo watermark; end card
-  with the logo sting and **تابعونا! / Follow us!**
+- **Branding:** drafts start straight in the action; every finished video
+  (`npm run release`) opens with the paper-cut spin logo intro (`intro-spin`,
+  5 s), added automatically. A `video.json` only sets `"intro"` to use a
+  different intro, or `"none"` for a video that must not have one (ask the user
+  first). Small logo watermark; end card with the logo sting and
+  **تابعونا! / Follow us!**
+- **Outro is never cut off:** the end card lasts at least 3 s (the sting plays
+  out) and at least 1 s after its voice ends, even if `endCard.duration` is
+  shorter. Its logo, text and both brothers stay inside the safe area (clear of
+  the TikTok/Reels buttons and caption and of Instagram's 3:4 grid crop), and
+  the brothers stop bouncing and stand still for the last 0.6 s. Don't put
+  anything on the end card outside `SAFE`.
 - **Story world:** stay in character (see the app's story: Nono 9, always
   running, "يلا بينا!"; Fofo 6, curious, "استنى نفكر شوية"; Grandpa's Coptic book,
   letters scattered across Egypt). Say "Coptic", never "Bohairic".
@@ -95,10 +105,17 @@ When the user says a video is finished ("done", "it's ready", "ship it",
    (or the logo) clear and readable, nothing mid-transition or blurred, and no
    flash. Check two or three candidates with `npm run still` and look at them.
 2. **Export:** `cd social/remotion && npm run release -- <NNN-slug> <thumb-seconds>`
-   (the intros: `intro-portrait`, and the short `intro-stitch` and `intro-spin`). It writes `social/out/release/<NNN-slug>/`:
-   - `video.mp4`: high quality for upload (1080×1920, H.264 CRF 12 slow, AAC 320k).
+   (`<thumb-seconds>` is draft time, the same seconds as `npm run still`). To
+   export an intro on its own: `intro-portrait`, `intro-stitch` or `intro-spin`.
+   It writes `social/out/release/<NNN-slug>/`:
+   - `video.mp4`: high quality for upload (1080×1920, H.264 CRF 12 slow, AAC 320k),
+     **opening with the logo intro** (`RELEASE_INTRO` in `remotion/src/theme.ts`).
    - `thumbnail.jpg`: the full-size cover frame.
-   Check the result with `npx remotion ffprobe` (size, fps, duration, audio).
+   Check the result with `npx remotion ffprobe` (size, fps, duration ≈ intro +
+   draft length, audio as long as video), and look at three frames: the intro
+   start, the first story scene right after it, and the last frame (end card
+   complete, brothers standing still, nothing under the right-side buttons or
+   the bottom caption).
 3. **Write `post.md`** in the same folder with captions for both platforms:
    - **Instagram (Reels):** a hook line, 2–3 short lines on what happens, and a
      call to action (تابعونا / Follow us), first in Egyptian Arabic (never MSA,

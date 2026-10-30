@@ -7,7 +7,7 @@ import {INTROS} from './generated/local';
 import {END_VOICE_AT, WIPE} from './theme';
 import type {Timing, VideoSpec} from './types';
 
-export type VideoProps = {spec: VideoSpec; timing: Timing | null};
+export type VideoProps = {spec: VideoSpec; timing: Timing | null; release?: boolean};
 
 export const Video: React.FC<VideoProps> = ({spec, timing}) => {
   if (!timing) return null;
@@ -52,7 +52,7 @@ const Story: React.FC<{spec: VideoSpec; timing: Timing}> = ({spec, timing}) => {
       })}
       {spec.endCard && (
         <Sequence from={timing.endFrom} name="end card">
-          <EndCard ar={spec.endCard.ar} en={spec.endCard.en} />
+          <EndCard ar={spec.endCard.ar} en={spec.endCard.en} frames={timing.total - timing.intro - timing.endFrom} />
           <Sfx id="mg_logo_sting" at={0} volume={0.9} />
           {spec.endCard.voice && (
             <Sequence from={Math.round(END_VOICE_AT * timing.fps)} layout="none">

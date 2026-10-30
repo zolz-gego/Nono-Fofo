@@ -1,15 +1,24 @@
 /// One word to spell: [text] shows on the name card; the answer is
 /// [letters], letter ids from letters.json in reading order.
 class PuzzleWord {
-  const PuzzleWord({required this.text, required this.letters});
+  const PuzzleWord({
+    required this.text,
+    required this.letters,
+    this.sounds = const [],
+  });
 
   factory PuzzleWord.fromJson(Map<String, dynamic> json) => PuzzleWord(
     text: json['text'] as String,
     letters: [for (final id in json['letters'] as List) id as String],
+    sounds: [for (final s in json['sounds'] as List? ?? const []) s as String],
   );
 
   final String text;
   final List<String> letters;
+
+  /// What each letter sounds like in this word, one per letter (Arabic
+  /// letters or harakat, or Latin in English). Used by Match the letters.
+  final List<String> sounds;
 }
 
 /// Settings and words from `assets/content/games/letter_puzzle.json`.

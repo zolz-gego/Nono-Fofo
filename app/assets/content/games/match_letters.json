@@ -1,0 +1,12 @@
+{
+  "_readme": "Settings for the Match the letters game (وصّل الحروف, Level 2, the Pyramids). The words, their Coptic letters and what each letter sounds like in the word (sounds) come from letter_puzzle.json, and so do the word lengths in the picker. The game shows a word, its Coptic letters top to bottom in a column, and their sounds shuffled in a second column; the child draws a line from each letter to its sound. Once every letter has a line the game checks: right lines turn green and stay, wrong lines turn red and go. wordsPerRound: words in one round. Stars: a mistake is one red line or one hint. 0..threeStarsMaxMistakes = 3 stars, up to twoStarsMaxMistakes = 2 stars, more = 1 star. checkDelayMs: pause after the last line before the check. redMs: how long red lines show. wordDoneMs: how long a finished word (and its Coptic spelling) stays before the next one.",
+  "version": 1,
+  "wordsPerRound": 10,
+  "stars": {
+    "threeStarsMaxMistakes": 2,
+    "twoStarsMaxMistakes": 5
+  },
+  "checkDelayMs": 500,
+  "redMs": 1300,
+  "wordDoneMs": 1700
+}

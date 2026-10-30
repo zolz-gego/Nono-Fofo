@@ -10,6 +10,7 @@ enum LevelGame {
   monastery,
   challenge,
   magicBasket,
+  matchLetters,
   letterPuzzle;
 
   /// Games on each level's road, in order.
@@ -22,7 +23,7 @@ enum LevelGame {
       monastery,
       challenge,
     ],
-    GameLevel.two => const [magicBasket, letterPuzzle],
+    GameLevel.two => const [magicBasket, matchLetters, letterPuzzle],
     GameLevel.three => const [],
   };
 }

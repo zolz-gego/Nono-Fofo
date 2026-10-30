@@ -3,7 +3,10 @@
 // npm run intro                               -> social/out/intro-landscape.mp4 + intro-portrait.mp4
 // npm run still  -- intro-landscape [seconds] (or intro-portrait) for an intro still
 // npm run release -- <video-folder> <thumb-seconds>  -> social/out/release/<folder>/
-//   video.mp4 (high quality: H.264 CRF 12 slow, AAC 320k) + thumbnail.jpg (full size)
+//   video.mp4 (high quality: H.264 CRF 12 slow, AAC 320k) + thumbnail.jpg (full size).
+//   The release opens with the logo intro (RELEASE_INTRO in src/theme.ts) unless
+//   video.json names another intro or "none". <thumb-seconds> is draft time
+//   (the same seconds you see in npm run still / render).
 import {execFileSync} from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -31,7 +34,7 @@ const fps = intro ? JSON.parse(fs.readFileSync(path.join(REMOTION, 'src', 'intro
 if (mode === 'release') {
   const dir = path.join(OUT, 'release', id);
   fs.mkdirSync(dir, {recursive: true});
-  run(['render', 'src/index.ts', comp, path.join(dir, 'video.mp4'), '--codec=h264', '--crf=12', '--x264-preset=slow', '--audio-codec=aac', '--audio-bitrate=320k', '--pixel-format=yuv420p']);
+  run(['render', 'src/index.ts', comp, path.join(dir, 'video.mp4'), ...(intro ? [] : ['--props={"release":true}']), '--codec=h264', '--crf=12', '--x264-preset=slow', '--audio-codec=aac', '--audio-bitrate=320k', '--pixel-format=yuv420p']);
   run(['still', 'src/index.ts', comp, path.join(dir, 'thumbnail.jpg'), `--frame=${Math.round(Number(sec) * fps)}`, '--image-format=jpeg', '--jpeg-quality=95']);
   console.log(`release -> ${dir} (write post.md with the captions next to it)`);
   process.exit(0);

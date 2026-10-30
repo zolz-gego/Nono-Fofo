@@ -87,6 +87,7 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
       LevelGame.monastery => AppRoutes.monastery,
       LevelGame.challenge => AppRoutes.challenge,
       LevelGame.magicBasket => AppRoutes.magicBasket,
+      LevelGame.matchLetters => AppRoutes.matchLetters,
       LevelGame.letterPuzzle => AppRoutes.letterPuzzle,
     };
     _buddy.play(CharacterAction.cheer, hold: const Duration(seconds: 1));
@@ -152,6 +153,13 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
         placeholder: AppIcons.magicBasket,
         title: l10n.gameMagicBasket,
         accent: AppColors.coral,
+        onTap: () => _openGame(index),
+      ),
+      LevelGame.matchLetters => RoadStop(
+        image: game.name,
+        placeholder: AppIcons.matchLetters,
+        title: l10n.gameMatchLetters,
+        accent: AppColors.mistBlue,
         onTap: () => _openGame(index),
       ),
       LevelGame.letterPuzzle => RoadStop(
