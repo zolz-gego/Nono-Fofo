@@ -38,6 +38,7 @@ import '../data/match_letters_config_repository.dart';
 import '../domain/match_board.dart';
 import '../domain/match_letters_config.dart';
 import 'match_letters_cubit.dart';
+import 'sound_face.dart';
 
 /// Match the letters, by the Pyramids. The word shows on a name plate
 /// (Arabic, or English in English); under it the word's Coptic letters go
@@ -1041,7 +1042,7 @@ class _MatchAreaState extends State<_MatchArea> {
                       null => LineMark.none,
                     },
                     picked: _from == (left: false, index: i),
-                    child: _SoundFace(sound: board.sounds[i], lang: lang),
+                    child: SoundFace(sound: board.sounds[i], lang: lang),
                   ),
                 ),
               ],
@@ -1124,43 +1125,6 @@ class _Tile extends StatelessWidget {
       );
     }
     return face;
-  }
-}
-
-/// A sound: an Arabic letter, a haraka with its name under it in brackets
-/// (e.g. "(فتحة)"), or Latin letters in the English app.
-class _SoundFace extends StatelessWidget {
-  const _SoundFace({required this.sound, required this.lang});
-
-  final String sound;
-  final String lang;
-
-  /// The haraka's name, when [sound] is one (written on a tatweel).
-  String? _haraka(BuildContext context) {
-    final l10n = context.l10n;
-    return switch (sound.replaceAll('ـ', '')) {
-      'َ' => l10n.harakaFatha,
-      'ِ' => l10n.harakaKasra,
-      'ُ' => l10n.harakaDamma,
-      _ => null,
-    };
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final haraka = _haraka(context);
-    if (haraka != null) {
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ArabicText.h1(sound, color: AppColors.ink),
-          ArabicText.h3('($haraka)', color: AppColors.cocoa),
-        ],
-      );
-    }
-    return lang == 'ar'
-        ? ArabicText.h1(sound, color: AppColors.ink)
-        : EnglishText.h1(sound, color: AppColors.ink);
   }
 }
 

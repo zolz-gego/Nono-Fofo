@@ -74,6 +74,7 @@ abstract final class AppIcons {
   static const FaIconData magicBasket = FontAwesomeIcons.basketShopping;
   static const FaIconData matchLetters = FontAwesomeIcons.link;
   static const FaIconData letterPuzzle = FontAwesomeIcons.puzzlePiece;
+  static const FaIconData whereLetter = FontAwesomeIcons.circleQuestion;
 
   // Magic basket
   static const FaIconData apple = FontAwesomeIcons.appleWhole;

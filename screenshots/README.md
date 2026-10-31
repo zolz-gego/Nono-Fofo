@@ -184,3 +184,15 @@ has a line it checks: right lines turn green, wrong ones turn red and go.
 It is the second game on the Level 2 road, before the Letter puzzle.
 
 ![Match the letters](39-match-letters.jpg)
+
+## Where's the letter (Level 2: letter sounds)
+
+In the church, a word's Coptic letters show with one missing. The child
+picks the missing letter from three, and the buddy carries it into the gap;
+then picks what it sounds like in the word (an Arabic letter or haraka, or
+Latin in English), and the buddy puts it in a box under the letter. Then the
+word itself shows and the other brother cheers. Wrong picks and hints (a
+hint takes a wrong option away) count as mistakes. It is the fourth game on
+the Level 2 road.
+
+![Where's the letter](40-where-letter.jpg)

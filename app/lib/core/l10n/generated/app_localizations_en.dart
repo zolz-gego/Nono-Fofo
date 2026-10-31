@@ -904,4 +904,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get harakaDamma => 'damma';
+
+  @override
+  String get gameWhereLetter => 'Where\'s the letter?';
+
+  @override
+  String whereLetterStart(String name) {
+    return 'Let\'s go, $name! Find the missing Coptic letter.';
+  }
+
+  @override
+  String get whereLetterPickLevel => 'How many letters in each word?';
+
+  @override
+  String get whereLetterPickLetter => 'Which letter is missing?';
+
+  @override
+  String get whereLetterPickSound =>
+      'What does this letter sound like in the word?';
+
+  @override
+  String get whereLetterHintSay => 'Let me take a wrong one away!';
+
+  @override
+  String get whereLetterWrong => 'Almost! Try again';
 }

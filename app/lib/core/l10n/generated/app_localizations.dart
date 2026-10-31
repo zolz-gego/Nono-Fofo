@@ -1609,6 +1609,48 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'ضمة'**
   String get harakaDamma;
+
+  /// No description provided for @gameWhereLetter.
+  ///
+  /// In ar, this message translates to:
+  /// **'فين الحرف؟'**
+  String get gameWhereLetter;
+
+  /// No description provided for @whereLetterStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'يلا يا {name}! دوّر على الحرف القبطي الناقص.'**
+  String whereLetterStart(String name);
+
+  /// No description provided for @whereLetterPickLevel.
+  ///
+  /// In ar, this message translates to:
+  /// **'هتكمّل كلمات من كام حرف؟'**
+  String get whereLetterPickLevel;
+
+  /// No description provided for @whereLetterPickLetter.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنهي حرف ناقص؟'**
+  String get whereLetterPickLetter;
+
+  /// No description provided for @whereLetterPickSound.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحرف ده بيتنطق إزاي في الكلمة؟'**
+  String get whereLetterPickSound;
+
+  /// No description provided for @whereLetterHintSay.
+  ///
+  /// In ar, this message translates to:
+  /// **'هشيل لك اختيار غلط!'**
+  String get whereLetterHintSay;
+
+  /// No description provided for @whereLetterWrong.
+  ///
+  /// In ar, this message translates to:
+  /// **'قرّبت! جرّب تاني'**
+  String get whereLetterWrong;
 }
 
 class _AppLocalizationsDelegate

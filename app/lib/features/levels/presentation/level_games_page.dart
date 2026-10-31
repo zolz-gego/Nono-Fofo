@@ -89,6 +89,7 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
       LevelGame.magicBasket => AppRoutes.magicBasket,
       LevelGame.matchLetters => AppRoutes.matchLetters,
       LevelGame.letterPuzzle => AppRoutes.letterPuzzle,
+      LevelGame.whereLetter => AppRoutes.whereLetter,
     };
     _buddy.play(CharacterAction.cheer, hold: const Duration(seconds: 1));
     // Back from a game: refresh ticks (e.g. the challenge just won).
@@ -167,6 +168,13 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
         placeholder: AppIcons.letterPuzzle,
         title: l10n.gameLetterPuzzle,
         accent: AppColors.sunYellow,
+        onTap: () => _openGame(index),
+      ),
+      LevelGame.whereLetter => RoadStop(
+        image: game.name,
+        placeholder: AppIcons.whereLetter,
+        title: l10n.gameWhereLetter,
+        accent: AppColors.leafGreen,
         onTap: () => _openGame(index),
       ),
     };
