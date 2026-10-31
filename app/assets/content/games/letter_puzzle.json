@@ -257,7 +257,7 @@
           "text": "فاكس",
           "coptic": "ⲫⲁⲝ",
           "letters": ["phi", "alpha", "exi"],
-          "sounds": ["ف", "ا", "كس"]
+          "sounds": ["ف", "ا", "اكس"]
         },
         {
           "text": "فيس",
@@ -577,7 +577,7 @@
           "text": "اكسب",
           "coptic": "ⲁⲝⲁⲃ",
           "letters": ["alpha", "exi", "alpha", "vida"],
-          "sounds": ["ا", "كس", "ـَ", "ب"]
+          "sounds": ["ا", "اكس", "ـَ", "ب"]
         },
         {
           "text": "فول",
@@ -664,12 +664,6 @@
           "sounds": ["ف", "ـُ", "ر", "ن"]
         },
         {
-          "text": "سلم",
-          "coptic": "ⲥⲓⲗⲙ",
-          "letters": ["sima", "iota", "lola", "mi"],
-          "sounds": ["س", "ـِ", "ل", "م"]
-        },
-        {
           "text": "حبل",
           "coptic": "ϩⲁⲃⲗ",
           "letters": ["hori", "alpha", "vida", "lola"],
@@ -683,6 +677,12 @@
         }
       ],
       "5": [
+        {
+          "text": "سلم",
+          "coptic": "ⲥⲉⲗⲉⲙ",
+          "letters": ["sima", "ei", "lola", "ei", "mi"],
+          "sounds": ["س", "ـِ", "ل", "ـِ", "م"]
+        },
         {
           "text": "يوسف",
           "coptic": "ⲓⲟⲥⲉϥ",
@@ -963,7 +963,7 @@
           "text": "اكسيوس",
           "coptic": "ⲁⲝⲓⲟⲥ",
           "letters": ["alpha", "exi", "iota", "o", "sima"],
-          "sounds": ["ا", "كس", "ي", "و", "س"]
+          "sounds": ["ا", "اكس", "ي", "و", "س"]
         },
         {
           "text": "باندا",
