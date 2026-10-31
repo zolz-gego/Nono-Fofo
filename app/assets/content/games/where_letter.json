@@ -1,0 +1,11 @@
+{
+  "_readme": "Settings for the Where's the letter game (فين الحرف؟, Level 2, the church). The words, their Coptic letters and what each letter sounds like in the word (sounds) come from letter_puzzle.json, and so do the word lengths in the picker. The game shows a word's Coptic letters with one missing (at random). The child picks the missing letter from options, then what it sounds like in the word (an Arabic letter or haraka, or a Latin sound in English). Wrong options never also fit: a wrong letter never makes the gap's sound, a wrong sound is never one the letter makes. wordsPerRound: words in one round. options: options per choice, the right one included. Stars: a mistake is one wrong pick or one hint (a hint takes one wrong option away). 0..threeStarsMaxMistakes = 3 stars, up to twoStarsMaxMistakes = 2 stars, more = 1 star. wordDoneMs: how long a finished word (and its Arabic/English word) stays before the next one.",
+  "version": 1,
+  "wordsPerRound": 10,
+  "options": 3,
+  "stars": {
+    "threeStarsMaxMistakes": 2,
+    "twoStarsMaxMistakes": 5
+  },
+  "wordDoneMs": 1700
+}

@@ -16,6 +16,7 @@ import '../../features/games/balloons/data/balloons_config_repository.dart';
 import '../../features/games/magic_basket/data/magic_basket_config_repository.dart';
 import '../../features/games/letter_puzzle/data/letter_puzzle_config_repository.dart';
 import '../../features/games/match_letters/data/match_letters_config_repository.dart';
+import '../../features/games/where_letter/data/where_letter_config_repository.dart';
 import '../../features/games/cards/data/cards_config_repository.dart';
 import '../../features/games/monastery/data/monastery_config_repository.dart';
 import '../../features/games/snakes_ladders/data/snakes_config_repository.dart';
@@ -84,6 +85,7 @@ Future<void> configureDependencies() async {
   sl.registerLazySingleton(() => BalloonsConfigRepository(sl()));
   sl.registerLazySingleton(() => MagicBasketConfigRepository(sl()));
   sl.registerLazySingleton(() => MatchLettersConfigRepository(sl()));
+  sl.registerLazySingleton(() => WhereLetterConfigRepository(sl()));
   sl.registerLazySingleton(() => LetterPuzzleConfigRepository(sl()));
   sl.registerLazySingleton(() => WritingConfigRepository(sl()));
   sl.registerLazySingleton(() => CardsConfigRepository(sl()));

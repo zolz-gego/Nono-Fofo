@@ -19,6 +19,7 @@ One illustration per game card on the level road. Same tool and workflow as
 | دوّر في الدير / Search the Monastery | `monastery.png` |
 | وصّل الحروف / Match the letters (Level 2) | `matchLetters.png` |
 | رتّب الحروف / Letter puzzle (Level 2) | `letterPuzzle.png` |
+| فين الحرف؟ / Where's the letter? (Level 2) | `whereLetter.png` |
 | تحدّى أخوك / Challenge your brother | `challenge.png` |
 
 ---
@@ -524,4 +525,25 @@ Paste the **style block** first, like the other cards.
 
 ```
 Two short columns of chunky cream #FFFBF4 letter tiles like toy blocks, side by side with a gap between them. The left column shows three big Coptic letters in cocoa brown #5B4B3A: ⲙ ⲏ ⲛ. The right column shows three big Arabic letters in cocoa brown, in a mixed-up order: ن م ي. Thick rounded deep teal #0F4C5C lines cross the gap joining each Coptic tile to its Arabic tile (ⲙ to م, ⲏ to ي, ⲛ to ن), with a small round dot at each end; the top line glows leaf green #6CC24A as if just drawn right. Behind the columns, two small simple golden pyramids on a warm sand dune. A few small sunny-yellow #FFC845 star sparkles. Bold, simple and readable at small size, because it is shown only about 150 pixels wide on the road.
+```
+
+## Where's the letter art (فين الحرف؟), Level 2
+
+In the church: a word's Coptic letters show with one missing; the child
+picks the missing letter, then what it sounds like. The game reuses the
+Letter puzzle church background, so only the road card is new.
+
+| What | Save the original as | Then |
+|---|---|---|
+| Road card | `design/reference/where_letter/icon.webp` | `tools/.venv/bin/python tools/games/process_where_letter.py` cuts away the wall and floor and puts it on the beige square as `app/assets/games/whereLetter.png` |
+
+Done (2026-10-31). The model drew the Coptic letters in a Latin-looking
+hand (ⲙ ⲏ ⲛ ⲁ read close to m h n a); fine at road size.
+
+### Road card: `whereLetter.png`
+
+Paste the **style block** first, like the other cards.
+
+```
+A row of four chunky cream #FFFBF4 letter tiles like toy blocks. Three show big Coptic letters in cocoa brown #5B4B3A: ⲙ, then an empty tile, then ⲛ ⲁ. The empty second tile glows sunny yellow #FFC845 with a gold border and a big cocoa-brown question mark on it. Just above the empty tile, a fourth cream tile with the Coptic letter ⲏ floats down toward it, with two small motion lines. Under the row, a small cream box with the Arabic letter ي in cocoa brown and a leaf green #6CC24A border. Behind the tiles, a simple warm sand church arch with a small cross on top and a mist-blue #A8DADC round window. A few small sunny-yellow star sparkles. Bold, simple and readable at small size, because it is shown only about 150 pixels wide on the road.
 ```
