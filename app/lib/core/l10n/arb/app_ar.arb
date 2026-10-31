@@ -739,5 +739,19 @@
   "matchLettersWrong": "قرّبت! صلّح الخطوط الحمرا",
   "harakaFatha": "فتحة",
   "harakaKasra": "كسرة",
-  "harakaDamma": "ضمة"
+  "harakaDamma": "ضمة",
+  "gameWhereLetter": "فين الحرف؟",
+  "whereLetterStart": "يلا يا {name}! دوّر على الحرف القبطي الناقص.",
+  "@whereLetterStart": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "whereLetterPickLevel": "هتكمّل كلمات من كام حرف؟",
+  "whereLetterPickLetter": "أنهي حرف ناقص؟",
+  "whereLetterPickSound": "الحرف ده بيتنطق إزاي في الكلمة؟",
+  "whereLetterHintSay": "هشيل لك اختيار غلط!",
+  "whereLetterWrong": "قرّبت! جرّب تاني"
 }

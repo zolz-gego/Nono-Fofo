@@ -265,5 +265,12 @@
   "matchLettersWrong": "Almost! Fix the red lines",
   "harakaFatha": "fatha",
   "harakaKasra": "kasra",
-  "harakaDamma": "damma"
+  "harakaDamma": "damma",
+  "gameWhereLetter": "Where's the letter?",
+  "whereLetterStart": "Let's go, {name}! Find the missing Coptic letter.",
+  "whereLetterPickLevel": "How many letters in each word?",
+  "whereLetterPickLetter": "Which letter is missing?",
+  "whereLetterPickSound": "What does this letter sound like in the word?",
+  "whereLetterHintSay": "Let me take a wrong one away!",
+  "whereLetterWrong": "Almost! Try again"
 }

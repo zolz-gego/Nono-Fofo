@@ -17,6 +17,8 @@ import '../features/games/letter_puzzle/presentation/letter_puzzle_level_page.da
 import '../features/games/letter_puzzle/presentation/letter_puzzle_page.dart';
 import '../features/games/match_letters/presentation/match_letters_cubit.dart';
 import '../features/games/match_letters/presentation/match_letters_page.dart';
+import '../features/games/where_letter/presentation/where_letter_cubit.dart';
+import '../features/games/where_letter/presentation/where_letter_page.dart';
 import '../features/games/magic_basket/presentation/magic_basket_cubit.dart';
 import '../features/games/magic_basket/presentation/magic_basket_page.dart';
 import '../features/games/monastery/presentation/monastery_level_page.dart';
@@ -59,6 +61,12 @@ abstract final class AppRoutes {
   /// [PlayerSetup]), then spell 10 words (extra: [LetterPuzzleArgs]).
   static const letterPuzzle = '/level/letter-puzzle';
   static const letterPuzzlePlay = '/level/letter-puzzle/play';
+
+  /// Where's the letter (Level 2, the church): pick a word length (extra:
+  /// [PlayerSetup]), then fill the gap in 10 words (extra:
+  /// [LetterPuzzleArgs]).
+  static const whereLetter = '/level/where-letter';
+  static const whereLetterPlay = '/level/where-letter/play';
 
   /// Write the letter (Grandpa's house): pick a letter (extra:
   /// [PlayerSetup]), then write it (extra: [LetterHuntArgs]).
@@ -156,6 +164,20 @@ final GoRouter appRouter = GoRouter(
     _withExtra<LetterPuzzleArgs>(
       AppRoutes.matchLettersPlay,
       (context, extra) => MatchLettersPage(args: extra),
+    ),
+    _withExtra<PlayerSetup>(
+      AppRoutes.whereLetter,
+      (context, extra) => LetterPuzzleLevelPage(
+        setup: extra,
+        gameId: WhereLetterCubit.id,
+        title: (l10n) => l10n.gameWhereLetter,
+        prompt: (l10n) => l10n.whereLetterPickLevel,
+        playRoute: AppRoutes.whereLetterPlay,
+      ),
+    ),
+    _withExtra<LetterPuzzleArgs>(
+      AppRoutes.whereLetterPlay,
+      (context, extra) => WhereLetterPage(args: extra),
     ),
     _withExtra<PlayerSetup>(
       AppRoutes.letterPuzzle,

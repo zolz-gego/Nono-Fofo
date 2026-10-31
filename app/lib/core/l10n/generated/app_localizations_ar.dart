@@ -949,4 +949,27 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get harakaDamma => 'ضمة';
+
+  @override
+  String get gameWhereLetter => 'فين الحرف؟';
+
+  @override
+  String whereLetterStart(String name) {
+    return 'يلا يا $name! دوّر على الحرف القبطي الناقص.';
+  }
+
+  @override
+  String get whereLetterPickLevel => 'هتكمّل كلمات من كام حرف؟';
+
+  @override
+  String get whereLetterPickLetter => 'أنهي حرف ناقص؟';
+
+  @override
+  String get whereLetterPickSound => 'الحرف ده بيتنطق إزاي في الكلمة؟';
+
+  @override
+  String get whereLetterHintSay => 'هشيل لك اختيار غلط!';
+
+  @override
+  String get whereLetterWrong => 'قرّبت! جرّب تاني';
 }
