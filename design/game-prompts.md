@@ -531,9 +531,14 @@ Two short columns of chunky cream #FFFBF4 letter tiles like toy blocks, side by 
 
 In the church: a word's Coptic letters show with one missing; the child
 picks the missing letter, then what it sounds like. The game reuses the
-Letter puzzle church background, so only the road card is new. Until
-`app/assets/games/whereLetter.png` is there, the road shows a placeholder
-icon.
+Letter puzzle church background, so only the road card is new.
+
+| What | Save the original as | Then |
+|---|---|---|
+| Road card | `design/reference/where_letter/icon.webp` | `tools/.venv/bin/python tools/games/process_where_letter.py` cuts away the wall and floor and puts it on the beige square as `app/assets/games/whereLetter.png` |
+
+Done (2026-10-31). The model drew the Coptic letters in a Latin-looking
+hand (ⲙ ⲏ ⲛ ⲁ read close to m h n a); fine at road size.
 
 ### Road card: `whereLetter.png`
 
