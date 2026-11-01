@@ -80,7 +80,7 @@ class _Front extends StatelessWidget {
           : AppTextStyles.english(AppTextVariant.h1);
       return Text(
         card.sounds(lang),
-        style: style.copyWith(fontSize: 96, height: 1.3, color: card.color),
+        style: style.copyWith(fontSize: 96, height: 1.3, color: AppColors.ink),
       );
     }
     return Text(
@@ -88,7 +88,7 @@ class _Front extends StatelessWidget {
       // Coptic keys like ")" must not be mirrored in Arabic.
       textDirection: TextDirection.ltr,
       style: AppTextStyles.coptic(AppTextVariant.h1)
-          .copyWith(fontSize: 96, height: 1.1, color: card.color),
+          .copyWith(fontSize: 96, height: 1.1, color: AppColors.coptic),
     );
   }
 
@@ -104,7 +104,7 @@ class _Front extends StatelessWidget {
           color: AppColors.cardFace,
           borderRadius: radius,
           border: Border.all(
-            color: card.matched ? AppColors.correct : card.color,
+            color: card.matched ? AppColors.correct : AppColors.cardBack,
             width: border,
           ),
           boxShadow: [

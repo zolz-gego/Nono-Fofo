@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui' show Color;
 
 import 'package:equatable/equatable.dart';
 
@@ -11,12 +10,12 @@ import 'cards_mode.dart';
 enum CardFace { capital, small, letter, sound }
 
 /// One card on the table. Its partner has the same [letter] and the other
-/// [face]; both share the letter's [color].
+/// [face]. Every card looks alike apart from its face, so colour never
+/// gives a pair away.
 class MemoryCard extends Equatable {
   const MemoryCard({
     required this.letter,
     required this.face,
-    required this.color,
     this.soundless = '',
     this.faceUp = false,
     this.matched = false,
@@ -24,7 +23,6 @@ class MemoryCard extends Equatable {
 
   final CopticLetter letter;
   final CardFace face;
-  final Color color;
 
   /// What a sound card shows for a letter with no sounds (So: "6").
   final String soundless;
@@ -62,7 +60,6 @@ class MemoryCard extends Equatable {
   MemoryCard copyWith({bool? faceUp, bool? matched}) => MemoryCard(
     letter: letter,
     face: face,
-    color: color,
     soundless: soundless,
     faceUp: faceUp ?? this.faceUp,
     matched: matched ?? this.matched,
@@ -73,12 +70,10 @@ class MemoryCard extends Equatable {
 }
 
 /// Deals [count] cards (count / 2 random letters from [alphabet], each as
-/// the two faces of [mode]), shuffled. [colors] go with the alphabet order;
-/// missing ones repeat. [soundless] is what a sound card shows for a letter
+/// the two faces of [mode]), shuffled. [soundless] is what a sound card shows for a letter
 /// with no sounds, by letter id.
 List<MemoryCard> dealCards({
   required List<CopticLetter> alphabet,
-  required List<Color> colors,
   required int count,
   CardsMode mode = CardsMode.letters,
   Map<String, String> soundless = const {},
@@ -86,17 +81,14 @@ List<MemoryCard> dealCards({
 }) {
   final rnd = random ?? Random();
   final pairs = min(count ~/ 2, alphabet.length);
-  final picked = [...alphabet.indexed]..shuffle(rnd);
+  final picked = [...alphabet]..shuffle(rnd);
   final cards = <MemoryCard>[
-    for (final (i, letter) in picked.take(pairs))
+    for (final letter in picked.take(pairs))
       for (final face in [mode.faces.$1, mode.faces.$2])
         MemoryCard(
           letter: letter,
           face: face,
           soundless: soundless[letter.id] ?? '',
-          color: colors.isEmpty
-              ? const Color(0xFF5B4B3A)
-              : colors[i % colors.length],
         ),
   ];
   return cards..shuffle(rnd);

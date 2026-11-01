@@ -1,5 +1,3 @@
-import 'dart:ui' show Color;
-
 /// Settings from `assets/content/games/cards.json`. Defaults here are only
 /// used for keys missing from the file.
 class CardsConfig {
@@ -10,7 +8,6 @@ class CardsConfig {
     this.heroRun = const Duration(milliseconds: 450),
     this.mismatchShow = const Duration(milliseconds: 1000),
     this.nameBubble = const Duration(milliseconds: 1500),
-    this.letterColors = const [],
     this.soundless = const {},
     this.background,
     this.cardBack,
@@ -37,11 +34,6 @@ class CardsConfig {
       heroRun: ms('heroRunMs') ?? d.heroRun,
       mismatchShow: ms('mismatchShowMs') ?? d.mismatchShow,
       nameBubble: ms('nameBubbleMs') ?? d.nameBubble,
-      letterColors:
-          (json['letterColors'] as List?)
-              ?.map((e) => _hex(e as String))
-              .toList() ??
-          d.letterColors,
       soundless:
           (json['soundless'] as Map<String, dynamic>?)?.map(
             (k, v) => MapEntry(k, v as String),
@@ -71,9 +63,6 @@ class CardsConfig {
   /// How long the letter's name bubble stays after a flip.
   final Duration nameBubble;
 
-  /// One colour per letter, in the alphabet order of letters.json.
-  final List<Color> letterColors;
-
   /// Level 2: what a sound card shows for a letter with no sounds, by
   /// letter id (So: "6").
   final Map<String, String> soundless;
@@ -91,7 +80,4 @@ class CardsConfig {
     for (final n in cardCounts)
       if (!isSmallScreen(shortestSide) || n <= phoneMaxCards) n,
   ];
-
-  static Color _hex(String s) =>
-      Color(int.parse(s.replaceFirst('#', ''), radix: 16) | 0xFF000000);
 }

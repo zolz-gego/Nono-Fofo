@@ -32,10 +32,9 @@ void main() {
   );
 
   group('dealCards', () {
-    test('deals capital + small pairs that share a colour', () {
+    test('deals capital + small pairs', () {
       final cards = dealCards(
         alphabet: _alphabet,
-        colors: const [Color(0xFF000001), Color(0xFF000002)],
         count: 16,
         random: Random(1),
       );
@@ -50,14 +49,12 @@ void main() {
           CardFace.capital,
           CardFace.small,
         });
-        expect(pair[0].color, pair[1].color);
       }
     });
 
     test('sound mode deals a letter card and a sound card', () {
       final cards = dealCards(
         alphabet: _alphabet,
-        colors: const [],
         count: 8,
         mode: CardsMode.sounds,
         random: Random(2),
@@ -71,7 +68,7 @@ void main() {
     });
 
     test('64 cards use the whole alphabet', () {
-      final cards = dealCards(alphabet: _alphabet, colors: const [], count: 64);
+      final cards = dealCards(alphabet: _alphabet, count: 64);
       expect(cards.map((c) => c.letter).toSet(), hasLength(32));
     });
   });
@@ -110,12 +107,7 @@ void main() {
           sounds: {'ar': ar, 'en': en},
         );
     MemoryCard card(CopticLetter l, CardFace face, {String soundless = ''}) =>
-        MemoryCard(
-          letter: l,
-          face: face,
-          color: const Color(0xFF000000),
-          soundless: soundless,
-        );
+        MemoryCard(letter: l, face: face, soundless: soundless);
     final vida = said('vida', ['ب', 'ڤ'], ['b', 'v']);
     final ei = said('ei', ['ي'], ['e']);
     final ita = said('ita', ['ي'], ['y']);
@@ -174,11 +166,8 @@ void main() {
     late CardsCubit cubit;
 
     // a-capital, b-capital, a-small, b-small.
-    MemoryCard card(String id, CardFace face) => MemoryCard(
-      letter: _letter(id),
-      face: face,
-      color: const Color(0xFF000000),
-    );
+    MemoryCard card(String id, CardFace face) =>
+        MemoryCard(letter: _letter(id), face: face);
 
     setUp(() {
       progress = _Progress();

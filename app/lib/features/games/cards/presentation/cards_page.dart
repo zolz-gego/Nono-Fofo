@@ -163,7 +163,6 @@ class _CardsPageState extends State<CardsPage> {
       languageCode: () => Localizations.localeOf(context).languageCode,
       cards: dealCards(
         alphabet: _alphabet,
-        colors: config.letterColors,
         count: _count,
         mode: _mode,
         soundless: config.soundless,
