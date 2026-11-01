@@ -34,6 +34,7 @@ import '../../shell/presentation/game_scaffold.dart';
 import '../data/cards_config_repository.dart';
 import '../domain/card_grid.dart';
 import '../domain/cards_config.dart';
+import '../domain/cards_mode.dart';
 import '../domain/memory_card.dart';
 import 'cards_cubit.dart';
 import 'cards_hud.dart';
@@ -42,16 +43,27 @@ import 'cards_share_card.dart';
 import 'flip_card.dart';
 import 'seaside_background.dart';
 
-/// Who plays Grandpa's Cards, and with how many cards.
+/// Who plays Grandpa's Cards, with how many cards and which pairs.
 class CardsArgs {
-  const CardsArgs({required this.setup, required this.count});
+  const CardsArgs({
+    required this.setup,
+    required this.count,
+    this.mode = CardsMode.letters,
+  });
 
   final PlayerSetup setup;
   final int count;
+  final CardsMode mode;
 }
 
+/// Grandpa's Cards' picker page for [mode].
+String cardsPickerRoute(CardsMode mode) => switch (mode) {
+  CardsMode.letters => AppRoutes.cards,
+  CardsMode.sounds => AppRoutes.soundCards,
+};
+
 /// Grandpa's Cards, by the sea in Alexandria: find each letter's capital
-/// and small card. On big screens the brothers stand on either side; the
+/// and small card (Level 2: each letter card and its sounds card). On big screens the brothers stand on either side; the
 /// child's buddy runs to every card tapped (it turns when he gets there)
 /// and the other brother says the letter's name and cheers the pairs. On
 /// small screens the buddy only pops in from the edge to turn the card and
@@ -117,6 +129,7 @@ class _CardsPageState extends State<CardsPage> {
   final Random _random = Random();
 
   int get _count => widget.args.count;
+  CardsMode get _mode => widget.args.mode;
 
   @override
   void initState() {
@@ -143,13 +156,16 @@ class _CardsPageState extends State<CardsPage> {
     _cubit?.close();
     final config = _config!;
     final progress = sl<GameProgressRepository>();
-    _bestBefore = progress.bestTime(CardsCubit.id, '$_count');
+    _bestBefore = progress.bestTime(_mode.id, '$_count');
     final cubit = CardsCubit(
       progress,
+      mode: _mode,
+      languageCode: () => Localizations.localeOf(context).languageCode,
       cards: dealCards(
         alphabet: _alphabet,
-        colors: config.letterColors,
         count: _count,
+        mode: _mode,
+        soundless: config.soundless,
         random: _random,
       ),
     );
@@ -167,7 +183,12 @@ class _CardsPageState extends State<CardsPage> {
     _other.idle();
     _sound.play(SoundEvent.levelStart);
     _later(const Duration(milliseconds: 500), () {
-      if (!_small) _hero.say(context.l10n.cardsStart(widget.args.setup.name));
+      if (_small) return;
+      final name = widget.args.setup.name;
+      _hero.say(switch (_mode) {
+        CardsMode.letters => context.l10n.cardsStart(name),
+        CardsMode.sounds => context.l10n.soundCardsStart(name),
+      });
     });
   }
 
@@ -272,7 +293,10 @@ class _CardsPageState extends State<CardsPage> {
   void _showName(int cardIndex) {
     final config = _config!;
     final lang = Localizations.localeOf(context).languageCode;
-    final name = _cubit!.state.cards[cardIndex].letter.nameIn(lang);
+    final card = _cubit!.state.cards[cardIndex];
+    // A sound card says nothing: the child works out whose sound it is.
+    if (card.face == CardFace.sound) return;
+    final name = card.letter.nameIn(lang);
     if (!_small) {
       _other.say(name, duration: config.nameBubble);
       return;
@@ -344,7 +368,7 @@ class _CardsPageState extends State<CardsPage> {
     if (context.canPop()) {
       context.pop();
     } else {
-      context.go(AppRoutes.cards);
+      context.go(cardsPickerRoute(_mode));
     }
   }
 
@@ -387,7 +411,7 @@ class _CardsPageState extends State<CardsPage> {
       formatClock(state.solvedIn!),
       state.moves,
     );
-    final fileName = 'nono-fofo-cards-$_count.png';
+    final fileName = 'nono-fofo-${_mode.id}-$_count.png';
     const type = 'image/png';
     final messenger = ScaffoldMessenger.of(context);
     final saved = l10n.writingShareSaved;

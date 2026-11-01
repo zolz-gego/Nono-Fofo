@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../progress/domain/game_progress_repository.dart';
 import '../../progress/domain/timed_record.dart';
+import '../domain/cards_mode.dart';
 import '../domain/memory_card.dart';
 
 /// Something the page reacts to (sounds, the brothers, the popup).
@@ -104,22 +105,26 @@ class CardsState extends Equatable {
   ];
 }
 
-/// Rules of Grandpa's Cards: turn two cards; a letter's capital and small
-/// card are a pair and stay up, anything else turns back. The clock starts
-/// at the first flip; every second card turned is one move.
+/// Rules of Grandpa's Cards: turn two cards; a pair ([CardsMode]) stays
+/// up, anything else turns back. The clock starts at the first flip; every
+/// second card turned is one move.
 class CardsCubit extends Cubit<CardsState> {
   CardsCubit(
     this._progress, {
     required List<MemoryCard> cards,
+    this.mode = CardsMode.letters,
+    String Function()? languageCode,
     Stopwatch? stopwatch,
   }) : _clock = stopwatch ?? Stopwatch(),
+       _languageCode = languageCode ?? (() => 'ar'),
        super(CardsState(cards: cards));
 
-  /// Key the best times are saved under (per number of cards).
-  static const String id = 'cards';
-
+  final CardsMode mode;
   final GameProgressRepository _progress;
   final Stopwatch _clock;
+
+  /// The UI language now: sound cards that look the same in it match.
+  final String Function() _languageCode;
 
   /// Time on the clock now.
   Duration get elapsed => state.solvedIn ?? _clock.elapsed;
@@ -157,7 +162,7 @@ class CardsCubit extends Cubit<CardsState> {
       return;
     }
     final moves = state.moves + 1;
-    if (!cards[open].pairsWith(cards[i])) {
+    if (!cards[open].pairsWith(cards[i], languageCode: _languageCode())) {
       emit(
         state.copyWith(
           cards: cards,
@@ -187,7 +192,7 @@ class CardsCubit extends Cubit<CardsState> {
     _clock.stop();
     final run = TimedRecord(time: _clock.elapsed, moves: moves);
     final level = '${cards.length}';
-    final best = _progress.bestTime(id, level);
+    final best = _progress.bestTime(mode.id, level);
     emit(
       state.copyWith(
         cards: cards,
@@ -199,7 +204,7 @@ class CardsCubit extends Cubit<CardsState> {
         event: CardsEvent.solved,
       ),
     );
-    await _progress.saveTime(id, level, run);
+    await _progress.saveTime(mode.id, level, run);
   }
 
   /// Turns the two different cards back down.

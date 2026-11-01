@@ -26,16 +26,21 @@ import '../../progress/domain/game_progress_repository.dart';
 import '../../progress/domain/timed_record.dart';
 import '../data/cards_config_repository.dart';
 import '../domain/cards_config.dart';
-import 'cards_cubit.dart';
+import '../domain/cards_mode.dart';
 import 'cards_page.dart';
 
 /// Before Grandpa's Cards: the child picks how many cards to play with.
 /// A solved size shows a green tick and its best time (with that run's
-/// moves). Phones don't offer the biggest sizes.
+/// moves) for [mode]. Phones don't offer the biggest sizes.
 class CardsLevelPage extends StatefulWidget {
-  const CardsLevelPage({super.key, required this.setup});
+  const CardsLevelPage({
+    super.key,
+    required this.setup,
+    this.mode = CardsMode.letters,
+  });
 
   final PlayerSetup setup;
+  final CardsMode mode;
 
   @override
   State<CardsLevelPage> createState() => _CardsLevelPageState();
@@ -70,10 +75,10 @@ class _CardsLevelPageState extends State<CardsLevelPage> {
   Future<void> _play(int count) async {
     _sound.play(SoundEvent.select);
     _buddy.play(CharacterAction.cheer, hold: const Duration(seconds: 1));
-    await context.push(
-      AppRoutes.cardsPlay,
-      extra: CardsArgs(setup: widget.setup, count: count),
-    );
+    await context.push(switch (widget.mode) {
+      CardsMode.letters => AppRoutes.cardsPlay,
+      CardsMode.sounds => AppRoutes.soundCardsPlay,
+    }, extra: CardsArgs(setup: widget.setup, count: count, mode: widget.mode));
     if (mounted) setState(() {}); // Show a new best time.
   }
 
@@ -136,7 +141,7 @@ class _CardsLevelPageState extends State<CardsLevelPage> {
                       for (final (i, n) in levels.indexed)
                         _LevelTile(
                               count: n,
-                              best: _progress.bestTime(CardsCubit.id, '$n'),
+                              best: _progress.bestTime(widget.mode.id, '$n'),
                               onTap: () => _play(n),
                             )
                             .animate(delay: (60 * i).ms)

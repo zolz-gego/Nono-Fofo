@@ -756,5 +756,13 @@
   "whereLetterPickLetter": "أنهي حرف ناقص؟",
   "whereLetterPickSound": "الحرف ده بيتنطق إزاي في الكلمة؟",
   "whereLetterHintSay": "هشيل لك اختيار غلط!",
-  "whereLetterWrong": "قرّبت! جرّب تاني"
+  "whereLetterWrong": "قرّبت! جرّب تاني",
+  "soundCardsStart": "يلا يا {name}! دوّر على كل حرف وصوته",
+  "@soundCardsStart": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }
