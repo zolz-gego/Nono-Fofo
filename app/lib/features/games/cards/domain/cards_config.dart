@@ -11,6 +11,7 @@ class CardsConfig {
     this.mismatchShow = const Duration(milliseconds: 1000),
     this.nameBubble = const Duration(milliseconds: 1500),
     this.letterColors = const [],
+    this.soundless = const {},
     this.background,
     this.cardBack,
   });
@@ -41,6 +42,11 @@ class CardsConfig {
               ?.map((e) => _hex(e as String))
               .toList() ??
           d.letterColors,
+      soundless:
+          (json['soundless'] as Map<String, dynamic>?)?.map(
+            (k, v) => MapEntry(k, v as String),
+          ) ??
+          d.soundless,
       background: art['background'] as String?,
       cardBack: art['cardBack'] as String?,
     );
@@ -67,6 +73,10 @@ class CardsConfig {
 
   /// One colour per letter, in the alphabet order of letters.json.
   final List<Color> letterColors;
+
+  /// Level 2: what a sound card shows for a letter with no sounds, by
+  /// letter id (So: "6").
+  final Map<String, String> soundless;
 
   /// Seaside picture behind the table (drawn in code without it).
   final String? background;

@@ -9,6 +9,7 @@ import '../core/widgets/app_top_bar.dart';
 import '../features/games/adventure/presentation/adventure_page.dart';
 import '../features/games/balloons/presentation/balloons_cubit.dart';
 import '../features/games/balloons/presentation/balloons_page.dart';
+import '../features/games/cards/domain/cards_mode.dart';
 import '../features/games/cards/presentation/cards_level_page.dart';
 import '../features/games/cards/presentation/cards_page.dart';
 import '../features/games/challenge/presentation/challenge_picker_page.dart';
@@ -99,6 +100,11 @@ abstract final class AppRoutes {
   /// fill the gap in 10 words (extra: [LetterPuzzleArgs]).
   static const whereLetter = '/level2/where-letter';
   static const whereLetterPlay = '/level2/where-letter/play';
+
+  /// Grandpa's Cards with sounds (Level 2, Alexandria): pick how many
+  /// cards, then pair each letter with its sounds (extra: [CardsArgs]).
+  static const soundCards = '/level2/sound-cards';
+  static const soundCardsPlay = '/level2/sound-cards/play';
 }
 
 final GoRouter appRouter = GoRouter(
@@ -198,6 +204,16 @@ final GoRouter appRouter = GoRouter(
       AppRoutes.whereLetterPlay,
       AppRoutes.whereLetter,
       (context, extra) => WhereLetterPage(args: extra),
+    ),
+    _withPlayer(
+      GameLevel.two,
+      AppRoutes.soundCards,
+      (context, setup) => CardsLevelPage(setup: setup, mode: CardsMode.sounds),
+    ),
+    _withExtra<CardsArgs>(
+      AppRoutes.soundCardsPlay,
+      AppRoutes.soundCards,
+      (context, extra) => CardsPage(args: extra),
     ),
     _withPlayer(
       GameLevel.two,

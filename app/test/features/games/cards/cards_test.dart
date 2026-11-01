@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:nonofofo/features/games/cards/domain/card_grid.dart';
 import 'package:nonofofo/features/games/cards/domain/cards_config.dart';
+import 'package:nonofofo/features/games/cards/domain/cards_mode.dart';
 import 'package:nonofofo/features/games/cards/domain/memory_card.dart';
 import 'package:nonofofo/features/games/cards/presentation/cards_cubit.dart';
 import 'package:nonofofo/features/games/progress/domain/game_progress_repository.dart';
@@ -45,8 +46,27 @@ void main() {
       }
       expect(byLetter, hasLength(8));
       for (final pair in byLetter.values) {
-        expect(pair.map((c) => c.face).toSet(), CardFace.values.toSet());
+        expect(pair.map((c) => c.face).toSet(), {
+          CardFace.capital,
+          CardFace.small,
+        });
         expect(pair[0].color, pair[1].color);
+      }
+    });
+
+    test('sound mode deals a letter card and a sound card', () {
+      final cards = dealCards(
+        alphabet: _alphabet,
+        colors: const [],
+        count: 8,
+        mode: CardsMode.sounds,
+        random: Random(2),
+      );
+      for (final c in cards) {
+        expect(
+          cards.where((o) => o.letter == c.letter).map((o) => o.face).toSet(),
+          {CardFace.letter, CardFace.sound},
+        );
       }
     });
 
@@ -77,6 +97,68 @@ void main() {
           }
         }
       }
+    });
+  });
+
+  group('sound cards', () {
+    CopticLetter said(String id, List<String> ar, List<String> en) =>
+        CopticLetter(
+          id: id,
+          small: id,
+          capital: id.toUpperCase(),
+          names: {'en': id},
+          sounds: {'ar': ar, 'en': en},
+        );
+    MemoryCard card(CopticLetter l, CardFace face, {String soundless = ''}) =>
+        MemoryCard(
+          letter: l,
+          face: face,
+          color: const Color(0xFF000000),
+          soundless: soundless,
+        );
+    final vida = said('vida', ['ب', 'ڤ'], ['b', 'v']);
+    final ei = said('ei', ['ي'], ['e']);
+    final ita = said('ita', ['ي'], ['y']);
+
+    test('a sound card shows every sound, in the UI language', () {
+      expect(card(vida, CardFace.sound).sounds('ar'), 'ب / ڤ');
+      expect(card(vida, CardFace.sound).sounds('en'), 'b / v');
+      const so = CopticLetter(id: 'so', small: '6', capital: '^', names: {});
+      expect(card(so, CardFace.sound, soundless: '6').sounds('ar'), '6');
+    });
+
+    test('the letter card shows both forms', () {
+      expect(card(vida, CardFace.letter).glyph, 'VIDA vida');
+    });
+
+    test('a letter pairs with any sound card that looks the same', () {
+      final eiLetter = card(ei, CardFace.letter);
+      expect(eiLetter.pairsWith(card(ei, CardFace.sound)), isTrue);
+      expect(eiLetter.pairsWith(card(ita, CardFace.sound)), isTrue);
+      // In English Ei says "e" and Ita "y": different cards.
+      expect(
+        eiLetter.pairsWith(card(ita, CardFace.sound), languageCode: 'en'),
+        isFalse,
+      );
+      expect(eiLetter.pairsWith(card(vida, CardFace.sound)), isFalse);
+      expect(eiLetter.pairsWith(card(ita, CardFace.letter)), isFalse);
+    });
+
+    test('best times are saved under the sounds game', () async {
+      final progress = _Progress();
+      when(() => progress.bestTime(any(), any())).thenReturn(null);
+      when(() => progress.saveTime(any(), any(), any()))
+          .thenAnswer((_) async => true);
+      final cubit = CardsCubit(
+        progress,
+        mode: CardsMode.sounds,
+        cards: [card(ei, CardFace.letter), card(ita, CardFace.sound)],
+      );
+      await cubit.flip(0);
+      await cubit.flip(1);
+      expect(cubit.state.solved, isTrue);
+      verify(() => progress.saveTime('soundCards', '2', any())).called(1);
+      await cubit.close();
     });
   });
 

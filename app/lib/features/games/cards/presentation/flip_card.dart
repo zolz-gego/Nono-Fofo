@@ -70,6 +70,28 @@ class _Front extends StatelessWidget {
   final BorderRadius radius;
   final double width;
 
+  /// The letter (Avva Shenouda keys) or, on a sound card, its sounds in the
+  /// UI language.
+  Widget _face(BuildContext context) {
+    if (card.face == CardFace.sound) {
+      final lang = Localizations.localeOf(context).languageCode;
+      final style = lang == 'ar'
+          ? AppTextStyles.arabic(AppTextVariant.h1)
+          : AppTextStyles.english(AppTextVariant.h1);
+      return Text(
+        card.sounds(lang),
+        style: style.copyWith(fontSize: 96, height: 1.3, color: card.color),
+      );
+    }
+    return Text(
+      card.glyph,
+      // Coptic keys like ")" must not be mirrored in Arabic.
+      textDirection: TextDirection.ltr,
+      style: AppTextStyles.coptic(AppTextVariant.h1)
+          .copyWith(fontSize: 96, height: 1.1, color: card.color),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final border = max(2.0, width * 0.05);
@@ -98,15 +120,7 @@ class _Front extends StatelessWidget {
             Positioned.fill(
               child: Padding(
                 padding: EdgeInsets.all(width * 0.1),
-                child: FittedBox(
-                  child: Text(
-                    card.glyph,
-                    // Coptic keys like ")" must not be mirrored in Arabic.
-                    textDirection: TextDirection.ltr,
-                    style: AppTextStyles.coptic(AppTextVariant.h1)
-                        .copyWith(fontSize: 96, height: 1.1, color: card.color),
-                  ),
-                ),
+                child: FittedBox(child: _face(context)),
               ),
             ),
             if (card.matched)

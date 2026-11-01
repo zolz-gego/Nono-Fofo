@@ -981,4 +981,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get whereLetterWrong => 'قرّبت! جرّب تاني';
+
+  @override
+  String soundCardsStart(String name) {
+    return 'يلا يا $name! دوّر على كل حرف وصوته';
+  }
 }

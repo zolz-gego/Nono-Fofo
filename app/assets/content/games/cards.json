@@ -1,5 +1,5 @@
 {
-  "_readme": "Settings for 'Grandpa's Cards' (كروت جدو), the memory game at Alexandria & the sea. Change numbers here; no code change needed. cardCounts: the levels (number of cards; each letter's capital + small make a pair, so 64 = all 32 letters). phoneMaxCards: phones (shortest screen side under smallScreenWidth) don't offer bigger levels, the cards would be too small. smallScreenWidth: below this shortest side (logical pixels) the brothers are hidden and only peek in to flip a card. heroRunMs: how long the brother takes to reach a card (the card flips when he gets there). mismatchShowMs: how long two different cards stay up before turning back. nameBubbleMs: how long the letter's name stays in the bubble after a flip. letterColors: one colour per letter, in letters.json order (both forms of a letter share it). art.background / art.cardBack: pictures (see design/game-prompts.md); without them both are drawn in code.",
+  "_readme": "Settings for 'Grandpa's Cards' (كروت جدو), the memory game at Alexandria & the sea. Change numbers here; no code change needed. cardCounts: the levels (number of cards; each letter's capital + small make a pair, so 64 = all 32 letters). phoneMaxCards: phones (shortest screen side under smallScreenWidth) don't offer bigger levels, the cards would be too small. smallScreenWidth: below this shortest side (logical pixels) the brothers are hidden and only peek in to flip a card. heroRunMs: how long the brother takes to reach a card (the card flips when he gets there). mismatchShowMs: how long two different cards stay up before turning back. nameBubbleMs: how long the letter's name stays in the bubble after a flip. letterColors: one colour per letter, in letters.json order (both cards of a pair share it). soundless: Level 2 (letter + sound cards) — what the sound card shows for a letter with no sounds in letters.json, by letter id. art.background / art.cardBack: pictures (see design/game-prompts.md); without them both are drawn in code.",
   "version": 1,
   "cardCounts": [4, 8, 16, 32, 64],
   "phoneMaxCards": 32,
@@ -15,6 +15,7 @@
     "#06A77D", "#C9184A", "#5E60CE", "#BC6C25", "#00838F", "#9D4EDD",
     "#7F5539", "#EF476F"
   ],
+  "soundless": { "so": "6" },
   "art": {
     "background": "assets/games/cards_seaside.webp",
     "cardBack": null
