@@ -208,13 +208,13 @@ class _FishingPageState extends State<FishingPage> {
     if (context.canPop()) {
       context.pop();
     } else {
-      context.go(AppRoutes.fishing, extra: widget.args.setup);
+      context.go(AppRoutes.fishing);
     }
   }
 
   void _backToGames() {
     _sound.play(SoundEvent.back);
-    context.go(AppRoutes.level, extra: widget.args.setup);
+    context.go(AppRoutes.level(widget.args.setup.level));
   }
 
   @override

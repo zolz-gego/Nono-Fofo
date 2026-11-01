@@ -392,6 +392,24 @@ abstract class AppLocalizations {
   /// **'إلغاء'**
   String get cancel;
 
+  /// No description provided for @profileTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مين بيلعب؟'**
+  String get profileTitle;
+
+  /// No description provided for @changeProfile.
+  ///
+  /// In ar, this message translates to:
+  /// **'غيّر اللاعب'**
+  String get changeProfile;
+
+  /// No description provided for @save.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ'**
+  String get save;
+
   /// No description provided for @gameComingSoon.
   ///
   /// In ar, this message translates to:

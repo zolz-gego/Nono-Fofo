@@ -9,23 +9,31 @@ import '../../../core/theme/app_icons.dart';
 import '../../../core/widgets/text/app_texts.dart';
 import '../../../engines/sound/application/sound_service.dart';
 import '../../../engines/sound/domain/sound_event.dart';
+import '../../profile/presentation/profile_cubit.dart';
+import '../../profile/presentation/profile_dialog.dart';
 import '../domain/game_level.dart';
-import 'player_setup_dialog.dart';
 
 /// "Choose your level" on the home page: one card per [GameLevel]. Tapping a
-/// card asks for the child's name and buddy, then hands the result to
-/// [onStart].
+/// card asks for the child's name and buddy the first time (they are saved
+/// after that), then hands the level to [onStart].
 class LevelSection extends StatelessWidget {
   const LevelSection({super.key, required this.onStart});
 
-  final ValueChanged<PlayerSetup> onStart;
+  final ValueChanged<GameLevel> onStart;
 
   static const double _threeColumnsFrom = 600;
 
   Future<void> _open(BuildContext context, GameLevel level) async {
-    context.read<SoundService>().play(SoundEvent.tap);
-    final setup = await PlayerSetupDialog.show(context, level);
-    if (setup != null) onStart(setup);
+    final sound = context.read<SoundService>()..play(SoundEvent.tap);
+    final profiles = context.read<ProfileCubit>();
+    if (profiles.state == null) {
+      final profile = await ProfileDialog.show(context, level: level);
+      if (profile == null) return;
+      profiles.save(profile);
+    } else {
+      sound.play(SoundEvent.levelStart);
+    }
+    onStart(level);
   }
 
   @override

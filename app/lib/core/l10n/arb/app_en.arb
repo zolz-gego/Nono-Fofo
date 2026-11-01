@@ -56,6 +56,9 @@
   "playWith": "Who do you want to play with?",
   "letsPlay": "Let's play!",
   "cancel": "Cancel",
+  "profileTitle": "Who's playing?",
+  "changeProfile": "Change player",
+  "save": "Save",
   "gameComingSoon": "Ready, {name}! The game is coming soon.",
   "@gameComingSoon": {
     "placeholders": {

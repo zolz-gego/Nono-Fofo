@@ -395,13 +395,13 @@ class _LetterPuzzlePageState extends State<LetterPuzzlePage> {
     if (context.canPop()) {
       context.pop();
     } else {
-      context.go(AppRoutes.letterPuzzle, extra: widget.args.setup);
+      context.go(AppRoutes.letterPuzzle);
     }
   }
 
   void _backToGames() {
     _sound.play(SoundEvent.back);
-    context.go(AppRoutes.level, extra: widget.args.setup);
+    context.go(AppRoutes.level(widget.args.setup.level));
   }
 
   // ---------------------------------------------------------------------------

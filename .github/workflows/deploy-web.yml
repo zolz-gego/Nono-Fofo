@@ -38,6 +38,11 @@ jobs:
       # circle-check) from the release build, so keep the full icon fonts.
       - run: flutter build web --release --base-href /Nono-Fofo/ --no-tree-shake-icons
 
+      # Every page has its own link (e.g. /Nono-Fofo/level1/cards). GitHub
+      # Pages has no such files, so it serves 404.html: make that the app too
+      # and the router opens the right page.
+      - run: cp build/web/index.html build/web/404.html
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: app/build/web

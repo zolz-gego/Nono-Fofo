@@ -168,6 +168,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cancel => 'إلغاء';
 
   @override
+  String get profileTitle => 'مين بيلعب؟';
+
+  @override
+  String get changeProfile => 'غيّر اللاعب';
+
+  @override
+  String get save => 'حفظ';
+
+  @override
   String gameComingSoon(String name) {
     return 'جاهز يا $name! اللعبة جاية قريب.';
   }
