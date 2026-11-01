@@ -275,5 +275,6 @@
   "whereLetterPickLetter": "Which letter is missing?",
   "whereLetterPickSound": "What does this letter sound like in the word?",
   "whereLetterHintSay": "Let me take a wrong one away!",
-  "whereLetterWrong": "Almost! Try again"
+  "whereLetterWrong": "Almost! Try again",
+  "soundCardsStart": "Come on, {name}! Match each letter with its sound"
 }

@@ -12,7 +12,8 @@ enum LevelGame {
   magicBasket,
   matchLetters,
   letterPuzzle,
-  whereLetter;
+  whereLetter,
+  soundCards;
 
   /// Games on each level's road, in order.
   static List<LevelGame> of(GameLevel level) => switch (level) {
@@ -29,6 +30,7 @@ enum LevelGame {
       matchLetters,
       letterPuzzle,
       whereLetter,
+      soundCards,
     ],
     GameLevel.three => const [],
   };

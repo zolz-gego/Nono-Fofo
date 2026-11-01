@@ -937,4 +937,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get whereLetterWrong => 'Almost! Try again';
+
+  @override
+  String soundCardsStart(String name) {
+    return 'Come on, $name! Match each letter with its sound';
+  }
 }

@@ -1669,6 +1669,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'قرّبت! جرّب تاني'**
   String get whereLetterWrong;
+
+  /// No description provided for @soundCardsStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'يلا يا {name}! دوّر على كل حرف وصوته'**
+  String soundCardsStart(String name);
 }
 
 class _AppLocalizationsDelegate
