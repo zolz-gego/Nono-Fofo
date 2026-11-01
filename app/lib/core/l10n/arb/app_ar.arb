@@ -56,6 +56,9 @@
   "playWith": "عايز تلعب مع مين؟",
   "letsPlay": "يلا نلعب!",
   "cancel": "إلغاء",
+  "profileTitle": "مين بيلعب؟",
+  "changeProfile": "غيّر اللاعب",
+  "save": "حفظ",
   "gameComingSoon": "جاهز يا {name}! اللعبة جاية قريب.",
   "@gameComingSoon": {
     "placeholders": {

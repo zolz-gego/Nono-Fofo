@@ -19,6 +19,7 @@ import '../../../../engines/characters/presentation/character_controller.dart';
 import '../../../../engines/sound/application/sound_service.dart';
 import '../../../../engines/sound/domain/sound_event.dart';
 import '../../../levels/domain/game_level.dart';
+import '../../../profile/presentation/profile_button.dart';
 import '../../../settings/presentation/language_button.dart';
 import '../../../settings/presentation/mute_button.dart';
 import '../../progress/domain/game_progress_repository.dart';
@@ -81,7 +82,7 @@ class _CardsLevelPageState extends State<CardsLevelPage> {
     if (context.canPop()) {
       context.pop();
     } else {
-      context.go(AppRoutes.level, extra: widget.setup);
+      context.go(AppRoutes.level(widget.setup.level));
     }
   }
 
@@ -98,6 +99,7 @@ class _CardsLevelPageState extends State<CardsLevelPage> {
             onPressed: _backToGames,
             icon: const FaIcon(AppIcons.road),
           ),
+          const ProfileButton(),
           const LanguageButton(),
           const MuteButton(),
           const SizedBox(width: AppDimens.spaceSm),

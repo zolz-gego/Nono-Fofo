@@ -232,13 +232,13 @@ class _BalloonsPageState extends State<BalloonsPage> {
     if (context.canPop()) {
       context.pop();
     } else {
-      context.go(AppRoutes.balloons, extra: widget.args.setup);
+      context.go(AppRoutes.balloons);
     }
   }
 
   void _backToGames() {
     _sound.play(SoundEvent.back);
-    context.go(AppRoutes.level, extra: widget.args.setup);
+    context.go(AppRoutes.level(widget.args.setup.level));
   }
 
   @override

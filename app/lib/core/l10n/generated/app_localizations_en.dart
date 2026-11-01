@@ -168,6 +168,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancel => 'Cancel';
 
   @override
+  String get profileTitle => 'Who\'s playing?';
+
+  @override
+  String get changeProfile => 'Change player';
+
+  @override
+  String get save => 'Save';
+
+  @override
   String gameComingSoon(String name) {
     return 'Ready, $name! The game is coming soon.';
   }

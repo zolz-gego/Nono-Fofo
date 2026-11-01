@@ -6,6 +6,7 @@ import '../core/l10n/l10n.dart';
 import '../core/theme/app_theme.dart';
 import '../engines/characters/domain/character_pose.dart';
 import '../engines/sound/application/sound_service.dart';
+import '../features/profile/presentation/profile_cubit.dart';
 import '../features/settings/domain/app_settings.dart';
 import '../features/settings/presentation/settings_cubit.dart';
 import 'di/injection.dart';
@@ -43,8 +44,11 @@ class _NonoFofoAppState extends State<NonoFofoApp> {
         RepositoryProvider<SoundService>.value(value: sl<SoundService>()),
         RepositoryProvider<CharacterRoster>.value(value: sl<CharacterRoster>()),
       ],
-      child: BlocProvider(
-        create: (_) => sl<SettingsCubit>(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (_) => sl<SettingsCubit>()),
+          BlocProvider(create: (_) => sl<ProfileCubit>()),
+        ],
         child: BlocBuilder<SettingsCubit, AppSettings>(
           buildWhen: (a, b) => a.languageCode != b.languageCode,
           builder: (context, _) {

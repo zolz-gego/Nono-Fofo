@@ -262,13 +262,13 @@ class _MagicBasketPageState extends State<MagicBasketPage> {
     if (context.canPop()) {
       context.pop();
     } else {
-      context.go(AppRoutes.magicBasket, extra: widget.args.setup);
+      context.go(AppRoutes.magicBasket);
     }
   }
 
   void _backToGames() {
     _sound.play(SoundEvent.back);
-    context.go(AppRoutes.level, extra: widget.args.setup);
+    context.go(AppRoutes.level(widget.args.setup.level));
   }
 
   /// Arrow keys and A / D move the basket: a tap is one step, a held key

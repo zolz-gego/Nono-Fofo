@@ -12,6 +12,7 @@ import '../../../../core/theme/app_icons.dart';
 import '../../../../core/widgets/app_top_bar.dart';
 import '../../../../engines/sound/application/sound_service.dart';
 import '../../../../engines/sound/domain/sound_event.dart';
+import '../../../profile/presentation/profile_button.dart';
 import '../../../settings/presentation/language_button.dart';
 import '../../../settings/presentation/mute_button.dart';
 import 'game_settings_dialog.dart';
@@ -149,6 +150,7 @@ class GameScaffoldState extends State<GameScaffold> {
                 onPressed: a.onPressed,
                 icon: FaIcon(a.icon),
               ),
+            const ProfileButton(),
             const LanguageButton(),
             const MuteButton(),
             const SizedBox(width: AppDimens.spaceSm),

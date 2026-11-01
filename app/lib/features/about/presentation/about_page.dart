@@ -8,6 +8,7 @@ import '../../../core/theme/app_dimens.dart';
 import '../../../core/widgets/app_top_bar.dart';
 import '../../../core/widgets/text/app_texts.dart';
 import '../../playground/presentation/playground_view.dart';
+import '../../profile/presentation/profile_button.dart';
 import '../../settings/presentation/language_button.dart';
 import '../../settings/presentation/mute_button.dart';
 
@@ -24,6 +25,7 @@ class AboutPage extends StatelessWidget {
         title: l10n.aboutTitle,
         onLogoTap: () => context.go(AppRoutes.home),
         actions: const [
+          ProfileButton(),
           LanguageButton(),
           MuteButton(),
           SizedBox(width: AppDimens.spaceSm),

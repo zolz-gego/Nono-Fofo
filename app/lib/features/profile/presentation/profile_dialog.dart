@@ -11,33 +11,47 @@ import '../../../core/theme/app_icons.dart';
 import '../../../core/widgets/text/app_texts.dart';
 import '../../../engines/sound/application/sound_service.dart';
 import '../../../engines/sound/domain/sound_event.dart';
-import '../domain/game_level.dart';
+import '../../levels/domain/game_level.dart';
+import '../domain/player_profile.dart';
 
-/// Popup before a level starts: the child types their name and picks which
-/// brother to play with. Returns null if closed without starting.
-class PlayerSetupDialog extends StatefulWidget {
-  const PlayerSetupDialog({super.key, required this.level});
+/// Popup where the child types their name and picks which brother to play
+/// with. Before a [level] it starts playing ("Let's play!"); without one
+/// (the top bar's profile button) it edits the saved [initial] profile.
+/// Returns null if closed without saving.
+class ProfileDialog extends StatefulWidget {
+  const ProfileDialog({super.key, this.level, this.initial, this.onDone});
 
-  final GameLevel level;
+  final GameLevel? level;
+  final PlayerProfile? initial;
 
-  static Future<PlayerSetup?> show(BuildContext context, GameLevel level) {
+  /// Gets the result (null if closed) when the dialog is part of a page
+  /// rather than pushed with [show]; otherwise it pops with it.
+  final ValueChanged<PlayerProfile?>? onDone;
+
+  static Future<PlayerProfile?> show(
+    BuildContext context, {
+    GameLevel? level,
+    PlayerProfile? initial,
+  }) {
     final sound = context.read<SoundService>()..play(SoundEvent.popupOpen);
-    return showDialog<PlayerSetup>(
+    return showDialog<PlayerProfile>(
       context: context,
-      builder: (_) => PlayerSetupDialog(level: level),
-    ).then((setup) {
-      if (setup == null) sound.play(SoundEvent.popupClose);
-      return setup;
+      builder: (_) => ProfileDialog(level: level, initial: initial),
+    ).then((profile) {
+      if (profile == null) sound.play(SoundEvent.popupClose);
+      return profile;
     });
   }
 
   @override
-  State<PlayerSetupDialog> createState() => _PlayerSetupDialogState();
+  State<ProfileDialog> createState() => _ProfileDialogState();
 }
 
-class _PlayerSetupDialogState extends State<PlayerSetupDialog> {
-  final TextEditingController _name = TextEditingController();
-  CharacterId? _buddy;
+class _ProfileDialogState extends State<ProfileDialog> {
+  late final TextEditingController _name = TextEditingController(
+    text: widget.initial?.name,
+  );
+  late CharacterId? _buddy = widget.initial?.buddy;
 
   static const double _maxWidth = 480;
   static const int _maxNameLength = 20;
@@ -67,15 +81,21 @@ class _PlayerSetupDialogState extends State<PlayerSetupDialog> {
 
   void _start() {
     if (!_canStart) return;
-    _sound.play(SoundEvent.levelStart);
-    Navigator.of(
-      context,
-    ).pop(PlayerSetup(level: widget.level, name: _trimmedName, buddy: _buddy!));
+    _sound.play(widget.level == null ? SoundEvent.tap : SoundEvent.levelStart);
+    _done(PlayerProfile(name: _trimmedName, buddy: _buddy!));
+  }
+
+  void _done(PlayerProfile? profile) {
+    final onDone = widget.onDone;
+    if (onDone == null) return Navigator.of(context).pop(profile);
+    if (profile == null) _sound.play(SoundEvent.popupClose);
+    onDone(profile);
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final level = widget.level;
     return Dialog(
       backgroundColor: AppColors.surface,
       shape: RoundedRectangleBorder(
@@ -92,12 +112,16 @@ class _PlayerSetupDialogState extends State<PlayerSetupDialog> {
               Row(
                 children: [
                   Expanded(
-                    child: AppText.h2(l10n.levelNumber(widget.level.number)),
+                    child: AppText.h2(
+                      level == null
+                          ? l10n.profileTitle
+                          : l10n.levelNumber(level.number),
+                    ),
                   ),
                   IconButton(
                     tooltip: l10n.cancel,
                     color: AppColors.textMuted,
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: () => _done(null),
                     icon: const FaIcon(AppIcons.close),
                   ),
                 ],
@@ -107,7 +131,7 @@ class _PlayerSetupDialogState extends State<PlayerSetupDialog> {
               const SizedBox(height: AppDimens.spaceSm),
               TextField(
                 controller: _name,
-                autofocus: true,
+                autofocus: widget.initial == null,
                 maxLength: _maxNameLength,
                 textCapitalization: TextCapitalization.words,
                 textInputAction: TextInputAction.done,
@@ -151,8 +175,8 @@ class _PlayerSetupDialogState extends State<PlayerSetupDialog> {
               const SizedBox(height: AppDimens.spaceLg),
               FilledButton.icon(
                 onPressed: _canStart ? _start : null,
-                icon: const FaIcon(AppIcons.play),
-                label: Text(l10n.letsPlay),
+                icon: FaIcon(level == null ? AppIcons.check : AppIcons.play),
+                label: Text(level == null ? l10n.save : l10n.letsPlay),
               ),
             ],
           ),
