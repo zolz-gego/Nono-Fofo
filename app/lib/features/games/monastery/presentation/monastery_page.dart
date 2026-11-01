@@ -401,13 +401,13 @@ class _MonasteryPageState extends State<MonasteryPage> {
     if (context.canPop()) {
       context.pop();
     } else {
-      context.go(AppRoutes.monastery, extra: widget.args.setup);
+      context.go(AppRoutes.monastery);
     }
   }
 
   void _backToGames() {
     _sound.play(SoundEvent.back);
-    context.go(AppRoutes.level, extra: widget.args.setup);
+    context.go(AppRoutes.level(widget.args.setup.level));
   }
 
   Future<Uint8List> _buildShareCard() {

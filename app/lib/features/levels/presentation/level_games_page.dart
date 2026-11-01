@@ -19,6 +19,7 @@ import '../../../engines/sound/application/sound_service.dart';
 import '../../../engines/sound/domain/sound_event.dart';
 import '../../games/progress/domain/game_progress_repository.dart';
 import '../../games/challenge/presentation/challenge_picker_page.dart';
+import '../../profile/presentation/profile_button.dart';
 import '../../settings/presentation/language_button.dart';
 import '../../settings/presentation/mute_button.dart';
 import '../domain/game_level.dart';
@@ -93,7 +94,7 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
     };
     _buddy.play(CharacterAction.cheer, hold: const Duration(seconds: 1));
     // Back from a game: refresh ticks (e.g. the challenge just won).
-    context.push(route, extra: widget.setup).then((_) {
+    context.push(route).then((_) {
       if (mounted) setState(() {});
     });
   }
@@ -189,6 +190,7 @@ class _LevelGamesPageState extends State<LevelGamesPage> {
         title: l10n.levelNumber(widget.setup.level.number),
         onLogoTap: () => context.go(AppRoutes.home),
         actions: const [
+          ProfileButton(),
           LanguageButton(),
           MuteButton(),
           SizedBox(width: AppDimens.spaceSm),

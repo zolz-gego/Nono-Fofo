@@ -18,6 +18,7 @@ abstract final class AppIcons {
   static const FaIconData letters = FontAwesomeIcons.tableCellsLarge;
   static const FaIconData road = FontAwesomeIcons.route;
   static const FaIconData starEmpty = FontAwesomeIcons.star;
+  static const FaIconData profile = FontAwesomeIcons.solidCircleUser;
 
   // Every game: the settings button and its pop-up.
   static const FaIconData settings = FontAwesomeIcons.gear;

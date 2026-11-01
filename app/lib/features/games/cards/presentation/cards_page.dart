@@ -344,13 +344,13 @@ class _CardsPageState extends State<CardsPage> {
     if (context.canPop()) {
       context.pop();
     } else {
-      context.go(AppRoutes.cards, extra: widget.args.setup);
+      context.go(AppRoutes.cards);
     }
   }
 
   void _backToGames() {
     _sound.play(SoundEvent.back);
-    context.go(AppRoutes.level, extra: widget.args.setup);
+    context.go(AppRoutes.level(widget.args.setup.level));
   }
 
   Future<Uint8List> _buildShareCard() {

@@ -26,6 +26,9 @@ import '../../features/games/writing/data/writing_config_repository.dart';
 import '../../features/games/progress/domain/game_progress_repository.dart';
 import '../../features/letters/data/letter_repository_impl.dart';
 import '../../features/letters/domain/letter_repository.dart';
+import '../../features/profile/data/profile_repository_impl.dart';
+import '../../features/profile/domain/profile_repository.dart';
+import '../../features/profile/presentation/profile_cubit.dart';
 import '../../features/questions/data/question_parser_registry.dart';
 import '../../features/questions/data/question_repository_impl.dart';
 import '../../features/questions/domain/letter_question.dart';
@@ -62,6 +65,12 @@ Future<void> configureDependencies() async {
     () => SettingsRepositoryImpl(sl()),
   );
   sl.registerFactory(() => SettingsCubit(sl(), sl()));
+
+  // Profile
+  sl.registerLazySingleton<ProfileRepository>(
+    () => ProfileRepositoryImpl(sl()),
+  );
+  sl.registerFactory(() => ProfileCubit(sl()));
 
   // Questions — register a parser per question type here.
   sl.registerLazySingleton(

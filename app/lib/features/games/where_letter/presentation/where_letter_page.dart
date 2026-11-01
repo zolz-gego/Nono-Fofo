@@ -399,13 +399,13 @@ class _WhereLetterPageState extends State<WhereLetterPage> {
     if (context.canPop()) {
       context.pop();
     } else {
-      context.go(AppRoutes.whereLetter, extra: widget.args.setup);
+      context.go(AppRoutes.whereLetter);
     }
   }
 
   void _backToGames() {
     _sound.play(SoundEvent.back);
-    context.go(AppRoutes.level, extra: widget.args.setup);
+    context.go(AppRoutes.level(widget.args.setup.level));
   }
 
   // ---------------------------------------------------------------------------

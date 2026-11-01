@@ -430,13 +430,13 @@ class _WritingPageState extends State<WritingPage> {
     if (context.canPop()) {
       context.pop();
     } else {
-      context.go(AppRoutes.writing, extra: widget.args.setup);
+      context.go(AppRoutes.writing);
     }
   }
 
   void _backToGames() {
     _sound.play(SoundEvent.back);
-    context.go(AppRoutes.level, extra: widget.args.setup);
+    context.go(AppRoutes.level(widget.args.setup.level));
   }
 
   @override

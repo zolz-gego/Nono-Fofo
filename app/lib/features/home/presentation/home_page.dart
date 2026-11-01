@@ -22,6 +22,7 @@ import '../../../engines/sound/application/sound_service.dart';
 import '../../../engines/sound/domain/sound_event.dart';
 import '../../levels/domain/game_level.dart';
 import '../../levels/presentation/level_section.dart';
+import '../../profile/presentation/profile_button.dart';
 import '../../settings/presentation/language_button.dart';
 import '../../settings/presentation/mute_button.dart';
 
@@ -67,8 +68,7 @@ class _HomePageState extends State<HomePage> {
     if (_sound.currentTrack == _music) _sound.playMusic(_music);
   }
 
-  void _startLevel(PlayerSetup setup) =>
-      context.push(AppRoutes.level, extra: setup);
+  void _startLevel(GameLevel level) => context.push(AppRoutes.level(level));
 
   @override
   void dispose() {
@@ -86,6 +86,7 @@ class _HomePageState extends State<HomePage> {
         appBar: AppTopBar(
           title: l10n.appTitle,
           actions: [
+            const ProfileButton(),
             const LanguageButton(),
             const MuteButton(),
             IconButton(

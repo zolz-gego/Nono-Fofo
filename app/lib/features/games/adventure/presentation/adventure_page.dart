@@ -183,7 +183,7 @@ class _AdventurePageState extends State<AdventurePage> {
 
   void _backToRoad() {
     _sound.play(SoundEvent.back);
-    context.go(AppRoutes.level, extra: widget.setup);
+    context.go(AppRoutes.level(widget.setup.level));
   }
 
   void _pause(bool paused) {

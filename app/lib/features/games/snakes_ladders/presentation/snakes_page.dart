@@ -297,7 +297,7 @@ class _SnakesPageState extends State<SnakesPage> {
 
   void _backToGames() {
     _sound.play(SoundEvent.back);
-    context.go(AppRoutes.level, extra: widget.setup);
+    context.go(AppRoutes.level(widget.setup.level));
   }
 
   String get _lang => Localizations.localeOf(context).languageCode;

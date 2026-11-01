@@ -23,6 +23,7 @@ import '../../../../engines/sound/domain/sound_event.dart';
 import '../../../letters/domain/coptic_letter.dart';
 import '../../../letters/domain/letter_repository.dart';
 import '../../../levels/domain/game_level.dart';
+import '../../../profile/presentation/profile_button.dart';
 import '../../../settings/presentation/language_button.dart';
 import '../../../settings/presentation/mute_button.dart';
 import '../../progress/domain/game_progress_repository.dart';
@@ -130,7 +131,7 @@ class _LetterPickPageState extends State<LetterPickPage> {
     if (context.canPop()) {
       context.pop();
     } else {
-      context.go(AppRoutes.level, extra: widget.setup);
+      context.go(AppRoutes.level(widget.setup.level));
     }
   }
 
@@ -147,6 +148,7 @@ class _LetterPickPageState extends State<LetterPickPage> {
             onPressed: _backToGames,
             icon: const FaIcon(AppIcons.road),
           ),
+          const ProfileButton(),
           const LanguageButton(),
           const MuteButton(),
           const SizedBox(width: AppDimens.spaceSm),

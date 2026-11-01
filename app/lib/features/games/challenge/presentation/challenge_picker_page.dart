@@ -17,6 +17,7 @@ import '../../../../core/widgets/text/app_texts.dart';
 import '../../../../engines/sound/application/sound_service.dart';
 import '../../../../engines/sound/domain/sound_event.dart';
 import '../../../levels/domain/game_level.dart';
+import '../../../profile/presentation/profile_button.dart';
 import '../../../settings/presentation/language_button.dart';
 import '../../../settings/presentation/mute_button.dart';
 import '../../adventure/presentation/adventure_cubit.dart';
@@ -53,7 +54,7 @@ class _ChallengePickerPageState extends State<ChallengePickerPage> {
   void _open(String route) {
     _sound.play(SoundEvent.levelStart);
     // Back from a game: refresh the ticks.
-    context.push(route, extra: widget.setup).then((_) {
+    context.push(route).then((_) {
       if (!mounted) return;
       _sound.playMusic(MusicTrack.pyramids);
       setState(() {});
@@ -94,6 +95,7 @@ class _ChallengePickerPageState extends State<ChallengePickerPage> {
         title: l10n.gameChallenge(opponent),
         onLogoTap: () => context.go(AppRoutes.home),
         actions: const [
+          ProfileButton(),
           LanguageButton(),
           MuteButton(),
           SizedBox(width: AppDimens.spaceSm),
