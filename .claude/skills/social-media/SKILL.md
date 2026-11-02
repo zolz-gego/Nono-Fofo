@@ -1,6 +1,6 @@
 ---
 name: social-media
-description: Make Nono & Fofo TikTok / Instagram videos — portrait motion graphics and B-rolls with the app's characters, colors, fonts, music and SFX, Egyptian Arabic voices from ElevenLabs (v3 with emotion tags), Arabic + English captions and keyword pop-ups, rendered with Remotion. Use for any social post, reel, short, script, voice script, or new social asset, and whenever a new image/sound is added for the social videos.
+description: Make Nono & Fofo TikTok / Instagram videos and photo carousels — portrait motion graphics and B-rolls with the app's characters, colors, fonts, music and SFX, Egyptian Arabic voices from ElevenLabs (v3 with emotion tags), Arabic + English captions and keyword pop-ups, rendered with Remotion. Use for any social post, reel, short, letter carousel, script, voice script, or new social asset, and whenever a new image/sound is added for the social videos.
 ---
 
 # Nono & Fofo social videos
@@ -22,6 +22,9 @@ ElevenLabs from the script Claude writes.
   `social/tools/synth_intro.py`, `social/tools/stitch_intro.py`, `social/tools/spin_intro.py`) are git-ignored and stay on this machine. Never
   `git add -f` them. Local-only compositions are registered through
   `src/generated/local.ts` (written by `npm run sync` when `src/intro/` exists).
+- **Carousel content stays local too:** `social/carousels/` (the word lists) and
+  the exported slides in `social/out/carousels/` are git-ignored. Only the
+  carousel engine (`Carousel.tsx`, sync, render) and this skill go in git.
 
 ## Fixed decisions
 
@@ -133,6 +136,55 @@ When the user says a video is finished ("done", "it's ready", "ship it",
 4. **Deliver:** send `video.mp4`, `thumbnail.jpg` and `post.md` to the user, and
    paste both captions in the reply so they can copy them. All of it stays local
    (`social/out/` is git-ignored).
+
+## Letter carousels (posted after each letter video)
+
+A photo carousel for Instagram and TikTok that follows a letter's video. Same
+look as the videos (AppColors, app fonts, Coptic in Avva keys), no characters.
+
+**Slides (9:16, 1080×1920, text inside `SAFE`):**
+1. **The letter:** "حرف اي · The letter Ei", capital and small tiles
+   (كبير / Capital, صغير / Small), the name in Arabic and English, and
+   "بينطق ي · says "e"".
+2. **9 word slides**, in this order: 3 Arabic words, 3 English words, 3 Coptic
+   words. Each one has the logo, a title with the small letter and its sound
+   ("ⲉ بينطق ي · says "e""), a card with the word, and the word's emoji under the
+   card, bottom middle. The taught letter is bigger and coral inside the word.
+   No slide counter. Every slide but the last has a "اسحب · Swipe" hint.
+   - **Arabic word** written in Coptic letters: Coptic / Arabic word / English meaning.
+   - **English word** written in Coptic letters: Coptic / English word / Arabic meaning.
+   - **Coptic word** (real Coptic), 4 lines: Coptic / sound in Arabic letters /
+     sound in English letters / meaning (Arabic · English).
+
+**Workflow (one question at a time):**
+1. **Agree the 9 words first.** Read the letter's video (`script.md` keywords)
+   and leave out every word it already shows. Propose 3 Arabic and 3 English
+   words (kid-friendly, starting with the letter's **exact** sound, e.g. Ei is the
+   short "e" of *egg*; a long "ee" word like *eagle* belongs to Eta), and about
+   10 real Coptic words with their sounds and meanings so the user picks 3.
+   Flag any spelling or reading you aren't sure of.
+2. **Write `social/carousels/<letter id>.json`** (the letter id from
+   `app/assets/content/letters.json`; the keys, name and sound come from there,
+   `"sound"` overrides it). Coptic is typed in Avva keys (see `letters.json`:
+   ⲏ `3`, ⲑ `0`, ϣ `2`, ϥ `4`, ϧ `q`, ϩ `h`, ϫ `g`, ϭ `s`, ϯ `5`, ⲩ `v`, ⲱ `w`…):
+   ```json
+   {
+     "letter": "ei",
+     "video": "004-running-letter",
+     "words": [
+       {"group": "ar", "coptic": "enta", "word": "إنتَ", "meaning": "You", "emoji": "🫵"},
+       {"group": "en", "coptic": "elefant", "word": "elephant", "meaning": "فيل", "emoji": "🐘"},
+       {"group": "cop", "coptic": "ekkl3cia", "ar": "إكليسيا", "en": "Eklisia", "meaning": {"ar": "كنيسة", "en": "Church"}, "emoji": "⛪"}
+     ]
+   }
+   ```
+3. **Sample first:** put just 2 words in (one Arabic, one Coptic), render, show
+   the user, then add all 9 once they approve.
+4. **Render / export:** `cd social/remotion && npm run carousel -- <letter id>`
+   writes lossless PNGs `social/out/carousels/<letter id>/01.png … 10.png`
+   (composition `c<letter id>`, one frame per slide). Look at every slide
+   (shrink copies with `sips -Z 500` into the scratchpad and Read them), then
+   send them all to the user. Never commit them.
 
 ## Adding resources (always keep the catalog up to date)
 
