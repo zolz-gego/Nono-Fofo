@@ -1,0 +1,9 @@
+{
+  "name": "whiteboard-hf",
+  "private": true,
+  "description": "Icons for the whiteboard letter videos (tools/wb_hyperframes.mjs): Fluent Emoji high-contrast outlines + flat colour, both MIT.",
+  "dependencies": {
+    "@iconify-json/fluent-emoji-flat": "1.2.6",
+    "@iconify-json/fluent-emoji-high-contrast": "1.2.6"
+  }
+}

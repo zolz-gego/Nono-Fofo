@@ -16,3 +16,7 @@ tools/spin_intro.py
 
 # Carousel content stays local like the videos
 carousels/
+
+# Whiteboard letter videos: generated HyperFrames projects stay local, icon packages are installed
+hyperframes/
+tools/whiteboard-hf/node_modules/
