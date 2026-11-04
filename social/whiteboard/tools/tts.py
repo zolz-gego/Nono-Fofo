@@ -1,14 +1,14 @@
 """Whiteboard letter videos: one ElevenLabs take with character timestamps.
 
-Builds the narration from every `say` in social/videos/<id>/whiteboard.json
+Builds the narration from every `say` in social/whiteboard/videos/<id>/whiteboard.json
 (in board order), writes voice/take.mp3 and
 voice/take.json (the text plus the start/end second of every character), which
-the whiteboard engine (tools/whiteboard-hf) uses to place each line and time the pen.
+the whiteboard engine (social/whiteboard/engine) uses to place each line and time the pen.
 
 The key comes from social/.env (ELEVENLABS_API_KEY). A take costs credits, so
 this refuses to overwrite an existing take unless --force is given.
 
-Run (from the repo root): python3 social/tools/wb_tts.py wb-01-alpha-ar [--force]
+Run (from the repo root): python3 social/whiteboard/tools/tts.py wb-01-alpha-ar [--force]
 """
 
 import base64
@@ -18,7 +18,8 @@ import sys
 import urllib.request
 from pathlib import Path
 
-SOCIAL = Path(__file__).resolve().parents[1]
+WHITEBOARD = Path(__file__).resolve().parents[1]
+SOCIAL = WHITEBOARD.parent
 
 # Narrator per language (Arabic only for now) (ElevenLabs voice ids).
 VOICES = {
@@ -48,7 +49,7 @@ def main() -> None:
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     if not args:
         sys.exit(__doc__)
-    folder = SOCIAL / "videos" / args[0]
+    folder = WHITEBOARD / "videos" / args[0]
     lang = args[0].rsplit("-", 1)[-1]
     voice = VOICES.get(lang) or sys.exit(f"no narrator voice for '{lang}'")
     out = folder / "voice"

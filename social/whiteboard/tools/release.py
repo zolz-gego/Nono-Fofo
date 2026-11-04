@@ -1,8 +1,8 @@
 """Release a whiteboard letter video (HyperFrames): everything that gets posted.
 
-    tools/.venv/bin/python social/tools/wb_release.py <folder> --thumb <seconds> [--story-beats 0-4] [--speed 1.5] [--story-only]
+    tools/.venv/bin/python social/whiteboard/tools/release.py <folder> --thumb <seconds> [--story-beats 0-4] [--speed 1.5] [--story-only]
 
-Writes social/out/release/<folder>/:
+Writes social/whiteboard/out/<folder>/:
   video.mp4      the full video, release quality (H.264 CRF 12 slow, AAC 320k)
   thumbnail.jpg  the frame at --thumb seconds, full size
   story.mp4      the hook for the story: the video's first beats (--story-beats,
@@ -24,8 +24,9 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 SOCIAL = ROOT / "social"
+WHITEBOARD = SOCIAL / "whiteboard"
 FF = SOCIAL / "remotion" / "node_modules" / "@remotion" / "compositor-darwin-arm64"
 ENV = {"DYLD_LIBRARY_PATH": str(FF), "PATH": "/usr/bin:/bin"}
 SR = 48000
@@ -88,7 +89,7 @@ def wsola(x, rate, sr=SR):
 
 def voice_activity(folder, timing, take):
     """Board-time intervals where the narrator is actually speaking."""
-    voice = SOCIAL / "videos" / folder / "voice" / "take.mp3"
+    voice = WHITEBOARD / "videos" / folder / "voice" / "take.mp3"
     tmp = Path(tempfile.mkdtemp()) / "v.wav"
     ff("-i", voice, "-ac", "1", "-ar", 16000, tmp)
     x = read_wav(tmp)[:, 0]
@@ -110,8 +111,8 @@ def voice_activity(folder, timing, take):
 
 
 def make_story(folder, out, beats, speed):
-    timing = json.loads((SOCIAL / "hyperframes" / folder / "timing.json").read_text())
-    take = json.loads((SOCIAL / "videos" / folder / "voice" / "take.json").read_text())
+    timing = json.loads((WHITEBOARD / "projects" / folder / "timing.json").read_text())
+    take = json.loads((WHITEBOARD / "videos" / folder / "voice" / "take.json").read_text())
     chosen = [timing["beats"][i] for i in beats]
     t0 = 0.0
     t1 = max(max(b["voice"][1], b["draw"][1] if b["draw"] else 0) for b in chosen) + 0.15
@@ -178,12 +179,12 @@ def main() -> None:
     if len(sys.argv) < 2 or ("--thumb" not in sys.argv and "--story-only" not in sys.argv):
         sys.exit(__doc__)
     folder = sys.argv[1]
-    out = SOCIAL / "out" / "release" / folder
+    out = WHITEBOARD / "out" / folder
     out.mkdir(parents=True, exist_ok=True)
     if "--story-only" not in sys.argv:
         py = ROOT / "tools" / ".venv" / "bin" / "python"
-        subprocess.run(["node", str(SOCIAL / "tools" / "wb_hyperframes.mjs"), folder], check=True)
-        subprocess.run([str(py), str(SOCIAL / "tools" / "hf_render.py"), str(SOCIAL / "hyperframes" / folder), str(out / "video.mp4"), "--hq"], check=True)
+        subprocess.run(["node", str(WHITEBOARD / "tools" / "build.mjs"), folder], check=True)
+        subprocess.run([str(py), str(WHITEBOARD / "tools" / "render.py"), str(WHITEBOARD / "projects" / folder), str(out / "video.mp4"), "--hq"], check=True)
         ff("-ss", opt("--thumb"), "-i", out / "video.mp4", "-frames:v", "1", "-q:v", "1", out / "thumbnail.jpg")
     lo, hi = map(int, opt("--story-beats", "0-4").split("-"))
     src, kept, length = make_story(folder, out, range(lo, hi + 1), float(opt("--speed", 1.5)))

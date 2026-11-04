@@ -7,19 +7,23 @@ description: Make a whiteboard-animation reel (TikTok / Instagram, ~80–110 s) 
 
 One Coptic letter per video, portrait 1080×1920, 30 fps, **Arabic only** (no
 English words, no English narration, no Latin transliterations on the board).
-**Always HyperFrames, never Remotion**: the engine is
-`social/tools/whiteboard-hf/board.js` (plain JS), `social/tools/wb_hyperframes.mjs`
-turns a spec into a HyperFrames project, `social/tools/hf_render.py` renders it.
+**Always HyperFrames, never Remotion.** Everything lives in its own folder,
+**`social/whiteboard/`** (map: `social/whiteboard/README.md`), reused for every letter:
+- `engine/board.js`: the engine (plain JS); `tools/build.mjs` turns a spec into
+  a HyperFrames project, `tools/render.py` renders it, `tools/release.py` makes
+  the release set, `tools/split.py` / `tools/tts.py` make the voice timing.
+- `videos/<folder>/` (spec, script, voice), `projects/<folder>/` (generated) and
+  `out/<folder>/` (exports) are local only.
 Fonts, music and the logo come from the app; SFX from `social/assets/sfx`.
-Example: `social/videos/wb-01-alpha-ar`.
+Example: `social/whiteboard/videos/wb-01-alpha-ar`.
 
 ## Git
 
-Same rules as the `social-media` skill: videos stay local. `social/videos/wb-*`
-(spec, voice), `social/hyperframes/` (generated projects) and `social/out/` are
-git-ignored; only the engine and tools (`social/tools/whiteboard-hf/`,
-`wb_hyperframes.mjs`, `hf_render.py`, `wb_release.py`, `wb_split.py`,
-`wb_tts.py`, `wb_marker` in `synth_social_sfx.py`), assets and this skill go in git.
+Same rules as the `social-media` skill: videos stay local. In
+`social/whiteboard/`, `videos/`, `projects/`, `out/` and `node_modules/` are
+git-ignored (its own `.gitignore`); only the engine, the tools, `package.json`,
+the README, the `wb_marker` SFX (`social/tools/synth_social_sfx.py`) and this
+skill go in git.
 
 ## Fixed decisions
 
@@ -52,9 +56,9 @@ git-ignored; only the engine and tools (`social/tools/whiteboard-hf/`,
   under them; the camera pans panel to panel (whoosh), zooms out for the recap.
 - **Drawings:** Fluent Emoji ids. The pen traces the black high-contrast
   outline, then the same emoji fills in **in colour** (Fluent Emoji Flat). Both
-  MIT, installed in `social/tools/whiteboard-hf` (`npm install` there once).
+  MIT, installed in `social/whiteboard` (`npm install` there once).
   Never leave drawings black: the user wants them colourful. Find names with
-  `node -e "console.log(Object.keys(require('./social/tools/whiteboard-hf/node_modules/@iconify-json/fluent-emoji-flat/icons.json').icons).filter(k=>k.includes('lion')))"`.
+  `node -e "console.log(Object.keys(require('./social/whiteboard/node_modules/@iconify-json/fluent-emoji-flat/icons.json').icons).filter(k=>k.includes('lion')))"`.
 - **Audio:** narrator only (no subtitles), marker scratch (`wb_marker`) only
   while the pen moves, a soft pop when each word row finishes, whoosh on pans,
   sparkle on the recap circle, quiet music (`map_theme`).
@@ -99,36 +103,36 @@ Ask the user one MCQ at a time (AskUserQuestion) when something is unclear.
    Include the letter facts, 1–2 Arabic words and 3–4 Coptic words (with
    Coptic spelling, Arabic transliteration, meaning, icon). Ask (MCQ) approve /
    change lines / remove facts; apply changes and confirm the final text.
-2. **Spec:** create `social/videos/wb-NN-<letter>-ar/whiteboard.json` (next NN).
+2. **Spec:** create `social/whiteboard/videos/wb-NN-<letter>-ar/whiteboard.json` (next NN).
 3. **Voice (the user makes it):** give the user the whole script as **one
    copy-paste block** for ElevenLabs **Eleven v3** (Stability Creative), one
    line per `say`, **full of v3 tags** ([excited], [gasps], [whispers],
    [curious], [playfully], [chuckles], [laughs], [proudly], [softly],
    [amazed], [storytelling], [short pause], [dramatic pause]...) so it never
    sounds monotone, and `[long pause]` at the end of every line. Also save it
-   in `social/videos/<folder>/script.md`. The user saves the result as
+   in `social/whiteboard/videos/<folder>/script.md`. The user saves the result as
    `voice/full.mp3`; then run
-   `tools/.venv/bin/python social/tools/wb_split.py <folder>` (repo root): it
+   `tools/.venv/bin/python social/whiteboard/tools/split.py <folder>` (repo root): it
    transcribes with Whisper, matches each `say` and cuts in the pauses →
    `voice/take.mp3` + `take.json`. Check the printed spans line up.
-   (`tools/wb_tts.py` can record a take through the API instead, Fatima's
+   (`social/whiteboard/tools/tts.py` can record a take through the API instead, Fatima's
    voice, but the user prefers making the voice themself.)
 4. **Build and preview (HyperFrames):**
    ```bash
-   node social/tools/wb_hyperframes.mjs <folder>     # -> social/hyperframes/<folder>/ + timing.json
-   tools/.venv/bin/python social/tools/hf_render.py social/hyperframes/<folder> social/out/<folder>.mp4
+   node social/whiteboard/tools/build.mjs <folder>     # -> social/whiteboard/projects/<folder>/ + timing.json
+   tools/.venv/bin/python social/whiteboard/tools/render.py social/whiteboard/projects/<folder> social/whiteboard/out/<folder>/draft.mp4
    ```
    Check frames (`npx hyperframes snapshot --at …` in the project, or a contact
    sheet from the MP4) for clipped text, overlaps and empty panels, check no
    frame flashes (a frame that differs from both neighbours while they match
    each other), and run `npx hyperframes check` in the project. Never
    hand-edit the generated project: change the spec or the engine and rebuild.
-   Pacing knobs in `board.js`: `PAD`, `GAP`, `PAUSE`, text/icon durations.
+   Pacing knobs in `engine/board.js`: `PAD`, `GAP`, `PAUSE`, text/icon durations.
 5. **Release** (when the user approves):
    ```bash
-   tools/.venv/bin/python social/tools/wb_release.py <folder> --thumb <seconds> [--story-beats 0-4] [--speed 1.5]
+   tools/.venv/bin/python social/whiteboard/tools/release.py <folder> --thumb <seconds> [--story-beats 0-4] [--speed 1.5]
    ```
-   → `social/out/release/<folder>/`: `video.mp4` (full quality: CRF 12 slow,
+   → `social/whiteboard/out/<folder>/`: `video.mp4` (full quality: CRF 12 slow,
    AAC 320k), `thumbnail.jpg` (pick a moment with the whole letter panel
    written), `story.mp4` (the hook, fast and packed: the first beats, by
    default the letter panel and its sound (`say` lines 0–4), with every silence
@@ -143,7 +147,7 @@ Ask the user one MCQ at a time (AskUserQuestion) when something is unclear.
 
 ## Rendering on this Mac
 
-There is no full ffmpeg here. `hf_render.py` renders a PNG sequence with
+There is no full ffmpeg here. `tools/render.py` renders a PNG sequence with
 HyperFrames (`npx hyperframes render --format png-sequence`, audio tags
 removed), mixes every `<audio>` itself with numpy and encodes with the ffmpeg
 bundled in `social/remotion/node_modules` (no filters needed). For

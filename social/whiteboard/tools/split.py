@@ -1,13 +1,13 @@
 """Whiteboard letter videos: time a take the user made in ElevenLabs.
 
 The user pastes the whole script (one line per `say`, v3 tags allowed) into
-ElevenLabs and saves the result as social/videos/<id>/voice/full.mp3. This
+ElevenLabs and saves the result as social/whiteboard/videos/<id>/voice/full.mp3. This
 transcribes it with Whisper (word timestamps), lines the transcript up with
 the `say` lines of whiteboard.json, snaps every cut into the nearest pause and
-writes voice/take.mp3 + voice/take.json in the same format as tools/wb_tts.py,
-so the whiteboard engine (tools/whiteboard-hf) plays each line on its own beat.
+writes voice/take.mp3 + voice/take.json in the same format as tools/tts.py,
+so the whiteboard engine (social/whiteboard/engine) plays each line on its own beat.
 
-Run (from the repo root): tools/.venv/bin/python social/tools/wb_split.py wb-01-alpha-ar
+Run (from the repo root): tools/.venv/bin/python social/whiteboard/tools/split.py wb-01-alpha-ar
 """
 
 import difflib
@@ -23,7 +23,7 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from wb_tts import SOCIAL  # noqa: E402
+from tts import SOCIAL, WHITEBOARD  # noqa: E402
 
 REMOTION = SOCIAL / "remotion"
 
@@ -70,7 +70,7 @@ def main() -> None:
         sys.exit(__doc__)
     import mlx_whisper
 
-    folder = SOCIAL / "videos" / sys.argv[1]
+    folder = WHITEBOARD / "videos" / sys.argv[1]
     spec = json.loads((folder / "whiteboard.json").read_text())
     lines = says(spec)
     x = load(folder / "voice" / "full.mp3")

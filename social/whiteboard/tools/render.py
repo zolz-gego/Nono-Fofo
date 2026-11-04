@@ -9,7 +9,7 @@ one bundled with Remotion) lacks. So this:
   3. encodes picture + mix with the bundled ffmpeg (no filters needed).
 Remove this once `brew install ffmpeg` is done: then `npx hyperframes render` works.
 
-Run (from the repo root): tools/.venv/bin/python social/tools/hf_render.py social/hyperframes/<project> [out.mp4] [--hq]
+Run (from the repo root): tools/.venv/bin/python social/whiteboard/tools/render.py social/whiteboard/projects/<folder> [out.mp4] [--hq]
 --hq: the release encode (H.264 CRF 12 slow, AAC 320k) instead of the draft one.
 """
 
@@ -24,7 +24,7 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 FF = ROOT / "social" / "remotion" / "node_modules" / "@remotion" / "compositor-darwin-arm64"
 SR = 48000
 

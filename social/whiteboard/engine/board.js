@@ -8,7 +8,7 @@
 // a marker (no hand) writes the text and traces the drawings while the camera
 // pans panel to panel, zooms out for the recap and drops to the end card.
 //
-// Timing never depends on measured text, so tools/wb_hyperframes.mjs runs
+// Timing never depends on measured text, so tools/build.mjs runs
 // buildBoard in Node (fake widths) to place the audio clips, and the scene runs
 // it again in the browser (real widths) to place the ink: both agree on time.
 (function (root) {
@@ -44,7 +44,7 @@
     return ds.join(' ');
   }
 
-  // env: {width(text, script, size), pathLen(d)}; data: see tools/wb_hyperframes.mjs
+  // env: {width(text, script, size), pathLen(d)}; data: see tools/build.mjs
   function buildBoard(data, env) {
     const items = [];
     const ops = [];
@@ -58,7 +58,7 @@
     let cursor = 0;
     const piece = (say) => {
       const i = take.text.indexOf(say, cursor);
-      if (i < 0) throw new Error(`"${say}" is not in the take (re-run tools/wb_split.py after editing a say)`);
+      if (i < 0) throw new Error(`"${say}" is not in the take (re-run social/whiteboard/tools/split.py after editing a say)`);
       cursor = i + say.length;
       return [take.start[i], take.end[i + say.length - 1]];
     };

@@ -16,14 +16,7 @@ from ElevenLabs (Eleven v3). The workflow lives in the `social-media` skill
 | `voices.md` | Nono's and Fofo's ElevenLabs voice prompts + v3 writing rules |
 | `assets/` | **Social-only** resources (catalogued below and in `assets/manifest.json`) |
 | `tools/split_voice.py` | Splits one ElevenLabs take into the per-line voice files |
-| `videos/wb-NN-<letter>-ar/` | *(local only)* Whiteboard letter videos: `whiteboard.json`, `script.md`, `voice/full.mp3` → `take.mp3/json` (skill `whiteboard-letter`) |
-| `hyperframes/<folder>/` | *(local only)* The generated HyperFrames project of a whiteboard video |
-| `tools/whiteboard-hf/board.js` | Whiteboard engine (layout, pen, camera, write-on) for HyperFrames; `npm install` there for the emoji |
-| `tools/wb_hyperframes.mjs` | Builds a whiteboard video's HyperFrames project from its spec and voice |
-| `tools/hf_render.py` | Renders a HyperFrames project on this Mac (PNG sequence + own audio mix, no full ffmpeg needed) |
-| `tools/wb_release.py` | Release set: full-quality video, thumbnail, story hook |
-| `tools/wb_split.py` | Times the user's ElevenLabs take per line (Whisper) for a whiteboard video |
-| `tools/wb_tts.py` | Whiteboard narration through the ElevenLabs API (key in git-ignored `social/.env`) |
+| `whiteboard/` | Whiteboard letter videos (HyperFrames): engine, tools, and the local letter specs / projects / exports; see `whiteboard/README.md` |
 | `tools/synth_social_sfx.py` | Synthesizes the social sound effects into `assets/sfx/` |
 | `tools/synth_intro.py` | *(local only)* Logo intro: cuts the logo into blocks and composes its score |
 | `tools/stitch_intro.py` | *(local only)* Stitch intro: logo line-art frames and its score |
