@@ -49,6 +49,7 @@
     const items = [];
     const ops = [];
     const clips = [];
+    const beats = []; // per say: when its camera move starts, its voice and its drawing (release tool: story cut)
     const cams = [];
     const cues = [];
     const rtl = data.lang === 'ar';
@@ -116,6 +117,7 @@
     const camOf = (p) => (p === 'all' ? {cx: PANEL_W, cy: PANEL_H + 270, s: 0.37} : {cx: P[p].x + PANEL_W / 2, cy: P[p].y + PANEL_H / 2, s: 1});
 
     const beat = (say, to, draw) => {
+      const camAt = t;
       if (to !== panel) {
         if (panel) {
           cams.push({t, ...camOf(panel)}, {t: t + PAN, ...camOf(to)});
@@ -129,7 +131,10 @@
       const [a0, a1] = piece(say);
       clips.push({from: t, a0, a1});
       drawAt = Math.max(drawAt, t + 0.1);
+      const firstOp = ops.length;
       draw(P[to === 'all' ? 'letter' : to]);
+      const mine = ops.slice(firstOp);
+      beats.push({say, cam: to === panel && camAt === t ? null : camAt, voice: [t, t + a1 - a0], draw: mine.length ? [mine[0].start, mine[mine.length - 1].start + mine[mine.length - 1].dur] : null});
       t = Math.max(t + (a1 - a0), drawAt) + PAD;
     };
 
@@ -246,7 +251,7 @@
       items.push({kind: 'image', op, x: o.x + 340, y: o.y + 860, w: 320, h: 320, src: data.logo});
     });
 
-    return {items, ops, clips, cams, cues, duration: Math.max(t, drawAt) + 1.4};
+    return {items, ops, clips, beats, cams, cues, duration: Math.max(t, drawAt) + 1.4};
   }
 
   // ------------------------------------------------------------ playback (browser)

@@ -162,5 +162,5 @@ for (const [f, body] of [
   if (!fs.existsSync(path.join(out, f))) fs.writeFileSync(path.join(out, f), JSON.stringify(body, null, 2) + '\n');
 }
 // beat timing for the release tool (story cut, thumbnail)
-fs.writeFileSync(path.join(out, 'timing.json'), JSON.stringify({duration: D, clips: board.clips.map((c) => ({start: r(c.from), end: r(c.from + c.a1 - c.a0)})), cams: board.cams}, null, 1) + '\n');
+fs.writeFileSync(path.join(out, 'timing.json'), JSON.stringify({duration: D, clips: board.clips.map((c) => ({start: r(c.from), end: r(c.from + c.a1 - c.a0)})), beats: board.beats, cams: board.cams}, null, 1) + '\n');
 console.log(`${folder}: ${D.toFixed(1)} s, ${board.ops.length} strokes, ${board.clips.length} voice clips -> ${path.relative(ROOT, out)}`);

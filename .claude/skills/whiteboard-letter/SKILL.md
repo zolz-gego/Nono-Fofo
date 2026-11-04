@@ -126,13 +126,15 @@ Ask the user one MCQ at a time (AskUserQuestion) when something is unclear.
    Pacing knobs in `board.js`: `PAD`, `GAP`, `PAUSE`, text/icon durations.
 5. **Release** (when the user approves):
    ```bash
-   tools/.venv/bin/python social/tools/wb_release.py <folder> --thumb <seconds> --story-until "<phrase>"
+   tools/.venv/bin/python social/tools/wb_release.py <folder> --thumb <seconds> [--story-beats 0-4] [--speed 1.5]
    ```
    → `social/out/release/<folder>/`: `video.mp4` (full quality: CRF 12 slow,
    AAC 320k), `thumbnail.jpg` (pick a moment with the whole letter panel
-   written), `story.mp4` (the hook: the opening, cut just after a phrase that
-   leaves them curious, ideally a question, around 10 s; `--story <s>` for a
-   fixed length). Then write `post.md` there: a short **TikTok** caption (hook
+   written), `story.mp4` (the hook, fast and packed: the first beats, by
+   default the letter panel and its sound (`say` lines 0–4), with every silence
+   cut (only the voice, the pen drawing and camera moves are kept) and played
+   at 1.5× with the voice's pitch kept; Alpha: 27 s of video → 15 s story).
+   `--story-only` re-makes just the story. Then write `post.md` there: a short **TikTok** caption (hook
    line, 1–2 facts, a few words, call to follow, ~10 hashtags) and a longer
    **Instagram** caption (the facts as ✨ lines, the words with emoji
    `عربي ← قبطي`, "احفظ الفيديو وابعته…", call to follow, ~13 hashtags), both
