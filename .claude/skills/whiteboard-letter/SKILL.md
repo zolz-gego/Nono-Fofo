@@ -1,6 +1,6 @@
 ---
 name: whiteboard-letter
-description: Make a whiteboard-animation reel (TikTok / Instagram, ~80–110 s) that teaches ONE Coptic letter in Egyptian Arabic — a marker (no hand) writes and draws on a white board in sync with a narration the user records from the tagged script Claude writes (Claude never generates audio); mostly about the letter itself (its name, rank, two forms, look, sound, vowel or not, number value, a church fact), then 1–2 Arabic words and 3–4 Coptic words with colour drawings, Coptic spellings and Arabic transliterations, a recap and a follow end card. Always built and rendered with HyperFrames, and released with a thumbnail, TikTok + Instagram captions and a story hook. Use whenever the user asks for a whiteboard / letter explainer video for a Coptic letter.
+description: Make a whiteboard-animation reel (TikTok / Instagram, ~80–110 s) that teaches ONE Coptic letter in Egyptian Arabic — a marker (no hand) writes and draws on a white board in sync with a narration the user records from the tagged script Claude writes (Claude never generates audio); mostly about the letter itself (its name, rank, two forms, look, sound, vowel or not, number value, a church fact), then 1–2 Arabic words and 2–3 Coptic words, every Coptic word spelled letter by letter (each letter named and written as it's said), with colour drawings and Arabic transliterations, a recap and a follow end card. Always built and rendered with HyperFrames, and released with a thumbnail, TikTok + Instagram captions and a story hook. Use whenever the user asks for a whiteboard / letter explainer video for a Coptic letter.
 ---
 
 # Whiteboard letter videos
@@ -36,10 +36,24 @@ skill go in git.
   2. *Facts panel:* its sound (بينطق: آ, ⲁ = ا), vowel or consonant (حرف متحرك
      in a red box, ا و ي), its number value (ⲁ with a red bar = ١), and a
      church / Bible fact when there is a true one (e.g. Alpha and Omega).
-  3. *Arabic words:* 1–2 words that start with the letter's sound: word →
-     drawing → the word spelled in Coptic letters (the taught letter red).
-  4. *Coptic words:* 3–4 words: Coptic (letter red) → how it sounds in Arabic
+  3. *Arabic words:* 1–2 words that start with the letter's sound, each on its
+     own screen: drawing → the word spelled in Coptic **letter by letter**
+     (pencil Arabic letter under each) → the marker writes the Arabic word (RTL).
+  4. *Coptic words:* 2–3 words, each on its own screen: Coptic spelled **letter
+     by letter** (pencil Arabic letter under each) → how it sounds in Arabic
      letters → drawing → Arabic meaning (blue, optional, e.g. آمين needs none).
+     A church verse with the words in it can follow on its own screen (`note`).
+- **Every Coptic word is spelled letter by letter, always.** Whenever a word is
+  written in Coptic (an Arabic word in Coptic letters or a Coptic word), the
+  narrator names each letter and its sound, and the pen writes that letter as
+  it's said: «إِي بيقول إِ!... وبيتا بيقول بْ... ورو بيقول رْ... وألفا بيقول آ...
+  إِبْرَة!». The taught letter gets the emphasis ([emphasized] [excited]) and is
+  red; the others are quicker ([slowly] is fine). Letter names and sounds come
+  from `letters.json`; a digraph is one part said together (ⲟⲩ: «وأو مع إبسيلون
+  بيقولوا و»). In the spec: `spell` + `sounds` on every word and `screens: true`
+  on every section (Arabic word: its own `spellSay` line; Coptic word: the
+  spelling is its `say`). Spelling is long, so keep the word count low
+  (1 Arabic + 2–3 Coptic, ~6–8 s per word) to stay near 100–125 s.
   5. A short empty pause, then the recap: zoom out over the whole board, red
      circle round the letter. Another pause, then the end card
      "تابعونا للحرف الجاي!" + logo.
@@ -84,14 +98,26 @@ skill go in git.
     {"say": "...", "rows": [[{"t": "a", "s": "cop", "over": true}, {"t": "=", "s": "en"}, {"t": "١", "s": "ar", "c": "red"}]]}
   ],
   "sections": [
-    {"group": "ar", "title": "كلمات عربي", "say": "...", "words": [{"word": "أسد", "coptic": "acad", "icon": "lion", "say": "أسد!"}]},
-    {"group": "cop", "title": "كلمات قبطي", "say": "...", "words": [{"coptic": "ajjeloc", "ar": "أنجيلوس", "meaning": "ملاك", "icon": "baby-angel", "say": "..."}]}
+    {"group": "ar", "screens": true, "title": "كلمة عربي", "say": "...", "words": [{"word": "أسد", "coptic": "acad",
+      "spell": ["a", "c", "a", "d"], "sounds": ["أ", "س", "ا", "د"], "icon": "lion", "say": "أسد!",
+      "spellSay": "نكتبها بالقبطي: ألفا بيقول آ!... وسيما بيقول س... وألفا بيقول آ... ودلتا بيقول د... أَسَد!"}]},
+    {"group": "cop", "screens": true, "title": "كلمات قبطي", "say": "...", "words": [{"coptic": "am3n",
+      "spell": ["a", "m", "3", "n"], "sounds": ["آ", "م", "ي", "ن"], "ar": "آمين", "icon": "folded-hands",
+      "say": "ألفا بيقول آ!... ومي بيقول م... وإيتا بيقول ي... وني بيقول ن... آمين!"}],
+     "note": {"title": "...", "say": "...", "rows": [[{"t": "...", "s": "cop", "mark": true, "at": "..."}]]}}
   ],
   "recap": {"say": "..."}, "end": {"say": "...", "text": "تابعونا للحرف الجاي!"}
 }
 ```
 
-Every `say` is one script line (without tags), in board order. Row parts are in
+More options (example: `social/whiteboard/videos/wb-02-ei-ar`):
+- **Hand-writing** (a fact on the facts panel): `"hand": {"box": [w, h], "scale": 1, "strokes": [{"d": "M… C…", "at": "نص دايرة", "num": [x, y], "head": "M… L… L…", "dur": 1.4}]}`: each stroke in ink (M/L/C/Q only, box coordinates), its red number at `num`, a red arrowhead `head`.
+- **Spelling letter by letter**: a word's `"spell": ["e", "h", "o", "ov"]` (Avva keys, a digraph as one part) writes each letter when the narrator names it (at the phrase holding the k-th «بيقول»). An Arabic word can have its own spelling line `spellSay`; on a Coptic word the spelling is part of `say` (the transliteration follows the last «...», the meaning «يعني»).
+- **One screen per word**: a section's `"screens": true` gives every word its own panel (and the `note` its own, with an optional `title`); the camera pans to each. Layout: Coptic word spelled big on top, under each letter (in pencil, grey) the Arabic letter of `"sounds": ["إ", "ب", "ر", "ة"]`, the drawing, then the marker writes the Arabic word (RTL) when the narrator says it, then the meaning. More than 4 panels → 3 columns; the recap still shows them all.
+- **Section `note`**: `{"say": "...", "rows": [...]}` written under the words (e.g. a church verse with the section's words in it).
+- **Row parts**: `"at": "words"` = the pen waits until the narrator says them; `"join": true` = no gap (one Latin word with a red letter, laid left to right); `"mark": true` = the taught letter in red inside a Coptic part. Long rows shrink to fit.
+
+Every `say` (and `spellSay`, `note.say`) is one script line (without tags), in board order. Row parts are in
 reading order: `s` = font (ar / cop / en), `c` = red / blue, `box` = red box,
 `over` = red bar over it (a Coptic number).
 
@@ -101,7 +127,7 @@ Ask the user one MCQ at a time (AskUserQuestion) when something is unclear.
 
 1. **Script first, before any implementation:** show the user a table per
    panel: line number, what the narrator says, what the pen writes/draws.
-   Include the letter facts, 1–2 Arabic words and 3–4 Coptic words (with
+   Include the letter facts, 1–2 Arabic words and 2–3 Coptic words, each with its letter-by-letter spelling line (with
    Coptic spelling, Arabic transliteration, meaning, icon). Ask (MCQ) approve /
    change lines / remove facts; apply changes and confirm the final text.
 2. **Spec:** create `social/whiteboard/videos/wb-NN-<letter>-ar/whiteboard.json` (next NN).
@@ -119,6 +145,12 @@ Ask the user one MCQ at a time (AskUserQuestion) when something is unclear.
    root): it transcribes with Whisper, matches each `say` and cuts in the
    pauses → `voice/take.mp3` + `take.json`. Check the printed spans line up.
    The `say` strings in whiteboard.json are the script lines without tags.
+   If the user re-records a few lines in a second file, patch them in first:
+   `tools/.venv/bin/python social/whiteboard/tools/patch.py <folder> <piece.mp3> <first> <last>`
+   (line numbers as split.py prints them; the first full take is kept as `voice/full.orig.mp3`), then run split.py.
+   Lines that aren't next to each other: `… patch.py <folder> <piece.mp3> 12,14 --on-current`
+   (`--on-current` keeps earlier patches). split.py also levels the voice into `take.mp3`:
+   whispers and soft phrases are lifted to the normal speaking level (up to +12 dB, peaks limited).
 4. **Build and preview (HyperFrames):**
    ```bash
    node social/whiteboard/tools/build.mjs <folder>     # -> social/whiteboard/projects/<folder>/ + timing.json

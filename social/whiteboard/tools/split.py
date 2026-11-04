@@ -40,7 +40,11 @@ def norm(s: str) -> str:
 def says(spec: dict) -> list[str]:
     out = list(spec["intro"]["say"]) + [f["say"] for f in spec.get("facts", [])]
     for sec in spec["sections"]:
-        out += [sec["say"]] + [w["say"] for w in sec["words"]]
+        out.append(sec["say"])
+        for w in sec["words"]:
+            out += [w["say"]] + ([w["spellSay"]] if w.get("spellSay") else [])
+        if sec.get("note"):
+            out.append(sec["note"]["say"])
     return out + [spec["recap"]["say"], spec["end"]["say"]]
 
 
@@ -69,14 +73,23 @@ def pauses(x: np.ndarray, sr=16000, hop=0.02) -> list[tuple[float, float]]:
 def main() -> None:
     if len(sys.argv) < 2:
         sys.exit(__doc__)
-    import mlx_whisper
 
     folder = WHITEBOARD / "videos" / sys.argv[1]
     spec = json.loads((folder / "whiteboard.json").read_text())
     lines = says(spec)
     x = load(folder / "voice" / "full.mp3")
+    spans, at, owner = align(x, lines)
+    write_take(folder, lines, spans, at, owner)
+    for l, (a0, a1) in zip(lines, spans):
+        print(f"{a0:6.2f}-{a1:6.2f}  {l}")
+
+
+def align(x: np.ndarray, lines: list[str]):
+    """Each line's [start, end] in x (cut in pauses), plus the heard time of every script letter."""
+    import mlx_whisper
+
     dur = len(x) / 16000
-    r = mlx_whisper.transcribe(x, path_or_hf_repo="mlx-community/whisper-large-v3-turbo", language="ar", word_timestamps=True)
+    r = mlx_whisper.transcribe(x, path_or_hf_repo="mlx-community/whisper-large-v3-turbo", language="ar", word_timestamps=True, condition_on_previous_text=False)
 
     # transcript letters, each with the time of the word it belongs to
     heard, times = "", []
@@ -119,23 +132,99 @@ def main() -> None:
                 spans[-1][1] = s
         spans.append([a0, dur])
 
-    # take.json: the narration text with times spread over each line's span
-    text, start, end = "", [], []
+    return spans, at, owner
+
+
+def char_times(lines, spans, at, owner):
+    """Per line, the time of every character: heard (Whisper) where the letter
+    was matched, else filled in between its neighbours; the first character
+    starts the line's span and the last ends it, so the clip cuts stay in the pauses."""
+    heard_of = {}  # (line, letter index in norm(line)) -> time
+    k = {}
+    for j, o in enumerate(owner):
+        n = k.get(o, 0)
+        if at[j] is not None:
+            heard_of[(o, n)] = at[j]
+        k[o] = n + 1
+    out = []
     for i, (l, (a0, a1)) in enumerate(zip(lines, spans)):
-        sep = "" if i == 0 else "\n"
-        for c in sep:
-            text += c
+        t, n = [None] * len(l), 0
+        for c_i, c in enumerate(l):
+            for _ in norm(c):
+                h = heard_of.get((i, n))
+                if h is not None and t[c_i] is None and a0 <= h <= a1:
+                    t[c_i] = h
+                n += 1
+        t[0] = a0
+        known = [c for c in range(len(l)) if t[c] is not None]
+        for c in range(len(l)):  # fill gaps linearly, end anchored at a1
+            if t[c] is None:
+                prev = max(q for q in known if q < c)
+                nxt = min((q for q in known if q > c), default=None)
+                hi_t, hi_c = (t[nxt], nxt) if nxt is not None else (a1, len(l))
+                t[c] = t[prev] + (hi_t - t[prev]) * (c - prev) / (hi_c - prev)
+        for c in range(1, len(l)):  # keep them in order
+            t[c] = max(t[c], t[c - 1])
+        out.append(t)
+    return out
+
+
+def level(src: Path, dst: Path, sr: int = 44100, boost_db: float = 12.0) -> None:
+    """A slow voice leveller: phrases quieter than the take's usual speaking level
+    (whispers, a soft line) are lifted towards it, by up to `boost_db`. The level is
+    measured over voiced frames only (so pauses don't count), across ~0.5 s, and
+    the gain glides; nothing is made quieter except peaks over -1 dBFS (limiter)."""
+    wav = Path(tempfile.mkdtemp()) / "a.wav"
+    subprocess.run(["npx", "remotion", "ffmpeg", "-v", "error", "-y", "-i", str(src), "-ac", "1", "-ar", str(sr), str(wav)], cwd=REMOTION, check=True)
+    w = wave.open(str(wav))
+    x = (np.frombuffer(w.readframes(w.getnframes()), np.int16) / 32768).astype(np.float32)
+    hop = int(sr * 0.02)
+    nfr = len(x) // hop
+    p = np.array([np.mean(x[i * hop:(i + 1) * hop] ** 2) for i in range(nfr)]) + 1e-12
+    db = 10 * np.log10(p)
+    voiced = db > db.max() - 38
+    win = np.ones(25)  # 0.5 s
+    env = np.convolve(p * voiced, win, "same") / np.maximum(np.convolve(voiced.astype(float), win, "same"), 1e-9)
+    env_db = 10 * np.log10(env + 1e-12)
+    target = np.percentile(env_db[voiced], 60)
+    gain_db = np.where(np.convolve(voiced.astype(float), win, "same") > 0, np.clip(target - env_db, 0, boost_db), 0)
+    gain_db = np.convolve(gain_db, np.ones(15) / 15, "same")  # glide over 0.3 s
+    g = 10 ** (np.interp(np.arange(len(x)), np.arange(nfr) * hop + hop / 2, gain_db) / 20)
+    y = x * g
+    # peak limiter: only the blocks that would go over -1 dBFS are turned down (5 ms blocks, gliding)
+    blk = int(sr * 0.005)
+    nb = len(y) // blk + 1
+    peaks = np.array([np.abs(y[i * blk:(i + 1) * blk]).max(initial=0) for i in range(nb)])
+    lim = np.minimum(1, 0.89 / np.maximum(peaks, 1e-9))
+    lim = np.minimum.reduce([np.roll(lim, k) for k in range(-3, 4)])  # look ahead / hold
+    lim = np.convolve(lim, np.ones(5) / 5, "same")
+    y = y * np.interp(np.arange(len(y)), np.arange(nb) * blk + blk / 2, lim)
+    y = np.clip(y, -0.95, 0.95)
+    out = Path(tempfile.mkdtemp()) / "b.wav"
+    o = wave.open(str(out), "wb")
+    o.setnchannels(1)
+    o.setsampwidth(2)
+    o.setframerate(sr)
+    o.writeframes((y * 32767).astype(np.int16).tobytes())
+    o.close()
+    subprocess.run(["npx", "remotion", "ffmpeg", "-v", "error", "-y", "-i", str(out), "-b:a", "192k", str(dst)], cwd=REMOTION, check=True)
+
+
+def write_take(folder: Path, lines, spans, at, owner) -> None:
+    """take.json: the narration text with the time of every character, plus each line's span."""
+    times = char_times(lines, spans, at, owner)
+    text, start, end = "", [], []
+    for i, (l, (a0, a1), t) in enumerate(zip(lines, spans, times)):
+        if i:
+            text += "\n"
             start.append(a0)
             end.append(a0)
-        n = len(l)
-        for k, c in enumerate(l):
+        for c_i, c in enumerate(l):
             text += c
-            start.append(a0 + (a1 - a0) * k / n)
-            end.append(a0 + (a1 - a0) * (k + 1) / n)
-    shutil.copyfile(folder / "voice" / "full.mp3", folder / "voice" / "take.mp3")
+            start.append(t[c_i])
+            end.append(t[c_i + 1] if c_i + 1 < len(l) else a1)
+    level(folder / "voice" / "full.mp3", folder / "voice" / "take.mp3")
     (folder / "voice" / "take.json").write_text(json.dumps({"text": text, "start": start, "end": end, "lines": spans}, ensure_ascii=False))
-    for l, (a0, a1) in zip(lines, spans):
-        print(f"{a0:6.2f}-{a1:6.2f}  {l}")
 
 
 if __name__ == "__main__":

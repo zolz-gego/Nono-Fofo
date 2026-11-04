@@ -82,7 +82,7 @@ board.clips.forEach((c, i) => {
 });
 board.ops.forEach((op, i) => {
   // the marker scratches only while the pen moves
-  audio.push(`<audio id="scratch-${i + 1}" class="clip" src="assets/audio/wb_marker.wav" data-start="${r(op.start)}" data-media-start="${r((i * 1.37) % 5.5)}" data-duration="${r(op.dur)}" data-track-index="3" data-volume="0.5" data-fade-in="0.08" data-fade-out="0.08"></audio>`);
+  audio.push(`<audio id="scratch-${i + 1}" class="clip" src="assets/audio/wb_marker.wav" data-start="${r(op.start)}" data-media-start="${r((i * 1.37) % 5.5)}" data-duration="${r(op.dur)}" data-track-index="3" data-volume="${op.tool === 'pencil' ? 0.3 : 0.5}" data-fade-in="0.08" data-fade-out="0.08"></audio>`);
 });
 const track = {mg_keyword_pop: 4, mg_whoosh_in: 5, mg_sparkle: 6};
 const len = {mg_keyword_pop: 0.9, mg_whoosh_in: 0.4, mg_sparkle: 1.5};
