@@ -1,6 +1,6 @@
 ---
 name: whiteboard-letter
-description: Make a whiteboard-animation reel (TikTok / Instagram, ~80–110 s) that teaches ONE Coptic letter in Egyptian Arabic — a marker (no hand) writes and draws on a white board in sync with the user's ElevenLabs narration; mostly about the letter itself (its name, rank, two forms, look, sound, vowel or not, number value, a church fact), then 1–2 Arabic words and 3–4 Coptic words with colour drawings, Coptic spellings and Arabic transliterations, a recap and a follow end card. Always built and rendered with HyperFrames, and released with a thumbnail, TikTok + Instagram captions and a story hook. Use whenever the user asks for a whiteboard / letter explainer video for a Coptic letter.
+description: Make a whiteboard-animation reel (TikTok / Instagram, ~80–110 s) that teaches ONE Coptic letter in Egyptian Arabic — a marker (no hand) writes and draws on a white board in sync with a narration the user records from the tagged script Claude writes (Claude never generates audio); mostly about the letter itself (its name, rank, two forms, look, sound, vowel or not, number value, a church fact), then 1–2 Arabic words and 3–4 Coptic words with colour drawings, Coptic spellings and Arabic transliterations, a recap and a follow end card. Always built and rendered with HyperFrames, and released with a thumbnail, TikTok + Instagram captions and a story hook. Use whenever the user asks for a whiteboard / letter explainer video for a Coptic letter.
 ---
 
 # Whiteboard letter videos
@@ -11,7 +11,7 @@ English words, no English narration, no Latin transliterations on the board).
 **`social/whiteboard/`** (map: `social/whiteboard/README.md`), reused for every letter:
 - `engine/board.js`: the engine (plain JS); `tools/build.mjs` turns a spec into
   a HyperFrames project, `tools/render.py` renders it, `tools/release.py` makes
-  the release set, `tools/split.py` / `tools/tts.py` make the voice timing.
+  the release set, `tools/split.py` times the user's recording per line.
 - `videos/<folder>/` (spec, script, voice), `projects/<folder>/` (generated) and
   `out/<folder>/` (exports) are local only.
 Fonts, music and the logo come from the app; SFX from `social/assets/sfx`.
@@ -62,10 +62,11 @@ skill go in git.
 - **Audio:** narrator only (no subtitles), marker scratch (`wb_marker`) only
   while the pen moves, a soft pop when each word row finishes, whoosh on pans,
   sparkle on the recap circle, quiet music (`map_theme`).
-- **Narrator:** the user generates it in ElevenLabs (Alpha used **Haytham -
-  Dramatic, Warm and Friendly**, Eleven v3); see step 3. Lively, never monotone.
-- **Key:** `ELEVENLABS_API_KEY` lives in git-ignored `social/.env`. Never ask
-  the user for it.
+- **Narration: text only, the user provides the audio.** Claude writes the
+  narration text with performance tags and never generates, calls or pays for
+  any voice (no ElevenLabs API, no TTS). The user records it in the tool of
+  their choice (Alpha: ElevenLabs Eleven v3, voice "Haytham - Dramatic, Warm
+  and Friendly") and drops the file in; see step 3. Lively, never monotone.
 - **Script style:** spoken Egyptian (Cairo), warm teacher talking to kids 7–9,
   short sentences. Coptic words are said the church way. Say "Coptic", never
   "Bohairic". Only true facts: check them (letters.json for name/sound/order).
@@ -104,19 +105,20 @@ Ask the user one MCQ at a time (AskUserQuestion) when something is unclear.
    Coptic spelling, Arabic transliteration, meaning, icon). Ask (MCQ) approve /
    change lines / remove facts; apply changes and confirm the final text.
 2. **Spec:** create `social/whiteboard/videos/wb-NN-<letter>-ar/whiteboard.json` (next NN).
-3. **Voice (the user makes it):** give the user the whole script as **one
-   copy-paste block** for ElevenLabs **Eleven v3** (Stability Creative), one
-   line per `say`, **full of v3 tags** ([excited], [gasps], [whispers],
-   [curious], [playfully], [chuckles], [laughs], [proudly], [softly],
-   [amazed], [storytelling], [short pause], [dramatic pause]...) so it never
-   sounds monotone, and `[long pause]` at the end of every line. Also save it
-   in `social/whiteboard/videos/<folder>/script.md`. The user saves the result as
-   `voice/full.mp3`; then run
-   `tools/.venv/bin/python social/whiteboard/tools/split.py <folder>` (repo root): it
-   transcribes with Whisper, matches each `say` and cuts in the pauses →
-   `voice/take.mp3` + `take.json`. Check the printed spans line up.
-   (`social/whiteboard/tools/tts.py` can record a take through the API instead, Fatima's
-   voice, but the user prefers making the voice themself.)
+3. **Narration text (the user records the audio):** write the whole script as
+   **one copy-paste block**, one line per `say`, **full of performance tags**
+   in square brackets ([excited], [gasps], [whispers], [curious], [playfully],
+   [chuckles], [laughs], [proudly], [softly], [amazed], [storytelling],
+   [reverent], [short pause], [dramatic pause]...; several per line, so it
+   never sounds monotone) and `[long pause]` at the end of every line (the gap
+   that lets split.py cut it). Vowel marks on tricky Coptic words
+   (أنْجِيلوس). Save it in `social/whiteboard/videos/<folder>/script.md`, give
+   it to the user, and **stop**: do not generate any audio. When the user
+   gives the recording, save it as `voice/full.mp3` and run
+   `tools/.venv/bin/python social/whiteboard/tools/split.py <folder>` (repo
+   root): it transcribes with Whisper, matches each `say` and cuts in the
+   pauses → `voice/take.mp3` + `take.json`. Check the printed spans line up.
+   The `say` strings in whiteboard.json are the script lines without tags.
 4. **Build and preview (HyperFrames):**
    ```bash
    node social/whiteboard/tools/build.mjs <folder>     # -> social/whiteboard/projects/<folder>/ + timing.json

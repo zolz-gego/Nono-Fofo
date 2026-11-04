@@ -4,7 +4,8 @@ The user pastes the whole script (one line per `say`, v3 tags allowed) into
 ElevenLabs and saves the result as social/whiteboard/videos/<id>/voice/full.mp3. This
 transcribes it with Whisper (word timestamps), lines the transcript up with
 the `say` lines of whiteboard.json, snaps every cut into the nearest pause and
-writes voice/take.mp3 + voice/take.json in the same format as tools/tts.py,
+writes voice/take.mp3 + voice/take.json (the text of every `say` with the
+start/end second of each character, plus each line's span),
 so the whiteboard engine (social/whiteboard/engine) plays each line on its own beat.
 
 Run (from the repo root): tools/.venv/bin/python social/whiteboard/tools/split.py wb-01-alpha-ar
@@ -22,8 +23,8 @@ from pathlib import Path
 
 import numpy as np
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-from tts import SOCIAL, WHITEBOARD  # noqa: E402
+WHITEBOARD = Path(__file__).resolve().parents[1]
+SOCIAL = WHITEBOARD.parent
 
 REMOTION = SOCIAL / "remotion"
 
