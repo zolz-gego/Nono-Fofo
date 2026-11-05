@@ -11,7 +11,7 @@ English words, no English narration, no Latin transliterations on the board).
 **`social/whiteboard/`** (map: `social/whiteboard/README.md`), reused for every letter:
 - `engine/board.js`: the engine (plain JS); `tools/build.mjs` turns a spec into
   a HyperFrames project, `tools/render.py` renders it, `tools/release.py` makes
-  the release set, `tools/split.py` times the user's recording per line.
+  the release set, `tools/upload.py` puts it on Google Drive, `tools/split.py` times the user's recording per line.
 - `videos/<folder>/` (spec, script, voice), `projects/<folder>/` (generated) and
   `out/<folder>/` (exports) are local only.
 Fonts, music and the logo come from the app; SFX from `social/assets/sfx`.
@@ -177,7 +177,16 @@ Ask the user one MCQ at a time (AskUserQuestion) when something is unclear.
    **Instagram** caption (the facts as ✨ lines, the words with emoji
    `عربي ← قبطي`, "احفظ الفيديو وابعته…", call to follow, ~13 hashtags), both
    in Egyptian Arabic with Coptic letters, plus a story note (link sticker,
-   «الفيديو كامل على البروفايل 👆»). Send the user the files.
+   «الفيديو كامل على البروفايل 👆»).
+6. **Upload to Drive** (automatic, right after `post.md` is written, no need to ask):
+   ```bash
+   python3 social/whiteboard/tools/upload.py <folder>
+   ```
+   → copies `video.mp4`, `thumbnail.jpg`, `story.mp4` and `post.md` (never
+   `draft.mp4`) to `gdrive:Whiteboard/<folder>/` with rclone (remote `gdrive:`).
+   Re-run it after any change to the release set (e.g. `--story-only`, edited
+   `post.md`); unchanged files are skipped. Then send the user the files and say
+   they're on Drive.
 
 ## Rendering on this Mac
 
