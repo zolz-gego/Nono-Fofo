@@ -16,6 +16,7 @@ from ElevenLabs (Eleven v3). The workflow lives in the `social-media` skill
 | `voices.md` | Nono's and Fofo's ElevenLabs voice prompts + v3 writing rules |
 | `assets/` | **Social-only** resources (catalogued below and in `assets/manifest.json`) |
 | `tools/split_voice.py` | Splits one ElevenLabs take into the per-line voice files |
+| `whiteboard/` | Whiteboard letter videos (HyperFrames): engine, tools, and the local letter specs / projects / exports; see `whiteboard/README.md` |
 | `tools/synth_social_sfx.py` | Synthesizes the social sound effects into `assets/sfx/` |
 | `tools/synth_intro.py` | *(local only)* Logo intro: cuts the logo into blocks and composes its score |
 | `tools/stitch_intro.py` | *(local only)* Stitch intro: logo line-art frames and its score |
@@ -65,6 +66,7 @@ tools/.venv/bin/python social/tools/synth_social_sfx.py   # (from repo root) reb
 | `mg_keyword_pop` | Pop + ding | Keyword card (automatic, 1st/3rd…) |
 | `mg_keyword_pop_2` | Pop + chime | Keyword card (automatic, 2nd/4th…) |
 | `mg_word_tick` | Tiny tick | Caption word highlight (optional) |
+| `wb_marker` | 8 s loop of felt-tip marker strokes | Whiteboard letter videos: plays only while the pen writes |
 | `mg_boing` | Cartoon boing | Bounce / "pop" entrance (automatic) |
 | `mg_pose_swap` | Quick "fwip" | Pose change (automatic) |
 | `mg_slide_up` / `mg_slide_down` | Slide whistle | Rising / dropping things |

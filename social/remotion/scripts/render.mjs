@@ -1,5 +1,6 @@
 // npm run render -- <video-folder>            -> social/out/<folder>.mp4
 // npm run still  -- <video-folder> [seconds]  -> social/out/<folder>@<s>s.jpg
+// npm run carousel -- <name>                -> social/out/carousels/<name>/NN.png (one per slide, lossless)
 // npm run intro                               -> social/out/intro-landscape.mp4 + intro-portrait.mp4
 // npm run still  -- intro-landscape [seconds] (or intro-portrait) for an intro still
 // npm run release -- <video-folder> <thumb-seconds>  -> social/out/release/<folder>/
@@ -22,6 +23,18 @@ if (mode === 'intro') {
   for (const comp of ['intro-landscape', 'intro-portrait']) {
     run(['render', 'src/index.ts', comp, path.join(OUT, `${comp}.mp4`), '--crf=16']);
   }
+  process.exit(0);
+}
+if (mode === 'carousel') {
+  // npm run carousel -- <name>  -> social/out/carousels/<name>/01.png, 02.png, ... (lossless, ready to post)
+  const dir = path.join(OUT, 'carousels', id);
+  fs.rmSync(dir, {recursive: true, force: true});
+  run(['render', 'src/index.ts', `c${id}`, dir, '--sequence', '--image-format=png']);
+  for (const f of fs.readdirSync(dir).sort()) {
+    const n = Number(f.match(/(\d+)\.png$/)?.[1]);
+    if (!Number.isNaN(n)) fs.renameSync(path.join(dir, f), path.join(dir, `${String(n + 1).padStart(2, '0')}.png`));
+  }
+  console.log(`carousel -> ${dir}`);
   process.exit(0);
 }
 if (!id) {

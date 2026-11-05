@@ -175,6 +175,31 @@ def _():
     return m.out()
 
 
+# ================================================================ whiteboard
+
+@sfx("wb_marker", "Whiteboard marker writing: 8 s loop of short felt-tip strokes (played only while the pen moves)", 0.55)
+def _():
+    d = 8.0
+    r = np.random.default_rng(7)
+    m = Mix()
+    t = 0.0
+    while t < d - 0.35:
+        s = float(r.uniform(0.07, 0.32))  # one stroke
+        n = noise(s)
+        fc = sweep(float(r.uniform(2200, 3400)), float(r.uniform(2600, 4200)), s)
+        felt = svf(n, fc, q=1.8, mode="bp") + 0.35 * svf(n, 900, q=0.8, mode="bp")
+        squeak = svf(n, float(r.uniform(5200, 6800)), q=9, mode="bp") * 0.25
+        env = hump(s) ** 0.6 * (1 + 0.25 * np.sin(np.linspace(0, r.uniform(6, 14), len(n))))
+        m.add((felt + squeak) * env, t, float(r.uniform(0.6, 1.0)))
+        t += s + float(r.uniform(0.01, 0.07))
+    x = m.out()[: int(SR * d)]
+    # crossfade the ends so it loops without a click
+    k = int(SR * 0.05)
+    x[:k] *= np.linspace(0, 1, k)
+    x[-k:] *= np.linspace(1, 0, k)
+    return x
+
+
 # ================================================================ render
 
 def main(only):

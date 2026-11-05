@@ -136,3 +136,18 @@ export type Timing = {
   endFrom: number;
   total: number;
 };
+
+// A carousel posted after a letter's video (social/carousels/<letter>.json).
+// Slide 1 is the letter card, then one slide per word.
+export type CarouselWord =
+  | {group: 'ar'; coptic: string; word: string; meaning: string; emoji?: string} // an Arabic word in Coptic letters
+  | {group: 'en'; coptic: string; word: string; meaning: string; emoji?: string} // an English word in Coptic letters
+  | {group: 'cop'; coptic: string; ar: string; en: string; meaning: {ar: string; en: string}; emoji?: string}; // a real Coptic word
+
+export type CarouselSpec = {
+  id: string; // file name, filled in by sync
+  video?: string; // the video it follows (social/videos folder)
+  letter: {small: string; capital: string; name: {ar: string; en: string}}; // from the app's letters.json
+  sound: {ar: string; en: string}; // from letters.json unless the carousel's json sets it
+  words: CarouselWord[];
+};

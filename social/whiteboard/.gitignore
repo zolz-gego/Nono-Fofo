@@ -1,0 +1,5 @@
+# Letter videos, generated HyperFrames projects and exports stay on this machine
+videos/
+projects/
+out/
+node_modules/
