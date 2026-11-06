@@ -188,6 +188,31 @@
       "file": "sfx/wb_marker.wav",
       "desc": "Whiteboard marker writing: 8 s loop of short felt-tip strokes (played only while the pen moves)",
       "duration": 7.8
+    },
+    "tut_tap": {
+      "file": "sfx/tut_tap.wav",
+      "desc": "Tutorial finger taps a button: soft click + bubbly pop",
+      "duration": 0.92
+    },
+    "tut_type": {
+      "file": "sfx/tut_type.wav",
+      "desc": "Tutorial typing: one soft keyboard tick per letter",
+      "duration": 0.04
+    },
+    "tut_zoom_in": {
+      "file": "sfx/tut_zoom_in.wav",
+      "desc": "Tutorial camera zooms in on a button: short soft rising whoosh",
+      "duration": 1.12
+    },
+    "tut_zoom_out": {
+      "file": "sfx/tut_zoom_out.wav",
+      "desc": "Tutorial camera zooms back out: short soft falling whoosh",
+      "duration": 0.25
+    },
+    "tut_highlight": {
+      "file": "sfx/tut_highlight.wav",
+      "desc": "Tutorial highlight ring appears: tiny glassy shimmer",
+      "duration": 1.18
     }
   },
   "music": {

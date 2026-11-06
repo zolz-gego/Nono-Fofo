@@ -16,3 +16,6 @@ tools/spin_intro.py
 
 # Carousel content stays local like the videos
 carousels/
+
+# Website tutorials: content, recordings and voices stay local like the videos
+tutorials/

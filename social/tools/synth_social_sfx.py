@@ -200,6 +200,35 @@ def _():
     return x
 
 
+# ================================================================ tutorials (website how-to videos)
+
+@sfx("tut_tap", "Tutorial finger taps a button: soft click + bubbly pop", 0.7)
+def _():
+    m = Mix().add(click(0.02, 3200), 0, 0.5).add(pop(620, 0.08), 0.008).add(wood("E6", 0.08), 0.012, 0.35)
+    return reverb(m.out(), 0.08)
+
+
+@sfx("tut_type", "Tutorial typing: one soft keyboard tick per letter", 0.45)
+def _():
+    return Mix().add(click(0.015, 5200), 0, 0.6).add(wood("A6", 0.04), 0.002, 0.5).out()
+
+
+@sfx("tut_zoom_in", "Tutorial camera zooms in on a button: short soft rising whoosh", 0.5)
+def _():
+    return reverb(whoosh(0.3, 400, 2600, q=1.1), 0.08)
+
+
+@sfx("tut_zoom_out", "Tutorial camera zooms back out: short soft falling whoosh", 0.45)
+def _():
+    return whoosh(0.26, 2400, 380, q=1.1)
+
+
+@sfx("tut_highlight", "Tutorial highlight ring appears: tiny glassy shimmer", 0.4)
+def _():
+    m = Mix().add(glass(2600, 0.3), 0, 0.5).add(sparkle(0.45, count=4, gain=0.25), 0.03)
+    return reverb(m.out(), 0.12)
+
+
 # ================================================================ render
 
 def main(only):
