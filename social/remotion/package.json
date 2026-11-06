@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "intro": "node scripts/sync-assets.mjs && node scripts/render.mjs intro",
     "release": "node scripts/sync-assets.mjs && node scripts/render.mjs release",
-    "carousel": "node scripts/sync-assets.mjs && node scripts/render.mjs carousel"
+    "carousel": "node scripts/sync-assets.mjs && node scripts/render.mjs carousel",
+    "record": "node scripts/record-tutorial.mjs"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "7.1.0",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@types/react": "19.2.2",
+    "playwright": "1.65.0",
     "typescript": "5.8.3"
   }
 }

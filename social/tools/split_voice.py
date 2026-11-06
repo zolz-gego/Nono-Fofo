@@ -9,6 +9,8 @@ line has its own long pause (e.g. "... ليه؟"), give the line times by hand w
 With both brothers, record one take each and pass --speaker nono|fofo: only
 that brother's lines are cut from the take (kept as voice/<speaker>_take.mp3).
 
+Works for website tutorials too (social/tutorials/<folder>, lines in tutorial.json order).
+
 Run:  tools/.venv/bin/python social/tools/split_voice.py <video-folder> <take.mp3> [--speaker nono] [--gap 0.15] [--lines 0-2.8,2.9-5.1,...]
 """
 import json
@@ -26,8 +28,19 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 
 def main(folder, take, min_gap=0.15, lines=None, speaker=None):
     vdir = os.path.join(ROOT, "social", "videos", folder)
-    scenes = json.load(open(os.path.join(vdir, "video.json")))["scenes"]
-    ids = [s["line"]["id"] for s in scenes if s.get("line") and speaker in (None, s["line"]["speaker"])]
+    if os.path.exists(os.path.join(vdir, "video.json")):
+        scenes = json.load(open(os.path.join(vdir, "video.json")))["scenes"]
+        ids = [s["line"]["id"] for s in scenes if s.get("line") and speaker in (None, s["line"]["speaker"])]
+    else:
+        # a website tutorial (social/tutorials/<folder>/tutorial.json): title, steps, end card
+        vdir = os.path.join(ROOT, "social", "tutorials", folder)
+        spec = json.load(open(os.path.join(vdir, "tutorial.json")))
+        found = [spec["title"].get("line")]
+        for s in spec["steps"]:
+            catches = s.get("catches") if isinstance(s.get("catches"), list) else []
+            found += [s.get("line")] + [c.get("line") for c in catches] + [s.get("lineAfter"), (s.get("finish") or {}).get("line")]
+        found.append(spec["end"].get("line"))
+        ids = [line["id"] for line in found if line]
     os.makedirs(os.path.join(vdir, "voice"), exist_ok=True)
     keep = os.path.join(vdir, "voice", (f"{speaker}_take" if speaker else "full_take") + os.path.splitext(take)[1])
     if os.path.abspath(take) != os.path.abspath(keep):

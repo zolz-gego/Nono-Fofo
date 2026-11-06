@@ -1,3 +1,5 @@
+import {faGlobe} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import React from 'react';
 import {AbsoluteFill, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {characters} from '../generated/data';
@@ -8,7 +10,8 @@ import {Background} from './Background';
 // Everything stays inside SAFE (clear of the TikTok/Reels buttons and caption,
 // and of Instagram's 3:4 grid crop), and the brothers land and stand still
 // for the last END_SETTLE seconds so the video never ends mid-jump.
-export const EndCard: React.FC<{ar: string; en: string; frames: number}> = ({ar, en, frames}) => {
+// `link` (tutorials) adds the website address under the text.
+export const EndCard: React.FC<{ar: string; en: string; frames: number; link?: string}> = ({ar, en, frames, link}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const logo = spring({frame, fps, config: {damping: 8, stiffness: 150}});
@@ -33,6 +36,12 @@ export const EndCard: React.FC<{ar: string; en: string; frames: number}> = ({ar,
           {ar}
         </div>
         <div style={{fontFamily: FONT_EN, fontWeight: 800, fontSize: 74, color: 'white', lineHeight: 1.1}}>{en}</div>
+        {link && (
+          <div style={{display: 'inline-flex', alignItems: 'center', gap: 16, marginTop: 22, padding: '12px 30px', borderRadius: 60, background: color('cream'), border: `5px solid ${color('sunYellow')}`, fontFamily: FONT_EN, fontWeight: 800, fontSize: 40, color: color('deepTeal')}}>
+            <FontAwesomeIcon icon={faGlobe} style={{width: 38, height: 38}} />
+            {link}
+          </div>
+        )}
       </div>
       <Img
         src={staticFile(nono.file!)}

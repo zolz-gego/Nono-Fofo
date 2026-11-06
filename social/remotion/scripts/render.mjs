@@ -3,6 +3,8 @@
 // npm run carousel -- <name>                -> social/out/carousels/<name>/NN.png (one per slide, lossless)
 // npm run intro                               -> social/out/intro-landscape.mp4 + intro-portrait.mp4
 // npm run still  -- intro-landscape [seconds] (or intro-portrait) for an intro still
+// The same commands take a tutorial folder (social/tutorials/<folder>, composition t<folder>).
+// npm run record -- <tutorial-folder>          -> records the website (scripts/record-tutorial.mjs)
 // npm run release -- <video-folder> <thumb-seconds>  -> social/out/release/<folder>/
 //   video.mp4 (high quality: H.264 CRF 12 slow, AAC 320k) + thumbnail.jpg (full size).
 //   The release opens with the logo intro (RELEASE_INTRO in src/theme.ts) unless
@@ -42,7 +44,9 @@ if (!id) {
   process.exit(1);
 }
 const intro = id.startsWith('intro-');
-const comp = intro ? id : `v${id}`;
+// website tutorials (social/tutorials/<folder>) are compositions t<folder>
+const tutorial = !intro && fs.existsSync(path.join(path.dirname(REMOTION), 'tutorials', id, 'tutorial.json'));
+const comp = intro ? id : `${tutorial ? 't' : 'v'}${id}`;
 const fps = intro ? JSON.parse(fs.readFileSync(path.join(REMOTION, 'src', 'intro', 'cues.json'), 'utf8')).fps : 30;
 if (mode === 'release') {
   const dir = path.join(OUT, 'release', id);

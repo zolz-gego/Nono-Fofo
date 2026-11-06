@@ -16,6 +16,8 @@ from ElevenLabs (Eleven v3). The workflow lives in the `social-media` skill
 | `voices.md` | Nono's and Fofo's ElevenLabs voice prompts + v3 writing rules |
 | `assets/` | **Social-only** resources (catalogued below and in `assets/manifest.json`) |
 | `tools/split_voice.py` | Splits one ElevenLabs take into the per-line voice files |
+| `tutorials/<NN-game>/` | *(local only)* Website how-to-play videos: `tutorial.json` (flow + voice lines), `script.md`, `voice/`, `recording/` (phone frames + step times); see the `tutorial-video` skill |
+| `tools/tutorial/find_letters.py` | Reads the Coptic letters on cream badges in a game screenshot (used by the tutorial recorder's game players) |
 | `whiteboard/` | Whiteboard letter videos (HyperFrames): engine, tools, and the local letter specs / projects / exports; see `whiteboard/README.md` |
 | `tools/synth_social_sfx.py` | Synthesizes the social sound effects into `assets/sfx/` |
 | `tools/synth_intro.py` | *(local only)* Logo intro: cuts the logo into blocks and composes its score |
@@ -52,6 +54,8 @@ tools/.venv/bin/python social/tools/stitch_intro.py       # (from repo root) reb
 npm run still -- intro-stitch 3.2       # one frame of the stitch intro
 npm run render -- intro-spin            # paper-cut spin intro -> out/intro-spin.mp4
 tools/.venv/bin/python social/tools/synth_social_sfx.py   # (from repo root) rebuild social SFX
+npm run record -- 01-fishing            # website tutorial: record the live site as a phone -> tutorials/01-fishing/recording/
+npm run render -- 01-fishing            # a tutorial folder works with still / render / release too (composition t01-fishing)
 ```
 
 ## Asset catalog (social-only)
@@ -67,6 +71,11 @@ tools/.venv/bin/python social/tools/synth_social_sfx.py   # (from repo root) reb
 | `mg_keyword_pop_2` | Pop + chime | Keyword card (automatic, 2nd/4th…) |
 | `mg_word_tick` | Tiny tick | Caption word highlight (optional) |
 | `wb_marker` | 8 s loop of felt-tip marker strokes | Whiteboard letter videos: plays only while the pen writes |
+| `tut_tap` | Soft click + bubbly pop | Tutorials: the finger taps a button |
+| `tut_type` | Tiny keyboard tick | Tutorials: each typed letter |
+| `tut_zoom_in` | Short soft rising whoosh | Tutorials: camera zooms in on a narrated step |
+| `tut_zoom_out` | Short soft falling whoosh | Tutorials: camera zooms back out |
+| `tut_highlight` | Tiny glassy shimmer | Tutorials: the highlight ring appears |
 | `mg_boing` | Cartoon boing | Bounce / "pop" entrance (automatic) |
 | `mg_pose_swap` | Quick "fwip" | Pose change (automatic) |
 | `mg_slide_up` / `mg_slide_down` | Slide whistle | Rising / dropping things |
