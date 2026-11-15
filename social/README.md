@@ -18,6 +18,7 @@ from ElevenLabs (Eleven v3). The workflow lives in the `social-media` skill
 | `tools/split_voice.py` | Splits one ElevenLabs take into the per-line voice files |
 | `tutorials/<NN-game>/` | *(local only)* Website how-to-play videos: `tutorial.json` (flow + voice lines), `script.md`, `voice/`, `recording/` (phone frames + step times); see the `tutorial-video` skill |
 | `tools/tutorial/find_letters.py` | Reads the Coptic letters on cream badges in a game screenshot (used by the tutorial recorder's game players) |
+| `tools/tutorial/upload.py` | Uploads a released tutorial (`out/release/<NN-game>/`) to Google Drive `Tutorials/<NN-game>/` with rclone |
 | `whiteboard/` | Whiteboard letter videos (HyperFrames): engine, tools, and the local letter specs / projects / exports; see `whiteboard/README.md` |
 | `tools/synth_social_sfx.py` | Synthesizes the social sound effects into `assets/sfx/` |
 | `tools/synth_intro.py` | *(local only)* Logo intro: cuts the logo into blocks and composes its score |

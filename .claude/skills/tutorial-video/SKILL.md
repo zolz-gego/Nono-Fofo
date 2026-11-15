@@ -75,6 +75,7 @@ voices) and `social/out/` are git-ignored and stay on this machine.
 - `social/remotion/scripts/tutorial-games/<game>.mjs` — a player per canvas game
 - `social/tools/tutorial/find_letters.py` — reads the Coptic letters on cream
   badges in a screenshot (Avva font matching), used by game players
+- `social/tools/tutorial/upload.py` — puts a release set on Google Drive
 - `social/remotion/src/tutorial/` — `types.ts`, `plan.ts` (timeline),
   `Tutorial.tsx` (title card, phone, camera, blur, ring, finger, captions)
 
@@ -178,7 +179,13 @@ ring and finger on a moving target with `speed`.
    the user says the video is done" (release with `npm run release --
    <NN-game> <thumb-seconds>` — the logo intro is added; thumbnail on the
    title card or a clear zoomed step; `post.md` with Instagram + TikTok
-   captions, include the website link and `#نونو_وفوفو` `#NonoAndFofo`).
+   captions, "اللينك في البايو" / "Link in bio" while the address isn't final,
+   and `#نونو_وفوفو` `#NonoAndFofo`).
+7. **Upload to Drive** (automatic, right after `post.md`, no need to ask):
+   `python3 social/tools/tutorial/upload.py <NN-game>` copies `video.mp4`,
+   `thumbnail.jpg` and `post.md` to `gdrive:Tutorials/<NN-game>/` with rclone
+   (remote `gdrive:`). Re-run it after any change to the release set. Then
+   send the user the files, paste both captions, and say they're on Drive.
 
 ## Notes
 
