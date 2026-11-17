@@ -32,6 +32,14 @@ ElevenLabs from the script Claude writes.
 - **Audience:** kids 7–9. Short, simple, warm words; no sarcasm, nothing scary.
 - **Language:** spoken Egyptian Arabic (Cairo), never MSA. On screen: the Arabic
   line (word-by-word highlight) with the English subtitle under it.
+- **One line per subtitle.** The Arabic and the English each show on a single
+  line, never wrapped. If a line is longer, split it into several subtitles
+  with `chunks` (`[{"from": <index of the chunk's first Arabic word>, "en":
+  "<that chunk's English>"}]`), breaking at commas. Check every video with
+  `cd social/remotion && npm run captions -- <NNN-slug>` (add `--large` for
+  `captionSize: "large"`). It measures each subtitle in Chromium with the real
+  fonts, suggests Arabic splits for the long ones, and must report "all
+  subtitles fit on one line" before a draft goes to the user.
 - **Keywords** pop up as cards with an icon, the Arabic word and the English word.
 - **Pace:** every scene ≤ 4–5 s. One voice line per scene. Something moves or
   changes at least every ~1.5 s (pose swap, keyword pop, wipe, sticker).
@@ -98,6 +106,10 @@ ElevenLabs from the script Claude writes.
    Listen-check by reading durations from the sync/render output; if a line runs
    over ~4.5 s, split it into two scenes or ask for a faster take. If a caption's
    word highlight drifts, add `words` (start second of each Arabic word).
+   With `chunks`, `words` also makes each subtitle switch exactly on its first
+   word. If pauses between lines are as short as pauses inside them, get the
+   word times with mlx-whisper (see the tutorial-video skill, step 5).
+   Run `npm run captions -- <NNN-slug>` again after any text change.
 
 ## When the user says the video is done
 

@@ -2,7 +2,7 @@ import {getAudioDurationInSeconds} from '@remotion/media-utils';
 import {staticFile} from 'remotion';
 import {INTROS} from '../generated/local';
 import {END_AFTER_VOICE, END_STING, END_VOICE_AT, FPS} from '../theme';
-import type {Cue, Mark, Plan, Rect, Seg, TLine, TStep, TutorialSpec} from './types';
+import type {Cue, Mark, Plan, RecStep, Rect, Seg, TAction, TLine, TStep, TutorialSpec} from './types';
 
 // Timing rules (seconds of finished video)
 // (kept tight: the series is fast and energetic)
@@ -16,6 +16,10 @@ const PLAY_GAP = 2.2; // gameplay between catches is sped up to fit this
 const AFTER_PLAY = 1.6; // gameplay kept after the last catch
 const TITLE_MIN = 2.0;
 const REACT = 0.9; // a catch's result (hooked fish, referee) shows this long after the tap
+const DRAW_SPEED = 1.6; // drawing (writing game) never plays slower than this
+const DRAW_MAX = 3.2; // and a drawing without a voice is sped up to fit this
+const CHALK_EVERY = 0.45; // a chalk scratch sound this often while drawing
+const PATH_LAG = 0.5; // the site paints chalk this late after the touch: the finger follows that much later
 
 const f = (s: number) => Math.round(s * FPS);
 
@@ -91,6 +95,106 @@ export async function computePlan(spec: TutorialSpec): Promise<Plan> {
     sfx.push({at: F + f(0.35), id: 'tut_zoom_out', volume: 0.45});
   };
 
+  // drawing: plays sped up while the finger follows the recorded path, with chalk sounds
+  const draw = (path: [number, number, number][], to: number, speed: number, maxOut: number) => {
+    const start = F;
+    const from = rt;
+    fit(to, speed, maxOut);
+    const k = (F - start) / Math.max(1e-3, to - from);
+    let last = -1e9;
+    for (const [t] of path) {
+      const at = start + Math.round((t - from) * k);
+      if (t > to) break;
+      if (t < from || at - last < f(CHALK_EVERY)) continue;
+      sfx.push({at, id: 'chalk_stroke', volume: 0.45});
+      last = at;
+    }
+  };
+
+  // a game player's own moves (writing: show the demo, tap a chalk, colour, scribble)
+  const playActions = async (s: TStep, ev: RecStep) => {
+    const acts = (s.actions ?? []) as TAction[];
+    for (const [j, a] of (ev.actions ?? []).entries()) {
+      const sa = acts[j] ?? ({do: a.do} as TAction);
+      const line = sa.line;
+      if (a.do === 'show') {
+        // the board plays on under the voice (a demo), highlighted
+        fit(a.t, 1, PLAY_GAP);
+        const from = F;
+        const end = line ? await say(line, F + f(LEAD)) : F + f(1.4);
+        fit(a.t1, 1, Math.max(0.6, (end - F) / FPS));
+        if (end > F) hold(end - F + f(0.6));
+        mark({kind: 'show', from, at: F - f(0.4), until: F, rect: a.rect, round: false, zoom: sa.zoom ?? 1.5, tRec: a.t1, speed: 0, finger: false, big: !!line});
+      } else if (a.do === 'tap') {
+        if (line) {
+          await freezeOn({...s, do: 'tap', line, zoom: sa.zoom ?? 2.4}, a.t, a.rect);
+        } else {
+          fit(a.t, 1, PLAY_GAP);
+          mark({kind: 'tap', from: F - f(0.6), at: F, until: F + f(0.2), rect: a.rect, round: false, zoom: sa.zoom ?? 1.8, tRec: a.t, speed: 0, finger: true, big: false});
+        }
+      } else if (a.do === 'draw') {
+        const path = (a.path ?? []).map(([t, x, y]) => [t + PATH_LAG, x, y] as [number, number, number]);
+        const lift = a.t1Draw ?? a.t1;
+        if (a.ok === false) {
+          // the wrong move: scribble outside, the brother warns, the meter fills
+          fit(a.t, 1, PLAY_GAP);
+          const from = F - f(0.5);
+          draw(path, lift, DRAW_SPEED, 1.8);
+          mark({kind: 'draw', from, at: from + f(0.5), until: F, rect: a.rect, round: false, zoom: sa.zoom ?? 1.4, tRec: a.t, speed: 0, finger: true, big: false, path});
+          pop(F + f(0.15), 'wrong');
+          const showFrom = F + f(0.6);
+          const end = await say(line, F + f(0.4));
+          fit(a.t1, 1, Math.max(0.6, (end - F) / FPS));
+          if (end > F) hold(end - F + f(0.3));
+          if (a.meter) mark({kind: 'show', from: showFrom, at: F - f(0.3), until: F, rect: a.meter, round: false, zoom: 3, tRec: a.t1, speed: 0, finger: false, big: true, free: true});
+        } else if (line && !sa.live) {
+          // narrated: freeze with the finger on the first point, explain, then colour
+          fit(a.t - 0.05, 1, MAX_GAP);
+          const from = F;
+          const end = await say(line, F + f(LEAD));
+          hold(end - F + f(TAIL) + f(PRESS));
+          const at = F;
+          if (sa.bar && a.meter) {
+            // colour a little, then visit the bar that fills while the second line plays, then back
+            const t0 = rt;
+            draw(path, t0 + (lift - t0) * 0.3, DRAW_SPEED, 1.4);
+            mark({kind: 'draw', from, at, until: F, rect: a.rect, round: false, zoom: sa.zoom ?? 1.5, tRec: a.t, speed: 0, finger: true, big: true, path});
+            const barFrom = F;
+            const barEnd = await say(sa.bar, F + f(0.4));
+            const len = (barEnd - F) / FPS + 0.3;
+            draw(path, Math.min(lift - 0.5, rt + len * DRAW_SPEED * 1.5), DRAW_SPEED, len);
+            if (barEnd > F) hold(barEnd - F + f(0.2));
+            mark({kind: 'show', from: barFrom, at: F - f(0.3), until: F - f(0.1), rect: a.meter, round: false, zoom: 3, tRec: rt, speed: 0, finger: false, big: true, free: true});
+            const back = F;
+            draw(path, lift, DRAW_SPEED, 1.6);
+            mark({kind: 'draw', from: back, at: back + f(0.3), until: F, rect: a.rect, round: false, zoom: sa.zoom ?? 1.5, tRec: a.t, speed: 0, finger: true, big: false, path});
+          } else {
+            draw(path, lift, DRAW_SPEED, DRAW_MAX);
+            mark({kind: 'draw', from, at, until: F, rect: a.rect, round: false, zoom: sa.zoom ?? 1.5, tRec: a.t, speed: 0, finger: true, big: true, path});
+          }
+          fit(a.t1, 1, 0.6);
+        } else {
+          // live: the voice plays over the sped-up colouring
+          fit(a.t, 1, PLAY_GAP);
+          const from = F;
+          const end = line ? await say(line, F + f(0.3)) : F;
+          const cut = typeof sa.cut === 'number' && a.t + sa.cut < lift - 1 ? a.t + sa.cut : null;
+          draw(path, cut ?? lift, DRAW_SPEED, cut ? DRAW_MAX : Math.max(DRAW_MAX, (end - F) / FPS - 0.6));
+          if (cut) {
+            // the rest of the colouring happens off camera: jump cut to the board passing
+            sfx.push({at: F, id: 'mg_scene_swipe', volume: 0.6});
+            rt = lift;
+            hold(f(0.3));
+          }
+          mark({kind: 'draw', from, at: from + f(0.4), until: F, rect: a.rect, round: false, zoom: sa.zoom ?? 1.4, tRec: a.t, speed: 0, finger: true, big: false, path: cut ? path.filter(([t]) => t <= cut + PATH_LAG) : path});
+          pop(F + f(0.3), 'ok');
+          fit(a.t1, 1, 0.8);
+          if (end > F) hold(end - F + f(0.2));
+        }
+      }
+    }
+  };
+
   if (rec) {
     const steps = spec.steps;
     for (let i = 0; i < steps.length; i++) {
@@ -123,7 +227,8 @@ export async function computePlan(spec: TutorialSpec): Promise<Plan> {
         if (ev.rect) mark({kind: 'type', from: start - f(0.45), at: start, until: F, rect: ev.rect, round: false, zoom: s.zoom ?? (fast ? 1.5 : 1.9), tRec: ev.t, speed: 0, finger: false, big: !fast});
       } else if (s.do === 'play') {
         gap(ev.t);
-        const taps = ev.taps ?? [];
+        if (ev.actions) await playActions(s, ev);
+        const taps = ev.actions ? [] : (ev.taps ?? []);
         const plan = Array.isArray(s.catches) ? (s.catches as {ok?: boolean; line?: TLine}[]) : [];
         let lastSaid = -1;
         plan.forEach((c, j) => c.line && (lastSaid = j));
@@ -161,7 +266,7 @@ export async function computePlan(spec: TutorialSpec): Promise<Plan> {
         }
         fit(Math.min(ev.shownEnd ?? ev.t1, rt + AFTER_PLAY), 1, AFTER_PLAY);
         // the rest of the round happens off camera: jump cut to the result card
-        const finish = s.finish as {line?: TLine} | undefined;
+        const finish = s.finish as {line?: TLine; shareAt?: number} | undefined;
         if (finish && ev.finish) {
           if (voiceEnd > F) hold(voiceEnd - F + f(0.3));
           voiceEnd = 0;
@@ -169,9 +274,22 @@ export async function computePlan(spec: TutorialSpec): Promise<Plan> {
           rt = ev.finish.t;
           hold(f(0.6));
           const from = F;
-          const end = await say(finish.line, F + f(LEAD));
+          const start = F + f(LEAD);
+          const end = await say(finish.line, start);
           hold(end - F + f(0.8));
-          mark({kind: 'show', from, at: F - f(0.5), until: F - f(0.1), rect: ev.finish.rect, round: false, zoom: 1.4, tRec: ev.finish.t, speed: 0, finger: false, big: true});
+          const share = ev.finish.share;
+          if (share && finish.line && typeof finish.shareAt === 'number') {
+            // the card, then its share button bubbles from the word that invites to share
+            // (the word's real time when the line has word times, else spread by word count)
+            const words = finish.line.ar.split(/\s+/).length;
+            const wt = finish.line.words?.length === words ? finish.line.words[finish.shareAt] : undefined;
+            const at = start + (wt !== undefined ? f(wt) : Math.round(((end - start) * finish.shareAt) / words));
+            mark({kind: 'show', from, at: at - f(0.5), until: at - 3, rect: ev.finish.rect, round: false, zoom: 1.4, tRec: ev.finish.t, speed: 0, finger: false, big: true});
+            mark({kind: 'show', from: at, at: F - f(0.5), until: F - f(0.1), rect: share, round: false, zoom: 1.4, tRec: ev.finish.t, speed: 0, finger: false, big: true, bubble: true});
+            sfx.push({at, id: 'mg_keyword_pop_2', volume: 0.7}, {at: at + 2, id: 'fish_bubbles', volume: 0.5});
+          } else {
+            mark({kind: 'show', from, at: F - f(0.5), until: F - f(0.1), rect: ev.finish.rect, round: false, zoom: 1.4, tRec: ev.finish.t, speed: 0, finger: false, big: true});
+          }
           sfx.push({at: from, id: 'tut_zoom_in', volume: 0.6});
           sfx.push({at: from + 8, id: 'tut_highlight', volume: 0.5});
           pop(from + 4, 'stars');

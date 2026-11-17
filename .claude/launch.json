@@ -19,6 +19,15 @@
         "cd app && flutter run -d web-server --web-port 8080 --web-hostname localhost"
       ],
       "port": 8080
+    },
+    {
+      "name": "social-studio",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-c",
+        "cd social/remotion && npm run studio -- --no-open --port 3210"
+      ],
+      "port": 3210
     }
   ]
 }

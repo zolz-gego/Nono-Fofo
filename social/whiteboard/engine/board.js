@@ -116,12 +116,12 @@
       items.push({kind: 'stroke', op, d, color, width: w});
     };
 
-    const icon = (id, x, y, size) => {
+    const icon = (id, x, y, size, dur = 1.8) => {
       const ic = data.icons[id];
       if (!ic) return;
       const d = iconPath(ic);
       const scale = size / ic.size;
-      const op = addOp({kind: 'path', d, len: env.pathLen(d), ox: x, oy: y, scale, dur: 1.8, tool: 'marker'});
+      const op = addOp({kind: 'path', d, len: env.pathLen(d), ox: x, oy: y, scale, dur, tool: 'marker'});
       items.push({kind: 'icon', op, x, y, size, icon: ic, d});
     };
 
@@ -131,7 +131,8 @@
     let panel = '';
     // Panels in board order: letter, facts, then one per word section, or with
     // `screens: true` one per word (+ one for the section's note). 2 columns for
-    // up to 4 panels, else 3; the end card sits centred under them.
+    // up to 4 panels, else 3; the end card sits centred under them. Arabic boards
+    // run right to left: each row starts on the right, like reading.
     const names = ['letter', 'facts'];
     data.sections.forEach((sec, si) => {
       if (!sec.screens) names.push(`s${si}`);
@@ -142,7 +143,7 @@
     });
     const COLS = names.length <= 4 ? 2 : 3;
     const ROWS = Math.ceil(names.length / COLS);
-    const P = Object.fromEntries(names.map((n, i) => [n, {x: (i % COLS) * PANEL_W, y: Math.floor(i / COLS) * PANEL_H}]));
+    const P = Object.fromEntries(names.map((n, i) => [n, {x: (rtl ? COLS - 1 - (i % COLS) : i % COLS) * PANEL_W, y: Math.floor(i / COLS) * PANEL_H}]));
     P.end = {x: ((COLS - 1) * PANEL_W) / 2, y: ROWS * PANEL_H};
     const BOARD_W = COLS * PANEL_W;
     const BOARD_H = (ROWS + 1) * PANEL_H;
@@ -265,8 +266,9 @@
       });
     }
 
-    // A Coptic word written letter by letter, each when the narrator names it, with
-    // (pencil) the Arabic letter it sounds like under it. Returns the word's box.
+    // A Coptic word: the whole word is written first (the taught letter in red), then,
+    // as the narrator names each letter, the Arabic letter it sounds like is pencilled
+    // under it. Returns the word's box.
     const spelled = (w, size, cx, cy, maxW) => {
       let ws = w.spell.map((k) => env.width(k, 'cop', size));
       let total = ws.reduce((a, b) => a + b, 0);
@@ -275,10 +277,10 @@
         ws = ws.map((x) => (x * maxW) / total);
         total = maxW;
       }
+      text(w.spell.join(''), 'cop', size, cx, cy, INK, {mark: L.small, max: maxW, dur: Math.min(1.2, 0.3 + 0.12 * w.spell.length)});
       let x = cx - total / 2;
       w.spell.forEach((k, i) => {
         waitForLetter(i);
-        text(k, 'cop', size, x + ws[i] / 2, cy, k === L.small ? RED : INK, {dur: 0.35});
         if (w.sounds && w.sounds[i]) text(w.sounds[i], 'ar', size * 0.42, x + ws[i] / 2, cy + size * 0.78, k === L.small ? RED : GRAPHITE, {dur: 0.3, tool: 'pencil'});
         x += ws[i];
       });
@@ -296,7 +298,7 @@
       const MEAN_Y = 1440;
       const IC = 400;
       const pop = () => cues.push({t: drawAt - GAP, sfx: 'mg_keyword_pop', volume: 0.25});
-      const drawIcon = (o) => icon(w.icon, o.x + 540 - IC / 2, o.y + ICON_Y - IC / 2, IC);
+      const drawIcon = (o, dur) => icon(w.icon, o.x + 540 - IC / 2, o.y + ICON_Y - IC / 2, IC, dur);
       if (sec.group === 'ar') {
         beat(w.say, id, (o) => {
           drawIcon(o);
@@ -316,8 +318,9 @@
           spelled(w, 210, o.x + 540, o.y + COP_Y, 900);
           waitForWord();
           text(w.ar, 'ar', 140, o.x + 540, o.y + AR_Y, INK, {max: 900});
+          // the drawing follows the word straight away, so the line ends with its meaning
+          drawIcon(o, 1.3);
           if (line.say.includes('يعني')) waitFor('يعني', 0, 0);
-          drawIcon(o);
           if (w.meaning) text(w.meaning, 'ar', 110, o.x + 540, o.y + MEAN_Y, BLUE, {max: 900});
           pop();
         });
@@ -427,8 +430,8 @@
 
     // a breath, then the recap: zoom out over the whole board and circle the letter
     t = Math.max(t, drawAt) + PAUSE;
-    beat(data.recap.say, 'all', () => {
-      const cx = 525;
+    beat(data.recap.say, 'all', (o) => {
+      const cx = o.x + 525; // the letter panel (on the right on Arabic boards)
       const cy = letterBox.y + letterBox.h / 2 + 10;
       const [rx, ry] = [480, 340];
       const pts = Array.from({length: 41}, (_, i) => {

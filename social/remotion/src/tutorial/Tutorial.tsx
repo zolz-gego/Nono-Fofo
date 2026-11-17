@@ -167,6 +167,23 @@ function frameFile(spec: TutorialSpec, t: number) {
   return `tutorials/${spec.id}/frames/${fr[lo].file}`;
 }
 
+// where a drawing finger is at recording time rt (on its path, held at the ends)
+function pathAt(path: [number, number, number][], rt: number): [number, number] {
+  if (rt <= path[0][0]) return [path[0][1], path[0][2]];
+  let lo = 0;
+  let hi = path.length - 1;
+  if (rt >= path[hi][0]) return [path[hi][1], path[hi][2]];
+  while (hi - lo > 1) {
+    const mid = (lo + hi) >> 1;
+    if (path[mid][0] <= rt) lo = mid;
+    else hi = mid;
+  }
+  const [t0, x0, y0] = path[lo];
+  const [t1, x1, y1] = path[hi];
+  const p = t1 > t0 ? (rt - t0) / (t1 - t0) : 0;
+  return [x0 + (x1 - x0) * p, y0 + (y1 - y0) * p];
+}
+
 // a mark's box at recording time rt (fish swim on)
 const rectAt = (m: Mark, rt: number): Rect => [m.rect[0] + m.speed * (rt - m.tRec), m.rect[1], m.rect[2], m.rect[3]];
 
@@ -182,7 +199,8 @@ function camFor(m: Mark | null, rt: number): Cam {
   // once the phone is wider/taller than the frame, never show past its edges
   if (z * SW > W) tx = Math.min(-BX + BEZEL * z, Math.max(W - BX - z * SW - BEZEL * z, tx));
   // (the phone's bottom may rise to the captions, so low targets still reach GOAL)
-  if (z * SH > 1920) ty = Math.min(-BY, Math.max(CAPTION_TOP - BY - z * SH, ty));
+  // (a free mark, e.g. a HUD bar at the very top, may pull the phone down to bring it to GOAL)
+  if (z * SH > 1920 && !m.free) ty = Math.min(-BY, Math.max(CAPTION_TOP - BY - z * SH, ty));
   return {z, tx, ty};
 }
 
@@ -227,9 +245,10 @@ const Screen: React.FC<{spec: TutorialSpec; plan: Plan; offset: number}> = ({spe
   const clip = box && (m!.round ? `ellipse(${box[2] / 2}px ${box[3] / 2}px at ${box[0] + box[2] / 2}px ${box[1] + box[3] / 2}px)` : `inset(${box[1]}px ${SW - box[0] - box[2]}px ${SH - box[1] - box[3]}px ${box[0]}px round ${radius}px)`);
   const blur = m ? (m.big ? 7 : 3.5) * k : 0;
   const dim = m ? (m.big ? 0.5 : 0.3) * k : 0;
-  const pulse = 1 + 0.04 * Math.sin(f / 3);
+  // a bubbling button bounces harder and faster
+  const pulse = m?.bubble ? 1 + 0.1 * Math.abs(Math.sin(f / 3.2)) : 1 + 0.04 * Math.sin(f / 3);
   // every tap kicks the camera a little; a wrong catch shakes it
-  const tapM = plan.marks.find((k) => k.kind !== 'show' && k.kind !== 'type' && f >= k.at && f < k.at + 12);
+  const tapM = plan.marks.find((k) => k.kind !== 'show' && k.kind !== 'type' && k.kind !== 'draw' && f >= k.at && f < k.at + 12);
   const kick = tapM ? 1 + 0.045 * Math.sin(((f - tapM.at) / 12) * Math.PI) : 1;
   const wrong = plan.pops.find((p) => p.kind === 'wrong' && f >= p.at && f < p.at + 14);
   const shake = wrong ? Math.sin((f - wrong.at) * 2.6) * (14 - (f - wrong.at)) * 2.4 : 0;
@@ -272,7 +291,46 @@ const Screen: React.FC<{spec: TutorialSpec; plan: Plan; offset: number}> = ({spe
       </div>
       </div>
       {m && <Finger m={m} f={f} rt={rt} cam={cam} />}
+      {m?.bubble && <Bubbles m={m} f={f} cam={cam} k={k} />}
     </AbsoluteFill>
+  );
+};
+
+// Bubbles rise from a button the voice invites to tap (share).
+const Bubbles: React.FC<{m: Mark; f: number; cam: Cam; k: number}> = ({m, f, cam, k}) => {
+  const [x, y, w] = m.rect;
+  const left = BX + cam.tx + cam.z * S0 * x;
+  const top = BY + cam.ty + cam.z * S0 * y;
+  const width = cam.z * S0 * w;
+  return (
+    <>
+      {Array.from({length: 14}, (_, i) => {
+        const life = 26 + Math.round(random(`bl-${i}`) * 14);
+        const age = (f - m.from + i * 5) % life;
+        const p = age / life;
+        const size = 18 + random(`bs-${i}`) * 30;
+        const bx = left + random(`bx-${i}`) * width + Math.sin((f + i * 7) / 5) * 12;
+        const by = top - p * 260;
+        return (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              left: bx - size / 2,
+              top: by - size / 2,
+              width: size,
+              height: size,
+              borderRadius: '50%',
+              border: `4px solid rgba(255,255,255,0.95)`,
+              background: 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9) 0 18%, rgba(255,196,60,0.35) 19% 100%)',
+              boxShadow: '0 0 12px rgba(255,196,60,0.8)',
+              opacity: k * interpolate(p, [0, 0.15, 0.75, 1], [0, 1, 1, 0]),
+              transform: `scale(${interpolate(p, [0, 0.2, 1], [0.3, 1, 1.15])})`,
+            }}
+          />
+        );
+      })}
+    </>
   );
 };
 
@@ -280,11 +338,18 @@ const Screen: React.FC<{spec: TutorialSpec; plan: Plan; offset: number}> = ({spe
 const Finger: React.FC<{m: Mark; f: number; rt: number; cam: Cam}> = ({m, f, rt, cam}) => {
   if (!m.finger) return null;
   const [x, y, w, h] = rectAt(m, rt);
-  const px = BX + cam.tx + cam.z * S0 * (x + w / 2);
-  const py = BY + cam.ty + cam.z * S0 * (y + h / 2);
+  const [cx, cy] = m.path?.length ? pathAt(m.path, rt) : [x + w / 2, y + h / 2];
+  const px = BX + cam.tx + cam.z * S0 * cx;
+  const py = BY + cam.ty + cam.z * S0 * cy;
   const inP = ease((f - m.from - 2) / 12);
   const out = ease((f - m.until - 2) / 8);
-  const press = m.kind === 'show' ? 0 : interpolate(f, [m.at - 4, m.at, m.at + 5], [0, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  // a drawing finger stays pressed down from the first touch until it lifts
+  const press =
+    m.kind === 'show'
+      ? 0
+      : m.kind === 'draw'
+        ? interpolate(f, [m.at - 4, m.at, m.until, m.until + 5], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})
+        : interpolate(f, [m.at - 4, m.at, m.at + 5], [0, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const point = m.kind === 'show' ? Math.sin(Math.max(0, f - m.from - 14) / 4) * 0.5 + 0.5 : 0;
   const size = 132;
   // the fingertip sits about here inside the icon
@@ -292,7 +357,7 @@ const Finger: React.FC<{m: Mark; f: number; rt: number; cam: Cam}> = ({m, f, rt,
   const tipY = size * 0.04;
   const ox = (1 - inP) * 180 + out * 140;
   const oy = (1 - inP) * 260 + out * 200 + point * 14;
-  const ripple = f >= m.at && m.kind !== 'show' ? (f - m.at) / 16 : -1;
+  const ripple = f >= m.at && m.kind !== 'show' ? (f - m.at) / 16 : -1; // (a drawing finger ripples once, at its first touch)
   return (
     <>
       {ripple >= 0 && ripple <= 1 && (

@@ -59,6 +59,38 @@ Preview text:
 [dramatically] أنا رمسيس... [laughs] أهلاً أهلاً يا ولاد!
 ```
 
+## Sphinx (أبو الهول, the Great Sphinx)
+
+Save the voice as **`Sphinx`**. Guest character (first in video 008). Clearly
+different from Ramses: not booming, but old, raspy and a bit grumpy, like a
+great-grandpa guarding his treasure. Easily shocked, warm and proud at the end.
+
+**Voice Design prompt:**
+```
+Elderly male voice actor performing an ancient grumpy lion-statue cartoon character, speaking Egyptian Arabic with a natural Cairo accent. Raspy, crackly and medium-low, a little slow and grumbly like a protective great-grandfather, gasps and grumbles easily, but kind and funny underneath, never scary. Clean close-mic studio recording, no background noise, no music.
+```
+Preview text:
+```
+[grumpy] بلاش لعب في الرملة يا ولاد! [gasps] إيه ده؟! [warmly] أهلاً أهلاً...
+```
+
+## Horse (الحصان, a proud Giza horse)
+
+Save the voice as **`Horse`**. Guest character (first in video 009), the camel's
+best friend, guarding King Khufu's treasures by the Great Pyramid. Proud and
+bossy, nose in the air, quick and clipped, a few snorts. Clearly not the old,
+raspy Sphinx or the booming Ramses. Smug when he quizzes, truly impressed and
+warm at the end.
+
+**Voice Design prompt:**
+```
+Adult male voice actor performing a proud, bossy cartoon horse character, speaking Egyptian Arabic with a natural Cairo accent. Medium pitch, bright and a little nasal, quick and clipped like a fussy show-off who thinks he is in charge, snorts and huffs between phrases, smug and teasing but funny and kind underneath, never scary. Clean close-mic studio recording, no background noise, no music.
+```
+Preview text:
+```
+[bossy] إنتوا بتعملوا إيه هنا؟! [snorts] ... [smugly] إنتوا ماتعرفوش حاجة! [impressed] برافوووو!
+```
+
 ---
 
 ## Writing lines for v3 (for Claude)

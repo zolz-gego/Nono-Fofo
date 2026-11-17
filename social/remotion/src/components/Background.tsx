@@ -11,12 +11,14 @@ const LETTERS = 'abjdezqiklmnxoprctvfyw'.split('');
 export const Background: React.FC<{bg: string; bg2?: string; pattern?: string; seed: string; icons?: string[]; camX?: number; from?: number; before?: {pattern: string; icons?: string[]}; backdrop?: string}> = ({bg, bg2, pattern = 'rays', seed, icons, camX = 0, from = 0, before, backdrop}) => {
   const frame = useCurrentFrame();
   // An illustrated backdrop (social image) replaces the pattern; it pans with the
-  // camera. Until the image exists, a drawn museum hall stands in.
+  // camera. Until the image exists, the scene's themed pattern (or a drawn museum hall) stands in.
   if (backdrop) {
     return (
       <AbsoluteFill style={{background: color(bg)}}>
         {images[backdrop] ? (
           <Img src={staticFile(images[backdrop])} style={{position: 'absolute', left: -220 - camX * 0.3, top: -180, width: W + 440, height: H + 360, objectFit: 'cover'}} />
+        ) : SCENERY.has(pattern) && pattern !== 'icons' ? (
+          <Scenery pattern={pattern} base={color(bg)} seed={seed} camX={camX} />
         ) : (
           <Museum camX={camX} />
         )}
