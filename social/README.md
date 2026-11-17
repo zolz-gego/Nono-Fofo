@@ -89,6 +89,15 @@ npm run render -- 01-fishing            # a tutorial folder works with still / r
 | `mg_siren` | Friendly two-tone wee-woo siren | Alarm opening (teasers) |
 | `mg_slam` | Punchy thump + clap + tiny shimmer | A big title slams in |
 | `mg_rattle` | Wooden box rattling | The secret box shakes |
+| `mg_metal_clang` | Sandy thump + bright metal ring | A foot lands on something metal under the sand (009) |
+| `mg_hooves` | Clip-clop hoof beats | A horse trots in (009) |
+| `mg_gulp` | Three glugs + splash | Gulping a glass of water (009) |
+| `wb_marker` | 8 s loop of felt-tip marker strokes | Whiteboard letter videos: plays only while the pen writes |
+| `tut_tap` | Soft click + bubbly pop | Tutorials: the finger taps a button |
+| `tut_type` | Tiny keyboard tick | Tutorials: each typed letter |
+| `tut_zoom_in` | Short soft rising whoosh | Tutorials: camera zooms in on a narrated step |
+| `tut_zoom_out` | Short soft falling whoosh | Tutorials: camera zooms back out |
+| `tut_highlight` | Tiny glassy shimmer | Tutorials: the highlight ring appears |
 | `mg_stone_wake` | Stone grinding + crumbling + shimmer *(ElevenLabs)* | Statues come alive |
 | `mg_stone_eyes` | Gritty stone scrape + squeak *(ElevenLabs)* | A statue's eyes slide sideways |
 | `mg_stone_tiptoe` | Little stone feet tiptoeing on marble *(ElevenLabs)* | Small statues sneaking around |
@@ -101,6 +110,7 @@ npm run render -- 01-fishing            # a tutorial folder works with still / r
 | `intro_logo_blocks` | 25.5 s score, 120 BPM, D hijaz: darbuka maqsum, bass, qanun plucks, block landings as a marimba melody, risers, final sting. Made by `tools/synth_intro.py`, cued from `remotion/src/intro/cues.json` | Logo intro |
 | `intro_stitch` | 4.5 s score, 120 BPM, D hijaz: needle whoosh, spinning whirr and qanun run, a zip per stitch, marimba while the lines draw, swell into the knot (boom, bell chord, darbuka), fly-out whoosh. Made by `tools/stitch_intro.py`, cued from `remotion/src/intro/stitch.json` | Stitch intro |
 | `intro_spin` | 5 s score, 120 BPM, D hijaz: knife slices, paper pop, spinning whirr with darbuka and qanun, slide whistle, three ring landings, logo rise hit with bell chord, typing taps. Made by `tools/spin_intro.py`, cued from `remotion/src/intro/spin.json` | Paper-cut spin intro |
+| `intro_street` | 20 s score, 120 BPM, D hijaz: pencil scratches with a climbing qanun, watercolour shimmer, maqsum darbuka chase with both brothers' footsteps, a marimba run as Nono bursts the letters, boings over the cat, the sun winding up and swooping down into the ring over a qanun run, the overshoot gag (whoosh, skids), turn-round pops and bulb ding, river trickle, book flap, scissor snips as the heads are cropped, match hit with bell chord and the final sting. Made by `tools/street_intro.py`, cued from `remotion/src/intro/street.json` | Street intro |
 
 All 107 app SFX (`correct_1`, `confetti`, `fish_splash_1`, …) can be used by id
 too; see `app/assets/audio/manifest.json`.
@@ -110,8 +120,11 @@ too; see `app/assets/audio/manifest.json`.
 | who | Poses | Used for |
 |---|---|---|
 | `ramses` | `idle`, `look`, `talk`, `demand`, `smile` (`ramses-<pose>.png`, cut-out) | Giant living statue of Ramses II (video 004), voice `Ramses` in `voices.md` |
+| `sphinx` | `idle`, `grumpy`, `proud`, `talk`, `shock`, `nervous`, `shy`, `smile` (`sphinx-<pose>.png`, cut-out) | The Great Sphinx come to life, old, grumpy and protective (video 008), voice `Sphinx` in `voices.md` |
+| `horse` | `idle`, `talk`, `bossy`, `shout`, `smirk`, `impressed`, `smile` (`horse-<pose>.png`, cut-out) | A proud, bossy Giza horse guarding Khufu's treasures (video 009), voice `Horse` in `voices.md` |
 
-| `nono` (extra poses) | `chef` (`nono-chef.png`, falls back to `hint` until it exists) | Extra Nono poses for the social videos only; the app's own poses stay in the app |
+| `nono` (extra poses) | `chef` (`nono-chef.png`, falls back to `hint`), `sand` (`nono-sand.png`, falls back to `sit`), `shy` (`nono-shy.png`, falls back to `wrong`), `stomp` (`nono-stomp.png`, falls back to `wrong`) | Extra Nono poses for the social videos only; the app's own poses stay in the app |
+| `fofo` (extra poses) | `angry` (`fofo-angry.png`, falls back to `wrong`), `whisper` (`fofo-whisper.png`, falls back to `hint`), `think` (`fofo-think.png`, falls back to `hint`), `shy` (`fofo-shy.png`, falls back to `wave`) | Extra Fofo poses for the social videos only (008, 009) |
 
 An entry for an app character adds poses next to the app's; `fallback` names the pose drawn until the PNG exists.
 Use them like the brothers (`"who": "ramses"` in `characters`, `"speaker": "ramses"`
@@ -124,6 +137,12 @@ on a line). A pose without its PNG yet is drawn as a sandstone placeholder.
 | `statue-cat`, `statue-ushabti` | The two little living statues (cut-outs) | `statues` prop (drawn shapes stand in until the PNGs exist) |
 | `surprise-cloth` | The big surprise under a golden cloth with a red bow and a "?" tag (cut-out) | Teaser endings (005, 006) |
 | `gem-hall` | Grand Egyptian Museum hall, portrait, empty floor in the middle | `backdrop` of the museum scenes (a drawn hall stands in until the PNG exists) |
+| `giza-desert` | Giza plateau: dunes, the three pyramids far back, empty sand in front, portrait | `backdrop` of the Sphinx scenes (008; the drawn desert stands in until the PNG exists) |
+| `camel-ride` | Nono and Fofo riding a friendly camel with a colorful saddle (cut-out, side view) | `image` prop in the camel scene (008) |
+| `camel-ride-tired` | The brothers on the camel, Nono flopped tired, Fofo cross (cut-out) | `image` prop in the kiosk scenes (009) |
+| `camel-idle` | The camel on its own, same saddle (cut-out) | `image` prop when the brothers find the camel (009) |
+| `khufu-pyramid` | The Great Pyramid of Khufu close up with its dark doorway, portrait | `backdrop` of the pyramid scenes (009) |
+| `grandpa-water` | Grandpa's hand holding a glass of water (cut-out) | `image` prop at the book (009) |
 
 ### Icons (keyword cards)
 
@@ -131,7 +150,7 @@ Font Awesome, registered in `remotion/src/icons.ts`: `anchor`, `arrowLeft`,
 `arrowRight`, `bolt`, `book`, `cake`, `check`, `church`, `clap`, `compass`, `fish`,
 `football`, `gift`, `heart`, `house`, `idea`, `map`, `medal`, `museum`, `paint`, `puzzle`,
 `question`, `rocket`, `run`, `sailboat`, `search`, `shield`, `shoes`, `sound`,
-`star`, `trophy`, `warning`.
+`star`, `trophy`, `warning`, `taxi`, `water`, `horse`, `gem`, `sun`.
 
 ### Scene backgrounds (`pattern`, `remotion/src/components/Scenery.tsx`)
 
@@ -173,6 +192,9 @@ from the voice start, like keywords; format in `remotion/src/types.ts`):
 | `pant` | Breath puffs + sweat drops (out of breath) |
 | `compare` | A Coptic letter tile ≈ a Latin letter tile (Ⲉ ≈ E); stays put on screen while the camera moves, `outAt` hides it |
 | `confetti` | Confetti burst |
+| `sand` | Sand grains spraying up while someone digs (`until`, `dir`); `burst` = one big puff (sand in the eyes) |
+| `sandpile` | A sand pyramid on the ground that grows a step at each `grow` time; `peekAt` shows the top of a gold letter sticking out of the peak, `glowAt` makes it shine, `outAt` pops it out |
+| `speech` | Kids-magazine speech bubble fixed on screen (white, bold outline) with a long tail to the speaker's mouth (`tailTo`); use with `captions: false` instead of the subtitle box |
 | `banner` | Yellow warning / note banner with a warning icon (Arabic + English), stays put on screen |
 | `screen` | An app screenshot (repo `screenshots/<shot>.jpg`, copied by `npm run sync`) in a tablet frame; flies in `from` bottom/top/left/right/zoom/box and out `to` a side at `outAt` (`components/TeaserProps.tsx`) |
 | `title` | Big outlined Arabic + English title that stays put on screen: `slam`, `pop` or `stamp` |

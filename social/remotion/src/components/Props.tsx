@@ -160,18 +160,21 @@ const Book: React.FC<P<'book'>> = ({t, fps, x = 540, y = 860, size = 1, openAt, 
               >
                 {Array.from({length: 9}, (_, i) => {
                   const key = KEYS[(i + side * 9) % KEYS.length];
+                  // letters found earlier sit big on the left page, side by side in the middle row
+                  const foundKeys = found ? found.split('') : [];
+                  const slots = foundKeys.length === 1 ? [4] : foundKeys.length === 2 ? [3, 5] : [3, 4, 5];
+                  const slot = side === 0 ? slots.indexOf(i) : -1;
                   // page letters vanish when they burst out; one comes back with letterIn
                   const back = side === 1 && i === 4 && li >= 0.55;
-                  // letters found earlier sit big on the page already
-                  const had = side === 0 && i === 4 && !!found;
+                  const had = slot >= 0 && slot < foundKeys.length;
                   const gone = burst && !back && !had;
                   // only: a clean page with just the letters found so far
                   if (only && !back && !had) return <div key={i} />;
                   return (
                     <GoldLetter
                       key={i}
-                      k={back ? letter : had ? found! : key}
-                      size={(back || had ? 110 : 70) * size}
+                      k={back ? letter : had ? foundKeys[slot] : key}
+                      size={(back ? 110 : had ? (foundKeys.length > 1 ? 95 : 110) : 70) * size}
                       style={{opacity: gone ? 0.08 : 1, transform: back ? `scale(${sp(li - 0.55, fps, 8, 200)})` : undefined}}
                     />
                   );
@@ -804,6 +807,56 @@ const Compare: React.FC<P<'compare'>> = ({t, fps, at, k, latin, y = 470, outAt})
   );
 };
 
+// Two Iotas slide together, a line joins them into the letter (`k`, e.g. Ita),
+// then a small Arabic sound letter grows into a big one ("a big ي").
+const TwoIotas: React.FC<P<'twoIotas'>> = ({t, fps, at, joinAt, soundAt, outAt, k = '#', iota = 'I', sound = 'ي', y = 330}) => {
+  const out = outAt !== undefined ? interpolate(t - outAt, [0, 0.25], [1, 0], clamp) : 1;
+  const a = sp(t - at, fps, 10, 170) * out;
+  if (a <= 0) return null;
+  const W = 760;
+  const H = 520;
+  const slide = interpolate(t - at, [0.35, 0.9], [150, 0], {...clamp, easing: (v) => 1 - (1 - v) ** 3});
+  const draw = interpolate(t - joinAt, [0, 0.45], [0, 1], clamp);
+  const morph = interpolate(t - joinAt, [0.55, 0.85], [0, 1], clamp);
+  const pop = sp(t - joinAt - 0.55, fps, 8, 220);
+  const s1 = sp(t - soundAt, fps, 10, 200);
+  const grow = sp(t - soundAt - 0.55, fps, 8, 160);
+  const legX = 205 + slide;
+  const iotaLeg = (left: boolean) => (
+    <div style={{position: 'absolute', top: 40, width: 220, textAlign: 'center', left: left ? W / 2 - legX - 110 : W / 2 + legX - 110, opacity: 1 - morph}}>
+      <GoldLetter k={iota} size={360} />
+      <div style={{fontFamily: FONT_AR, fontWeight: 800, fontSize: 44, color: 'white', marginTop: -10, textShadow: `0 4px 0 ${color('cocoa')}`}}>يوتا</div>
+    </div>
+  );
+  const big = 64 + grow * 120;
+  return (
+    <div style={{position: 'absolute', left: 540 - W / 2, top: y, width: W, height: H + 330, transform: `scale(${a})`}}>
+      <div style={{position: 'absolute', inset: 0, height: H, borderRadius: 60, background: `radial-gradient(circle at 50% 40%, ${color('slateTeal')}, ${color('deepTeal')})`, border: `10px solid ${color('cocoa')}`, boxShadow: `0 14px 0 ${color('cocoa')}`}} />
+      {iotaLeg(true)}
+      {iotaLeg(false)}
+      <svg width={W} height={H} style={{position: 'absolute', left: 0, top: 0, opacity: 1 - morph}}>
+        <line x1={W / 2 - legX + 20} y1={H * 0.4} x2={W / 2 - legX + 20 + (2 * legX - 40) * draw} y2={H * 0.4} stroke={color('cocoa')} strokeWidth={40} strokeLinecap="round" opacity={draw > 0 ? 1 : 0} />
+        <line x1={W / 2 - legX + 20} y1={H * 0.4} x2={W / 2 - legX + 20 + (2 * legX - 40) * draw} y2={H * 0.4} stroke={color('coral')} strokeWidth={26} strokeLinecap="round" opacity={draw > 0 ? 1 : 0} />
+      </svg>
+      {morph > 0 && (
+        <div style={{position: 'absolute', left: 0, top: 30, width: W, display: 'flex', justifyContent: 'center', opacity: morph, transform: `scale(${0.8 + 0.2 * pop})`}}>
+          <GoldLetter k={k} size={420} />
+        </div>
+      )}
+      {s1 > 0 && (
+        <div style={{position: 'absolute', left: 0, top: H + 40, width: W, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 30, transform: `scale(${s1})`}}>
+          <div style={{minWidth: 150, height: 150 + grow * 110, padding: '0 34px', borderRadius: 44, background: color('coral'), border: `8px solid ${color('cocoa')}`, boxShadow: `0 10px 0 ${color('cocoa')}`, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+            <div dir="rtl" style={{fontFamily: FONT_AR, fontWeight: 800, fontSize: big, lineHeight: 1, color: 'white', textShadow: `0 6px 0 ${color('cocoa')}`}}>{sound}</div>
+          </div>
+          {grow > 0.05 && (
+            <div dir="rtl" style={{fontFamily: FONT_AR, fontWeight: 800, fontSize: 70, color: 'white', textShadow: `0 6px 0 ${color('cocoa')}`, opacity: grow}}>كبيرة!</div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const CONFETTI = ['coral', 'sunYellow', 'leafGreen', 'mistBlue', 'letterGold', 'white'];
 const Confetti: React.FC<P<'confetti'>> = ({t, at, count = 70}) => {
   const k = t - at;
@@ -821,6 +874,108 @@ const Confetti: React.FC<P<'confetti'>> = ({t, at, count = 70}) => {
         return <div key={i} style={{position: 'absolute', left: x, top: y, width: 22 + r('w') * 16, height: 12 + r('h') * 10, borderRadius: 4, background: color(CONFETTI[i % CONFETTI.length]), transform: `rotate(${k * (300 + r('rot') * 600)}deg) scaleY(${Math.cos(k * 12 + i)})`}} />;
       })}
     </>
+  );
+};
+
+// ---------------------------------------------------------------- sand (digging spray, sand pyramid)
+
+const SAND = ['pyramidDune', 'pyramidShade', 'sunYellow'];
+const Sand: React.FC<P<'sand'>> = ({t, at, x, y, until, dir = 'up', burst, fall}) => {
+  const end = burst ? at + 0.05 : (until ?? at + 1);
+  if (fall) {
+    // grains thrown up come raining down onto (x, y)
+    return (
+      <>
+        {Array.from({length: 70}, (_, i) => {
+          const r = (n: string) => random(`fall-${at}-${i}-${n}`);
+          const k = t - (at + (i / 70) * (end - at));
+          if (k < 0 || k > 0.6) return null;
+          const px = x + (r('x') - 0.5) * 170 + (r('d') - 0.5) * 60 * k;
+          const py = y - 320 + 1800 * k * k + r('y') * 40;
+          const s = 9 + r('w') * 14;
+          return <div key={i} style={{position: 'absolute', left: px - s / 2, top: py - s / 2, width: s, height: s, borderRadius: '45%', background: color(SAND[i % SAND.length]), border: `2px solid ${color('cocoa')}`, opacity: k > 0.45 ? (0.6 - k) / 0.15 : 1}} />;
+        })}
+      </>
+    );
+  }
+  return (
+    <>
+      {Array.from({length: burst ? 60 : 90}, (_, i) => {
+        const r = (n: string) => random(`sand-${at}-${i}-${n}`);
+        const born = burst ? at : at + (i / 90) * (end - at);
+        const k = t - born;
+        if (k < 0 || k > 0.9) return null;
+        const side = dir === 'left' ? -1 : dir === 'right' ? 1 : r('s') < 0.5 ? -1 : 1;
+        const vx = side * (burst ? 200 + r('vx') * 700 : 150 + r('vx') * 450);
+        const vy = -(burst ? 500 + r('vy') * 900 : 700 + r('vy') * 700);
+        const px = x + vx * k;
+        const py = y + vy * k + 2200 * k * k;
+        const s = 10 + r('w') * 16;
+        return <div key={i} style={{position: 'absolute', left: px - s / 2, top: py - s / 2, width: s, height: s, borderRadius: '45%', background: color(SAND[i % SAND.length]), border: `2px solid ${color('cocoa')}`, opacity: 1 - k / 0.9}} />;
+      })}
+    </>
+  );
+};
+
+const SandPile: React.FC<P<'sandpile'>> = ({t, fps, x, y, size = 360, grow, peekAt, glowAt, k = 'I', outAt}) => {
+  // each `grow` time adds a step of height (a sand pat); no times = already built
+  const steps = grow?.length ? grow.reduce((h, g) => h + sp(t - g, fps, 8, 220) / grow.length, 0) : 1;
+  if (steps <= 0.01) return null;
+  const glow = glowAt !== undefined ? interpolate(t - glowAt, [0, 0.4], [0, 1], clamp) : 0;
+  const pulse = 0.75 + Math.sin(t * 8) * 0.25;
+  const pop = outAt !== undefined ? sp(t - outAt, fps, 9, 170) : 0;
+  const h = size * 0.8 * steps;
+  // after popping out it hands over (e.g. to a `runner` flying to a hand)
+  const popFade = outAt !== undefined ? interpolate(t - outAt, [0.45, 0.6], [1, 0], clamp) : 1;
+  // the letter's top sticking out of the sand by the peak, with a glint now and then
+  const peek = peekAt !== undefined && t >= peekAt && pop <= 0.02 ? Math.min(1, (t - peekAt) / 0.3) : 0;
+  const glint = Math.max(0, Math.sin(t * 4.5)) ** 8;
+  return (
+    <div style={{position: 'absolute', left: x - size / 2, top: y - h, width: size, height: h}}>
+      {peek > 0 && (
+        <>
+          <GoldLetter k={k} size={size * 0.4} style={{position: 'absolute', left: size * 0.42, top: -size * 0.2 + (1 - peek) * size * 0.2, transform: 'rotate(14deg)'}} />
+          <svg width={60} height={60} viewBox="-30 -30 60 60" style={{position: 'absolute', left: size * 0.52 - 30, top: -size * 0.18 - 30, transform: `scale(${glint})`}}>
+            <path d="M0 -28 L6 -6 L28 0 L6 6 L0 28 L-6 6 L-28 0 L-6 -6 Z" fill="white" stroke={color('sunYellow')} strokeWidth={3} />
+          </svg>
+        </>
+      )}
+      {glow > 0 && <div style={{position: 'absolute', left: size * 0.1, top: -size * 0.15, width: size * 0.8, height: h + size * 0.2, borderRadius: '50%', background: `radial-gradient(circle, ${GLOW} 0%, transparent 65%)`, opacity: glow * pulse}} />}
+      <svg width={size} height={h} viewBox="0 0 100 80" preserveAspectRatio="none" style={{position: 'absolute', left: 0, top: 0}}>
+        <path d="M2,79 Q8,74 14,64 L46,6 Q50,0 54,6 L86,64 Q92,74 98,79 Z" fill={color('pyramidDune')} stroke={color('cocoa')} strokeWidth={3} strokeLinejoin="round" />
+        <path d="M50,3 L86,64 Q92,74 98,79 L64,79 Z" fill={color('pyramidShade')} />
+        {[[30, 40], [55, 58], [40, 70], [62, 34]].map(([cx, cy]) => (
+          <circle key={`${cx}`} cx={cx} cy={cy} r={1.6} fill={color('cocoa')} opacity={0.35} />
+        ))}
+      </svg>
+      {glow > 0 && popFade > 0 && <GoldLetter k={k} size={size * 0.42} style={{position: 'absolute', left: size * 0.3, top: h * 0.4 - pop * size * 0.9, opacity: (peekAt !== undefined ? pop : Math.max(glow * 0.5, pop)) * popFade, transform: `scale(${1 + pop * 0.5}) rotate(${pop * -10}deg)`}} />}
+    </div>
+  );
+};
+
+// ---------------------------------------------------------------- speech bubble (kids-magazine style, on screen)
+
+const Speech: React.FC<P<'speech'>> = ({t, fps, ar, en, at, outAt, x = 540, y = 190, width = 900, height, size = 70, tailTo, tailX}) => {
+  const out = outAt !== undefined ? interpolate(t - outAt, [0, 0.2], [1, 0], clamp) : 1;
+  const p = sp(t - at, fps, 10, 190) * out;
+  if (p <= 0.01) return null;
+  const [tx, ty] = tailTo;
+  const H = height ?? (en ? 230 : 160);
+  const bottom = y + H;
+  const bx = Math.min(x + width / 2 - 110, Math.max(x - width / 2 + 110, tailX ?? tx));
+  const wob = Math.sin(t * 3) * 1.2;
+  return (
+    <div style={{position: 'absolute', inset: 0, transform: `scale(${0.6 + 0.4 * p}) rotate(${wob}deg)`, transformOrigin: `${bx}px ${bottom}px`, opacity: Math.min(1, p * 1.5)}}>
+      <svg width={1080} height={1920} style={{position: 'absolute', left: 0, top: 0}}>
+        <polygon points={`${bx - 46},${bottom - 20} ${bx + 46},${bottom - 20} ${tx},${ty}`} fill="white" stroke={color('cocoa')} strokeWidth={9} strokeLinejoin="round" />
+      </svg>
+      <div style={{position: 'absolute', left: x - width / 2, top: y, width, height: H, boxSizing: 'border-box', background: 'white', border: `9px solid ${color('cocoa')}`, borderRadius: 70, boxShadow: `0 12px 0 ${color('cocoa')}`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 40px'}}>
+        <div dir="rtl" style={{fontFamily: FONT_AR, fontWeight: 800, fontSize: size, lineHeight: 1.15, color: color('deepTeal'), textAlign: 'center'}}>{ar}</div>
+        {en && <div style={{fontFamily: FONT_EN, fontWeight: 800, fontSize: Math.round(size * 0.55), lineHeight: 1.1, color: color('coral'), textAlign: 'center'}}>{en}</div>}
+      </div>
+      {/* hide the tail's outline where it meets the bubble */}
+      <div style={{position: 'absolute', left: bx - 37, top: bottom - 16, width: 74, height: 14, background: 'white'}} />
+    </div>
   );
 };
 
@@ -866,7 +1021,7 @@ const Banner: React.FC<P<'banner'>> = ({t, fps, at, ar, en, y = 250, outAt}) => 
 // ---------------------------------------------------------------- layers
 
 const BACK = new Set(['book', 'egypt', 'speed']);
-const SCREEN = new Set(['compare', 'title', 'alarm', 'banner']);
+const SCREEN = new Set(['compare', 'twoIotas', 'title', 'alarm', 'banner', 'speech']);
 
 // Props behind the characters (`layer="back"`) or in front of them.
 export const Props: React.FC<{props?: PropSpec[]; voiceFrom: number; layer: 'back' | 'front' | 'screen'}> = ({props, voiceFrom, layer}) => {
@@ -881,7 +1036,7 @@ export const Props: React.FC<{props?: PropSpec[]; voiceFrom: number; layer: 'bac
             ? false
             : SCREEN.has(p.kind)
               ? layer === 'screen'
-              : layer !== 'screen' && (p.kind === 'statues' ? p.layer !== 'front' : BACK.has(p.kind)) === (layer === 'back'),
+              : layer !== 'screen' && (p.kind === 'statues' ? p.layer !== 'front' : p.kind === 'image' ? p.layer === 'back' : BACK.has(p.kind)) === (layer === 'back'),
         )
         .map((p, i) => {
           const q = {...p, t, fps} as never;
@@ -912,10 +1067,18 @@ export const Props: React.FC<{props?: PropSpec[]; voiceFrom: number; layer: 'bac
               return <Pant key={i} {...(q as P<'pant'>)} />;
             case 'compare':
               return <Compare key={i} {...(q as P<'compare'>)} />;
+            case 'twoIotas':
+              return <TwoIotas key={i} {...(q as P<'twoIotas'>)} />;
             case 'banner':
               return <Banner key={i} {...(q as P<'banner'>)} />;
             case 'confetti':
               return <Confetti key={i} {...(q as P<'confetti'>)} />;
+            case 'sand':
+              return <Sand key={i} {...(q as P<'sand'>)} />;
+            case 'speech':
+              return <Speech key={i} {...(q as P<'speech'>)} />;
+            case 'sandpile':
+              return <SandPile key={i} {...(q as P<'sandpile'>)} />;
             case 'screen':
               return <Screen key={i} {...(q as P<'screen'>)} />;
             case 'title':

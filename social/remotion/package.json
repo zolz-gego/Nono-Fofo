@@ -11,21 +11,29 @@
     "intro": "node scripts/sync-assets.mjs && node scripts/render.mjs intro",
     "release": "node scripts/sync-assets.mjs && node scripts/render.mjs release",
     "carousel": "node scripts/sync-assets.mjs && node scripts/render.mjs carousel",
-    "record": "node scripts/record-tutorial.mjs"
+    "record": "node scripts/record-tutorial.mjs",
+    "captions": "node scripts/fit-captions.mjs"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "7.1.0",
     "@fortawesome/free-solid-svg-icons": "7.1.0",
     "@fortawesome/react-fontawesome": "3.1.1",
+    "@react-three/fiber": "9.8.2",
     "@remotion/cli": "4.0.532",
+    "@remotion/effects": "4.0.532",
     "@remotion/fonts": "4.0.532",
+    "@remotion/media": "4.0.532",
     "@remotion/media-utils": "4.0.532",
+    "@remotion/three": "4.0.532",
+    "@remotion/transitions": "4.0.532",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "remotion": "4.0.532"
+    "remotion": "4.0.532",
+    "three": "0.181.0"
   },
   "devDependencies": {
     "@types/react": "19.2.2",
+    "@types/three": "0.181.0",
     "playwright": "1.65.0",
     "typescript": "5.8.3"
   }

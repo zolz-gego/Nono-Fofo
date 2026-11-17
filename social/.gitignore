@@ -10,9 +10,11 @@ remotion/src/generated/
 videos/
 previews/
 remotion/src/intro/
+remotion/src/local/
 tools/synth_intro.py
 tools/stitch_intro.py
 tools/spin_intro.py
+tools/street_intro.py
 
 # Carousel content stays local like the videos
 carousels/

@@ -23,7 +23,7 @@ export const Screen: React.FC<P<'screen'>> = ({t, fps, shot, at, outAt, x = 540,
   const k = t - at;
   if (k < 0) return null;
   const inP = sp(k, fps, 12, 170);
-  const o = outAt === undefined ? 0 : interpolate(t - outAt, [0, 0.28], [0, 1], clamp);
+  const o = outAt == null ? 0 : interpolate(t - outAt, [0, 0.28], [0, 1], clamp);
   if (o >= 1) return null;
   const W = 900 * size;
   const H = W * (800 / 1280);
@@ -78,7 +78,7 @@ export const Screen: React.FC<P<'screen'>> = ({t, fps, shot, at, outAt, x = 540,
 export const Title: React.FC<P<'title'>> = ({t, fps, ar, en, at, outAt, y = 330, size = 1, fill = 'sunYellow', style = 'slam', rot = -3}) => {
   const k = t - at;
   if (k < 0) return null;
-  const o = outAt === undefined ? 0 : interpolate(t - outAt, [0, 0.2], [0, 1], clamp);
+  const o = outAt == null ? 0 : interpolate(t - outAt, [0, 0.2], [0, 1], clamp);
   if (o >= 1) return null;
   // slam: drops from huge with a thump; pop: springs up from nothing; stamp: lands tilted like a rubber stamp
   const p = sp(k, fps, style === 'pop' ? 9 : 14, style === 'pop' ? 200 : 260);
@@ -251,7 +251,7 @@ export const Box: React.FC<P<'box'>> = ({t, fps, at = 0, x = 540, y = 1380, size
 export const Bubble: React.FC<P<'bubble'>> = ({t, fps, ar, en, at, outAt, x = 540, y = 520, tail = 'left', wrongAt}) => {
   const k = t - at;
   if (k < 0) return null;
-  const o = outAt === undefined ? 0 : interpolate(t - outAt, [0, 0.2], [0, 1], clamp);
+  const o = outAt == null ? 0 : interpolate(t - outAt, [0, 0.2], [0, 1], clamp);
   if (o >= 1) return null;
   const p = sp(k, fps, 9, 190) * (1 - o);
   const w = wrongAt === undefined ? -1 : t - wrongAt;
@@ -259,17 +259,24 @@ export const Bubble: React.FC<P<'bubble'>> = ({t, fps, ar, en, at, outAt, x = 54
   const jolt = w >= 0 && w < 0.35 ? Math.sin(w * 90) * 14 * (1 - w / 0.35) : 0;
   const W = 680;
   return (
-    <div style={{position: 'absolute', left: x - W / 2, top: y, width: W, transform: `translateX(${jolt}px) scale(${p}) rotate(${tail === 'left' ? -2 : 2}deg)`, transformOrigin: tail === 'left' ? '15% 100%' : '85% 100%'}}>
+    <div style={{position: 'absolute', left: x - W / 2, top: y, width: W, transform: `translateX(${jolt}px) scale(${p}) rotate(${tail === 'left' ? -2 : 2}deg)`, transformOrigin: tail === 'left' ? '15% 100%' : tail === 'right' ? '85% 100%' : tail === 'upLeft' ? '15% 0%' : '85% 0%'}}>
       <div style={{position: 'relative', background: 'white', border: `9px solid ${COCOA}`, borderRadius: 60, padding: '26px 40px 30px', textAlign: 'center', boxShadow: `0 12px 0 ${COCOA}`}}>
         <div dir="rtl" style={{fontFamily: FONT_AR, fontWeight: 800, fontSize: 92, lineHeight: 1.1, color: color('deepTeal')}}>
           {ar}
         </div>
         {en && <div style={{fontFamily: FONT_EN, fontWeight: 800, fontSize: 50, lineHeight: 1.1, color: color('coral')}}>{en}</div>}
         {/* tail */}
-        <svg width={110} height={90} style={{position: 'absolute', bottom: -84, [tail === 'left' ? 'left' : 'right']: 80}}>
-          <polygon points={tail === 'left' ? '10,0 90,0 20,82' : '20,0 100,0 90,82'} fill="white" stroke={COCOA} strokeWidth={9} strokeLinejoin="round" />
-          <rect x={14} y={0} width={82} height={12} fill="white" />
-        </svg>
+        {tail === 'none' ? null : tail === 'left' || tail === 'right' ? (
+          <svg width={110} height={90} style={{position: 'absolute', bottom: -84, [tail === 'left' ? 'left' : 'right']: 80}}>
+            <polygon points={tail === 'left' ? '10,0 90,0 20,82' : '20,0 100,0 90,82'} fill="white" stroke={COCOA} strokeWidth={9} strokeLinejoin="round" />
+            <rect x={14} y={0} width={82} height={12} fill="white" />
+          </svg>
+        ) : (
+          <svg width={110} height={90} style={{position: 'absolute', top: -84, [tail === 'upLeft' ? 'left' : 'right']: 80}}>
+            <polygon points={tail === 'upLeft' ? '10,90 90,90 20,8' : '20,90 100,90 90,8'} fill="white" stroke={COCOA} strokeWidth={9} strokeLinejoin="round" />
+            <rect x={14} y={78} width={82} height={12} fill="white" />
+          </svg>
+        )}
         {x2 > 0 && (
           <svg width={W} height={260} viewBox="0 0 680 260" style={{position: 'absolute', left: -9, top: '50%', marginTop: -130, transform: `scale(${0.4 + x2 * 0.6})`, opacity: Math.min(1, x2 * 2)}}>
             {[
@@ -291,17 +298,25 @@ export const Bubble: React.FC<P<'bubble'>> = ({t, fps, ar, en, at, outAt, x = 54
 // ---------------------------------------------------------------- social image
 
 // A social image (e.g. the covered surprise) springing in; a dashed placeholder until the PNG exists.
-export const Picture: React.FC<P<'image'>> = ({t, fps, id, at, outAt, x = 540, y = 820, height = 700, rot = 0, from = 'pop', glow}) => {
+export const Picture: React.FC<P<'image'>> = ({t, fps, id, at, outAt, x: x0 = 540, y: y0 = 820, height: h0 = 700, rot = 0, from = 'pop', glow, path, walk, flip}) => {
   const k = t - at;
   if (k < 0) return null;
-  const o = outAt === undefined ? 0 : interpolate(t - outAt, [0, 0.25], [0, 1], clamp);
+  const o = outAt == null ? 0 : interpolate(t - outAt, [0, 0.25], [0, 1], clamp);
   if (o >= 1) return null;
-  const p = sp(k, fps, 10, 150);
+  const p = from === 'none' ? 1 : sp(k, fps, 10, 150);
   const dy = from === 'bottom' ? (1 - p) * 1400 : from === 'top' ? (1 - p) * -1400 : 0;
   const s = (from === 'pop' ? p : 1) * (1 - o);
-  const sway = Math.sin(t * 2) * 1.5;
+  // keyframed walk: start at (x0, y0, h0), reach each point at its time
+  const keys = [{at, x: x0, y: y0, height: h0}, ...(path ?? []).map((q) => ({at: q.at, x: q.x, y: q.y ?? y0, height: q.height ?? h0}))];
+  const lerp = (f: 'x' | 'y' | 'height') => interpolate(t, keys.map((q) => q.at), keys.map((q) => q[f]), {...clamp, easing: (v) => v * v * (3 - 2 * v)});
+  const x = keys.length > 1 ? lerp('x') : x0;
+  const y = keys.length > 1 ? lerp('y') : y0;
+  const height = keys.length > 1 ? lerp('height') : h0;
+  const moving = keys.length > 1 && keys.some((q, i) => i > 0 && t >= keys[i - 1].at && t <= q.at);
+  const bob = walk && moving ? -Math.abs(Math.sin(t * 9)) * height * 0.025 : 0;
+  const sway = walk ? (moving ? Math.sin(t * 9) * 1.5 : 0) : Math.sin(t * 2) * 1.5;
   return (
-    <div style={{position: 'absolute', left: x, top: y, transform: `translate(-50%, -50%) translateY(${dy}px) rotate(${rot + sway}deg) scale(${s})`}}>
+    <div style={{position: 'absolute', left: x, top: y, transform: `translate(-50%, -50%) translateY(${dy + bob}px) rotate(${rot + sway}deg) scale(${s}) scaleX(${flip ? -1 : 1})`}}>
       {glow && (
         <div style={{position: 'absolute', left: '50%', top: '50%', width: height * 1.6, height: height * 1.6, transform: 'translate(-50%, -50%)', borderRadius: '50%', background: `radial-gradient(circle, ${color('foundGlow')}, transparent 65%)`, opacity: 0.6 + 0.3 * Math.sin(t * 4)}} />
       )}

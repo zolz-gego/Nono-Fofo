@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.join(ROOT, "tools", "audio"))
 
 from dsp import (Mix, SR, arp, bell, boing, chime, chord, click, doum, finish, glass, hump, marimba,  # noqa: E402
                  noise, osc, perc, svf, pluck, pop, reverb, slide_whistle, sparkle, sweep, tek, thud, whoosh,
-                 wood, write_wav)
+                 water, wood, write_wav)
 
 OUT = os.path.join(ROOT, "social", "assets", "sfx")
 MANIFEST = os.path.join(ROOT, "social", "assets", "manifest.json")
@@ -172,6 +172,35 @@ def _():
     for i in range(9):
         m.add(wood(["C4", "E4", "D4"][i % 3], 0.07), i * 0.075, 0.7 - i * 0.04)
         m.add(click(0.02, 2400), i * 0.075 + 0.02, 0.25)
+    return m.out()
+
+
+@sfx("mg_metal_clang", "Foot lands on metal buried under the sand: sandy thump + bright clang ring", 0.8)
+def _():
+    d = 0.9
+    ring = sum(g * osc(f, d) * perc(d, 0.001, tau) for f, g, tau in
+               ((523, 1.0, 0.32), (1187, 0.6, 0.22), (1913, 0.45, 0.16), (2741, 0.3, 0.1), (3620, 0.2, 0.07)))
+    hit = svf(noise(0.05), 3200, q=1.2, mode="bp") * perc(0.05, 0.0005, 0.01)
+    m = Mix().add(thud(80, 0.25), 0.0, 0.7).add(hit, 0.0, 0.6).add(ring, 0.004, 0.55)
+    return reverb(m.out(), 0.12)
+
+
+@sfx("mg_hooves", "A horse trots in: clip-clop hoof beats on packed sand", 0.7)
+def _():
+    m = Mix()
+    for i in range(8):
+        t = i * 0.16 + (0.05 if i % 2 else 0)
+        m.add(wood(["E5", "C5"][i % 2], 0.09), t, 0.5 + 0.06 * i)
+        m.add(svf(noise(0.05), 900, mode="lp") * perc(0.05, 0.001, 0.02), t, 0.4)
+    return m.out()
+
+
+@sfx("mg_gulp", "Big happy gulps of water: three glugs and an 'aah' splash", 0.7)
+def _():
+    m = Mix()
+    for i, f in enumerate((300, 260, 230)):
+        m.add(osc(sweep(f, f * 1.9, 0.12), 0.12) * perc(0.12, 0.004, 0.05), i * 0.26, 0.8)
+        m.add(water(0.15, 1400), i * 0.26 + 0.02, 0.35)
     return m.out()
 
 

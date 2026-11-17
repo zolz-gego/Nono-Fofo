@@ -147,8 +147,8 @@ for (const dir of ids(path.join(SOCIAL, 'videos')).sort()) {
 // social/tutorials/<id>/tutorial.json + recording/ (npm run record -- <id>): the
 // recorded frames are served from public/tutorials/<id>/frames.
 const tutorials = [];
-// a step's voice lines in speaking order (play: each narrated catch, then lineAfter, then the finish card)
-const stepLines = (s) => [s.line, ...(Array.isArray(s.catches) ? s.catches.map((c) => c.line) : []), s.lineAfter, s.finish?.line];
+// a step's voice lines in speaking order (play: each narrated catch or action (its line, then its bar line), then lineAfter, then the finish card)
+const stepLines = (s) => [s.line, ...(Array.isArray(s.catches) ? s.catches.map((c) => c.line) : []), ...(s.actions ?? []).flatMap((a) => [a.line, a.bar]), s.lineAfter, s.finish?.line];
 for (const dir of ids(path.join(SOCIAL, 'tutorials')).sort()) {
   const folder = path.join(SOCIAL, 'tutorials', dir);
   const specFile = path.join(folder, 'tutorial.json');

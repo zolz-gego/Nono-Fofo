@@ -41,12 +41,13 @@ skill go in git.
      (pencil Arabic letter under each) → the marker writes the Arabic word (RTL).
   4. *Coptic words:* 2–3 words, each on its own screen: Coptic spelled **letter
      by letter** (pencil Arabic letter under each) → how it sounds in Arabic
-     letters → drawing → Arabic meaning (blue, optional, e.g. آمين needs none).
+     letters → drawing (straight after, so the line ends on the meaning) → Arabic meaning (blue, optional, e.g. آمين needs none).
      A church verse with the words in it can follow on its own screen (`note`).
 - **Every Coptic word is spelled letter by letter, always.** Whenever a word is
   written in Coptic (an Arabic word in Coptic letters or a Coptic word), the
-  narrator names each letter and its sound, and the pen writes that letter as
-  it's said: «إِي بيقول إِ!... وبيتا بيقول بْ... ورو بيقول رْ... وألفا بيقول آ...
+  pen first writes the **whole word** in Coptic (taught letter in red), then the
+  narrator names each letter and its sound, and the pencil writes that letter's
+  Arabic sound under it as it's said (user's choice, Iota video): «إِي بيقول إِ!... وبيتا بيقول بْ... ورو بيقول رْ... وألفا بيقول آ...
   إِبْرَة!». The taught letter gets the emphasis ([emphasized] [excited]) and is
   red; the others are quicker ([slowly] is fine). Letter names and sounds come
   from `letters.json`; a digraph is one part said together (ⲟⲩ: «وأو مع إبسيلون
@@ -112,7 +113,7 @@ skill go in git.
 
 More options (example: `social/whiteboard/videos/wb-02-ei-ar`):
 - **Hand-writing** (a fact on the facts panel): `"hand": {"box": [w, h], "scale": 1, "strokes": [{"d": "M… C…", "at": "نص دايرة", "num": [x, y], "head": "M… L… L…", "dur": 1.4}]}`: each stroke in ink (M/L/C/Q only, box coordinates), its red number at `num`, a red arrowhead `head`.
-- **Spelling letter by letter**: a word's `"spell": ["e", "h", "o", "ov"]` (Avva keys, a digraph as one part) writes each letter when the narrator names it (at the phrase holding the k-th «بيقول»). An Arabic word can have its own spelling line `spellSay`; on a Coptic word the spelling is part of `say` (the transliteration follows the last «...», the meaning «يعني»).
+- **Spelling letter by letter**: a word's `"spell": ["e", "h", "o", "ov"]` (Avva keys, a digraph as one part) writes the whole word at the start of the line, then pencils each letter's sound under it when the narrator names it (at the phrase holding the k-th «بيقول»). An Arabic word can have its own spelling line `spellSay`; on a Coptic word the spelling is part of `say` (the transliteration follows the last «...», the meaning «يعني»).
 - **One screen per word**: a section's `"screens": true` gives every word its own panel (and the `note` its own, with an optional `title`); the camera pans to each. Layout: Coptic word spelled big on top, under each letter (in pencil, grey) the Arabic letter of `"sounds": ["إ", "ب", "ر", "ة"]`, the drawing, then the marker writes the Arabic word (RTL) when the narrator says it, then the meaning. More than 4 panels → 3 columns; the recap still shows them all.
 - **Section `note`**: `{"say": "...", "rows": [...]}` written under the words (e.g. a church verse with the section's words in it).
 - **Row parts**: `"at": "words"` = the pen waits until the narrator says them; `"join": true` = no gap (one Latin word with a red letter, laid left to right); `"mark": true` = the taught letter in red inside a Coptic part. Long rows shrink to fit.

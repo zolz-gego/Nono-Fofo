@@ -38,7 +38,8 @@ def main(folder, take, min_gap=0.15, lines=None, speaker=None):
         found = [spec["title"].get("line")]
         for s in spec["steps"]:
             catches = s.get("catches") if isinstance(s.get("catches"), list) else []
-            found += [s.get("line")] + [c.get("line") for c in catches] + [s.get("lineAfter"), (s.get("finish") or {}).get("line")]
+            acts = [ln for a in s.get("actions") or [] for ln in (a.get("line"), a.get("bar"))]
+            found += [s.get("line")] + [c.get("line") for c in catches] + acts + [s.get("lineAfter"), (s.get("finish") or {}).get("line")]
         found.append(spec["end"].get("line"))
         ids = [line["id"] for line in found if line]
     os.makedirs(os.path.join(vdir, "voice"), exist_ok=True)

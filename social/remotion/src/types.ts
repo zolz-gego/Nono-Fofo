@@ -40,13 +40,14 @@ export type Keyword = {
   mark?: string; // Avva key of the letter to highlight in `coptic` (bigger, coral), e.g. "e"
   big?: boolean; // wide card, Coptic word as the largest text
   top?: number; // y of the card's top (default 235), e.g. to stack big cards
+  scale?: number; // shrink (or grow) the card, e.g. 0.8 to stack three big cards
   at: number; // seconds from voice start
 };
 
 // Motion-graphics props (src/components/Props.tsx). Times are seconds from the
 // voice start (like keywords); negative = during the scene lead-in.
 export type PropSpec =
-  | {kind: 'book'; x?: number; y?: number; size?: number; openAt?: number; burstAt?: number; letterInAt?: number; letterFrom?: [number, number]; letter?: string; found?: string; only?: boolean} // letter: Avva key that flies in (default A); found: one already on the page; only: hide the other letters
+  | {kind: 'book'; x?: number; y?: number; size?: number; openAt?: number; burstAt?: number; letterInAt?: number; letterFrom?: [number, number]; letter?: string; found?: string; only?: boolean} // letter: Avva key that flies in (default A); found: letters already on the left page (e.g. "AE"); only: hide the other letters
   | {kind: 'egypt'; at?: number}
   | {
       kind: 'letter';
@@ -78,7 +79,15 @@ export type PropSpec =
   | {kind: 'dizzy'; at: number; x: number; y: number; until?: number} // stars spinning around a head after a bonk
   | {kind: 'pant'; at: number; x: number; y: number; until?: number; dir?: 'left' | 'right'} // breath puffs + sweat drops (out of breath)
   | {kind: 'compare'; at: number; k: string; latin: string; y?: number; outAt?: number} // Coptic letter ≈ Latin letter (stays put on screen)
+  // two Iotas (`iota`, Avva key) slide together, a line joins them into `k` at joinAt; at soundAt a small `sound` grows into a big one
+  | {kind: 'twoIotas'; at: number; joinAt: number; soundAt: number; outAt?: number; k?: string; iota?: string; sound?: string; y?: number}
   | {kind: 'confetti'; at: number; count?: number}
+  // kids-magazine speech bubble fixed on screen (white, bold outline) with a long tail down to the speaker's mouth `tailTo` (screen px); use it instead of the subtitle box (captions: false)
+  | {kind: 'speech'; ar: string; en?: string; at: number; outAt?: number; x?: number; y?: number; width?: number; height?: number; size?: number; tailTo: [number, number]; tailX?: number} // size: Arabic font px (text wraps inside width) // tailX: where the tail leaves the bubble (default: above tailTo)
+  // sand grains spraying up from (x, y) while someone digs; dir = which way they fly; burst = one big puff (sand in the eyes)
+  | {kind: 'sand'; at: number; x: number; y: number; until?: number; dir?: 'left' | 'right' | 'up'; burst?: boolean; fall?: boolean} // fall: grains rain down onto (x, y), e.g. a head
+  // a sand pyramid built on the ground at x (y = its base); grows in steps at `grow` times; peekAt: the top of a gold letter (`k`) sticks out of the sand, glowAt: it shines from inside, outAt: it pops out
+  | {kind: 'sandpile'; x: number; y: number; size?: number; grow?: number[]; peekAt?: number; glowAt?: number; k?: string; outAt?: number}
   | {kind: 'banner'; at: number; ar: string; en: string; y?: number; outAt?: number} // yellow warning / note banner, stays put on screen
   // teaser props (components/TeaserProps.tsx)
   // an app screenshot (repo screenshots/<shot>.jpg) in a tablet frame; flies in from `from`, out to `to` at outAt
@@ -90,8 +99,9 @@ export type PropSpec =
   | {kind: 'box'; at?: number; x?: number; y?: number; size?: number; shakes?: number[]; opens?: {at: number; until: number; wide?: boolean}[]; lockAt?: number}
   // comic speech bubble (tail points to the speaker); wrongAt stamps a red X over it
   // a social image (social/assets/manifest.json "images") popping in, e.g. the covered surprise; placeholder until it exists
-  | {kind: 'image'; id: string; at: number; outAt?: number; x?: number; y?: number; height?: number; rot?: number; from?: 'pop' | 'bottom' | 'top'; glow?: boolean}
-  | {kind: 'bubble'; ar: string; en?: string; at: number; outAt?: number; x?: number; y?: number; tail?: 'left' | 'right'; wrongAt?: number};
+  // path: walk to each point by its time (voice seconds), smooth; walk: bob and rock while moving; layer back: behind the characters
+  | {kind: 'image'; id: string; at: number; outAt?: number; x?: number; y?: number; height?: number; rot?: number; from?: 'pop' | 'bottom' | 'top' | 'none'; glow?: boolean; path?: {at: number; x: number; y?: number; height?: number}[]; walk?: boolean; flip?: boolean; layer?: 'back' | 'front'}
+  | {kind: 'bubble'; ar: string; en?: string; at: number; outAt?: number; x?: number; y?: number; tail?: 'left' | 'right' | 'upLeft' | 'upRight' | 'none'; wrongAt?: number}; // up*: the tail points up from the top (bubble under the speaker); none: no tail
 
 export type SceneSpec = {
   id: string;

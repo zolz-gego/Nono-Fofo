@@ -24,7 +24,7 @@ export const KeywordCard: React.FC<{kw: Keyword; index: number; count: number; s
   const icon = kw.icon ? ICONS[kw.icon] : undefined;
 
   return (
-    <div style={{position: 'absolute', left, top: (kw.top ?? 235) + float, width: cw}}>
+    <div style={{position: 'absolute', left, top: (kw.top ?? 235) + float, width: cw, transform: kw.scale ? `scale(${kw.scale})` : undefined, transformOrigin: '50% 0%'}}>
       {/* burst of little stars */}
       {Array.from({length: 8}, (_, i) => {
         const a = (i / 8) * Math.PI * 2 + random(`${kw.en}-a${i}`);

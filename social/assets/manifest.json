@@ -34,6 +34,118 @@
           "file": "images/nono-chef.png",
           "fallback": "hint",
           "desc": "Nono in a tall chef hat with a wooden spoon (teaser 006: 'a cooking site!')"
+        },
+        "sand": {
+          "file": "images/nono-sand.png",
+          "fallback": "sit",
+          "desc": "Nono kneeling in the sand, happily scooping and patting a sand pyramid (008)"
+        },
+        "shy": {
+          "file": "images/nono-shy.png",
+          "fallback": "wrong",
+          "desc": "Nono caught out: shoulders up, sheepish grin, rubbing the back of his head (008)"
+        },
+        "stomp": {
+          "file": "images/nono-stomp.png",
+          "fallback": "wrong",
+          "desc": "Nono stomping in a tantrum: one foot up, fists down, cheeks puffed, frowning (009)"
+        }
+      }
+    },
+    "sphinx": {
+      "desc": "The Great Sphinx of Giza come to life: old, grumpy and protective, warm underneath (video 008), raspy voice `Sphinx`. Cut-out PNGs, same framing for every pose.",
+      "source": "AI image tool, prompts in videos/008-sphinx-iota/images.md",
+      "poses": {
+        "idle": {
+          "file": "images/sphinx-idle.png",
+          "desc": "lying calm on the sand, eyes half closed, proud old smile"
+        },
+        "grumpy": {
+          "file": "images/sphinx-grumpy.png",
+          "desc": "one big paw raised, wagging a claw 'no no', grumpy frown"
+        },
+        "proud": {
+          "file": "images/sphinx-proud.png",
+          "desc": "chin up, chest out, eyes closed, posing proudly for photos"
+        },
+        "talk": {
+          "file": "images/sphinx-talk.png",
+          "desc": "mouth open, leaning in, telling a secret"
+        },
+        "shock": {
+          "file": "images/sphinx-shock.png",
+          "desc": "eyes huge, mouth a round O, ears/headdress flaps up, sand falling off"
+        },
+        "nervous": {
+          "file": "images/sphinx-nervous.png",
+          "desc": "eyes darting to the side, sheepish toothy grin, one paw hiding something in the sand"
+        },
+        "smile": {
+          "file": "images/sphinx-smile.png",
+          "desc": "huge warm smile, eyes squeezed happily, paws together"
+        },
+        "shy": {
+          "file": "images/sphinx-shy.png",
+          "desc": "the nervous pose with red blushing cheeks (made from sphinx-nervous.png)"
+        }
+      }
+    },
+    "fofo": {
+      "desc": "Extra Fofo poses for the social videos (the app's poses stay in the app)",
+      "poses": {
+        "angry": {
+          "file": "images/fofo-angry.png",
+          "fallback": "wrong",
+          "desc": "Fofo cross with Nono: fists on hips, frowning, puffed cheeks, leaning forward (008)"
+        },
+        "whisper": {
+          "file": "images/fofo-whisper.png",
+          "fallback": "hint",
+          "desc": "Fofo on tiptoe, hand cupped by his mouth, whispering a secret (008)"
+        },
+        "think": {
+          "file": "images/fofo-think.png",
+          "fallback": "hint",
+          "desc": "Fofo thinking hard: one eyebrow raised, finger on his chin, eyes squinting sideways (008)"
+        },
+        "shy": {
+          "file": "images/fofo-shy.png",
+          "fallback": "wave",
+          "desc": "Fofo embarrassed: small bow, hand behind his head, blushing grin (009)"
+        }
+      }
+    },
+    "horse": {
+      "desc": "A proud, bossy Giza horse, the camel's best friend, guarding King Khufu's treasures by the Great Pyramid (video 009), voice `Horse`. Cut-out PNGs, same framing for every pose.",
+      "source": "AI image tool, prompts in videos/009-khufu-ita/images.md",
+      "poses": {
+        "idle": {
+          "file": "images/horse-idle.png",
+          "desc": "standing side-on, nose up, proud half-closed eyes, tail swishing"
+        },
+        "talk": {
+          "file": "images/horse-talk.png",
+          "desc": "mouth open mid-word, one front hoof lifted, explaining"
+        },
+        "bossy": {
+          "file": "images/horse-bossy.png",
+          "desc": "nose high in the air, eyes closed, one hoof stamping, 'not yours!'"
+        },
+        "shout": {
+          "file": "images/horse-shout.png",
+          "desc": "rearing up on his back legs, mane flying, mouth wide (funny, not scary)"
+        },
+        "smirk": {
+          "file": "images/horse-smirk.png",
+          "desc": "one eyebrow up, sly lopsided grin, chin raised (quiz master)"
+        },
+        "impressed": {
+          "file": "images/horse-impressed.png",
+          "desc": "eyes wide and sparkly, clapping his front hooves, 'bravo!'"
+        },
+        "smile": {
+          "file": "images/horse-smile.png",
+          "desc": "warm big smile, head bowed a little, kind eyes"
         }
       }
     }
@@ -62,6 +174,48 @@
       "width": 1024,
       "height": 1024,
       "source": "AI image, prompt in videos/005-teaser-sos/images.md"
+    },
+    "giza-desert": {
+      "file": "images/giza-desert.png",
+      "desc": "Giza plateau: golden dunes, the three pyramids far back, empty sand in front (portrait backdrop, room for the Sphinx)",
+      "width": 1080,
+      "height": 1920,
+      "source": "AI image tool, prompts in videos/008-sphinx-iota/images.md"
+    },
+    "camel-ride": {
+      "file": "images/camel-ride.png",
+      "desc": "Nono and Fofo riding a friendly camel with a colorful saddle (cut-out, side view)",
+      "width": 824,
+      "height": 943,
+      "source": "AI image tool, prompts in videos/008-sphinx-iota/images.md"
+    },
+    "camel-idle": {
+      "file": "images/camel-idle.png",
+      "desc": "The friendly camel on its own with the same colorful saddle, standing side-on, smiling (cut-out)",
+      "width": 930,
+      "height": 860,
+      "source": "AI image tool, prompts in videos/009-khufu-ita/images.md"
+    },
+    "khufu-pyramid": {
+      "file": "images/khufu-pyramid.png",
+      "desc": "The Great Pyramid of Khufu close up, its dark doorway low in the middle, sand in front, portrait",
+      "width": 1080,
+      "height": 1920,
+      "source": "AI image tool, prompts in videos/009-khufu-ita/images.md"
+    },
+    "grandpa-water": {
+      "file": "images/grandpa-water.png",
+      "desc": "Grandpa's hand (sleeve, warm skin) holding a tall glass of water from the side (cut-out)",
+      "width": 881,
+      "height": 747,
+      "source": "AI image tool, prompts in videos/009-khufu-ita/images.md"
+    },
+    "camel-ride-tired": {
+      "file": "images/camel-ride-tired.png",
+      "desc": "Nono and Fofo on the camel: Nono flopped tired over the hump, Fofo cross with him (cut-out, same framing as camel-ride)",
+      "width": 929,
+      "height": 962,
+      "source": "AI image tool, prompts in videos/009-khufu-ita/images.md"
     }
   },
   "sfx": {
@@ -160,6 +314,51 @@
       "desc": "Wooden box rattles and shakes",
       "duration": 0.67
     },
+    "mg_metal_clang": {
+      "file": "sfx/mg_metal_clang.wav",
+      "desc": "Foot lands on metal buried under the sand: sandy thump + bright clang ring",
+      "duration": 1.36
+    },
+    "mg_hooves": {
+      "file": "sfx/mg_hooves.wav",
+      "desc": "A horse trots in: clip-clop hoof beats on packed sand",
+      "duration": 1.26
+    },
+    "mg_gulp": {
+      "file": "sfx/mg_gulp.wav",
+      "desc": "Big happy gulps of water: three glugs and an 'aah' splash",
+      "duration": 0.69
+    },
+    "wb_marker": {
+      "file": "sfx/wb_marker.wav",
+      "desc": "Whiteboard marker writing: 8 s loop of short felt-tip strokes (played only while the pen moves)",
+      "duration": 7.8
+    },
+    "tut_tap": {
+      "file": "sfx/tut_tap.wav",
+      "desc": "Tutorial finger taps a button: soft click + bubbly pop",
+      "duration": 0.92
+    },
+    "tut_type": {
+      "file": "sfx/tut_type.wav",
+      "desc": "Tutorial typing: one soft keyboard tick per letter",
+      "duration": 0.04
+    },
+    "tut_zoom_in": {
+      "file": "sfx/tut_zoom_in.wav",
+      "desc": "Tutorial camera zooms in on a button: short soft rising whoosh",
+      "duration": 1.12
+    },
+    "tut_zoom_out": {
+      "file": "sfx/tut_zoom_out.wav",
+      "desc": "Tutorial camera zooms back out: short soft falling whoosh",
+      "duration": 0.25
+    },
+    "tut_highlight": {
+      "file": "sfx/tut_highlight.wav",
+      "desc": "Tutorial highlight ring appears: tiny glassy shimmer",
+      "duration": 1.18
+    },
     "mg_stone_wake": {
       "file": "sfx/mg_stone_wake.wav",
       "desc": "Statues wake up: stone grinding and cracking, crumbling dust, magic shimmer",
@@ -233,6 +432,12 @@
       "desc": "Paper-cut spin intro score (5 s, 120 BPM, D hijaz): knife slices, paper pop, spinning whirr with darbuka and qanun, slide whistle, three ring landings, logo rise hit with bell chord, typing taps. Synced to remotion/src/intro/spin.json.",
       "duration": 5.0,
       "source": "social/tools/spin_intro.py"
+    },
+    "intro_street": {
+      "file": "music/intro_street.wav",
+      "desc": "Street intro score (20 s, 120 BPM, D hijaz): pencil scratches with a climbing qanun, watercolour shimmer, maqsum darbuka chase with footsteps, letter marimba run, boings, ring run, overshoot gag, pops and bulb ding, book flap, match hit and sting. Synced to remotion/src/intro/street.json.",
+      "duration": 20.0,
+      "source": "social/tools/street_intro.py"
     }
   }
 }

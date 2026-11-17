@@ -62,7 +62,14 @@ voices) and `social/out/` are git-ignored and stay on this machine.
   final (leave `end.link` out; set it only when the user says the link is final).
   Small logo watermark during the recording.
 - Arabic captions word by word with the English subtitle under them (same
-  `Captions` as the social videos), inside the safe area.
+  `Captions` as the social videos), inside the safe area. **One line per
+  subtitle, Arabic and English:** split each line into `chunks`
+  (`[{from: <first Arabic word index>, en: "<its English>"}]`, break at
+  commas) so each chunk's Arabic (62 px, weight 800, 18 px gaps) and English
+  (40 px, weight 700) each fit on one line. Check with
+  `cd social/remotion && npm run captions -- <NN-game>`, which measures them in
+  Chromium with the real fonts (PIL can't shape Arabic here) and suggests
+  splits. It must pass before the draft goes to the user.
 
 ## Files
 
@@ -75,7 +82,8 @@ voices) and `social/out/` are git-ignored and stay on this machine.
 - `social/remotion/scripts/tutorial-games/<game>.mjs` — a player per canvas game
 - `social/tools/tutorial/find_letters.py` — reads the Coptic letters on cream
   badges in a screenshot (Avva font matching), used by game players
-- `social/tools/tutorial/upload.py` — puts a release set on Google Drive
+- `social/tools/tutorial/find_hollow.py` — finds the hollow letter on the
+  writing game's chalkboard and plans chalk rows over it
 - `social/remotion/src/tutorial/` — `types.ts`, `plan.ts` (timeline),
   `Tutorial.tsx` (title card, phone, camera, blur, ring, finger, captions)
 
@@ -146,6 +154,27 @@ ring and finger on a moving target with `speed`.
   `ok: false` taps a fish with another letter. With `finish`, it keeps
   catching until the result card's "العب تاني" button appears and logs the
   card's box.
+- **writing.mjs** — Grandpa's chalkboard. The step has `actions` instead of
+  `catches` (matched by index with what the player logs, each may carry a
+  `line`): `show demo` (waits for the chalk demo, box = the letter), `tap size`
+  (`find: "^تخين$"`), `tap color` (`pick`: nth chalk stick, top row first),
+  `draw fill` (`until: "halfway"` / `"passed"`, the brother's speech bubbles
+  are read from the accessibility tree; `live: true` = voice over the sped-up
+  colouring instead of a freeze), `draw mess` (`ok: false`: scribble under the
+  letter until the warning, then the HUD mess meter is highlighted), `show
+  capital`. On a narrated `draw fill`, `bar: LINE` adds a second line while
+  the camera flies up to the HUD's coloured bar (sharp, the phone may move
+  off the top: `free` marks) and back to the board. On a live one, `cut: 6`
+  shows that many recording seconds, then jump cuts to the board passing
+  (the whole letter takes too long). `finish.shareAt` (word index of its
+  line) makes the pass card's Share button bounce and bubble from that word.
+  `finish` colours the capital off camera until the pass card's
+  "شارك الرسمة". The letter's inside comes from
+  `social/tools/tutorial/find_hollow.py` (closes the dotted outline, keeps the
+  faintly filled parts → zigzag chalk rows). The live site is slow per touch
+  move (~1.5 s a row), so a recording takes ~3.5 min; the video speeds the
+  drawing up and the finger follows the logged `path` (`PATH_LAG` in
+  `plan.ts`, because the site paints the chalk late).
 - For a new game, write `tutorial-games/<game>.mjs` the same way: read the
   game's code and config (`app/lib/features/games/<game>/`,
   `app/assets/content/games/<game>.json`) to know where things are, find the
@@ -175,6 +204,13 @@ ring and finger on a moving target with `speed`.
    `tools/.venv/bin/python social/tools/split_voice.py <NN-game> <take>`
    (same options as for the social videos: `--gap`, `--lines`). Re-render:
    freezes and holds stretch to the real voice lengths automatically.
+   If pauses between lines are as short as those inside lines, transcribe
+   the take with mlx-whisper (`tools/.venv`, model
+   `mlx-community/whisper-large-v3-turbo`, `language='ar'`,
+   `word_timestamps=True`). There's no ffmpeg, so pass it a 16 kHz mono array
+   made with `afconvert`. Cut with `--lines` at the pauses between the
+   script's lines, then store each line's word times (s from its cut start,
+   ≥ 0) as `words` in `tutorial.json`. Captions and `shareAt` use those times.
 6. **When the user says it's done:** follow the social-media skill's "When
    the user says the video is done" (release with `npm run release --
    <NN-game> <thumb-seconds>` — the logo intro is added; thumbnail on the
