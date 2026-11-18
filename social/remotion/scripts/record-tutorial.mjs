@@ -55,12 +55,19 @@ await sleep(1200);
 const cdp = await ctx.newCDPSession(page);
 const frames = [];
 let t0 = null; // wall-clock seconds of the first frame
+let frameSize = null; // the screencast's page size (other sizes are screenshot captures)
 const now = () => Date.now() / 1000 - t0;
 cdp.on('Page.screencastFrame', async ({data, metadata, sessionId}) => {
   cdp.send('Page.screencastFrameAck', {sessionId}).catch(() => {});
   if (t0 === null) t0 = metadata.timestamp;
+  // page.screenshot (game players) can slip a frame of its own capture into
+  // the screencast, out of time order or with another size: drop those (flashes)
+  const size = `${metadata.deviceWidth}x${metadata.deviceHeight}`;
+  frameSize ??= size;
+  const t = +(metadata.timestamp - t0).toFixed(3);
+  if (size !== frameSize || (frames.length && t < frames[frames.length - 1].t)) return;
   const file = `${String(frames.length).padStart(5, '0')}.jpg`;
-  frames.push({t: +(metadata.timestamp - t0).toFixed(3), file});
+  frames.push({t, file});
   fs.writeFileSync(path.join(FRAMES, file), Buffer.from(data, 'base64'));
 });
 await cdp.send('Page.startScreencast', {format: 'jpeg', quality: 88, maxWidth: VIEW.width * DPR, maxHeight: VIEW.height * DPR, everyNthFrame: 1});

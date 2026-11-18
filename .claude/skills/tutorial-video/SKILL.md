@@ -144,7 +144,8 @@ level cards are "المستوى 1, اتعرّف على الحروف | …", game
 Games drawn with Flame have no nodes. A player module exports
 `play(ctx, step)`, taps the right things and returns `{taps: [{t, point, r,
 speed, ok}], shownEnd, finish: {t, rect} | null}` (seconds since the recording started, CSS px; `r` ≈ the target's
-radius; `speed` = CSS px/s it moves right, 0 if still). The video keeps the
+radius; `speed` = CSS px/s it moves right, 0 if still; optional `vy` = CSS px/s down,
+`rect` = the target's box, `react` = where a wrong action's reaction shows). The video keeps the
 ring and finger on a moving target with `speed`.
 
 - **fishing.mjs** — screenshots the water, finds the fish whose badge shows
@@ -154,6 +155,17 @@ ring and finger on a moving target with `speed`.
   `ok: false` taps a fish with another letter. With `finish`, it keeps
   catching until the result card's "العب تاني" button appears and logs the
   card's box.
+- **balloons.mjs** — balloons rise from the bottom with the letter on a cream
+  circle. Looks twice with `find_letters.py --serve` to measure each balloon's
+  rise (`vy`, CSS px/s, < 0) and skip the still bunch the other brother
+  holds, then taps a little above it (time the look from when the screenshot
+  *returns*, or the ring lands above the balloon). Screenshot the whole
+  screen and pass find_letters a `top` fraction: a clipped `page.screenshot`
+  leaks into the screencast as flashing frames (the recorder now drops
+  frames that are out of time order or another size, as a safety net). Logs `rect` (the whole
+  balloon) and `react` (both brothers, highlighted while a wrong one pops).
+  Off camera it grabs the highest target first; floated-away targets count as
+  mistakes, so the round usually ends on 1 star.
 - **writing.mjs** — Grandpa's chalkboard. The step has `actions` instead of
   `catches` (matched by index with what the player logs, each may carry a
   `line`): `show demo` (waits for the chalk demo, box = the letter), `tap size`

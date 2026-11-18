@@ -238,15 +238,16 @@ export async function computePlan(spec: TutorialSpec): Promise<Plan> {
           const r = tp.r;
           const line = plan[j]?.line ?? (j === 0 && !plan.length ? s.line : undefined);
           // the whole fish around its letter badge
-          const rect: Rect = [tp.point[0] - 5.4 * r, tp.point[1] - 3.6 * r, 9.6 * r, 7.2 * r];
+          const rect: Rect = tp.rect ?? [tp.point[0] - 5.4 * r, tp.point[1] - 3.6 * r, 9.6 * r, 7.2 * r];
+          const vy = tp.vy ?? 0;
           if (line && tp.ok !== false) {
             // a right catch: freeze on the fish while the voice explains, then tap
-            await freezeOn({...s, do: 'tap', line}, tp.t, rect, {round: true, speed: tp.speed, zoom: s.zoom ?? 1.8});
+            await freezeOn({...s, do: 'tap', line}, tp.t, rect, {round: true, speed: tp.speed, vy, zoom: s.zoom ?? 1.8});
             pop(F + f(REACT), 'ok');
           } else if (line) {
             // a wrong catch: tap it, then let the referee react while the voice explains
             fit(tp.t, 1, PLAY_GAP);
-            mark({kind: 'catch', from: F - f(0.9), at: F, until: F + f(0.15), rect, round: true, zoom: 1.6, tRec: tp.t, speed: tp.speed, finger: true, big: true});
+            mark({kind: 'catch', from: F - f(0.9), at: F, until: F + f(0.15), rect, round: true, zoom: 1.6, tRec: tp.t, speed: tp.speed, vy, finger: true, big: true});
             const tapAt = F;
             pop(F + f(REACT), 'wrong');
             const end = await say(line, F + f(0.4));
@@ -256,10 +257,10 @@ export async function computePlan(spec: TutorialSpec): Promise<Plan> {
             if (end > F) hold(end - F + f(0.3));
             // then the reaction: the hooked fish and the referee (top of the scene)
             const vh = rec.viewport.height;
-            mark({kind: 'show', from: tapAt + f(0.7), at: F, until: F - f(0.2), rect: [0, vh * 0.09, rec.viewport.width, vh * 0.38], round: false, zoom: 1.2, tRec: tp.t, speed: 0, finger: false, big: false});
+            mark({kind: 'show', from: tapAt + f(0.7), at: F, until: F - f(0.2), rect: tp.react ?? [0, vh * 0.09, rec.viewport.width, vh * 0.38], round: false, zoom: 1.2, tRec: tp.t, speed: 0, finger: false, big: false});
           } else {
             fit(tp.t, 1, PLAY_GAP);
-            mark({kind: 'catch', from: F - f(0.75), at: F, until: F + f(0.15), rect, round: true, zoom: 1.3, tRec: tp.t, speed: tp.speed, finger: true, big: false});
+            mark({kind: 'catch', from: F - f(0.75), at: F, until: F + f(0.15), rect, round: true, zoom: 1.3, tRec: tp.t, speed: tp.speed, vy, finger: true, big: false});
             if (tp.ok !== false) pop(F + f(REACT), 'ok');
           }
           if (j === lastSaid) voiceEnd = await say(s.lineAfter, F + f(0.5));
