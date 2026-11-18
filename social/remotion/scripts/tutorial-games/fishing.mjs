@@ -86,7 +86,7 @@ export async function play({page, sleep, now, nodes, VIEW, DPR, ROOT}, step) {
 }
 
 // the result card's box: the smallest node holding the "play again" button that isn't the whole screen
-async function resultCard(page) {
+export async function resultCard(page) {
   return page.evaluate(() => {
     const els = [...document.querySelectorAll('flt-semantics')];
     const btn = els.find((e) => /العب تاني|Play again/.test(e.textContent ?? '') && !e.querySelector('flt-semantics'));

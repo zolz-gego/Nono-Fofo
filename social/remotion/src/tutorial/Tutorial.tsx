@@ -185,7 +185,7 @@ function pathAt(path: [number, number, number][], rt: number): [number, number] 
 }
 
 // a mark's box at recording time rt (fish swim on)
-const rectAt = (m: Mark, rt: number): Rect => [m.rect[0] + m.speed * (rt - m.tRec), m.rect[1], m.rect[2], m.rect[3]];
+const rectAt = (m: Mark, rt: number): Rect => [m.rect[0] + m.speed * (rt - m.tRec), m.rect[1] + (m.vy ?? 0) * (rt - m.tRec), m.rect[2], m.rect[3]];
 
 type Cam = {z: number; tx: number; ty: number};
 const REST: Cam = {z: 1, tx: 0, ty: 0};

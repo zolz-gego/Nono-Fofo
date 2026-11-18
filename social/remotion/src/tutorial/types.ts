@@ -47,7 +47,7 @@ export type RecStep = {
   rect?: Rect | null;
   point?: [number, number];
   keys?: number[];
-  taps?: {t: number; point: [number, number]; r: number; speed: number; ok?: boolean; key?: string}[];
+  taps?: {t: number; point: [number, number]; r: number; speed: number; vy?: number; ok?: boolean; key?: string; rect?: Rect; react?: Rect}[]; // vy: CSS px/s down (balloons rise: < 0); rect: the target's box at t; react: where the reaction to a wrong one shows
   shownEnd?: number; // play: when the shown part ended (the rest of the round is off camera)
   finish?: {t: number; rect: Rect; share?: Rect | null} | null; // play: the result card (share: its share button)
   actions?: RecAction[]; // play: what the game player did (writing)
@@ -82,6 +82,7 @@ export type Mark = {
   zoom: number;
   tRec: number; // recording time of the tap (moving targets are at `rect` then)
   speed: number; // CSS px / s the target moves right (fish), 0 = still
+  vy?: number; // CSS px / s the target moves down (balloons rise: < 0)
   finger: boolean;
   big: boolean; // narrated step: full zoom, blur, whoosh + shimmer
   path?: [number, number, number][]; // the finger follows this ([recording time, x, y]) instead of pointing at the box
