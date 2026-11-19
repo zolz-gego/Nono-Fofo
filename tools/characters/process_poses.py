@@ -31,6 +31,7 @@ SOURCES = {
         "fish": "Nono Fishing.webp", "reel": "Nono Fishing.webp",
         "jump": "Balloons Poses.webp",
         "sit": "Nono Basket.webp", "toss": "Nono Basket.webp", "carry": "Nono Basket.webp",
+        "tired": "Nono Tired.jpeg", "rest": "Nono Tired.jpeg",
     },
     "fofo": {
         "idle": "Fofo idle.jpeg", "cheer": "Fofo Cheer.jpeg", "wrong": "Fofo oops.jpeg",
@@ -40,6 +41,7 @@ SOURCES = {
         "fish": "Fofo Fishing.webp", "reel": "Fofo Fishing.webp",
         "hold": "Balloons Poses.webp",
         "sit": "Fofo Basket.webp", "toss": "Fofo Basket.webp", "carry": "Fofo Basket.webp",
+        "tired": "Fofo Tired.jpeg", "rest": "Fofo Tired.jpeg",
     },
 }
 
@@ -109,6 +111,10 @@ def fix_source(name, pose, img):
     elif (name, pose) == ("fofo", "celebrate"):
         # lightbulb belongs to the hint pose
         d.rectangle((560, 0, 720, 175), fill="white")
+    elif pose in ("tired", "rest"):
+        # exhausted sheets: standing (left half), sitting (right half). Cropping
+        # instead of PICK keeps the loose sweat drops and breath puffs.
+        img = img.crop((0, 0, W // 2, H)) if pose == "tired" else img.crop((W // 2, 0, W, H))
     elif (name, pose) == ("nono", "sleep"):
         # remove the drawn floor line on both sides of the body
         d.rectangle((140, 850, 338, 868), fill="white")

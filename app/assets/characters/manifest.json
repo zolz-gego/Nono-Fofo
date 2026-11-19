@@ -231,6 +231,28 @@
           321,
           511
         ]
+      },
+      "tired": {
+        "file": "nono/tired.png",
+        "small": "nono/small/tired.png",
+        "width": 441,
+        "height": 778,
+        "source": "Nono Tired.jpeg",
+        "head_center": [
+          268,
+          121
+        ]
+      },
+      "rest": {
+        "file": "nono/rest.png",
+        "small": "nono/small/rest.png",
+        "width": 670,
+        "height": 747,
+        "source": "Nono Tired.jpeg",
+        "head_center": [
+          483,
+          144
+        ]
       }
     },
     "fofo": {
@@ -458,6 +480,28 @@
         "hand": [
           272,
           391
+        ]
+      },
+      "tired": {
+        "file": "fofo/tired.png",
+        "small": "fofo/small/tired.png",
+        "width": 365,
+        "height": 676,
+        "source": "Fofo Tired.jpeg",
+        "head_center": [
+          214,
+          115
+        ]
+      },
+      "rest": {
+        "file": "fofo/rest.png",
+        "small": "fofo/small/rest.png",
+        "width": 384,
+        "height": 588,
+        "source": "Fofo Tired.jpeg",
+        "head_center": [
+          203,
+          108
         ]
       }
     }
