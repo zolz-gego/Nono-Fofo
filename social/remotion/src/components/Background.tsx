@@ -16,7 +16,9 @@ export const Background: React.FC<{bg: string; bg2?: string; pattern?: string; s
     return (
       <AbsoluteFill style={{background: color(bg)}}>
         {images[backdrop] ? (
-          <Img src={staticFile(images[backdrop])} style={{position: 'absolute', left: -220 - camX * 0.3, top: -180, width: W + 440, height: H + 360, objectFit: 'cover'}} />
+          [-1, 0, 1].map((n) => (
+            <Img key={n} src={staticFile(images[backdrop])} style={{position: 'absolute', left: -220 - camX * 0.3 + n * (W + 440), top: -180, width: W + 440, height: H + 360, objectFit: 'cover', transform: n ? 'scaleX(-1)' : undefined}} />
+          ))
         ) : SCENERY.has(pattern) && pattern !== 'icons' ? (
           <Scenery pattern={pattern} base={color(bg)} seed={seed} camX={camX} />
         ) : (

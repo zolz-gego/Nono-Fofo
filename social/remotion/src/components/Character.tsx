@@ -44,6 +44,17 @@ export const Character: React.FC<{spec: CharacterSpec; amp: number}> = ({spec, a
   if (enter === 'right') dx = interpolate(inP, [0, 1], [1000, 0]);
   if (enter === 'bottom') dy = interpolate(inP, [0, 1], [1100, 0]);
   if (enter === 'pop') s = inP;
+  // top: falls from the sky (gravity), then a squashy bounce on the sand
+  let land = 1;
+  if (enter === 'top') {
+    const k = (frame - delay) / (0.6 * fps);
+    if (k < 1) dy = -1900 * (1 - k * k);
+    else {
+      const l = (frame - delay) / fps - 0.6;
+      dy = -Math.abs(Math.sin(l * 9)) * 90 * Math.exp(-l * 6);
+      land = 1 - 0.22 * Math.exp(-l * 9) * Math.cos(l * 18);
+    }
+  }
 
   // A little hop each time the pose changes.
   const hop = swapFrame >= 0 && !fade ? Math.sin(Math.min(1, (frame - swapFrame) / 9) * Math.PI) * 50 : 0;
@@ -67,6 +78,8 @@ export const Character: React.FC<{spec: CharacterSpec; amp: number}> = ({spec, a
   let mx = 0;
   let my = 0;
   let flip = !!spec.flip;
+  let spin = 0;
+  let msc = 1;
   for (const m of spec.moves ?? []) {
     const a = m.at * fps;
     if (frame < a) break;
@@ -77,7 +90,10 @@ export const Character: React.FC<{spec: CharacterSpec; amp: number}> = ({spec, a
     mx = mx + (m.to - mx) * e;
     if (m.toY !== undefined) my = my + (m.toY - my) * e;
     if (m.flip !== undefined) flip = m.flip;
+    if (m.spin !== undefined) spin = spin + (m.spin - spin) * e;
+    if (m.scale !== undefined) msc = msc + (m.scale - msc) * e;
   }
+  if (msc <= 0.01) return null;
 
   const style: React.CSSProperties = {
     position: 'absolute',
@@ -86,7 +102,7 @@ export const Character: React.FC<{spec: CharacterSpec; amp: number}> = ({spec, a
     width: w,
     height,
     transformOrigin: '50% 100%',
-    transform: `translateY(${talkY - hop - jump}px) rotate(${tilt}deg) scale(${sx * s * (0.85 + 0.15 * swapPop)}, ${sy * s * (0.85 + 0.15 * swapPop)}) ${flip ? 'scaleX(-1)' : ''}`,
+    transform: `${spin || msc !== 1 ? `translateY(${-height / 2}px) rotate(${spin}deg) scale(${msc}) translateY(${height / 2}px) ` : ''}translateY(${talkY - hop - jump}px) rotate(${tilt}deg) scale(${(sx * s * (0.85 + 0.15 * swapPop)) / Math.sqrt(land)}, ${sy * s * (0.85 + 0.15 * swapPop) * land}) ${flip ? 'scaleX(-1)' : ''}`,
     filter: 'drop-shadow(0 10px 0 rgba(0,0,0,0.08))',
   };
   const prev = characters[spec.who][prevPose];

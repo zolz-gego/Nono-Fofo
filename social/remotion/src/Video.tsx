@@ -4,12 +4,12 @@ import {EndCard} from './components/EndCard';
 import {Scene, Sfx} from './components/Scene';
 import {music} from './generated/data';
 import {INTROS} from './generated/local';
-import {END_VOICE_AT, WIPE} from './theme';
+import {END_VOICE_AT, PUSH, WIPE} from './theme';
 import type {Timing, VideoSpec} from './types';
 
-export type VideoProps = {spec: VideoSpec; timing: Timing | null; release?: boolean};
+export type VideoProps = {spec: VideoSpec; timing: Timing | null; release?: boolean; noCaptions?: boolean}; // noCaptions: hide the subtitle box (e.g. a clean thumbnail)
 
-export const Video: React.FC<VideoProps> = ({spec, timing}) => {
+export const Video: React.FC<VideoProps> = ({spec, timing, noCaptions}) => {
   if (!timing) return null;
   const Intro = timing.intro ? INTROS[spec.intro!]?.component : undefined;
   // The intro plays first; the story (and its music) starts when it ends.
@@ -21,13 +21,13 @@ export const Video: React.FC<VideoProps> = ({spec, timing}) => {
         </Sequence>
       )}
       <Sequence from={timing.intro} name="story">
-        <Story spec={spec} timing={timing} />
+        <Story spec={spec} timing={timing} noCaptions={noCaptions} />
       </Sequence>
     </AbsoluteFill>
   );
 };
 
-const Story: React.FC<{spec: VideoSpec; timing: Timing}> = ({spec, timing}) => {
+const Story: React.FC<{spec: VideoSpec; timing: Timing; noCaptions?: boolean}> = ({spec, timing, noCaptions}) => {
   const frame = useCurrentFrame();
   const total = timing.total - timing.intro;
 
@@ -45,8 +45,8 @@ const Story: React.FC<{spec: VideoSpec; timing: Timing}> = ({spec, timing}) => {
         const t = timing.scenes[i];
         const last = i === spec.scenes.length - 1 && !spec.endCard;
         return (
-          <Sequence key={scene.id} from={t.from} durationInFrames={t.duration + (last ? 0 : WIPE)} name={scene.id}>
-            <Scene scene={scene} index={i} voiceFrom={t.voiceFrom} voiceFrames={t.voiceFrames} captionSize={spec.captionSize} />
+          <Sequence key={scene.id} from={t.from} durationInFrames={t.duration + (last ? 0 : spec.scenes[i + 1]?.transition === 'pushUp' ? PUSH : WIPE)} name={scene.id}>
+            <Scene scene={scene} index={i} clock={t.from} duration={t.duration} exitPush={spec.scenes[i + 1]?.transition === 'pushUp'} voiceFrom={t.voiceFrom} voiceFrames={t.voiceFrames} captionSize={spec.captionSize} noCaptions={noCaptions} />
           </Sequence>
         );
       })}

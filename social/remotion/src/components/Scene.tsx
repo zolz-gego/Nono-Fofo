@@ -1,12 +1,13 @@
 import React from 'react';
 import {AbsoluteFill, Audio, interpolate, Sequence, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {sfx} from '../generated/data';
-import {WIPE} from '../theme';
+import {PUSH, WIPE} from '../theme';
 import type {SceneSpec} from '../types';
 import {Background} from './Background';
 import {Captions} from './Captions';
 import {Character} from './Character';
 import {KeywordCard} from './KeywordCard';
+import {NileLife} from './Ambient';
 import {Props, shakeOffset} from './Props';
 import {VoiceAmp} from './VoiceAmp';
 
@@ -21,6 +22,9 @@ export const Sfx: React.FC<{id: string; at: number; volume?: number}> = ({id, at
 // Entrances, pose swaps, keywords and the wipe-in get their sound automatically;
 // `sfx` in video.json adds more.
 // Camera state at a frame: eased between keyframes (scene seconds).
+// pushUp: the new scene slides up over PUSH frames while the one before slides off the top
+const pushE = (p: number) => (p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
+
 export function cameraAt(cam: SceneSpec['camera'], sec: number) {
   const c = {x: 0, y: 0, zoom: 1, rot: 0};
   for (const k of cam ?? []) {
@@ -36,7 +40,7 @@ export function cameraAt(cam: SceneSpec['camera'], sec: number) {
   return c;
 }
 
-export const Scene: React.FC<{scene: SceneSpec; index: number; voiceFrom: number; voiceFrames: number; captionSize?: 'normal' | 'large'}> = ({scene, index, voiceFrom, voiceFrames, captionSize}) => {
+export const Scene: React.FC<{scene: SceneSpec; index: number; clock?: number; duration?: number; exitPush?: boolean; voiceFrom: number; voiceFrames: number; captionSize?: 'normal' | 'large'; noCaptions?: boolean}> = ({noCaptions, scene, index, clock = 0, duration = 0, exitPush = false, voiceFrom, voiceFrames, captionSize}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const sec = (s: number) => Math.round(s * fps);
@@ -52,7 +56,11 @@ export const Scene: React.FC<{scene: SceneSpec; index: number; voiceFrom: number
   return (
     <AbsoluteFill
       style={
-        scene.transition === 'whip' && index > 0
+        exitPush && frame >= duration
+          ? {transform: `translateY(${-pushE(Math.min(1, (frame - duration) / PUSH)) * 1920}px)`}
+          : scene.transition === 'pushUp' && index > 0
+          ? {transform: `translateY(${(1 - pushE(Math.min(1, frame / PUSH))) * 1920}px)`}
+          : scene.transition === 'whip' && index > 0
           ? {transform: `translateX(${whip * 1080}px)`, filter: whip > 0.02 ? `blur(${whip * 18}px)` : undefined}
           : scene.transition === 'cut'
             ? {}
@@ -74,6 +82,7 @@ export const Scene: React.FC<{scene: SceneSpec; index: number; voiceFrom: number
             before={scene.before}
             backdrop={scene.backdrop}
           />
+          {scene.ambient === 'nile' && <NileLife clock={clock + frame} />}
         </AbsoluteFill>
         <AbsoluteFill style={{transform: world}}>
           <Props props={scene.props} voiceFrom={voiceFrom} layer="back" />
@@ -88,15 +97,17 @@ export const Scene: React.FC<{scene: SceneSpec; index: number; voiceFrom: number
       {(scene.keywords ?? []).map((kw, i) => (
         <KeywordCard key={i} kw={kw} index={i} count={scene.keywords!.length} startFrame={voiceFrom + sec(kw.at)} />
       ))}
-      {line && scene.captions !== false && <Captions line={line} voiceFrom={voiceFrom} voiceFrames={voiceFrames} size={captionSize} />}
+      {line && scene.captions !== false && !noCaptions && <Captions line={line} voiceFrom={voiceFrom} voiceFrames={voiceFrames} size={captionSize} />}
 
       {line?.voice && (
         <Sequence from={voiceFrom} layout="none">
           <Audio src={staticFile(line.voice)} />
         </Sequence>
       )}
-      {index > 0 && scene.transition !== 'cut' && <Sfx id={scene.transition === 'whip' ? 'mg_whoosh_out' : 'mg_scene_swipe'} at={0} volume={0.8} />}
-      {chars.map((c, i) => (c.enter ?? 'left') !== 'none' && <Sfx key={`e${i}`} id={c.enter === 'pop' ? 'mg_boing' : 'mg_whoosh_in'} at={1 + sec(c.delay ?? 0)} volume={0.7} />)}
+      {index > 0 && scene.transition !== 'cut' && <Sfx id={scene.transition === 'whip' || scene.transition === 'pushUp' ? 'mg_whoosh_out' : 'mg_scene_swipe'} at={0} volume={0.8} />}
+      {chars.map((c, i) => (c.enter ?? 'left') !== 'none' && <Sfx key={`e${i}`} id={c.enter === 'pop' ? 'mg_boing' : c.enter === 'top' ? 'mg_slide_down' : 'mg_whoosh_in'} at={1 + sec(c.delay ?? 0)} volume={0.7} />)}
+      {/* a drop from the sky ends with a thump on the ground */}
+      {chars.map((c, i) => c.enter === 'top' && <Sfx key={`l${i}`} id="mg_slam" at={sec((c.delay ?? 0) + 0.6)} volume={0.6} />)}
       {chars.flatMap((c, i) => (c.swaps ?? []).map((s, j) => !s.fade && <Sfx key={`p${i}-${j}`} id="mg_pose_swap" at={sec(s.at)} volume={0.8} />))}
       {(scene.keywords ?? []).map((kw, i) => (
         <Sfx key={`k${i}`} id={i % 2 ? 'mg_keyword_pop_2' : 'mg_keyword_pop'} at={voiceFrom + sec(kw.at)} volume={0.75} />

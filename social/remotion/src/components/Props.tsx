@@ -1,7 +1,7 @@
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import React from 'react';
 import {Img, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
-import {images} from '../generated/data';
+import {characters, images} from '../generated/data';
 import {ICONS} from '../icons';
 import {color, FONT_AR, FONT_COPTIC, FONT_EN} from '../theme';
 import type {PropSpec} from '../types';
@@ -54,7 +54,7 @@ const Starburst: React.FC<{size: number; fill: string}> = ({size, fill}) => {
 
 // ---------------------------------------------------------------- Grandpa's golden book
 
-const Book: React.FC<P<'book'>> = ({t, fps, x = 540, y = 860, size = 1, openAt, burstAt, letterInAt, letterFrom = [540, 420], letter = 'A', found, only}) => {
+const Book: React.FC<P<'book'>> = ({t, fps, x = 540, y = 860, size = 1, dropAt, openAt, burstAt, letterInAt, letterFrom = [540, 420], letter = 'A', found, only}) => {
   const W = 640 * size;
   const H = 400 * size;
   // closed cover flips away, then the open book unfolds
@@ -66,9 +66,12 @@ const Book: React.FC<P<'book'>> = ({t, fps, x = 540, y = 860, size = 1, openAt, 
   const hit = burst ? Math.sin(Math.min(1, b / 0.35) * Math.PI) : 0;
   const glow = 0.55 + 0.25 * Math.sin(t * 5) + (burst ? interpolate(b, [0, 0.15, 0.8], [0, 1.2, 0], clamp) : 0);
   const li = since(t, letterInAt);
+  // dropAt: falls from the sky and lands with a bounce
+  if (dropAt !== undefined && t < dropAt) return null;
+  const dropY = dropAt === undefined ? 0 : (1 - sp(t - dropAt, fps, 9, 110)) * -1400;
 
   return (
-    <div style={{position: 'absolute', left: x, top: y, width: 0, height: 0}}>
+    <div style={{position: 'absolute', left: x, top: y + dropY, width: 0, height: 0}}>
       {/* glow + slowly turning rays */}
       <div
         style={{
@@ -162,7 +165,7 @@ const Book: React.FC<P<'book'>> = ({t, fps, x = 540, y = 860, size = 1, openAt, 
                   const key = KEYS[(i + side * 9) % KEYS.length];
                   // letters found earlier sit big on the left page, side by side in the middle row
                   const foundKeys = found ? found.split('') : [];
-                  const slots = foundKeys.length === 1 ? [4] : foundKeys.length === 2 ? [3, 5] : [3, 4, 5];
+                  const slots = foundKeys.length === 1 ? [4] : foundKeys.length === 2 ? [3, 5] : foundKeys.length === 3 ? [3, 4, 5] : [1, 3, 5, 7, 4, 0, 2, 6, 8];
                   const slot = side === 0 ? slots.indexOf(i) : -1;
                   // page letters vanish when they burst out; one comes back with letterIn
                   const back = side === 1 && i === 4 && li >= 0.55;
@@ -1018,9 +1021,367 @@ const Banner: React.FC<P<'banner'>> = ({t, fps, at, ar, en, y = 250, outAt}) => 
   );
 };
 
+// ---------------------------------------------------------------- magic swirl (دوامة): an electric-blue 3D tunnel
+
+// Neon rings and spiral arms rush out of a white-hot centre towards the camera,
+// with light streaks flying past, so it feels like flying down a glowing tunnel.
+const Vortex: React.FC<P<'vortex'>> = ({t, fps, at, outAt, x = 540, y = 900, size = 760, full, to}) => {
+  if (t < at) return null;
+  const open = full ? 1 : sp(t - at, fps, 14, 90);
+  const close = outAt !== undefined ? interpolate(t - outAt, [0, 0.35], [1, 0], clamp) : 1;
+  // full screen, then (to) it shrinks and slides away
+  const m = full && to ? interpolate(t - to.at, [0, to.dur ?? 0.8], [0, 1], clamp) : 0;
+  const me = m < 0.5 ? 2 * m * m : 1 - Math.pow(-2 * m + 2, 2) / 2;
+  const R = (full ? 1250 + ((to?.size ?? 0) / 2 - 1250) * me : size / 2) * open * close;
+  const cx = full ? 540 + ((to?.x ?? 540) - 540) * me : x;
+  const cy = full ? 960 + ((to?.y ?? 960) - 960) * me : y;
+  if (R < 2) return null;
+  const k = t - at;
+  const speed = full ? 0.9 : 0.55; // rings per second towards the camera
+  const RINGS = 18;
+  const ring = (i: number) => {
+    const d = (i / RINGS + k * speed) % 1; // 0 = deep in the tunnel, 1 = at the camera
+    const r = R * Math.pow(d, 2.1);
+    const tw = d * 220 + k * 140; // the tunnel twists as it comes closer
+    const pts: string[] = [];
+    for (let j = 0; j <= 72; j++) {
+      const a = (j / 72) * Math.PI * 2;
+      const rr = r * (1 + 0.07 * Math.sin(6 * a + (tw * Math.PI) / 180));
+      pts.push(`${(Math.cos(a) * rr).toFixed(1)},${(Math.sin(a) * rr).toFixed(1)}`);
+    }
+    const w = 2 + 22 * d * d;
+    const o = Math.min(1, d * 3) * (full ? 1 : 1 - Math.pow(d, 6));
+    return {pts: pts.join(' '), w, o, hue: i % 3};
+  };
+  const ARMS = 5;
+  const arm = (n: number) => {
+    const pts: string[] = [];
+    for (let j = 0; j <= 48; j++) {
+      const f = j / 48;
+      const r = R * Math.pow(f, 1.6);
+      const a = ((n * 360) / ARMS + f * 320 - k * 200) * (Math.PI / 180);
+      pts.push(`${(Math.cos(a) * r).toFixed(1)},${(Math.sin(a) * r).toFixed(1)}`);
+    }
+    return pts.join(' ');
+  };
+  const NEON = ['#00E5FF', '#2F7BFF', '#9FD8FF'];
+  const rings = Array.from({length: RINGS}, (_, i) => ring(i)).sort((p, q) => p.w - q.w);
+  return (
+    <div style={{position: 'absolute', left: cx, top: cy, width: 0, height: 0}}>
+      {/* see-through: only a soft white glow in the middle (the scene shows behind the rings) */}
+      <div style={{position: 'absolute', left: -R, top: -R, width: R * 2, height: R * 2, borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(220,248,255,0.7) 6%, rgba(160,225,255,0.28) 18%, rgba(120,200,255,0.1) 38%, rgba(255,255,255,0) 62%)'}} />
+      <svg width={R * 2} height={R * 2} style={{position: 'absolute', left: -R, top: -R, overflow: 'visible'}}>
+        <g transform={`translate(${R} ${R})`}>
+          {/* spiral arms (soft glow + bright core) */}
+          {Array.from({length: ARMS}, (_, n) => (
+            <g key={`a${n}`}>
+              <polyline points={arm(n)} fill="none" stroke="#2F7BFF" strokeWidth={Math.max(8, R * 0.07)} strokeLinecap="round" opacity={0.35} />
+              <polyline points={arm(n)} fill="none" stroke="#7FE9FF" strokeWidth={Math.max(3, R * 0.018)} strokeLinecap="round" opacity={0.85} />
+            </g>
+          ))}
+          {/* tunnel rings rushing towards the camera */}
+          {rings.map((g, i) => (
+            <g key={`r${i}`} opacity={g.o}>
+              <polygon points={g.pts} fill="none" stroke={NEON[g.hue]} strokeWidth={g.w * 2.6} opacity={0.22} strokeLinejoin="round" />
+              <polygon points={g.pts} fill="none" stroke={g.hue === 2 ? '#FFFFFF' : NEON[g.hue]} strokeWidth={g.w} opacity={0.9} strokeLinejoin="round" />
+            </g>
+          ))}
+        </g>
+      </svg>
+      {/* light streaks flying past */}
+      {Array.from({length: full ? 34 : 16}, (_, i) => {
+        const q = (k * (full ? 1.4 : 1) + random(`vs${i}`)) % 1;
+        const a = random(`va${i}`) * Math.PI * 2;
+        const r0 = R * 0.08 + R * Math.pow(q, 2) * 1.1;
+        const len = 20 + R * 0.35 * q * q;
+        return (
+          <div key={i} style={{position: 'absolute', left: Math.cos(a) * r0, top: Math.sin(a) * r0, width: len, height: Math.max(2, 7 * q),
+            borderRadius: 4, background: i % 4 ? '#BFF6FF' : 'white', opacity: Math.min(1, q * 3) * 0.9, transformOrigin: '0 50%', transform: `rotate(${(a * 180) / Math.PI}deg)`,
+            boxShadow: '0 0 12px #29B6FF'}} />
+        );
+      })}
+    </div>
+  );
+};
+
+// ---------------------------------------------------------------- a dropped gold letter (falls, tumbles, rests and glows)
+
+const Drop: React.FC<P<'drop'>> = ({t, k, size = 200, outAt, path}) => {
+  if (!path.length || t < path[0].at) return null;
+  const out = outAt !== undefined ? interpolate(t - outAt, [0, 0.2], [1, 0], clamp) : 1;
+  if (out <= 0) return null;
+  let i = path.length - 1;
+  for (let j = 0; j < path.length - 1; j++) if (t < path[j + 1].at) { i = j; break; }
+  const a = path[i];
+  const b = path[Math.min(i + 1, path.length - 1)];
+  const p = b === a ? 1 : Math.min(1, (t - a.at) / (b.at - a.at));
+  const x = a.x + (b.x - a.x) * p;
+  const y = a.y + (b.y - a.y) * p - Math.sin(p * Math.PI) * (b.hop ?? 0);
+  const resting = b === a || (i === path.length - 2 && p >= 1);
+  // spins while it tumbles, settles upright
+  const spin = resting ? 0 : (b.x < a.x ? -1 : 1) * p * 360 * (b.hop ? 1 : 0.5);
+  const rest = resting ? t - path[path.length - 1].at : 0;
+  const glow = resting ? 0.6 + 0.4 * Math.sin(rest * 6) : 0.4;
+  const bob = resting ? Math.sin(rest * 3) * 8 : 0;
+  return (
+    <div style={{position: 'absolute', left: x, top: y + bob, width: 0, height: 0, transform: `scale(${out})`}}>
+      <div style={{position: 'absolute', left: -size * 1.1, top: -size * 1.1, width: size * 2.2, height: size * 2.2, borderRadius: '50%', background: `radial-gradient(circle, ${GLOW} 0%, transparent 62%)`, opacity: glow}} />
+      <div style={{position: 'absolute', left: -size / 2, top: -size / 2, width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center', transform: `rotate(${spin}deg)`}}>
+        <GoldLetter k={k} size={size} style={{textShadow: [...Array.from({length: 12}, (_, n) => `${Math.cos((n / 12) * Math.PI * 2) * 6}px ${Math.sin((n / 12) * Math.PI * 2) * 6}px 0 white`), `0 0 ${size * 0.15}px ${GLOW}`].join(', ')}} />
+      </div>
+    </div>
+  );
+};
+
+// ---------------------------------------------------------------- trip across Egypt (map + travelling swirl)
+
+// world px of a place: Giza is (0, 0); 330 px per degree east, 365 px per degree south
+const MX = (lon: number) => (lon - 31.13) * 330;
+const MY = (lat: number) => (29.98 - lat) * 365;
+const M = ([lon, lat]: [number, number]) => `${MX(lon).toFixed(0)},${MY(lat).toFixed(0)}`;
+const LAND: [number, number][] = [
+  [24.2, 31.6], [25.2, 31.6], [27.2, 31.4], [29.0, 30.95], [29.9, 31.22], [30.4, 31.5], [31.0, 31.6], [31.9, 31.52], [32.3, 31.28], [33.2, 31.12], [34.2, 31.32],
+  [34.9, 29.5], [34.6, 28.6], [34.27, 27.75], [33.75, 28.2], [33.2, 28.9], [32.75, 29.6], [32.55, 29.95],
+  [32.35, 29.6], [32.7, 28.95], [33.3, 28.1], [33.85, 27.2], [34.3, 26.1], [35.0, 24.9], [35.6, 23.9], [36.0, 22.6], [36.9, 21.6], [37.5, 18.0], [24.2, 18.0],
+];
+const NILE_PATH: [number, number][] = [
+  [32.88, 23.2], [32.9, 24.09], [32.95, 24.6], [32.87, 25.2], [32.62, 25.7], [32.72, 26.15], [32.25, 26.05], [31.7, 26.55], [31.18, 27.18],
+  [30.75, 28.1], [31.1, 29.07], [31.22, 30.05], [31.1, 30.25],
+];
+const DELTA_ARMS: [number, number][][] = [[[31.1, 30.25], [30.75, 30.9], [30.4, 31.45]], [[31.1, 30.25], [31.4, 30.95], [31.82, 31.5]]];
+// the trip: from the pyramids, along the Nile, to Aswan
+const ROUTE: [number, number][] = [[31.0, 29.95], [31.1, 29.07], [30.75, 28.1], [31.18, 27.18], [31.7, 26.55], [32.25, 26.05], [32.72, 26.15], [32.62, 25.7], [32.87, 25.2], [32.95, 24.6], [32.85, 24.1]];
+const ROUTE_PX = ROUTE.map(([lon, lat]) => [MX(lon), MY(lat)] as [number, number]);
+const ROUTE_LEN = ROUTE_PX.slice(1).reduce((a, q, i) => a + Math.hypot(q[0] - ROUTE_PX[i][0], q[1] - ROUTE_PX[i][1]), 0);
+const routeAt = (p: number): [number, number] => {
+  let d = Math.max(0, Math.min(1, p)) * ROUTE_LEN;
+  for (let i = 1; i < ROUTE_PX.length; i++) {
+    const [ax, ay] = ROUTE_PX[i - 1];
+    const [bx, by] = ROUTE_PX[i];
+    const l = Math.hypot(bx - ax, by - ay);
+    if (d <= l) return [ax + ((bx - ax) * d) / l, ay + ((by - ay) * d) / l];
+    d -= l;
+  }
+  return ROUTE_PX[ROUTE_PX.length - 1];
+};
+
+const INK = '#5B4B3A';
+// little landmarks, drawn in the app's flat style (each fits a ~120 px box, base at 0,0)
+const Mark: React.FC<{kind: string}> = ({kind}) => {
+  const st = {stroke: INK, strokeWidth: 4, strokeLinejoin: 'round' as const};
+  switch (kind) {
+    case 'lighthouse':
+      return (
+        <g>
+          <path d="M-22 0 L-14 -92 L14 -92 L22 0 Z" fill="white" {...st} />
+          <path d="M-19.5 -30 L19.5 -30 L17 -52 L-17 -52 Z M-15.5 -72 L15.5 -72 L14.5 -84 L-14.5 -84 Z" fill="#FF7A5C" />
+          <rect x={-16} y={-112} width={32} height={20} fill="#FFC845" {...st} />
+          <path d="M-20 -112 L0 -130 L20 -112 Z" fill="#FF7A5C" {...st} />
+          <path d="M16 -102 L70 -122 L70 -82 Z" fill="#FFF4C2" opacity={0.7} />
+        </g>
+      );
+    case 'tower':
+      return (
+        <g>
+          <path d="M-12 0 L-7 -100 L7 -100 L12 0 Z" fill="#E9D8B4" {...st} />
+          <path d="M-16 -100 Q0 -126 16 -100 Z" fill="#6CC24A" {...st} />
+          <rect x={-2} y={-138} width={4} height={14} fill={INK} />
+          {[-80, -60, -40, -20].map((y) => <line key={y} x1={-9} y1={y} x2={9} y2={y} stroke={INK} strokeWidth={2} opacity={0.5} />)}
+        </g>
+      );
+    case 'pyramids':
+      return (
+        <g>
+          {[[-70, 56], [-28, 80], [22, 50]].map(([ox, w], j) => (
+            <g key={j}>
+              <polygon points={`${ox},0 ${ox + w / 2},${-w * 0.85} ${ox + w},0`} fill="#FFC845" {...st} />
+              <polygon points={`${ox + w / 2},${-w * 0.85} ${ox + w},0 ${ox + w * 0.62},0`} fill="#C99A55" />
+            </g>
+          ))}
+        </g>
+      );
+    case 'ship':
+      return (
+        <g>
+          <path d="M-50 -20 L50 -20 L38 0 L-38 0 Z" fill="#FF7A5C" {...st} />
+          <rect x={-30} y={-46} width={44} height={26} fill="white" {...st} />
+          <rect x={18} y={-56} width={14} height={36} fill="#FFC845" {...st} />
+          <circle cx={-18} cy={-33} r={4} fill="#4F7C82" />
+          <circle cx={0} cy={-33} r={4} fill="#4F7C82" />
+        </g>
+      );
+    case 'wheel':
+      return (
+        <g>
+          <circle cx={0} cy={-46} r={40} fill="none" stroke="#A0704A" strokeWidth={10} />
+          {[0, 45, 90, 135].map((a) => (
+            <line key={a} x1={-40 * Math.cos((a * Math.PI) / 180)} y1={-46 - 40 * Math.sin((a * Math.PI) / 180)} x2={40 * Math.cos((a * Math.PI) / 180)} y2={-46 + 40 * Math.sin((a * Math.PI) / 180)} stroke="#6E4A2F" strokeWidth={6} />
+          ))}
+          <circle cx={0} cy={-46} r={10} fill="#6E4A2F" />
+          <path d="M-56 0 L56 0" stroke="#6FC3D0" strokeWidth={10} strokeLinecap="round" />
+        </g>
+      );
+    case 'mountain':
+      return (
+        <g>
+          <polygon points="-62,0 -12,-92 38,0" fill="#C27C50" {...st} />
+          <polygon points="-2,0 34,-62 70,0" fill="#D5B27A" {...st} />
+          <polygon points="-24,-70 -12,-92 0,-70 -8,-66 -14,-74" fill="white" />
+        </g>
+      );
+    case 'fish':
+      return (
+        <g>
+          <ellipse cx={0} cy={-34} rx={36} ry={22} fill="#FFC845" {...st} />
+          <path d="M30 -34 L58 -54 L58 -14 Z" fill="#FF7A5C" {...st} />
+          <path d="M-8 -54 L-8 -14" stroke="#FF7A5C" strokeWidth={8} />
+          <circle cx={-20} cy={-38} r={5} fill={INK} />
+          <path d="M-60 0 Q-50 -26 -40 0 M44 0 Q52 -20 60 0" fill="#FF7A5C" stroke={INK} strokeWidth={3} />
+        </g>
+      );
+    case 'balloon':
+      return (
+        <g>
+          <path d="M0 -40 C-50 -60 -46 -132 0 -132 C46 -132 50 -60 0 -40 Z" fill="#FF7A5C" {...st} />
+          <path d="M0 -132 C-18 -110 -18 -60 0 -40 C18 -60 18 -110 0 -132" fill="#FFC845" />
+          <path d="M-10 -40 L-10 -22 M10 -40 L10 -22" stroke={INK} strokeWidth={3} />
+          <rect x={-14} y={-22} width={28} height={20} rx={4} fill="#A0704A" {...st} />
+        </g>
+      );
+    case 'temple':
+      return (
+        <g>
+          <path d="M-62 0 L-56 -86 L-14 -86 L-8 0 Z M8 0 L14 -86 L56 -86 L62 0 Z" fill="#E6C88E" {...st} />
+          <rect x={-10} y={-56} width={20} height={56} fill="#C99A55" {...st} />
+          {[-46, -32, 24, 38].map((x) => <line key={x} x1={x} y1={-70} x2={x + 6} y2={-24} stroke="#C99A55" strokeWidth={4} />)}
+          <path d="M-70 0 L70 0" stroke="#6FC3D0" strokeWidth={10} strokeLinecap="round" />
+        </g>
+      );
+    case 'palms':
+      return (
+        <g>
+          {[-26, 22].map((x, j) => (
+            <g key={j} transform={`translate(${x} 0) scale(${j ? 0.8 : 1})`}>
+              <path d="M0 0 Q6 -40 0 -80" stroke="#8A6B4E" strokeWidth={9} fill="none" />
+              <path d="M0 -80 Q-34 -92 -50 -66 M0 -80 Q34 -92 50 -66 M0 -80 Q-20 -112 -40 -110 M0 -80 Q20 -112 40 -110" stroke="#5E9E45" strokeWidth={12} fill="none" strokeLinecap="round" />
+            </g>
+          ))}
+        </g>
+      );
+    default:
+      return null;
+  }
+};
+const LANDMARKS: {at: [number, number]; kind: string; ar: string; en: string}[] = [
+  {at: [29.92, 31.2], kind: 'lighthouse', ar: 'الإسكندرية', en: 'Alexandria'},
+  {at: [32.3, 31.2], kind: 'ship', ar: 'بورسعيد', en: 'Port Said'},
+  {at: [31.55, 30.15], kind: 'tower', ar: 'القاهرة', en: 'Cairo'},
+  {at: [30.6, 29.95], kind: 'pyramids', ar: 'الجيزة', en: 'Giza'},
+  {at: [30.2, 29.3], kind: 'wheel', ar: 'الفيوم', en: 'Fayoum'},
+  {at: [33.9, 28.75], kind: 'mountain', ar: 'سيناء', en: 'Sinai'},
+  {at: [34.35, 27.05], kind: 'fish', ar: 'الغردقة', en: 'Hurghada'},
+  {at: [30.3, 25.6], kind: 'palms', ar: 'الوادي الجديد', en: 'New Valley'},
+  {at: [33.3, 25.85], kind: 'balloon', ar: 'الأقصر', en: 'Luxor'},
+  {at: [32.3, 24.05], kind: 'temple', ar: 'أسوان', en: 'Aswan'},
+];
+
+const Travel: React.FC<P<'travel'>> = ({t, fps, at, until, from, to, ease, intro, zoomAt}) => {
+  const k = interpolate(t, [at, until], [0, 1], clamp);
+  const e = ease === 'in' ? k * k : ease === 'out' ? 1 - (1 - k) * (1 - k) : k;
+  const prog = from + (to - from) * e;
+  const [vx, vy] = routeAt(prog);
+  // the camera keeps the swirl a little above the middle, so you see where it's heading
+  const FX = 540;
+  const FY = 760;
+  const introZ = intro ? interpolate(t - at, [0, 0.55], [2.4, 1], {...clamp, easing: (x) => 1 - Math.pow(1 - x, 3)}) : 1;
+  const dive = zoomAt !== undefined ? interpolate(t - zoomAt, [0, 0.6], [1, 2.6], {...clamp, easing: (x) => x * x}) : 1;
+  const z = introZ * dive;
+  const flash = intro ? interpolate(t - at, [0, 0.35], [1, 0], clamp) : 0;
+  const nono = characters.nono?.fall;
+  const fofo = characters.fofo?.surprised;
+  const spin = prog * 2200;
+  return (
+    <div style={{position: 'absolute', left: 0, top: 0, width: 1080, height: 1920, overflow: 'hidden', background: '#6FC3D0'}}>
+      <div style={{position: 'absolute', left: FX, top: FY, width: 0, height: 0, transform: `scale(${z}) translate(${-vx}px, ${-vy}px)`}}>
+        <svg width={10} height={10} style={{position: 'absolute', overflow: 'visible'}}>
+          {/* sea waves */}
+          {Array.from({length: 120}, (_, i) => {
+            const wx = -3000 + (i % 10) * 640 + (Math.floor(i / 10) % 2) * 320 + Math.sin(t * 1.5 + i) * 10;
+            const wy = -1200 + Math.floor(i / 10) * 520;
+            return <path key={i} d={`M${wx} ${wy} q15 -12 30 0 t30 0`} fill="none" stroke="white" strokeWidth={5} strokeLinecap="round" opacity={0.7} />;
+          })}
+          {/* land, with a soft shadow edge */}
+          <polygon points={LAND.map(M).join(' ')} fill="#D6B072" transform="translate(0 14)" />
+          <polygon points={LAND.map(M).join(' ')} fill="#EFDCAE" stroke={INK} strokeWidth={8} strokeLinejoin="round" />
+          {/* sand ripples */}
+          {Array.from({length: 140}, (_, i) => {
+            const rx = MX(25.5 + random(`rx${i}`) * 9);
+            const ry = MY(22.6 + random(`ry${i}`) * 8);
+            return <path key={i} d={`M${rx} ${ry} q20 -10 40 0`} fill="none" stroke="#D6B072" strokeWidth={5} strokeLinecap="round" />;
+          })}
+          {/* the green delta and the green strip along the Nile */}
+          <polygon points={[[31.1, 30.25], [30.2, 31.45], [30.6, 31.55], [31.4, 31.55], [32.0, 31.45]].map((q) => M(q as [number, number])).join(' ')} fill="#8CC66A" stroke="#6FAE52" strokeWidth={6} strokeLinejoin="round" />
+          <polyline points={NILE_PATH.map(M).join(' ')} fill="none" stroke="#8CC66A" strokeWidth={110} strokeLinecap="round" strokeLinejoin="round" />
+          <polyline points={NILE_PATH.map(M).join(' ')} fill="none" stroke="#3FA7C0" strokeWidth={28} strokeLinecap="round" strokeLinejoin="round" />
+          {DELTA_ARMS.map((arm, i) => <polyline key={i} points={arm.map(M).join(' ')} fill="none" stroke="#3FA7C0" strokeWidth={20} strokeLinecap="round" />)}
+          {/* Lake Nasser */}
+          <path d={`M${M([32.88, 23.95])} C${M([33.15, 23.5])} ${M([32.6, 23.0])} ${M([32.4, 22.4])} C${M([32.0, 22.1])} ${M([32.5, 21.9])} ${M([32.9, 22.6])} C${M([33.3, 23.1])} ${M([33.2, 23.7])} ${M([32.88, 23.95])}`} fill="#3FA7C0" />
+          {/* Fayoum lake */}
+          <ellipse cx={MX(30.6)} cy={MY(29.45)} rx={50} ry={20} fill="#3FA7C0" />
+          {/* the trail left behind */}
+          <polyline points={Array.from({length: 40}, (_, i) => routeAt((prog * i) / 39)).map(([x, y]) => `${x},${y}`).join(' ')} fill="none" stroke="white" strokeWidth={8} strokeDasharray="4 22" strokeLinecap="round" opacity={0.9} />
+        </svg>
+        {/* landmarks with name tags */}
+        {LANDMARKS.map((lm, i) => {
+          const x = MX(lm.at[0]);
+          const y = MY(lm.at[1]);
+          const near = Math.hypot(x - vx, y - vy);
+          const pop = 1.35 * (1 + 0.25 * Math.max(0, 1 - near / 400));
+          return (
+            <div key={i} style={{position: 'absolute', left: x, top: y, width: 0, height: 0, transform: `scale(${pop})`}}>
+              <svg width={10} height={10} style={{position: 'absolute', overflow: 'visible'}}>
+                <ellipse cx={0} cy={2} rx={58} ry={10} fill="rgba(0,0,0,0.12)" />
+                <Mark kind={lm.kind} />
+              </svg>
+              <div style={{position: 'absolute', left: -110, top: 10, width: 220, textAlign: 'center'}}>
+                <div style={{display: 'inline-block', padding: '2px 16px 4px', borderRadius: 22, background: color('cream'), border: `4px solid ${INK}`, whiteSpace: 'nowrap'}}>
+                  <div dir="rtl" style={{fontFamily: FONT_AR, fontWeight: 800, fontSize: 30, lineHeight: 1.2, color: color('deepTeal')}}>{lm.ar}</div>
+                  <div style={{fontFamily: FONT_EN, fontWeight: 800, fontSize: 18, lineHeight: 1, color: color('coral')}}>{lm.en}</div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+        {/* the swirl with the brothers tumbling inside */}
+        <div style={{position: 'absolute', left: vx, top: vy, width: 0, height: 0}}>
+          <Vortex kind="vortex" t={t} fps={fps} at={-99} x={0} y={0} size={420} />
+          {[nono, fofo].map((pose, i) =>
+            pose?.file ? (
+              <Img
+                key={i}
+                src={staticFile(pose.file)}
+                style={{
+                  position: 'absolute',
+                  height: 120,
+                  width: (pose.width / pose.height) * 120,
+                  left: Math.cos((spin * 0.6 + i * 180) * (Math.PI / 180)) * 58 - ((pose.width / pose.height) * 120) / 2,
+                  top: Math.sin((spin * 0.6 + i * 180) * (Math.PI / 180)) * 58 - 60,
+                  transform: `rotate(${(i ? -1 : 1) * spin}deg)`,
+                }}
+              />
+            ) : null,
+          )}
+        </div>
+      </div>
+      {flash > 0 && <div style={{position: 'absolute', inset: 0, background: 'white', opacity: flash}} />}
+    </div>
+  );
+};
+
 // ---------------------------------------------------------------- layers
 
-const BACK = new Set(['book', 'egypt', 'speed']);
+const BACK = new Set(['book', 'egypt', 'speed', 'vortex', 'travel']);
 const SCREEN = new Set(['compare', 'twoIotas', 'title', 'alarm', 'banner', 'speech']);
 
 // Props behind the characters (`layer="back"`) or in front of them.
@@ -1089,6 +1450,12 @@ export const Props: React.FC<{props?: PropSpec[]; voiceFrom: number; layer: 'bac
               return <Box key={i} {...(q as P<'box'>)} />;
             case 'image':
               return <Picture key={i} {...(q as P<'image'>)} />;
+            case 'vortex':
+              return <Vortex key={i} {...(q as P<'vortex'>)} />;
+            case 'travel':
+              return <Travel key={i} {...(q as P<'travel'>)} />;
+            case 'drop':
+              return <Drop key={i} {...(q as P<'drop'>)} />;
             case 'bubble':
               return <Bubble key={i} {...(q as P<'bubble'>)} />;
             default:

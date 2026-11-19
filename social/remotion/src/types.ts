@@ -19,7 +19,7 @@ export type CharacterSpec = {
   who: string; // 'nono' | 'fofo' | a guest (e.g. 'ramses')
   pose: string;
   at?: 'center' | 'left' | 'right';
-  enter?: 'left' | 'right' | 'bottom' | 'pop' | 'none';
+  enter?: 'left' | 'right' | 'bottom' | 'top' | 'pop' | 'none'; // top: drops from the sky and lands with a bounce
   flip?: boolean;
   swaps?: {at: number; pose: string; fade?: boolean}[]; // seconds from scene start; fade = dissolve into the new pose (no hop, no sound)
   size?: number; // height multiplier (1 = standing height)
@@ -27,7 +27,7 @@ export type CharacterSpec = {
   delay?: number; // seconds from scene start before he enters
   // slide sideways: offset in px from his spot, reached at `at` (scene seconds) over `dur`;
   // `flip` sets which way he faces from that moment
-  moves?: {at: number; to: number; toY?: number; dur?: number; flip?: boolean}[]; // toY: vertical offset (px, + = down)
+  moves?: {at: number; to: number; toY?: number; dur?: number; flip?: boolean; spin?: number; scale?: number}[]; // toY: vertical offset (px, + = down); spin: turns (deg) reached by the end; scale: size reached (0 = vanishes, e.g. sucked into a vortex)
   jumps?: {at: number; until?: number; height?: number; every?: number}[]; // hop up and down (scene seconds), e.g. reaching for something
 };
 
@@ -47,7 +47,7 @@ export type Keyword = {
 // Motion-graphics props (src/components/Props.tsx). Times are seconds from the
 // voice start (like keywords); negative = during the scene lead-in.
 export type PropSpec =
-  | {kind: 'book'; x?: number; y?: number; size?: number; openAt?: number; burstAt?: number; letterInAt?: number; letterFrom?: [number, number]; letter?: string; found?: string; only?: boolean} // letter: Avva key that flies in (default A); found: letters already on the left page (e.g. "AE"); only: hide the other letters
+  | {kind: 'book'; x?: number; y?: number; size?: number; dropAt?: number; openAt?: number; burstAt?: number; letterInAt?: number; letterFrom?: [number, number]; letter?: string; found?: string; only?: boolean} // letter: Avva key that flies in (default A); found: letters already on the left page (e.g. "AE"); only: hide the other letters
   | {kind: 'egypt'; at?: number}
   | {
       kind: 'letter';
@@ -71,6 +71,14 @@ export type PropSpec =
   | {kind: 'ball'; at: number; x: number; y: number; size?: number} // football bounces in from the right
   | {kind: 'rain'; at?: number; count?: number} // gold Coptic letters fall and bounce off the brothers' heads
   | {kind: 'shake'; at: number}
+  // magic swirl (دوامة) at x,y: opens at `at`, closes at `outAt`; full = fills the whole screen (the tunnel ride)
+  | {kind: 'vortex'; at: number; outAt?: number; x?: number; y?: number; size?: number; full?: boolean; to?: {at: number; x: number; y: number; size: number; dur?: number}} // to: a full-screen swirl shrinks and slides to x,y (e.g. up into the sky of the next scene)
+  // trip across a cartoon map of Egypt (Giza → down the Nile → Aswan) in a small swirl with the brothers spinning inside;
+  // progress goes from `from` to `to` between at and until (voice s); ease in/out at the ends of the trip; intro: the map zooms out
+  // from a white flash; zoomAt: the camera dives into the end of the trip
+  | {kind: 'travel'; at: number; until: number; from: number; to: number; ease?: 'in' | 'out'; intro?: boolean; zoomAt?: number}
+  // a gold Coptic letter (Avva key `k`) moving along a path (world px, voice seconds): hop = arc (it tumbles), the last point is where it rests and glows
+  | {kind: 'drop'; k: string; size?: number; outAt?: number; path: {at: number; x: number; y: number; hop?: number}[]}
   | {kind: 'arrow'; at: number; x: number; y: number; dir: 'left' | 'right'}
   // a Coptic letter on little legs running along a path (keyframes: reach x,y at `at`); hop = arcs between points
   | {kind: 'runner'; k: string; size?: number; path: {at: number; x: number; y: number; hop?: number}[]}
@@ -118,13 +126,14 @@ export type SceneSpec = {
   lead?: number; // seconds before the voice starts in this scene (default: the video's pace.lead)
   props?: PropSpec[];
   captions?: boolean; // false = no subtitle box (e.g. the words are already on pop-up cards)
+  ambient?: 'nile'; // living scenery over the backdrop (world px, keeps moving across scenes): nile = birds, drifting clouds, water sparkles, a sailing felucca
   backdrop?: string; // id of a social image (social/assets/manifest.json "images") drawn behind everything, with parallax
   // Camera moves (scene seconds): the world (characters + props) pans/zooms,
   // the background follows with parallax. x/y = camera offset in px.
   camera?: {at: number; x?: number; y?: number; zoom?: number; rot?: number; dur?: number}[];
   patternAt?: number; // the themed background appears at this time (seconds from voice start)
   before?: {pattern: string; icons?: string[]}; // background shown until patternAt
-  transition?: 'wipe' | 'whip' | 'cut'; // how this scene comes in (default: circle wipe; cut = same shot continues)
+  transition?: 'wipe' | 'whip' | 'cut' | 'pushUp'; // how this scene comes in (default: circle wipe; cut = same shot continues; pushUp = slides up from below and pushes the last scene off the top)
 };
 
 export type VideoSpec = {

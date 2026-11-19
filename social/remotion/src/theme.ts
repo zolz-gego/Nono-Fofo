@@ -25,6 +25,7 @@ export const LEAD = 0.35; // scene opens, characters land, then the voice starts
 export const TAIL = 0.45; // after the voice, before the next scene
 export const MIN_SCENE = 1.6;
 export const WIPE = 10; // frames the next scene takes to wipe in
+export const PUSH = 24; // frames a pushUp scene takes to slide in (the scene before stays on screen that long)
 export const END_CARD = 2.6;
 export const END_VOICE_AT = 0.45; // end card voice starts after the logo sting hit
 export const END_AFTER_VOICE = 1.0; // the end card stays this long after its voice ends
