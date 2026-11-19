@@ -49,6 +49,16 @@
           "file": "images/nono-stomp.png",
           "fallback": "wrong",
           "desc": "Nono stomping in a tantrum: one foot up, fists down, cheeks puffed, frowning (009)"
+        },
+        "ring": {
+          "file": "images/nono-ring.png",
+          "fallback": "hint",
+          "desc": "Nono proudly wearing the round gold letter on his finger like a ring, admiring it (010)"
+        },
+        "fall": {
+          "file": "images/nono-fall.png",
+          "fallback": "sit",
+          "desc": "Nono flat on the ground after a tumble, legs up, dazed grin (010)"
         }
       }
     },
@@ -112,6 +122,11 @@
           "file": "images/fofo-shy.png",
           "fallback": "wave",
           "desc": "Fofo embarrassed: small bow, hand behind his head, blushing grin (009)"
+        },
+        "fall": {
+          "file": "images/fofo-fall.png",
+          "fallback": "sit",
+          "desc": "Fofo sitting on the ground after a tumble, rubbing his head, cross (010)"
         }
       }
     },
@@ -146,6 +161,44 @@
         "smile": {
           "file": "images/horse-smile.png",
           "desc": "warm big smile, head bowed a little, kind eyes"
+        }
+      }
+    },
+    "othmana": {
+      "desc": "عثمانة, a cheeky Nubian boy from Aswan (white galabeya, colourful Nubian scarf, embroidered cap), video 010, voice `Othmana`. Original character. Cut-out PNGs, same framing for every pose.",
+      "source": "AI image tool, prompts in videos/010-aswan-o/images.md",
+      "poses": {
+        "idle": {
+          "file": "images/othmana-idle.png",
+          "desc": "standing relaxed, hands behind his back, cheeky friendly grin"
+        },
+        "wave": {
+          "file": "images/othmana-wave.png",
+          "desc": "big friendly wave with one hand, bright open smile (greeting)"
+        },
+        "talk": {
+          "file": "images/othmana-talk.png",
+          "desc": "mouth open mid-word, one hand out explaining"
+        },
+        "sneaky": {
+          "file": "images/othmana-sneaky.png",
+          "desc": "eyes narrowed, sly grin, rubbing his hands together (بخبث)"
+        },
+        "nervous": {
+          "file": "images/othmana-nervous.png",
+          "desc": "caught out: big nervous smile, sweat drop, hand covering his galabeya pocket"
+        },
+        "run": {
+          "file": "images/othmana-run.png",
+          "desc": "running away to the side, galabeya flapping, looking back over his shoulder"
+        },
+        "shout": {
+          "file": "images/othmana-shout.png",
+          "desc": "one hand up like STOP, mouth wide open shouting, eyebrows up"
+        },
+        "smile": {
+          "file": "images/othmana-smile.png",
+          "desc": "huge warm smile, thumbs up, eyes squeezed happily"
         }
       }
     }
@@ -216,6 +269,13 @@
       "width": 929,
       "height": 962,
       "source": "AI image tool, prompts in videos/009-khufu-ita/images.md"
+    },
+    "aswan-nile": {
+      "file": "images/aswan-nile.png",
+      "desc": "Aswan on the Nile: Philae temple on its island, white feluccas, colourful Nubian domed houses on the far bank, palms, open sandy ground in front (portrait backdrop)",
+      "width": 1080,
+      "height": 1920,
+      "source": "AI image tool, prompts in videos/010-aswan-o/images.md"
     }
   },
   "sfx": {
@@ -383,35 +443,10 @@
       "duration": 2.7,
       "source": "ElevenLabs Sound Effects, prompts in videos/004-running-letter/sounds.md (trimmed)"
     },
-    "wb_marker": {
-      "file": "sfx/wb_marker.wav",
-      "desc": "Whiteboard marker writing: 8 s loop of short felt-tip strokes (played only while the pen moves)",
-      "duration": 7.8
-    },
-    "tut_tap": {
-      "file": "sfx/tut_tap.wav",
-      "desc": "Tutorial finger taps a button: soft click + bubbly pop",
-      "duration": 0.92
-    },
-    "tut_type": {
-      "file": "sfx/tut_type.wav",
-      "desc": "Tutorial typing: one soft keyboard tick per letter",
-      "duration": 0.04
-    },
-    "tut_zoom_in": {
-      "file": "sfx/tut_zoom_in.wav",
-      "desc": "Tutorial camera zooms in on a button: short soft rising whoosh",
-      "duration": 1.12
-    },
-    "tut_zoom_out": {
-      "file": "sfx/tut_zoom_out.wav",
-      "desc": "Tutorial camera zooms back out: short soft falling whoosh",
-      "duration": 0.25
-    },
-    "tut_highlight": {
-      "file": "sfx/tut_highlight.wav",
-      "desc": "Tutorial highlight ring appears: tiny glassy shimmer",
-      "duration": 1.18
+    "mg_vortex": {
+      "file": "sfx/mg_vortex.wav",
+      "desc": "Magic swirl / portal opens and sucks in: spinning wind that rises, with a wobbly whistle and sparkles",
+      "duration": 2.63
     }
   },
   "music": {

@@ -258,6 +258,18 @@ def _():
     return reverb(m.out(), 0.12)
 
 
+@sfx("mg_vortex", "Magic swirl / portal opens and sucks in: spinning wind that rises, with a wobbly whistle and sparkles", 0.7)
+def _():
+    d = 1.8
+    t = np.linspace(0, d, int(SR * d), endpoint=False)
+    swirl = 900 + 700 * np.sin(2 * np.pi * (2 + 4 * t / d) * t) + 1400 * t / d
+    wind = svf(noise(d), swirl, q=2.2, mode="bp") * 1.6
+    whistle = osc(sweep(300, 1100, d) * (1 + 0.06 * np.sin(2 * np.pi * 9 * t)), d, "sine") * 0.18
+    env = np.minimum(1, t / 0.35) * np.minimum(1, (d - t) / 0.4)
+    m = Mix().add((wind + whistle) * env).add(sparkle(1.2, 8, gain=0.25), 0.4)
+    return reverb(m.out(), 0.25)
+
+
 # ================================================================ render
 
 def main(only):

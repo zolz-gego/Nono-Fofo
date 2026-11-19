@@ -91,6 +91,24 @@ Preview text:
 [bossy] إنتوا بتعملوا إيه هنا؟! [snorts] ... [smugly] إنتوا ماتعرفوش حاجة! [impressed] برافوووو!
 ```
 
+## Othmana (عثمانة, a Nubian boy from Aswan)
+
+Save the voice as **`Othmana`**. Guest character (first in video 010), an
+original cheeky Nubian boy from Aswan. Clearly different from both brothers:
+warm and a little deeper than Nono, with the soft, sing-song southern Aswan /
+Nubian accent (not Cairo), relaxed and smiley, sneaky when he hides the letter,
+then generous at the end. He says a few Nubian words (ماسكاجرو "hello",
+ماسكا "fine").
+
+**Voice Design prompt:**
+```
+Adult voice actor performing a cheeky, playful animated-cartoon sidekick voice, speaking Egyptian Arabic with a warm southern Aswan Nubian accent, soft rolling sing-song rhythm, not a Cairo accent. Medium-high and bright, relaxed and smiley, quick and sly when he is hiding something, laughs easily, friendly and kind, never scary. Clean close-mic studio recording, no background noise, no music.
+```
+Preview text:
+```
+[cheerfully] ماسكاجرو! [laughs] أهلاً بيكم في أسوان! [mischievously] حروف؟!
+```
+
 ---
 
 ## Writing lines for v3 (for Claude)

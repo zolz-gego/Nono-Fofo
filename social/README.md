@@ -80,6 +80,7 @@ npm run render -- 01-fishing            # a tutorial folder works with still / r
 | `mg_boing` | Cartoon boing | Bounce / "pop" entrance (automatic) |
 | `mg_pose_swap` | Quick "fwip" | Pose change (automatic) |
 | `mg_slide_up` / `mg_slide_down` | Slide whistle | Rising / dropping things |
+| `mg_vortex` | Spinning wind that rises, wobbly whistle, sparkles | The magic swirl (دوامة) opening / pulling the brothers in (010) |
 | `mg_logo_sting` | Darbuka + qanun run + sparkles | End card (automatic) |
 | `mg_sparkle` | Magic shimmer | Stars, shining letters |
 | `mg_ta_da` | Marimba + bell reveal | Big moment / catchphrase |
@@ -122,9 +123,10 @@ too; see `app/assets/audio/manifest.json`.
 | `ramses` | `idle`, `look`, `talk`, `demand`, `smile` (`ramses-<pose>.png`, cut-out) | Giant living statue of Ramses II (video 004), voice `Ramses` in `voices.md` |
 | `sphinx` | `idle`, `grumpy`, `proud`, `talk`, `shock`, `nervous`, `shy`, `smile` (`sphinx-<pose>.png`, cut-out) | The Great Sphinx come to life, old, grumpy and protective (video 008), voice `Sphinx` in `voices.md` |
 | `horse` | `idle`, `talk`, `bossy`, `shout`, `smirk`, `impressed`, `smile` (`horse-<pose>.png`, cut-out) | A proud, bossy Giza horse guarding Khufu's treasures (video 009), voice `Horse` in `voices.md` |
+| `othmana` | `idle`, `wave`, `talk`, `sneaky`, `nervous`, `run`, `shout`, `smile` (`othmana-<pose>.png`, cut-out) | عثمانة, a cheeky Nubian boy from Aswan who pockets the letter Ⲟ (video 010), voice `Othmana` in `voices.md` |
 
-| `nono` (extra poses) | `chef` (`nono-chef.png`, falls back to `hint`), `sand` (`nono-sand.png`, falls back to `sit`), `shy` (`nono-shy.png`, falls back to `wrong`), `stomp` (`nono-stomp.png`, falls back to `wrong`) | Extra Nono poses for the social videos only; the app's own poses stay in the app |
-| `fofo` (extra poses) | `angry` (`fofo-angry.png`, falls back to `wrong`), `whisper` (`fofo-whisper.png`, falls back to `hint`), `think` (`fofo-think.png`, falls back to `hint`), `shy` (`fofo-shy.png`, falls back to `wave`) | Extra Fofo poses for the social videos only (008, 009) |
+| `nono` (extra poses) | `chef` (`nono-chef.png`, falls back to `hint`), `sand` (`nono-sand.png`, falls back to `sit`), `shy` (`nono-shy.png`, falls back to `wrong`), `stomp` (`nono-stomp.png`, falls back to `wrong`), `ring` (`nono-ring.png`, falls back to `hint`), `fall` (`nono-fall.png`, falls back to `sit`) | Extra Nono poses for the social videos only; the app's own poses stay in the app |
+| `fofo` (extra poses) | `angry` (`fofo-angry.png`, falls back to `wrong`), `whisper` (`fofo-whisper.png`, falls back to `hint`), `think` (`fofo-think.png`, falls back to `hint`), `shy` (`fofo-shy.png`, falls back to `wave`), `fall` (`fofo-fall.png`, falls back to `sit`) | Extra Fofo poses for the social videos only (008, 009, 010) |
 
 An entry for an app character adds poses next to the app's; `fallback` names the pose drawn until the PNG exists.
 Use them like the brothers (`"who": "ramses"` in `characters`, `"speaker": "ramses"`
@@ -143,6 +145,7 @@ on a line). A pose without its PNG yet is drawn as a sandstone placeholder.
 | `camel-idle` | The camel on its own, same saddle (cut-out) | `image` prop when the brothers find the camel (009) |
 | `khufu-pyramid` | The Great Pyramid of Khufu close up with its dark doorway, portrait | `backdrop` of the pyramid scenes (009) |
 | `grandpa-water` | Grandpa's hand holding a glass of water (cut-out) | `image` prop at the book (009) |
+| `aswan-nile` | Aswan on the Nile: Philae temple on its island, white feluccas, colourful Nubian domed houses, palms, open ground in front, portrait | `backdrop` of the Aswan scenes (010; the drawn waves stand in until the PNG exists) |
 
 ### Icons (keyword cards)
 
@@ -150,7 +153,7 @@ Font Awesome, registered in `remotion/src/icons.ts`: `anchor`, `arrowLeft`,
 `arrowRight`, `bolt`, `book`, `cake`, `check`, `church`, `clap`, `compass`, `fish`,
 `football`, `gift`, `heart`, `house`, `idea`, `map`, `medal`, `museum`, `paint`, `puzzle`,
 `question`, `rocket`, `run`, `sailboat`, `search`, `shield`, `shoes`, `sound`,
-`star`, `trophy`, `warning`, `taxi`, `water`, `horse`, `gem`, `sun`.
+`star`, `trophy`, `warning`, `taxi`, `water`, `horse`, `gem`, `sun`, `bus`.
 
 ### Scene backgrounds (`pattern`, `remotion/src/components/Scenery.tsx`)
 

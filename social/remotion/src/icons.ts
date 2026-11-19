@@ -44,6 +44,7 @@ import {
   faHorse,
   faGem,
   faSun,
+  faBus,
   type IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -95,4 +96,5 @@ export const ICONS: Record<string, IconDefinition> = {
   horse: faHorse,
   gem: faGem,
   sun: faSun,
+  bus: faBus,
 };
