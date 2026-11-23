@@ -11,6 +11,8 @@ Remove this once `brew install ffmpeg` is done: then `npx hyperframes render` wo
 
 Run (from the repo root): tools/.venv/bin/python social/whiteboard/tools/render.py social/whiteboard/projects/<folder> [out.mp4] [--hq]
 --hq: the release encode (H.264 CRF 12 slow, AAC 320k) instead of the draft one.
+--audio-only: keep the picture of the existing out.mp4 and only re-mix its sound
+  (e.g. after changing a volume in index.html); the old file is kept as *.orig.mp4.
 """
 
 import os
@@ -29,6 +31,10 @@ FF = ROOT / "social" / "remotion" / "node_modules" / "@remotion" / "compositor-d
 SR = 48000
 
 
+class _Skip(Exception):
+    pass
+
+
 def tools_path() -> str:
     """A PATH with ffmpeg/ffprobe wrappers around the Remotion build (it needs its dylib folder)."""
     d = Path(tempfile.gettempdir()) / "ffwrap"
@@ -43,6 +49,7 @@ def tools_path() -> str:
 def main() -> None:
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     hq = "--hq" in sys.argv
+    audio_only = "--audio-only" in sys.argv
     if not args:
         sys.exit(__doc__)
     proj = Path(args[0]).resolve()
@@ -53,13 +60,21 @@ def main() -> None:
     dur = float(re.search(r'data-composition-id="main"[^>]*data-duration="([\d.]+)"', html).group(1))
 
     # 1. picture
+    if audio_only:
+        orig = out.with_suffix(".orig.mp4")
+        if not orig.exists():
+            shutil.copyfile(out, orig)
     frames = proj / "renders" / "frames"
     shutil.rmtree(frames, ignore_errors=True)
     backup = index.with_suffix(".html.bak")
     shutil.copyfile(index, backup)
     try:
+        if audio_only:
+            raise _Skip
         index.write_text(re.sub(r"\s*<audio[^>]*></audio>", "", html))
         subprocess.run(["npx", "--yes", "hyperframes@0.9.9", "render", "--format", "png-sequence", "-o", str(frames), "--quiet"], cwd=proj, env=env, check=True)
+    except _Skip:
+        pass
     finally:
         shutil.move(backup, index)
 
@@ -98,6 +113,14 @@ def main() -> None:
 
     # 3. encode
     out.parent.mkdir(parents=True, exist_ok=True)
+    if audio_only:
+        subprocess.run(
+            ["ffmpeg", "-v", "error", "-y", "-i", str(orig), "-i", str(wav), "-map", "0:v", "-map", "1:a", "-c:v", "copy",
+             "-c:a", "aac", "-b:a", "320k" if hq else "256k", "-movflags", "+faststart", "-shortest", str(out)],
+            env=env, check=True,
+        )
+        print(f"{out} (sound re-mixed, {dur:.1f} s, mix peak {peak:.2f})")
+        return
     subprocess.run(
         ["ffmpeg", "-v", "error", "-y", "-framerate", "30", "-i", str(frames / "frame_%06d.png"), "-i", str(wav),
          "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "12" if hq else "16", "-preset", "slow" if hq else "medium",
