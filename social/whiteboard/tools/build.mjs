@@ -71,7 +71,7 @@ copy(path.join(ROOT, 'app', 'assets', 'brand', 'logo.png'), 'logo.png');
 copy(path.join(src, 'voice', 'take.mp3'), 'audio/voice.mp3');
 const music = spec.music ? path.join(ROOT, 'app', 'assets', 'audio', 'music', `${spec.music.track}.m4a`) : null;
 if (music) copy(music, 'audio/music.m4a');
-const MARKER_VOLUME = { pen: 0.1, pencil: 0.06 }; // pen scratch level (was 0.5 / 0.3)
+const MARKER_VOLUME = { pen: 0, pencil: 0 }; // pen scratch level; 0 = no pen sound (the user removed it)
 for (const s of ['wb_marker', 'mg_whoosh_in', 'mg_keyword_pop', 'mg_sparkle']) copy(path.join(SOCIAL, 'assets', 'sfx', `${s}.wav`), `audio/${s}.wav`);
 
 // ---------------------------------------------------------------- root: scene host + audio
@@ -82,7 +82,8 @@ board.clips.forEach((c, i) => {
   audio.push(`<audio id="voice-${i + 1}" class="clip" src="assets/audio/voice.mp3" data-start="${r(c.from)}" data-media-start="${r(a0)}" data-duration="${r(Math.min(c.a1 + 0.12, takeEnd) - a0)}" data-track-index="2" data-volume="1"></audio>`);
 });
 board.ops.forEach((op, i) => {
-  // the marker scratches only while the pen moves, kept very quiet under the voice
+  // the marker scratches only while the pen moves (off: volume 0 adds no clip)
+  if (!MARKER_VOLUME[op.tool === 'pencil' ? 'pencil' : 'pen']) return;
   audio.push(`<audio id="scratch-${i + 1}" class="clip" src="assets/audio/wb_marker.wav" data-start="${r(op.start)}" data-media-start="${r((i * 1.37) % 5.5)}" data-duration="${r(op.dur)}" data-track-index="3" data-volume="${op.tool === 'pencil' ? MARKER_VOLUME.pencil : MARKER_VOLUME.pen}" data-fade-in="0.08" data-fade-out="0.08"></audio>`);
 });
 const track = {mg_keyword_pop: 4, mg_whoosh_in: 5, mg_sparkle: 6};

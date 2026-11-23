@@ -26,4 +26,4 @@ tools/.venv/bin/python social/whiteboard/tools/release.py <folder> --thumb <seco
 python3 social/whiteboard/tools/upload.py <folder>                      # after post.md: upload to Drive
 ```
 
-The marker scratch is `social/assets/sfx/wb_marker.wav` (made by `social/tools/synth_social_sfx.py`).
+The marker scratch `social/assets/sfx/wb_marker.wav` (made by `social/tools/synth_social_sfx.py`) is off: `MARKER_VOLUME` in `tools/build.mjs` is 0.

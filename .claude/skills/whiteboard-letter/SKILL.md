@@ -74,9 +74,9 @@ skill go in git.
   MIT, installed in `social/whiteboard` (`npm install` there once).
   Never leave drawings black: the user wants them colourful. Find names with
   `node -e "console.log(Object.keys(require('./social/whiteboard/node_modules/@iconify-json/fluent-emoji-flat/icons.json').icons).filter(k=>k.includes('lion')))"`.
-- **Audio:** narrator only (no subtitles), marker scratch (`wb_marker`) only
-  while the pen moves and kept very quiet (volume 0.1 pen / 0.06 pencil,
-  `MARKER_VOLUME` in `tools/build.mjs`; the user found 0.5 too loud), a soft pop when each word row finishes, whoosh on pans,
+- **Audio:** narrator only (no subtitles), **no pen / marker sound** (the user
+  removed it: `MARKER_VOLUME` in `tools/build.mjs` is 0, so no `wb_marker`
+  clips are added), a soft pop when each word row finishes, whoosh on pans,
   sparkle on the recap circle, quiet music (`map_theme`).
 - **Narration: text only, the user provides the audio.** Claude writes the
   narration text with performance tags and never generates, calls or pays for
